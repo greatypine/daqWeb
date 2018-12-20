@@ -22,6 +22,7 @@
 	<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
 	<!-- Select2 -->
 	<link rel="stylesheet" href="plugins/select2/select2.min.css">
+	<link rel="stylesheet" href="plugins/date-new/css/jquery-ui-1.9.2.custom.css" type="text/css">
 	<link href="../scripts/css/auto.css" rel="stylesheet">
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,15 +31,15 @@
 	<script src="IE 9/respond.min.js"></script>
 	<![endif]-->
 	<style>
-		.box-default{border-bottom: 1px solid #e1e1e1;}
+		.box-default{border-bottom: 1px solid #e1e1e1;height:100%; width:100%;}
 		.info_head{padding: 25px 0 35px 0;}
 		.info_head img{width:123px; margin-top:10px;}
 		.info_head span{padding-left: 20px;}
 		.info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
 		.info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
 		.box .h4{padding-left:20px;}
-		.nav-tabs-custom{padding:0 20px;}
-		.nav-tabs{border:0;}
+		.nav-tabs-custom > .nav-tabs > li.active{border-top-color:#3c8dbc!important}
+		.nav-tabs-custom > .nav-tabs > li.active > a{background-color:#fff;color:#000;}
 		.logo-lg li{float: left; position: relative;}
 
 		.logo-lg i{color: #fff;}
@@ -46,6 +47,8 @@
 		.nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
 		.logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
 		.logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+		.table button{padding: 3px 20px; margin: 0 5px;}
+		.table a{color:#194dc4;}
 
 
 		.tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
@@ -81,10 +84,44 @@
 			color:#337ab7;
 		}
 
-		.demo-input{padding-left: 10px; height: 38px; min-width: 262px; line-height: 38px; border: 1px solid #e6e6e6;  background-color: #fff;  border-radius: 2px;}
-		.demo-footer{padding: 50px 0; color: #999; font-size: 14px;}
-		.demo-footer a{padding: 0 5px; color: #01AAED;}
-		.auto{max-height:200px; overflow-y:scroll;border: 0px solid #dedede;}
+
+
+		/*时间控件*/
+		.show-more-line{width: 100%; height: 40px; border-top: 1px dashed #e6e6e6; position: relative; background-color: #f5f5f5;}
+		.how-more{position: absolute; top: -1px; left: 50%; background-color: #fff; border-left: 1px solid #e6e6e6; border-right: 1px solid #e6e6e6; border-bottom: 1px solid #e6e6e6;  padding: 5px 15px; margin: 0 0 0 -40px; color: #888; cursor: pointer; font-size: 12px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;}
+		.how-more i{padding-left: 5px; font-size: 14px;}
+		.fold-con,.sl-btns{display: none;}
+		.selectorLine{border-top: 1px dashed #e6e6e6; padding: 10px 0 0 0; position: relative;}
+		.selectorLine a{float: left; height: 18px; line-height: 18px; padding: 0 3px; margin: 2px 12px 12px 0; white-space: nowrap;}
+		.selectorLine a:nth-child(1){margin-left: 15px;}
+		.selectorLine a:hover{background-color: #ff7701; color: #fff;}
+		.search-title{width: 100px; color: #777; white-space: nowrap; overflow: hidden; position: absolute; top: 10px; left: 0; text-align: right;}
+		.search-con{margin-left: 0px; padding-right: 80px; overflow: hidden;}
+		.sl-ext {position: absolute; top: 10px; right: 10px; width: 60px; height: auto; line-height: 22px; overflow: hidden; zoom: 1;}
+		.search-more{width: 60px; height: 25px; line-height: 25px; padding: 0 7px 0 0; background: #fff; color: #333; border: 1px solid #ddd; font-size: 12px; position: relative; right: 0; top: 0;}
+		.search-more i{position: absolute; top: 3px; right: 0; display: block; width: 20px; height: 20px; background-position: 4px 7px; font-size: 18px;}
+		.search-more:hover{color: #e4393c;}
+		.search-more-open i{ -webkit-transform: rotateX(180deg); -o-transform: rotateX(180deg); -moz-transform: rotateX(180deg);}
+		.sx_type{margin-top: 5px;}
+		.sx_type span{padding-right: 5px;}
+		.sx_type span .icheckbox_minimal-blue{margin-right: 2px;}
+
+
+
+
+		/*类型*/
+		.leixing div{display: inline-block; position: relative; cursor: pointer;}
+		.type_con{width: 65px; height: 45px; line-height: 45px; color: #fff; display: block; position: absolute; bottom: 20px; left: -20px; display: none;}
+		.gonghai .type_con{background: url("dist/img/gonghai(1).png") no-repeat; background-size: 100% 100%;}
+		.yichang .type_con{background: url("dist/img/gonghai(2).png") no-repeat; background-size: 100% 100%;}
+		.gonghai:hover .type_con,.yichang:hover .type_con{display: block;}
+		.fold-con{display: none;}
+		.auto{max-height:200px; overflow-y:scroll;}
+		.opeDiv span{float: right;width: 46px;height: 24px;line-height: 24px;text-align: center;font-size: 12px;border: 1px solid #9fa3a8;border-radius: 3px;color: #616d73;margin: 0 13px 12px 0;box-shadow: 0 1px 5px rgba(0,0,0,0.3);cursor: pointer;}
+		.Confirm{ background: linear-gradient(#83c56a, #63b254); border: 1px solid #46975d!important;; color: #fff!important;}
+		.ui-close-date{color: #fff; font-size: 14px!important; float:right!important; margin-right:10px!important}
+		.ui-datepicker-quick span{height: 30px; line-height: 35px}
+		.ui-datepicker-time{background-color:transparent}
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -112,100 +149,243 @@
 		</nav>
 	</header>
 
+
 	<!-- =============================================== -->
 
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
-		<div class="container" style="width:1230px">
+		<div>
 			<!-- Main content -->
 
 			<section class="content-header">
-				<div class="box box-default">
-					<div class="box-header h4 text-light-blue">
-						<div class="pull-left "><strong>毛利统计（运营）</strong></div>
-						<div class="pull-left text-red" style="padding-left:15px;font-size:75%">数据口径：</div>
-						<div class="pull-left text-red" style="font-size:75%">1.营销费用不包含A类营销费用。</br>2.此页面数据为运营监控数据，不可作为绩效数据使用。</div>
-					</div>
-					<div class="box-body">
-						<form id="searchform">
-							<div class="form-group col-lg-4">
-								<label>查询时间</label>
-								<!--<input type="text" class="form-control" id="be_date1" name="be_date1" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>-->
-								<input type="text" class="form-control pull-right" id="auto_date_profit"  placeholder="点击选择日期" readonly="readonly">
-							</div>
-							<div class="form-group col-lg-4">
-								<label><span class="text-red" title="勾选城市：以城市为单位统计&#13;未勾选城市：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>城市<span class="checkboxFive">
-                <input type='checkbox' id="cityClick" onclick='operatedCoverageCity()' checked="checked" value='city'>
-                <label for="cityClick"></label>
-                </span></label>
-								<input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
-								<input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px;" disabled="true"/>
-								<div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;">
-								</div>
-							</div>
-							<div class="form-group col-lg-4">
-								<label><span class="text-red" title="勾选门店：以门店为单位统计&#13;未勾选门店：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>门店<span class="checkboxFive">
-                <input type='checkbox' id="storeClick" onclick='operatedCoverageStore()' checked="checked" value='store'>
-                <label for="storeClick"></label>
-                </span></label>
-								<input id="store_id_tradetype" name="store_id_tradetype" type="hidden" value=""/>
-								<input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px;width: 90%" disabled="true"/>
-								<div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
-								</div>
-							</div>
-							<div class="form-group col-lg-4" id="profit_dept">
-								<label><span class="text-red" title="勾选事业群：以事业群为单位统计&#13;未勾选事业群：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>事业群<span class="checkboxFive">
-                <input type='checkbox' id="deptClick" onclick='operatedCoverageDept()' checked="checked" value='dept'>
+				<div class="nav-tabs-custom no-margin">
+					<ul class="nav nav-tabs">
+						<li class="active" id="tab_1_avtive"><a href="#tab_1" id="bigshow1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
+						<li class="" id="tab_2_avtive"><a href="#tab_2" id="bigshow2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
+						<li class="" id="tab_3_avtive"><a href="#tab_3" id="bighide" data-toggle="tab" aria-expanded="false">业务单位统计</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="col-sm-12 text-red no-padding" style="padding-left:15px;font-size:75%;float: right">
+							<p style="width:auto;float:right">数据口径：</br>1.营销费用不包含A类营销费用。</br>2.此页面数据为运营监控数据，不可作为绩效数据使用。</p>
+						</div>
+
+
+						<div class="tab-pane active" id="tab_1">
+							<div class="box-body">
+								<div class="clearfix search-criteria">
+									<div id="selectorLine clearfix no-border" class="clearfix">
+										<div class="form-group col-lg-4">
+											<label>查询时间</label>
+											<input type="text" class="form-control pull-right" id="auto_date_store"  placeholder="点击选择日期" readonly="readonly">
+										</div>
+										<div class="form-group col-lg-4">
+											<label>城市</label>
+											<input id="city_id_tradetype2" name="city_id_tradetype2" type="hidden" value=""/>
+											<input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype2" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+											<div class="auto hidden" id="auto_city2" style="width:85%;z-index: 99999;">
+												<!-- /.input group -->
+											</div>
+										</div>
+										<div class="form-group col-lg-4">
+											<label>门店</label>
+											<input id="store_id_tradetype" name="store_id_tradetype" type="hidden" value=""/>
+											<input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px;width: 90%"/>
+											<div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
+											</div>
+										</div>
+										<div class="form-group col-lg-4" id="profit_dept">
+											<label><span class="text-red" title="勾选事业群：以事业群为单位统计&#13;未勾选事业群：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>事业群<span class="checkboxFive">
+                <input type='checkbox' id="deptClick" onclick='operatedCoverageDept()' value='dept'>
                 <label for="deptClick"></label>
 				</span></label>
-								<select class="form-control select2" id="deptSelect">
-								</select>
-							</div>
-							<div class="form-group col-lg-4" id="profit_channel">
-								<label><span class="text-red" title="勾选频道：以频道为单位统计&#13;未勾选频道：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>频道<span class="checkboxFive">
-                <input type='checkbox' id="channelClick" onclick='operatedCoverageChannel()' checked="checked" value='area'>
+											<select class="form-control select2" id="deptSelect">
+											</select>
+										</div>
+										<div class="form-group col-lg-4" id="profit_channel">
+											<label><span class="text-red" title="勾选频道：以频道为单位统计&#13;未勾选频道：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>频道<span class="checkboxFive">
+                <input type='checkbox' id="channelClick" onclick='operatedCoverageChannel()' value='area'>
                 <label for="channelClick"></label>
                 </span></label>
-								<input type="text" class="form-control"  placeholder="频道" id="channel_name" style="border-radius: 6px;width: 90%" disabled="true"/>
-							</div>
-						</form>
-						<div class="form-group col-lg-6" style="margin-top: 20px; padding: 0 25px;">
-						</div>
-						<div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
-							<button type="button" class="btn btn-block btn-primary" onclick="searchInfo_tradeprofit_step1(1)">查询</button>
-						</div>
-						<div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
-							<button type="button" onclick="export_tradetype()" class="btn btn-block btn-warning">导出</button>
-						</div>
-						<div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
-							<button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
-						</div>
-
-					</div>
-					<div class="box-body">
-						<div class="nav-tabs-custom">
-							<div class="tab-content">
-								<div>
-									<table class="table table-striped">
-										<tbody id="tradeType_tbody">
-										<tr>
-											<th width="8%" id="citynamepayhide">城市</th>
-											<th width="10%" id="storenamepayhide">门店名称</th>
-											<th width="10%" id="storenopayhide">门店编号</th>
-											<th width="10%" id="deptnamepayhide">事业群</th>
-											<th width="10%" id="channelnamepayhide">频道</th>
-											<th width="10%"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-												<font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">销售收入-已退货-营销费用</font>毛利</th>
-										</tr>
-										</tbody>
-									</table>
+											<input type="text" class="form-control"  placeholder="频道" id="channel_name" style="border-radius: 6px;width: 90%" disabled="true"/>
+										</div>
+									</div>
 								</div>
-								<!-- /.tab-pane -->
-							</div>
 
-							<!-- /.tab-content -->
+								<div class="clearfix">
+									<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+										<button type="button" onclick="resetSerachParamStore()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+									</div>
+									<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+										<button type="button" onclick="export_store()" class="btn btn-block btn-warning">导出</button>
+									</div>
+									<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+										<button type="button" class="btn btn-block btn-primary" onclick="searchInfo_store_step1(1)">查询</button>
+									</div>
+
+								</div>
+
+							</div>
+							<div class="box-body">
+								<div class="tab-content">
+									<div>
+										<table class="table table-striped">
+											<tbody id="tradeType_tbody_store">
+											<tr>
+												<th width="8%">城市</th>
+												<th width="10%">门店名称</th>
+												<th width="10%">门店编号</th>
+												<th width="10%" id="deptnamepayhide">事业群</th>
+												<th width="10%" id="channelnamepayhide">频道</th>
+												<th width="10%"><font id="attention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+													<font id="showattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:170px">销售收入-已退货-营销费用</font>毛利</th>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+									<!-- /.tab-pane -->
+								</div>
+								<!-- /.tab-content -->
+								<div style="position:absolute;bottom:20px;left:27px;width:25%">显示 <select id="pageRecords_store" name="pageRecords_store" onchange="chnagePageRecords_Store(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_store"></span> 条</div>
+								<div class="tcdPageCode" id="page_store"></div>
+							</div>
 						</div>
-						<div class="tcdPageCode" id="page_tradetype"></div>
+
+						<div class="tab-pane " id="tab_2">
+							<div class="box-body">
+								<div class="clearfix search-criteria">
+									<div id="selectorLine clearfix no-border" class="clearfix">
+										<div class="form-group col-lg-4">
+											<label>查询时间</label>
+											<input type="text" class="form-control pull-right" id="auto_date_city"  placeholder="点击选择日期" readonly="readonly">
+										</div>
+										<div class="form-group col-lg-4">
+											<label>城市</label>
+											<input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
+											<input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+											<div class="auto hidden" id="auto_city" style="width:85%;z-index: 99999;">
+												<!-- /.input group -->
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix">
+									<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+										<button type="button" onclick="resetSerachParamCity()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+									</div>
+									<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+										<button type="button" onclick="export_tradetype()" class="btn btn-block btn-warning">导出</button>
+									</div>
+									<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+										<button type="button" class="btn btn-block btn-primary" onclick="searchInfo_tradeprofit_step1(1)">查询</button>
+									</div>
+
+								</div>
+
+							</div>
+							<div class="box-body">
+								<div class="tab-content">
+									<div>
+										<table class="table table-striped">
+											<tbody id="tradeType_tbody">
+											<tr>
+												<th width="8%">城市</th>
+												<th width="10%"><font id="attentioncity" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+													<font id="showattentioncity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:380px;">销售收入-已退货-营销费用</font>毛利</th>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+									<!-- /.tab-pane -->
+								</div>
+								<!-- /.tab-content -->
+								<div style="position:absolute;bottom:20px;left:27px;width:25%">显示 <select id="pageRecords_city" name="pageRecords_city" onchange="chnagePageRecords_City(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_city"></span> 条</div>
+								<div class="tcdPageCode" id="page_city"></div>
+							</div>
+						</div>
+
+						<div class="tab-pane" id="tab_3">
+							<div class="box-body">
+								<div class="clearfix search-criteria">
+									<div id="selectorLine clearfix no-border" class="clearfix">
+										<div class="form-group col-lg-4">
+											<label>查询时间</label>
+											<input type="text" class="form-control pull-right" id="auto_date_dept"  placeholder="点击选择日期" readonly="readonly">
+										</div>
+										<div class="form-group col-lg-4">
+											<label><span class="text-red" title="勾选城市：以城市为单位统计&#13;未勾选城市：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>城市<span class="checkboxFive">
+                <input type='checkbox' id="cityClick" onclick='operatedCoverageCity()' value='city'>
+                <label for="cityClick"></label>
+                </span></label>
+											<input id="city_id_tradetype3" name="city_id_tradetype3" type="hidden" value=""/>
+											<input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype3" style="display: inherit;width: 90%;border-radius: 6px;" disabled="true"/>
+											<div class="auto hidden" id="auto_city3" style="width:82%;z-index: 99999;">
+											</div>
+										</div>
+										<div class="form-group col-lg-4">
+											<label><span class="text-red" title="勾选门店：以门店为单位统计&#13;未勾选门店：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>门店<span class="checkboxFive">
+                <input type='checkbox' id="storeClick" onclick='operatedCoverageStore()' value='store'>
+                <label for="storeClick"></label>
+                </span></label>
+											<input id="store_id_tradetype3" name="store_id_tradetype3" type="hidden" value=""/>
+											<input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype3" style="border-radius: 6px;width: 90%" disabled="true"/>
+											<div class="auto hidden" id="auto_store3" style="width:82%;z-index: 99999;">
+											</div>
+										</div>
+										<div class="form-group col-lg-4">
+											<label>事业群</label>
+											<select class="form-control select2" id="deptSelect2">
+											</select>
+										</div>
+										<div class="form-group col-lg-4">
+											<label><span class="text-red" title="勾选频道：以频道为单位统计&#13;未勾选频道：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>频道<span class="checkboxFive">
+                <input type='checkbox' id="channelClick2" onclick='operatedCoverageChannel2()' value='channel'>
+                <label for="channelClick2"></label>
+                </span></label>
+											<input type="text" class="form-control"  placeholder="频道" id="channel_name2" style="border-radius: 6px;width: 90%" disabled="true"/>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="clearfix">
+									<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+										<button type="button" onclick="resetSerachParamDept()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+									</div>
+									<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+										<button type="button" onclick="export_dept()" class="btn btn-block btn-warning">导出</button>
+									</div>
+									<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+										<button type="button" class="btn btn-block btn-primary" onclick="searchInfo_dept_step1(1)">查询</button>
+									</div>
+
+								</div>
+
+							</div>
+							<div class="box-body">
+								<div class="tab-content">
+									<div>
+										<table class="table table-striped">
+											<tbody id="tradeType_tbody_dept">
+											<tr>
+												<th width="8%" id="citynamepayhide">城市</th>
+												<th width="10%" id="storenamepayhide">门店名称</th>
+												<th width="10%" id="storenopayhide">门店编号</th>
+												<th width="10%">事业群</th>
+												<th width="10%" id="channelnamepayhide2">频道</th>
+												<th width="10%"><font id="attentiondept" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+													<font id="showattentiondept" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:170px">销售收入-已退货-营销费用</font>毛利</th>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+									<!-- /.tab-pane -->
+								</div>
+								<!-- /.tab-content -->
+								<div style="position:absolute;bottom:20px;left:27px;width:25%">显示 <select id="pageRecords_dept" name="pageRecords_dept" onchange="chnagePageRecords_Dept(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_dept"></span> 条</div>
+								<div class="tcdPageCode" id="page_dept"></div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -215,9 +395,9 @@
 </div>
 
 <!-- ./wrapper -->
-<!-- jQuery 2.2.0 -->
-<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
-<script type="text/javascript" src="laydate/laydate.js"></script>
+<script src="plugins/date-new/js/jQuery-2.2.0.min.js"></script>
+<script src="plugins/date-new/js/jquery-ui-1.9.2.custom.js" type = "text/javascript"></script>
+<script src="plugins/date-new/js/share.js" type = "text/javascript"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
@@ -237,10 +417,9 @@
 
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script>
-
-
 <script type="text/javascript">
-    <!--target(数据查询层级标识) 0：总部  1:城市级别 2：门店-->
+
+    <!--target(数据查询层级标识) 0:总部  1:城市级别 2:门店-->
 
     Date.prototype.format=function(fmt) {
         var o = {
@@ -277,9 +456,7 @@
     }
 
     layer.config({
-
         extend: 'skin/crmskin/style.css' //加载新皮肤
-
     });
     var cityId = decode64(getUrlParamByKey("c"));//城市ID
     var initCity = cityId;
@@ -290,104 +467,118 @@
     var storeName=decode64(getUrlParamByKey("sn"));
     var storeNo=decode64(getUrlParamByKey("so"));
     var role = decode64(getUrlParamByKey("r"));
-    var dept = decode64(getUrlParamByKey("dn"));//事业群
-    var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
-    $(function () {
+    var fromBar = decode64(getUrlParamByKey("fb"));
+    var beti = decode64(getUrlParamByKey("beTi"));
+    var endt = decode64(getUrlParamByKey("endT"));
 
-        $('#auto_date_profit').daterangepicker({
+    $(function () {
+        $('#auto_date_store').daterangepicker({
+            minDate:new Date('2018/01/01'),
+            maxDate:new Date()
+        });
+        $('#auto_date_city').daterangepicker({
+            minDate:new Date('2018/01/01'),
+            maxDate:new Date()
+        });
+        $('#auto_date_dept').daterangepicker({
             minDate:new Date('2018/01/01'),
             maxDate:new Date()
         });
         var firstDate = new Date();
-        var curDate = new Date();
+        firstDate.setTime(firstDate.getTime()-24*60*60*1000);
         var bdate = firstDate.format('yyyy/MM/dd');
-        var cDate = curDate.format('yyyy/MM/dd');
-        $("#auto_date_profit").val(bdate+" - "+cDate);
+        var cDate = firstDate.format('yyyy/MM/dd');
+        $("#auto_date_store").val(bdate+" - "+cDate);
+        $("#auto_date_city").val(bdate+" - "+cDate);
+        $("#auto_date_dept").val(bdate+" - "+cDate);
 
         initalldept();
         if(target==0){//总部
 
         }else if(target==1){//城市
             $("#city_name_tradetype").val(cityName);
-            $("#city_name_channel").val(cityName);
             $("#city_name_tradetype").attr("readonly",true);
-            $("#city_name_channel").attr("readonly",true);
-            $("#cityClick").attr("disabled","disabled");
+            $("#city_name_tradetype2").val(cityName);
+            $("#city_name_tradetype2").attr("readonly",true);
+            $("#city_name_tradetype3").val(cityName);
+            $("#city_name_tradetype3").attr("readonly",true);
         }else if(target==2){//店长
-            $("#city_name_tradetype").val(cityName);
-            $("#city_name_channel").val(cityName);
-            $("#city_name_tradetype").attr("readonly",true);
-            $("#city_name_channel").attr("readonly",true);
-            $("#store_name_tradetype").val(storeName);
-            $("#store_name_channel").val(storeName);
-            $("#store_name_tradetype").attr("readonly",true);
-            $("#store_name_channel").attr("readonly",true);
-            $("#cityClick").attr("disabled","disabled");
-            $("#storeClick").attr("disabled","disabled");
-        }else if(target==3){//事业群
-            $("#deptSelect").val(dept);
-            $("#deptSelect").attr("disabled","disabled");
-        }
+            $("#tab_2_avtive").hide();
+            $("#tab_2").hide();
+            $("#tab_3_avtive").hide();
+            $("#tab_3").hide();
 
+            $("#city_name_tradetype2").val(cityName);
+            $("#city_name_tradetype2").attr("readonly",true);
+            $("#store_name_tradetype2").val(storeName);
+            $("#store_name_tradetype").attr("readonly",true)
+        }
+        $("#deptSelect").attr("disabled","disabled");
+        if(fromBar == "1"){
+            $("#first_date").attr("value",beti +'-'+ endt);
+            $("#startDateFirst").attr("value",beti);
+            $("#endDateFirst").attr("value",endt);
+            searchInfo_step2();
+            $("#tab_2_avtive").addClass("active");
+            $("#tab_2").addClass("active");
+            $("#tab_1_avtive").removeClass("active");
+            $("#tab_1").removeClass("active");
+        }else if(fromBar == "2"){
+            $("#searchTime").attr("value",beti +'-'+ endt);
+            $("#startOpenCardDate").attr("value",beti);
+            $("#endOpenCardDate").attr("value",endt);
+            searchInfo_tradetype_step2();
+        }else if(fromBar == "3"){
+            $("#tab_3_avtive").addClass("active");
+            $("#tab_3").addClass("active");
+            $("#tab_1_avtive").removeClass("active");
+            $("#tab_1").removeClass("active");
+            $("#bigmember").hide();
+        }
         $(".logo-lg > ul > li").hover(function(){
             $(this).children(".nav_dropdown").toggle('1000');
         });
 
-        $("#columnattention").on("mouseover",function(event){
-            $("#forcolumnattention").show();
+        $("#bighide").on("click",function(event){
+            $("#bigmember").hide();
         });
-        $("#columnattention").on("mouseout",function(event){
-            $("#forcolumnattention").hide();
+        $("#bigshow1").on("click",function(event){
+            $("#bigmember").show();
+        });
+        $("#bigshow2").on("click",function(event){
+            $("#bigmember").show();
         });
 
-        var searchChannelStr = "dept_channel_active";
-        if($('#channelClick').is(':checked')){
-            searchChannelStr = "dept_channel_active";
-            $("#channelnamepayhide").show();
-        }else{
-            $("#channelnamepayhide").hide();
-        }
-        $('#channelClick').removeAttr('checked');
+        $("#deptnamepayhide").hide();
         $("#channelnamepayhide").hide();
-
-        var searchDeptCityStr = "dept_city_active";
-        if(target!=1){
-            $('#cityClick').removeAttr('checked');
-        }
         $("#citynamepayhide").hide();
-        if($('#cityClick').is(':checked')){
-            searchDeptCityStr = "dept_city_active";
-            $("#citynamepayhide").show();
-        }else{
-            $("#citynamepayhide").hide();
-        }
-
-        var searchDeptStoreStr = "dept_store_active";
-        if($('#storeClick').is(':checked')){
-            searchDeptStoreStr = "dept_store_active";
-            $("#storenamepayhide").show();
-            $("#storenopayhide").show();
-        }else{
-            $("#storenamepayhide").hide();
-            $("#storenopayhide").hide();
-        }
-
-        var searchDeptStr = "dept_active";
-        if($('#deptClick').is(':checked')){
-            $("#deptnamepayhide").show();
-        }else{
-            $("#deptnamepayhide").hide();
-        }
-
-        $('#storeClick').removeAttr('checked');
-        $('#deptClick').removeAttr('checked');
-        $("#deptSelect").attr("disabled","disabled");
         $("#storenamepayhide").hide();
         $("#storenopayhide").hide();
-        $("#deptnamepayhide").hide();
+        $("#channelnamepayhide2").hide();
+
+        //门店单位
+        $("#attention").on("mouseover",function(event){
+            $("#showattention").show();
+        });
+        $("#attention").on("mouseout",function(event){
+            $("#showattention").hide();
+        });
+        //城市单位
+        $("#attentioncity").on("mouseover",function(event){
+            $("#showattentioncity").show();
+        });
+        $("#attentioncity").on("mouseout",function(event){
+            $("#showattentioncity").hide();
+        });
+        //业务单位
+        $("#attentiondept").on("mouseover",function(event){
+            $("#showattentiondept").show();
+        });
+        $("#attentiondept").on("mouseout",function(event){
+            $("#showattentiondept").hide();
+        });
+
     });
-
-
     /**-----------------------------------搜索城市------------------------------------------------------**/
     var lst_select_city=null;
     var cityNameArray=new Array();
@@ -398,7 +589,6 @@
         $("#auto_store").empty();
         $("#store_id_tradetype").val("");
         $("#store_name_tradetype").val("");
-        $('#store_name-search_tradetype').children().remove();
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
             $("#city_id_tradetype").val("");
@@ -415,11 +605,72 @@
                 if(data.result){
 
                     lst_select_city = JSON.parse(data.data);
-                    for(i=0;i<lst_select_city.length;i++){
+                    for(var i=0;i<lst_select_city.length;i++){
                         cityNameArray.push(lst_select_city[i].cityname);
                         cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
                     }
                     var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
+                    autoComplete.start(event);
+                }else{
+
+                }
+            });
+        }
+    });
+
+    $('#city_name_tradetype2').keyup(function(event){//门店交易额统计
+        cityNameArray=new Array();
+        $("#auto_city_member").empty();
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+            $("#city_id").val("");
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+            var city_id = null;
+            if(target==1){
+                city_id = cityId;
+
+            }
+            doManager('dynamicManager','selectAllCity',null,function(data){
+                if(data.result){
+
+                    lst_select_city = JSON.parse(data.data);
+                    for(var i=0;i<lst_select_city.length;i++){
+                        cityNameArray.push(lst_select_city[i].cityname);
+                        cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
+                    }
+                    var autoComplete = new AutoComplete("city_name_tradetype2","auto_city2",cityNameArray);
+                    autoComplete.start(event);
+                }else{
+
+                }
+            });
+        }
+    });
+
+    $('#city_name_tradetype3').keyup(function(event){//门店交易额统计
+        cityNameArray=new Array();
+        $("#auto_city_try").empty();
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+            $("#city_id_try").val("");
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+            var city_id = null;
+            if(target==1){
+                city_id = cityId;
+
+            }
+            doManager('dynamicManager','selectAllCity',null,function(data){
+                if(data.result){
+                    lst_select_city = JSON.parse(data.data);
+                    for(var i=0;i<lst_select_city.length;i++){
+                        cityNameArray.push(lst_select_city[i].cityname);
+                        cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
+                    }
+                    var autoComplete = new AutoComplete("city_name_tradetype3","auto_city3",cityNameArray);
                     autoComplete.start(event);
                 }else{
 
@@ -433,6 +684,18 @@
         $("#city_id_tradetype").val(cityIdMap[temp_city]);
     });
 
+    $('#auto_city2').on("click",function(){
+        var temp_city = document.getElementById("city_name_tradetype2").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+        $("#city_id_tradetype2").val(cityIdMap[temp_city]);
+    });
+
+    $('#auto_city3').on("click",function(){
+        var temp_city = document.getElementById("city_name_tradetype3").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+        $("#city_id_tradetype3").val(cityIdMap[temp_city]);
+    });
+
+
+
 
     /**-----------------------------------搜索门店------------------------------------------------------**/
     var lst_select_store=null;
@@ -444,7 +707,6 @@
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
             $("#store_id_tradetype").val("");
-            $('#store_name-search_tradetype').children().remove();
             if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
                 return;
             }
@@ -477,33 +739,143 @@
         }
     });
 
+    $('#store_name_tradetype3').keyup(function(event){
+        storeNameArray=new Array();
+        $("#auto_store3").empty();
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+            $("#store_id_tradetype3").val("");
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+            var city_id = null;
+            if(target==0){//总部
+                city_id = ($("#city_id_tradetype3").val())==""?null:($("#city_id_tradetype3").val());
+                var city_name =  $("#city_name_tradetype3").val();
+                if(city_id==null&&city_name!=""){
+                    city_id=-10000;
+                }
+            }else if(target==1){//城市
+                city_id = cityId;
+            }
+
+            doManager('dynamicManager','getStoreByCity',[target,employeeId,city_id,str_name],function(data){
+                if(data.result){
+                    lst_select_store = JSON.parse(data.data).storelist;
+                    for(var i=0;i<lst_select_store.length;i++){
+                        storeNameArray.push(lst_select_store[i].name);
+                        storeIdMap[lst_select_store[i].name] = lst_select_store[i].storeno;
+                    }
+                    var autoComplete = new AutoComplete("store_name_tradetype3","auto_store3",storeNameArray);
+                    autoComplete.start(event);
+                }else{
+
+                }
+            });
+        }
+    });
+
     $('#auto_store').on("click",function(){
         var temp_store = document.getElementById("store_name_tradetype").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
         $("#store_id_tradetype").val(storeIdMap[temp_store]);
     });
+    $('#auto_store3').on("click",function(){
+        var temp_store = document.getElementById("store_name_tradetype3").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+        $("#store_id_tradetype3").val(storeIdMap[temp_store]);
+    });
 
-    <!-------------------------------------------------------点击查询----------------------------------------------------------------->
+    function initalldept(){
+        doManager("chartStatManager","queryAllDept",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    $("#deptSelect").append("<option value=''>全部</option>");
+                    $("#deptSelect2").append("<option value=''>全部</option>");
+                    $(jsonData).each(function(index,element){
+                        $("#deptSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+                        $("#deptSelect2").append('<option value="'+element.id+'">'+element.name+'</option>');
+                    });
+                }
+            });
+    }
 
+    function operatedCoverageDept(){
+        if($('#deptClick').is(':checked')){
+            $("#deptSelect").attr("disabled",false)
+        }else{
+            $("#deptSelect").attr("disabled",true)
+            $("#deptSelect").val("");
+        }
+    }
+
+    function operatedCoverageChannel(){
+        if($('#channelClick').is(':checked')){
+            $("#channel_name").attr("disabled",false);
+        }else{
+            $("#channel_name").attr("disabled",true);
+            $("#channel_name").val("");
+        }
+    }
+
+    function operatedCoverageCity(){
+        if($('#cityClick').is(':checked')){
+            $("#city_name_tradetype3").attr("disabled",false);
+            $("#auto_city3").empty();
+        }else{
+            $("#city_name_tradetype3").attr("disabled",true);
+            $("#city_id_tradetype3").val("");
+            $("#city_name_tradetype3").val("");
+            $("#auto_city3").empty();
+        }
+    }
+
+    function operatedCoverageStore(){
+        if($('#storeClick').is(':checked')){
+            $("#store_name_tradetype3").attr("disabled",false);
+            $("#auto_store3").empty();
+        }else{
+            $("#store_name_tradetype3").attr("disabled",true);
+            $("#store_id_tradetype3").val("");
+            $("#store_name_tradetype3").val("");
+            $("#auto_store3").empty();
+        }
+    }
+
+    function operatedCoverageChannel2(){
+        if($('#channelClick2').is(':checked')){
+            $("#channel_name2").attr("disabled",false);
+        }else{
+            $("#channel_name2").attr("disabled",true);
+            $("#channel_name2").val("");
+        }
+    }
+
+    <!-------------------------------------------------------城市单位分页点击查询----------------------------------------------------------------->
     var isCreatePage1=false;
     function searchInfo_tradeprofit_step1(cur_page){
         isCreatePage1=false;
         searchInfo_tradeprofit_step2(cur_page);
     }
 
-
+    var manualPageRecordeCity=10;
+    function chnagePageRecords_City(t){
+        $("#page_city").empty();
+        manualPageRecordeCity  = $("#pageRecords_city").val();
+        searchInfo_tradeprofit_step1(1);
+    }
 
     //查询上
     var currentPage_tradetype = 1;
     var totalPage_tradetype = 1;
     function   searchInfo_tradeprofit_step2(cur_page){
-        var sdate = $("#auto_date_profit").val();
+        var sdate = $("#auto_date_city").val();
         var begin_end_date=["",""];
         if(sdate!=""){
             begin_end_date = sdate.split("-");
         }else{
             crm_alert(0,"请选择时间！");
             return;
-		}
+        }
 
         searchInfo_tradeprofit_step3(cur_page,begin_end_date);
     }
@@ -511,13 +883,9 @@
     function searchInfo_tradeprofit_step3(cur_page,begin_end_date){
         $("#process_div").show();
         $("#process_div_pic").show();
+        var searchstr = "store_active";
         var number_str = $("#store_id_tradetype").val();
         var storeName = $("#store_name_tradetype").val();
-        var dept = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
-        var channel = $("#channel_name").val();
-        if(dept!="" && dept=="全部"){
-            dept = null;
-        }
 
         if(number_str==""&&storeName!=""){
             number_str=-10000;
@@ -536,9 +904,7 @@
                 endDate:endDate,
                 storeNo:number_str,
                 cityId:cityId,
-                dept:dept,
-                searchstr:"",
-                channel:channel,
+                searchstr:searchstr,
                 employeeId:employeeId,
                 target:target
             }
@@ -548,9 +914,7 @@
                 endDate:endDate,
                 storeNo:number_str,
                 cityId:initCity,
-                dept:dept,
-                searchstr:"",
-                channel:channel,
+                searchstr:searchstr,
                 employeeId:employeeId,
                 target:target
             }
@@ -558,10 +922,8 @@
             dynamicDto = {
                 beginDate:beginDate,
                 endDate:endDate,
-                storeNo:number_str,
-                dept:dept,
-                searchstr:"",
-                channel:channel,
+                storeNo:storeNo,
+                searchstr:searchstr,
                 employeeNo:employeeId,
                 target:target
             }
@@ -570,70 +932,23 @@
                 beginDate:beginDate,
                 endDate:endDate,
                 storeNo:number_str,
-                dept:dept,
-                searchstr:"",
-                channel:channel,
+                searchstr:searchstr,
                 employeeNo:employeeId,
                 target:target
             }
         }
-        var searchstrTemp = "";
-        if($('#channelClick').is(':checked') || $('#cityClick').is(':checked') || $('#storeClick').is(':checked') || $('#deptClick').is(':checked')){
-            if($('#channelClick').is(':checked')){
-                searchstrTemp += ",dept_channel_active";
-                $("#channelnamepayhide").show();
-            }
-
-            if($('#deptClick').is(':checked')){
-                searchstrTemp += ",dept_active";
-                $("#deptnamepayhide").show();
-            }
-
-            if($('#cityClick').is(':checked')){
-                searchstrTemp += ",dept_city_active";
-                $("#citynamepayhide").show();
-            }
-
-            if($('#storeClick').is(':checked')){
-                searchstrTemp += ",dept_store_active";
-                $("#storenamepayhide").show();
-                $("#storenopayhide").show();
-            }
-
-            if(searchstrTemp.indexOf("dept_channel_active") == -1){
-                $("#channelnamepayhide").hide();
-            }
-            if(searchstrTemp.indexOf("dept_city_active") == -1){
-                $("#citynamepayhide").hide();
-            }
-            if(searchstrTemp.indexOf("dept_store_active") == -1){
-                $("#storenamepayhide").hide();
-                $("#storenopayhide").hide();
-            }
-            if(searchstrTemp.indexOf("dept_active") == -1){
-                $("#deptnamepayhide").hide();
-            }
-        }else{
-            $("#channelnamepayhide").hide();
-            $("#citynamepayhide").hide();
-            $("#storenamepayhide").hide();
-            $("#storenopayhide").hide();
-            $("#deptnamepayhide").hide();
-        }
-        dynamicDto["searchstr"] = searchstrTemp;
-
-        $("#tradeType_tbody").find("tr:gt(0)").remove();
         var pageInfo = new Object();
         pageInfo.currentPage = cur_page;
+        pageInfo.recordsPerPage = manualPageRecordeCity;
         doManager('dynamicManager','queryProfitStat',[dynamicDto,pageInfo],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
-                    // $("#tradeType_tbody").find("tr:gt(0)").remove();
+                    $("#tradeType_tbody").find("tr:gt(0)").remove();
                     var jData = result.data;
                     if(jData==null||jData.length==0){
                         crm_alert(5,"没有符合条件的数据！");
-                        $("#page_tradetype").createPage({
+                        $("#page_city").createPage({
                             pageCount:0,
                             current:0,
                             backFn:function(p){
@@ -645,9 +960,10 @@
                         return;
                     }
                     totalPage_tradetype = result.total_pages;
+                    $("#totalRecord_city").html(result.pageinfo.totalRecords);
 
                     if(!isCreatePage1){
-                        $("#page_tradetype").createPage({
+                        $("#page_city").createPage({
                             pageCount:totalPage_tradetype,
                             current:cur_page,
                             backFn:function(p){
@@ -659,22 +975,10 @@
 
                     var infoStr="";
                     for(var i=0;i<jData.length;i++){
-                        infoStr= "<tr>";
-                        if($('#cityClick').is(':checked')){
-                            infoStr= infoStr +"<td>"+jData[i].city_name+"</td>";
-                        }
-                        if($('#storeClick').is(':checked')){
-                            infoStr= infoStr +"<td>"+jData[i].store_name+"</td>";
-                            infoStr= infoStr +"<td>"+jData[i].store_code+"</td>";
-                        }
-                        if($('#deptClick').is(':checked')){
-                            infoStr= infoStr +"<td>"+jData[i].department_name+"</td>";
-                        }
-                        if($('#channelClick').is(':checked')){
-                            infoStr= infoStr +"<td>"+jData[i].channel_name+"</td>";
-                        }
-                        var real_profit = (jData[i].total_profit -jData[i].return_profit- jData[i].order_fee).toFixed(2);
-                        infoStr = infoStr+"<td>"+real_profit+"</td>"
+                        var real_profit = (jData[i].total_profit-jData[i].return_profit-jData[i].order_fee).toFixed(2);
+                        infoStr= "<tr>"
+                            +"<td>"+jData[i].city_name+"</td>"
+                            +"<td>"+real_profit+"</td>"
                             +"</tr>";
 
                         $("#tradeType_tbody").append(infoStr);
@@ -682,7 +986,7 @@
                 }else if(result.status=='storefail'){
                     $("#tradeType_tbody").find("tr:gt(0)").remove();
                     crm_alert(5,JSON.parse(result.data).message);
-                    $("#page_tradetype").createPage({
+                    $("#page_city").createPage({
                         pageCount:0,
                         current:0,
                         backFn:function(p){
@@ -707,9 +1011,9 @@
         });
     }
 
-    //导出上
-    function   export_tradetype(){
-        var sdate = $("#auto_date_profit").val();
+    //城市单位导出
+    function export_tradetype(){
+        var sdate = $("#auto_date_city").val();
         var begin_end_date=["",""];
         if(sdate!=""){
             begin_end_date = sdate.split("-");
@@ -717,24 +1021,11 @@
             crm_alert(0,"请选择时间！");
             return;
         }
-
-        var cur_page;
-        export_tradetype1(begin_end_date);
-
-
-    }
-    //导出上第二步
-    function export_tradetype1(begin_end_date){
         $("#process_div").show();
         $("#process_div_pic").show();
 
         var number_str = $("#store_id_tradetype").val();
-        var storeName = $("#store_name_tradetype").val()
-        var dept = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
-        var channel = $("#channel_name").val();
-        if(dept!="" && dept=="全部"){
-            dept = null;
-        }
+        var storeName = $("#store_name_tradetype").val();
 
         if(number_str==""&&storeName!=""){
             number_str=-10000;
@@ -750,14 +1041,13 @@
             }
             dynamicDto = {
                 beginDate:beginDate,
-				endDate:endDate,
+                endDate:endDate,
                 storeNo:number_str,
                 cityId:cityId,
-                dept:dept,
-                searchstr:"",
-                channel:channel,
                 employeeId:employeeId,
-                target:target
+                target:target,
+                storeId:number_str,
+                searchstr:"store"
             }
         }else if(target==1){//城市
             dynamicDto = {
@@ -765,81 +1055,23 @@
                 endDate:endDate,
                 storeNo:number_str,
                 cityId:initCity,
-                dept:dept,
-                searchstr:"",
-                channel:channel,
                 employeeId:employeeId,
-                target:target
+                target:target,
+                storeId:number_str,
+                searchstr:"store"
             }
         }else if(target==2){//店长
             dynamicDto = {
                 beginDate:beginDate,
                 endDate:endDate,
                 storeNo:number_str,
-                dept:dept,
-                searchstr:"",
-                channel:channel,
                 employeeNo:employeeId,
-                target:target
-            }
-        }else if(target==3){//事业部
-            dynamicDto = {
-                beginDate:beginDate,
-                endDate:endDate,
-                storeNo:number_str,
-                dept:dept,
-                searchstr:"",
-                channel:channel,
-                employeeNo:employeeId,
-                target:target
+                storeId:storeId,
+                target:target,
+                searchstr:"store"
             }
         }
 
-        var searchstrTemp = "";
-        if($('#channelClick').is(':checked') || $('#cityClick').is(':checked') || $('#storeClick').is(':checked') || $('#deptClick').is(':checked')){
-            if($('#channelClick').is(':checked')){
-                searchstrTemp += ",dept_channel_active";
-                $("#channelnamepayhide").show();
-            }
-
-            if($('#cityClick').is(':checked')){
-                searchstrTemp += ",dept_city_active";
-                $("#citynamepayhide").show();
-            }
-
-            if($('#storeClick').is(':checked')){
-                searchstrTemp += ",dept_store_active";
-                $("#storenamepayhide").show();
-                $("#storenopayhide").show();
-            }
-
-            if($('#deptClick').is(':checked')){
-                searchstrTemp += ",dept_active";
-                $("#deptnamepayhide").show();
-            }
-
-            if(searchstrTemp.indexOf("dept_channel_active") == -1){
-                $("#channelnamepayhide").hide();
-            }
-            if(searchstrTemp.indexOf("dept_city_active") == -1){
-                $("#citynamepayhide").hide();
-            }
-            if(searchstrTemp.indexOf("dept_store_active") == -1){
-                $("#storenamepayhide").hide();
-                $("#storenopayhide").hide();
-            }
-            if(searchstrTemp.indexOf("dept_active") == -1){
-                $("#deptnamepayhide").hide();
-            }
-        }else{
-            $("#channelnamepayhide").hide();
-            $("#citynamepayhide").hide();
-            $("#storenamepayhide").hide();
-            $("#storenopayhide").hide();
-            $("#deptnamepayhide").hide();
-        }
-        dynamicDto["searchstr"] = searchstrTemp;
-        searchInfo_tradeprofit_step2(1);
         doManager('dynamicManager','exportProfitStat',[dynamicDto],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
@@ -864,98 +1096,773 @@
         });
     }
 
-    function initalldept(){
-        doManager("chartStatManager","queryAllDept",null,
-            function(data,textStatus,XmlHttpRequest){
-                if (data.result) {
-                    var jsonData = $.fromJSON(data.data);
-                    $("#deptSelect").append("<option value=''>全部</option>");
-                    $(jsonData).each(function(index,element){
-                        $("#deptSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
-                    });
-                }
-            });
-    }
-
-    function operatedCoverageChannel(){
-        if($('#channelClick').is(':checked')){
-            $("#channel_name").attr("disabled",false);
-        }else{
-            $("#channel_name").attr("disabled",true);
-            $("#channel_name").val("");
-        }
-    }
-
-    function operatedCoverageCity(){
-        if($('#cityClick').is(':checked')){
-            $("#city_name_tradetype").attr("disabled",false);
-            $("#auto_city").empty();
-        }else{
-            $("#city_name_tradetype").attr("disabled",true);
-            $("#city_id_tradetype").val("");
-            $("#city_name_tradetype").val("");
-            $("#city_store").empty();
-        }
-    }
-
-    function operatedCoverageStore(){
-        if($('#storeClick').is(':checked')){
-            $("#store_name_tradetype").attr("disabled",false);
-            $("#auto_store").empty();
-        }else{
-            $("#store_name_tradetype").attr("disabled",true);
-            $("#store_id_tradetype").val("");
-            $("#store_name_tradetype").val("");
-            $("#auto_store").empty();
-        }
-    }
-
-    function operatedCoverageDept(){
-        if($('#deptClick').is(':checked')){
-			$("#deptSelect").attr("disabled",false)
-        }else{
-            $("#deptSelect").attr("disabled",true)
-        }
-    }
-
-    function resetSerachParam(){
-        $("#auto_store").empty();
-        var firstDate = new Date();
-        var curDate = new Date();
-        var bdate = firstDate.format('yyyy/MM/dd');
-        var cDate = curDate.format('yyyy/MM/dd');
-        $("#auto_date_profit").val(bdate+" - "+cDate);
+    function resetSerachParamCity(){
+        $("#auto_city").empty();
         if(target==0){//总部
+            if(fromBar != "1" && fromBar != "2"){
+                $("#city_id_tradetype").val("");
+                $("#city_name_tradetype").val("");
+            }
             $("#store_id_tradetype").val("");
             $("#store_name_tradetype").val("");
-            $("#store_name-search_tradetype").empty();
 
-            $("#city_id_tradetype").val("");
-            $("#city_name-search_tradetype").empty();
-            $("#city_name_tradetype").val("");
 
-            $("#deptSelect").val("");
-            $("#channel_name").val("");
         }else if(target==1){//城市级别
 
             $("#store_id_tradetype").val("");
             $("#store_name_tradetype").val("");
-            $("#store_name-search_tradetype").empty();
 
-            $("#deptSelect").val("");
-            $("#channel_name").val("");
         }else if(target==2){//店长
 
-        }else if(target==3){//事业群
-            $("#city_id_tradetype").val("");
-            $("#city_name_tradetype").val("");
+        }
+        var firstDate = new Date();
+        firstDate.setTime(firstDate.getTime()-24*60*60*1000);
+        var bdate = firstDate.format('yyyy/MM/dd');
+        var cDate = firstDate.format('yyyy/MM/dd');
+        $("#auto_date_city").val(bdate+" - "+cDate);
+
+    }
+
+
+    <!-------------------------------------------------------门店单位分页点击查询----------------------------------------------------------------->
+    var isCreatePage2=false;
+    function searchInfo_store_step1(cur_page){
+        isCreatePage2=false;
+        searchInfo_store_step2(cur_page);
+    }
+
+    var manualPageRecordeStore=10;
+    function chnagePageRecords_Store(t){
+        $("#page_store").empty();
+        manualPageRecordeStore  = $("#pageRecords_store").val();
+        searchInfo_store_step1(1);
+    }
+    //查询上
+    var currentPage_tradetype2 = 1;
+    var totalPage_tradetype2 = 1;
+    function   searchInfo_store_step2(cur_page){
+        var sdate = $("#auto_date_store").val();
+        var begin_end_date=["",""];
+        if(sdate!=""){
+            begin_end_date = sdate.split("-");
+        }else{
+            crm_alert(0,"请选择时间！");
+            return;
+        }
+
+        searchInfo_store_step3(cur_page,begin_end_date);
+    }
+
+    function searchInfo_store_step3(cur_page,begin_end_date){
+        $("#process_div").show();
+        $("#process_div_pic").show();
+        var searchstr = "store_active";
+        var number_str = $("#store_id_tradetype").val();
+        var storeName = $("#store_name_tradetype").val();
+        var dept = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
+        var channel = $("#channel_name").val();
+        if(dept!="" && dept=="全部"){
+            dept = null;
+        }
+        if(number_str==""&&storeName!=""){
+            number_str=-10000;
+        }
+        var dynamicDto=null;
+        var beginDate = begin_end_date[0].trim().replace(new RegExp("/","g"),"-");
+        var endDate = begin_end_date[1].trim().replace(new RegExp("/","g"),"-");
+        if(target==0){//总部
+            var cityId = $("#city_id_tradetype2").val();
+            var cityName = $("#city_name_tradetype2").val();
+            if(cityId==""&&cityName!=""){
+                cityId="-10000";
+            }
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                cityId:cityId,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeId:employeeId,
+                target:target
+            }
+        }else if(target==1){//城市
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                cityId:initCity,
+                searchstr:searchstr,
+                employeeId:employeeId,
+                target:target
+            }
+        }else if(target==2){//店长
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:storeNo,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeNo:employeeId,
+                target:target
+            }
+        }else if(target==3){//事业部
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeNo:employeeId,
+                target:target
+            }
+        }
+
+        var searchstrTemp = "store_active";
+        if($('#channelClick').is(':checked') || $('#deptClick').is(':checked')){
+            if($('#channelClick').is(':checked')){
+                searchstrTemp += ",store_channel";
+                $("#channelnamepayhide").show();
+            }
+
+            if($('#deptClick').is(':checked')){
+                searchstrTemp += ",store_dept";
+                $("#deptnamepayhide").show();
+            }
+
+            if(searchstrTemp.indexOf("store_channel") == -1){
+                $("#channelnamepayhide").hide();
+            }
+            if(searchstrTemp.indexOf("store_dept") == -1){
+                $("#deptnamepayhide").hide();
+            }
+
+        }else{
+            $("#channelnamepayhide").hide();
+            $("#deptnamepayhide").hide();
+        }
+        dynamicDto["searchstr"] = searchstrTemp;
+
+        var pageInfo = new Object();
+        pageInfo.currentPage = cur_page;
+        pageInfo.recordsPerPage = manualPageRecordeStore;
+        doManager('dynamicManager','queryProfitStoreStat',[dynamicDto,pageInfo],function(data){
+            if(data.result){
+                var result= JSON.parse(data.data);
+                if(result.status=='success'){
+                    $("#tradeType_tbody_store").find("tr:gt(0)").remove();
+                    var jData = result.data;
+                    if(jData==null||jData.length==0){
+                        crm_alert(5,"没有符合条件的数据！");
+                        $("#page_store").createPage({
+                            pageCount:0,
+                            current:0,
+                            backFn:function(p){
+
+                            }
+                        });
+                        $("#process_div").hide();
+                        $("#process_div_pic").hide();
+                        return;
+                    }
+                    totalPage_tradetype2 = result.total_pages;
+                    $("#totalRecord_store").html(result.pageinfo.totalRecords);
+
+                    if(!isCreatePage2){
+                        $("#page_store").createPage({
+                            pageCount:totalPage_tradetype2,
+                            current:cur_page,
+                            backFn:function(p){
+                                searchInfo_store_step3(p,begin_end_date);
+                            }
+                        });
+                        isCreatePage2=true;
+                    }
+
+                    var infoStr="";
+                    for(var i=0;i<jData.length;i++){
+                        infoStr= "<tr>"
+                            +"<td>"+jData[i].city_name+"</td>"
+                            +"<td>"+jData[i].store_name+"</td>"
+                            +"<td>"+jData[i].store_code+"</td>";
+                        if($('#deptClick').is(':checked')){
+                            infoStr= infoStr +"<td>"+jData[i].department_name+"</td>";
+                        }
+                        if($('#channelClick').is(':checked')){
+                            infoStr= infoStr +"<td>"+jData[i].channel_name+"</td>";
+                        }
+                        infoStr = infoStr +"<td>"+jData[i].real_profit+"</td>"
+                            +"</tr>";
+
+                        $("#tradeType_tbody_store").append(infoStr);
+                    }
+                }else if(result.status=='storefail'){
+                    $("#tradeType_tbody_store").find("tr:gt(0)").remove();
+                    crm_alert(5,JSON.parse(result.data).message);
+                    $("#page_store").createPage({
+                        pageCount:0,
+                        current:0,
+                        backFn:function(p){
+
+                        }
+                    });
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                    return;
+                }else{
+                    crm_alert(5,"请稍后重新请求！");
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                    return;
+                }
+
+            }else{
+                crm_alert(5,"请稍后重新请求！");
+            }
+            $("#process_div").hide();
+            $("#process_div_pic").hide();
+        });
+    }
+
+    //门店单位导出
+    function export_store(){
+        var sdate = $("#auto_date_store").val();
+        var begin_end_date=["",""];
+        if(sdate!=""){
+            begin_end_date = sdate.split("-");
+        }else{
+            crm_alert(0,"请选择时间！");
+            return;
+        }
+        $("#process_div").show();
+        $("#process_div_pic").show();
+
+        var number_str = $("#store_id_tradetype").val();
+        var storeName = $("#store_name_tradetype").val();
+        var dept = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
+        var channel = $("#channel_name").val();
+        if(dept!="" && dept=="全部"){
+            dept = null;
+        }
+        if(number_str==""&&storeName!=""){
+            number_str=-10000;
+        }
+        var dynamicDto=null;
+        var beginDate = begin_end_date[0].trim().replace(new RegExp("/","g"),"-");
+        var endDate = begin_end_date[1].trim().replace(new RegExp("/","g"),"-");
+        if(target==0){//总部
+            var cityId = $("#city_id_tradetype2").val();
+            var cityName = $("#city_name_tradetype2").val();
+            if(cityId==""&&cityName!=""){
+                cityId="-10000";
+            }
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                cityId:cityId,
+                employeeId:employeeId,
+                target:target,
+                dept:dept,
+                channel:channel,
+                searchstr:"store"
+            }
+        }else if(target==1){//城市
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                cityId:initCity,
+                employeeId:employeeId,
+                target:target,
+                dept:dept,
+                channel:channel,
+                searchstr:"store"
+            }
+        }else if(target==2){//店长
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                employeeNo:employeeId,
+                target:target,
+                dept:dept,
+                channel:channel,
+                searchstr:"store"
+            }
+        }
+
+        var searchstrTemp = "store_active";
+        if($('#channelClick').is(':checked') || $('#deptClick').is(':checked')){
+            if($('#channelClick').is(':checked')){
+                searchstrTemp += ",store_channel";
+                $("#channelnamepayhide").show();
+            }
+
+            if($('#deptClick').is(':checked')){
+                searchstrTemp += ",store_dept";
+                $("#deptnamepayhide").show();
+            }
+
+            if(searchstrTemp.indexOf("store_channel") == -1){
+                $("#channelnamepayhide").hide();
+            }
+            if(searchstrTemp.indexOf("store_dept") == -1){
+                $("#deptnamepayhide").hide();
+            }
+
+        }else{
+            $("#channelnamepayhide").hide();
+            $("#deptnamepayhide").hide();
+        }
+        dynamicDto["searchstr"] = searchstrTemp;
+
+        doManager('dynamicManager','exportProfitStoreStat',[dynamicDto],function(data){
+            if(data.result){
+                var result= JSON.parse(data.data);
+                if(result.status=='success'){
+                    window.location.href=result.data;
+                }else if(result.status=='null'){
+                    crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                    return;
+                }else{
+                    crm_alert(5,"请稍后重新请求！");
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                }
+
+            }else{
+                crm_alert(5,"请稍后重新请求！");
+            }
+            $("#process_div").hide();
+            $("#process_div_pic").hide();
+        });
+    }
+
+    function resetSerachParamStore(){
+        $("#auto_city2").empty();
+        $("#channel_name").val("");
+        $("#deptSelect").val("");
+        if(target==0){//总部
+            if(fromBar != "1" && fromBar != "2"){
+                $("#city_id_tradetype2").val("");
+                $("#city_name_tradetype2").val("");
+            }
             $("#store_id_tradetype").val("");
             $("#store_name_tradetype").val("");
-            $("#store_name-search_tradetype").empty();
-            $("#deptSelect").val("");
-            $("#channel_name").val("");
+
+
+        }else if(target==1){//城市级别
+
+            $("#store_id_tradetype").val("");
+            $("#store_name_tradetype").val("");
+
+        }else if(target==2){//店长
+
         }
+        var firstDate = new Date();
+        firstDate.setTime(firstDate.getTime()-24*60*60*1000);
+        var bdate = firstDate.format('yyyy/MM/dd');
+        var cDate = firstDate.format('yyyy/MM/dd');
+        $("#auto_date_store").val(bdate+" - "+cDate);
+
     }
+
+
+    <!-------------------------------------------------------门店单位分页点击查询----------------------------------------------------------------->
+    var isCreatePage3=false;
+    function searchInfo_dept_step1(cur_page){
+        isCreatePage3=false;
+        searchInfo_dept_step2(cur_page);
+    }
+
+    var manualPageRecordeDept=10;
+    function chnagePageRecords_Dept(t){
+        $("#page_dept").empty();
+        manualPageRecordeDept  = $("#pageRecords_dept").val();
+        searchInfo_dept_step1(1);
+    }
+    //查询上
+    var currentPage_tradetype3 = 1;
+    var totalPage_tradetype3 = 1;
+    function   searchInfo_dept_step2(cur_page){
+        var sdate = $("#auto_date_dept").val();
+        var begin_end_date=["",""];
+        if(sdate!=""){
+            begin_end_date = sdate.split("-");
+        }else{
+            crm_alert(0,"请选择时间！");
+            return;
+        }
+
+        searchInfo_dept_step3(cur_page,begin_end_date);
+    }
+
+    function searchInfo_dept_step3(cur_page,begin_end_date){
+        $("#process_div").show();
+        $("#process_div_pic").show();
+        var searchstr = "store_active";
+        var number_str = $("#store_id_tradetype3").val();
+        var storeName = $("#store_name_tradetype3").val();
+
+        var dept = $("#deptSelect2 option:selected").html()==""?null:$("#deptSelect2 option:selected").html();
+        var channel = $("#channel_name2").val();
+        if(dept!="" && dept=="全部"){
+            dept = null;
+        }
+
+        if(number_str==""&&storeName!=""){
+            number_str=-10000;
+        }
+        var dynamicDto=null;
+        var beginDate = begin_end_date[0].trim().replace(new RegExp("/","g"),"-");
+        var endDate = begin_end_date[1].trim().replace(new RegExp("/","g"),"-");
+        if(target==0){//总部
+            var cityId = $("#city_id_tradetype3").val();
+            var cityName = $("#city_name_tradetype3").val();
+            if(cityId==""&&cityName!=""){
+                cityId="-10000";
+            }
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                cityId:cityId,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeId:employeeId,
+                target:target
+            }
+        }else if(target==1){//城市
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                cityId:initCity,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeId:employeeId,
+                target:target
+            }
+        }else if(target==2){//店长
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:storeNo,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeNo:employeeId,
+                target:target
+            }
+        }else if(target==3){//事业部
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeNo:employeeId,
+                target:target
+            }
+        }
+
+        var searchstrTemp = "dept_active";
+        if($('#channelClick2').is(':checked') || $('#cityClick').is(':checked') || $('#storeClick').is(':checked')){
+            if($('#channelClick2').is(':checked')){
+                searchstrTemp += ",dept_channel";
+                $("#channelnamepayhide2").show();
+            }
+
+            if($('#storeClick').is(':checked')){
+                searchstrTemp += ",dept_store";
+                $("#storenamepayhide").show();
+                $("#storenopayhide").show();
+            }
+            if($('#cityClick').is(':checked')){
+                searchstrTemp += ",dept_city";
+                $("#citynamepayhide").show();
+            }
+
+            if(searchstrTemp.indexOf("dept_channel") == -1){
+                $("#channelnamepayhide2").hide();
+            }
+            if(searchstrTemp.indexOf("dept_city") == -1){
+                $("#citynamepayhide").hide();
+            }
+            if(searchstrTemp.indexOf("dept_store") == -1){
+                $("#storenamepayhide").hide();
+                $("#storenopayhide").hide();
+            }
+
+        }else{
+            $("#channelnamepayhide2").hide();
+            $("#storenamepayhide").hide();
+            $("#storenopayhide").hide();
+            $("#citynamepayhide").hide();
+        }
+        dynamicDto["searchstr"] = searchstrTemp;
+
+        var pageInfo = new Object();
+        pageInfo.currentPage = cur_page;
+        pageInfo.recordsPerPage = manualPageRecordeDept;
+        doManager('dynamicManager','queryProfitDeptStat',[dynamicDto,pageInfo],function(data){
+            if(data.result){
+                var result= JSON.parse(data.data);
+                if(result.status=='success'){
+                    $("#tradeType_tbody_dept").find("tr:gt(0)").remove();
+                    var jData = result.data;
+                    if(jData==null||jData.length==0){
+                        crm_alert(5,"没有符合条件的数据！");
+                        $("#page_store").createPage({
+                            pageCount:0,
+                            current:0,
+                            backFn:function(p){
+
+                            }
+                        });
+                        $("#process_div").hide();
+                        $("#process_div_pic").hide();
+                        return;
+                    }
+                    totalPage_tradetype3 = result.total_pages;
+                    $("#totalRecord_dept").html(result.pageinfo.totalRecords);
+
+                    if(!isCreatePage2){
+                        $("#page_dept").createPage({
+                            pageCount:totalPage_tradetype3,
+                            current:cur_page,
+                            backFn:function(p){
+                                searchInfo_dept_step3(p,begin_end_date);
+                            }
+                        });
+                        isCreatePage3=true;
+                    }
+
+                    var infoStr="";
+                    for(var i=0;i<jData.length;i++){
+                        infoStr= "<tr>";
+                        if($('#cityClick').is(':checked')){
+                            infoStr= infoStr +"<td>"+jData[i].city_name+"</td>";
+                        }
+                        if($('#storeClick').is(':checked')){
+                            infoStr= infoStr +"<td>"+jData[i].store_name+"</td>";
+                            infoStr= infoStr +"<td>"+jData[i].store_code+"</td>";
+                        }
+                        infoStr= infoStr +"<td>"+jData[i].department_name+"</td>";
+                        if($('#channelClick2').is(':checked')){
+                            infoStr= infoStr +"<td>"+jData[i].channel_name+"</td>";
+                        }
+                        infoStr = infoStr +"<td>"+jData[i].real_profit+"</td>"
+                            +"</tr>";
+
+                        $("#tradeType_tbody_dept").append(infoStr);
+                    }
+                }else if(result.status=='storefail'){
+                    $("#tradeType_tbody_dept").find("tr:gt(0)").remove();
+                    crm_alert(5,JSON.parse(result.data).message);
+                    $("#page_dept").createPage({
+                        pageCount:0,
+                        current:0,
+                        backFn:function(p){
+
+                        }
+                    });
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                    return;
+                }else{
+                    crm_alert(5,"请稍后重新请求！");
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                    return;
+                }
+
+            }else{
+                crm_alert(5,"请稍后重新请求！");
+            }
+            $("#process_div").hide();
+            $("#process_div_pic").hide();
+        });
+    }
+
+    //业务单位导出
+    function export_dept(){
+        var sdate = $("#auto_date_dept").val();
+        var begin_end_date=["",""];
+        if(sdate!=""){
+            begin_end_date = sdate.split("-");
+        }else{
+            crm_alert(0,"请选择时间！");
+            return;
+        }
+        $("#process_div").show();
+        $("#process_div_pic").show();
+        var searchstr = "store_active";
+        var number_str = $("#store_id_tradetype3").val();
+        var storeName = $("#store_name_tradetype3").val();
+        var dept = $("#deptSelect2 option:selected").html()==""?null:$("#deptSelect2 option:selected").html();
+        var channel = $("#channel_name2").val();
+        if(dept!="" && dept=="全部"){
+            dept = null;
+        }
+        if(number_str==""&&storeName!=""){
+            number_str=-10000;
+        }
+        var dynamicDto=null;
+        var beginDate = begin_end_date[0].trim().replace(new RegExp("/","g"),"-");
+        var endDate = begin_end_date[1].trim().replace(new RegExp("/","g"),"-");
+        if(target==0){//总部
+            var cityId = $("#city_id_tradetype3").val();
+            var cityName = $("#city_name_tradetype3").val();
+            if(cityId==""&&cityName!=""){
+                cityId="-10000";
+            }
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                cityId:cityId,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeId:employeeId,
+                target:target
+            }
+        }else if(target==1){//城市
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                cityId:initCity,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeId:employeeId,
+                target:target
+            }
+        }else if(target==2){//店长
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:storeNo,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeNo:employeeId,
+                target:target
+            }
+        }else if(target==3){//事业部
+            dynamicDto = {
+                beginDate:beginDate,
+                endDate:endDate,
+                storeNo:number_str,
+                searchstr:searchstr,
+                dept:dept,
+                channel:channel,
+                employeeNo:employeeId,
+                target:target
+            }
+        }
+
+        var searchstrTemp = "dept_active";
+        if($('#channelClick2').is(':checked') || $('#cityClick').is(':checked') || $('#storeClick').is(':checked')){
+            if($('#channelClick2').is(':checked')){
+                searchstrTemp += ",dept_channel";
+                $("#channelnamepayhide2").show();
+            }
+
+            if($('#storeClick').is(':checked')){
+                searchstrTemp += ",dept_store";
+                $("#storenamepayhide").show();
+                $("#storenopayhide").show();
+            }
+            if($('#cityClick').is(':checked')){
+                searchstrTemp += ",dept_city";
+                $("#citynamepayhide").show();
+            }
+
+            if(searchstrTemp.indexOf("dept_channel") == -1){
+                $("#channelnamepayhide2").hide();
+            }
+            if(searchstrTemp.indexOf("dept_city") == -1){
+                $("#citynamepayhide").hide();
+            }
+            if(searchstrTemp.indexOf("dept_store") == -1){
+                $("#storenamepayhide").hide();
+                $("#storenopayhide").hide();
+            }
+
+        }else{
+            $("#channelnamepayhide2").hide();
+            $("#storenamepayhide").hide();
+            $("#storenopayhide").hide();
+            $("#citynamepayhide").hide();
+        }
+        dynamicDto["searchstr"] = searchstrTemp;
+
+        doManager('dynamicManager','exportProfitDeptStat',[dynamicDto],function(data){
+            if(data.result){
+                var result= JSON.parse(data.data);
+                if(result.status=='success'){
+                    window.location.href=result.data;
+                }else if(result.status=='null'){
+                    crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                    return;
+                }else{
+                    crm_alert(5,"请稍后重新请求！");
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                }
+
+            }else{
+                crm_alert(5,"请稍后重新请求！");
+            }
+            $("#process_div").hide();
+            $("#process_div_pic").hide();
+        });
+    }
+
+    function resetSerachParamDept(){
+        $("#auto_city3").empty();
+        $("#channel_name2").val("");
+        $("#deptSelect2").val("");
+        if(target==0){//总部
+            if(fromBar != "1" && fromBar != "2"){
+                $("#city_id_tradetype3").val("");
+                $("#city_name_tradetype3").val("");
+            }
+            $("#store_id_tradetype3").val("");
+            $("#store_name_tradetype3").val("");
+
+
+        }else if(target==1){//城市级别
+
+            $("#store_id_tradetype3").val("");
+            $("#store_name_tradetype3").val("");
+
+        }else if(target==2){//店长
+
+        }
+        var firstDate = new Date();
+        firstDate.setTime(firstDate.getTime()-24*60*60*1000);
+        var bdate = firstDate.format('yyyy/MM/dd');
+        var cDate = firstDate.format('yyyy/MM/dd');
+        $("#auto_date_store").val(bdate+" - "+cDate);
+
+    }
+
+
 
 </script>
 

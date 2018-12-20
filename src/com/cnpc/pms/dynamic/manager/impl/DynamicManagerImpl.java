@@ -7518,6 +7518,31 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		return result;
 	}
 
+	public Map<String, Object> queryProfitStoreStat(DynamicDto dynamicDto,PageInfo pageInfo){
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Map<String, Object> result =new HashMap<String,Object>();
+		try {
+			result = storeDao.queryProfitStoreStat(dynamicDto, pageInfo);
+			result.put("status","success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("status","fail");
+		}
+		return result;
+	}
+
+	public Map<String, Object> queryProfitDeptStat(DynamicDto dynamicDto,PageInfo pageInfo){
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Map<String, Object> result =new HashMap<String,Object>();
+		try {
+			result = storeDao.queryProfitDeptStat(dynamicDto, pageInfo);
+			result.put("status","success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("status","fail");
+		}
+		return result;
+	}
 
 	public Map<String, Object> exportProfitStat(DynamicDto dynamicDto){
 		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
@@ -7530,48 +7555,90 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","more");
 				return result;
 			}
-
 			//城市毛利
-			String[] str_headers = null;
-			String[] headers_key = null;
+			String[] str_headers = new String[]{"城市","毛利"};
+			String[] headers_key = new String[]{"city_name","real_profit"};
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("城市单位毛利",list,str_headers,headers_key);
+			result = eeuo.exportFile();
+		}else{
+			result.put("message","请重新操作！");
+			result.put("status","fail");
+		}
+		return result;
+	}
 
-			//毛利统计
-			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){
+	public Map<String, Object> exportProfitStoreStat(DynamicDto dynamicDto){
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Map<String, Object> result = new HashMap<String,Object>();
+		List<Map<String, Object>> list = storeDao.exportProfitStoreStat(dynamicDto);
+
+		if(list!=null&&list.size()>0){//成功返回数据
+			if(list.size()>50000){
+				result.put("message","导出条目过多，请重新筛选条件导出！");
+				result.put("status","more");
+				return result;
+			}
+			String[] str_headers = new String[]{"城市","门店名称","门店编号","毛利"};
+			String[] headers_key = new String[]{"city_name","store_name","store_code","real_profit"};
+
+			if(dynamicDto.getSearchstr().contains("store_dept") || dynamicDto.getSearchstr().contains("store_channel")){
 				Map<String,String> content = new LinkedHashMap<>();
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
+				content.put("城市","city_name");
+				content.put("门店名称","store_name");
+				content.put("门店编号","store_code");
+				if(dynamicDto.getSearchstr().contains("store_dept")){
+					content.put("事业群","department_name");
+				}
+				if(dynamicDto.getSearchstr().contains("store_channel")){
+					content.put("频道","channel_name");
+				}
+				content.put("毛利","real_profit");
+				str_headers = content.keySet().toArray(new String[0]);
+				headers_key = content.values().toArray(new String[0]);
+			}
+
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("门店单位毛利",list,str_headers,headers_key);
+			result = eeuo.exportFile();
+		}else{
+			result.put("message","请重新操作！");
+			result.put("status","fail");
+		}
+		return result;
+	}
+
+	public Map<String, Object> exportProfitDeptStat(DynamicDto dynamicDto){
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Map<String, Object> result = new HashMap<String,Object>();
+		List<Map<String, Object>> list = storeDao.exportProfitDeptStat(dynamicDto);
+
+		if(list!=null&&list.size()>0){//成功返回数据
+			if(list.size()>50000){
+				result.put("message","导出条目过多，请重新筛选条件导出！");
+				result.put("status","more");
+				return result;
+			}
+			String[] str_headers = new String[]{"频道","毛利"};
+			String[] headers_key = new String[]{"department_name","real_profit"};
+
+			if(dynamicDto.getSearchstr().contains("dept_store") || dynamicDto.getSearchstr().contains("dept_city") || dynamicDto.getSearchstr().contains("dept_channel")){
+				Map<String,String> content = new LinkedHashMap<>();
+				if(dynamicDto.getSearchstr().contains("dept_city")){
 					content.put("城市","city_name");
 				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
+				if(dynamicDto.getSearchstr().contains("dept_store")){
 					content.put("门店名称","store_name");
 					content.put("门店编号","store_code");
 				}
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					content.put("事业群","department_name");
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+				content.put("事业群","department_name");
+				if(dynamicDto.getSearchstr().contains("store_channel")){
 					content.put("频道","channel_name");
 				}
-
 				content.put("毛利","real_profit");
-
 				str_headers = content.keySet().toArray(new String[0]);
 				headers_key = content.values().toArray(new String[0]);
-			}else{
-				str_headers = new String[]{"毛利"};
-				headers_key = new String[]{"real_profit"};
 			}
 
-			String sheetName = "";
-			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "dept_city_active".equals(dynamicDto.getSearchstr())){
-				sheetName = "城市";
-			}
-			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "dept_store_active".equals(dynamicDto.getSearchstr())){
-				sheetName = "门店";
-			}
-			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
-				sheetName = "事业群";
-			}
-			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil(dynamicDto.getBeginDate()+sheetName+"毛利",list,str_headers,headers_key);
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("业务单位毛利",list,str_headers,headers_key);
 			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
