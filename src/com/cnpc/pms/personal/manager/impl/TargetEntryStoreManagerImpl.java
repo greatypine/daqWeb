@@ -310,6 +310,13 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 							String str_value = getCellValue(row_human.getCell(nCellIndex));
 							if(nCellIndex == 3){
 								if(isNumeric(str_value)){
+									if(str_value.contains(".")){
+										String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+										if(str_value1.length() > 2){
+											rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+											return rcvmsg;
+										}
+									}
 									maori_target_list = Double.valueOf(str_value);
 								}else{
 									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
@@ -319,6 +326,13 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 							}
 							if(nCellIndex == 4){
 								if(isNumeric(str_value)){
+									if(str_value.contains(".")){
+										String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+										if(str_value1.length() > 2){
+											rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+											return rcvmsg;
+										}
+									}
 									profit_target_list = Double.valueOf(str_value);
 								}else{
 									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
@@ -326,6 +340,13 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 								}
 							}
 							if(nCellIndex == 5){
+								if(str_value.contains(".")){
+									String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+									if(str_value1.length() > 2){
+										rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+										return rcvmsg;
+									}
+								}
 								if(isNumeric(str_value)){
 									user_target_list = Double.valueOf(str_value);
 								}else{
@@ -350,6 +371,13 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 							if(str_value != null && str_value != "" && str_value != "0"){
 								if(nCellIndex == 3){
 									if(isNumeric(str_value)){
+										if(str_value.contains(".")){
+											String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+											if(str_value1.length() > 2){
+												rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+												return rcvmsg;
+											}
+										}
 										maori_target =  maori_target + Double.valueOf(str_value);
 									}else{
 										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
@@ -359,6 +387,13 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 								}
 								if(nCellIndex == 4){
 									if(isNumeric(str_value)){
+										if(str_value.contains(".")){
+											String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+											if(str_value1.length() > 2){
+												rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+												return rcvmsg;
+											}
+										}
 										profit_target = profit_target + Double.valueOf(str_value);
 									}else{
 										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
@@ -368,6 +403,13 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 								}
 								if(nCellIndex == 5){
 									if(isNumeric(str_value)){
+										if(str_value.contains(".")){
+											String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+											if(str_value1.length() > 2){
+												rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+												return rcvmsg;
+											}
+										}
 										user_target =  user_target + Double.valueOf(str_value);
 									}else{
 										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
