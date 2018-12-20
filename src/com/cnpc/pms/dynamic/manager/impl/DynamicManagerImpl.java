@@ -7617,7 +7617,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","more");
 				return result;
 			}
-			String[] str_headers = new String[]{"频道","毛利"};
+			String[] str_headers = new String[]{"事业群","毛利"};
 			String[] headers_key = new String[]{"department_name","real_profit"};
 
 			if(dynamicDto.getSearchstr().contains("dept_store") || dynamicDto.getSearchstr().contains("dept_city") || dynamicDto.getSearchstr().contains("dept_channel")){
@@ -7630,7 +7630,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 					content.put("门店编号","store_code");
 				}
 				content.put("事业群","department_name");
-				if(dynamicDto.getSearchstr().contains("store_channel")){
+				if(dynamicDto.getSearchstr().contains("dept_channel")){
 					content.put("频道","channel_name");
 				}
 				content.put("毛利","real_profit");
