@@ -35,7 +35,7 @@ public interface TargetEntryManager extends IManager {
 	 * @param
 	 * @return
 	 */
-	Map<String, Object> getByTarget(String statistics, String deptName,String channelName);
+	Map<String, Object> getByTarget(String statistics, String deptName,String channelName,TargetEntry targetEntry);
 	/**
 	 * 通过id查询目标值信息
 	 * @param id

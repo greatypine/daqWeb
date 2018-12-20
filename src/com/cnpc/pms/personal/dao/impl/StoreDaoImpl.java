@@ -1900,142 +1900,226 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	}
 
 	public Map<String, Object> queryProfitStat(DynamicDto dynamicDto,PageInfo pageInfo){
-		String sql = "";
-		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){
-			sql = sql + "select min(city_name) as city_name,min(store_name) as store_name,min(store_code) as store_code,min(department_name) as department_name,"
-					+ "min(channel_name) as channel_name,sum(order_fee) as order_fee,sum(total_profit) as total_profit,"
-					+ "sum(return_profit) as return_profit from (select aa.city_name,aa.store_city_code,aa.store_name,aa.store_code,aa.department_name,aa.channel_name,"
-					+ "order_fee,total_profit,ifnull(dd.return_profit,0) as return_profit from ("
-					+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_name) as store_name,min(dot.store_code) as store_code,"
-					+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
-					+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
-					+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
-					+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' and dot.department_name!='运营管理中心' ";
-			if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
-				sql = sql + "and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' ";
-			}
-			if(dynamicDto.getCityId()!=null){
-				sql = sql + "and tdc.id = "+dynamicDto.getCityId()+" ";
-			}
-			if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
-				Map<String,Object> position_obj = queryPlatformidByCode(dynamicDto.getStoreNo());
-				if (position_obj != null) {
-					sql = sql + " and (dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "' or dot.normal_store_id='"+(String) position_obj.get("platformid")+"')";
-				}else{
-					sql = sql + " and dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "'";
-				}
-			}
-			if(StringUtils.isNotEmpty(dynamicDto.getDept())){
-				sql = sql + "and dot.department_name like '%"+dynamicDto.getDept()+"%' ";
-			}
-			if(StringUtils.isNotEmpty(dynamicDto.getChannel())){
-				sql = sql + "and dot.channel_name like '%"+dynamicDto.getChannel()+"%' ";
-			}
-
-			if(dynamicDto.getSearchstr().contains("dept_city_active") || dynamicDto.getSearchstr().contains("dept_store_active")
-					|| dynamicDto.getSearchstr().contains("dept_channel_active") || dynamicDto.getSearchstr().contains("dept_active")){
-				sql = sql + "group by ";
-				String sqlTemp = "";
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					sqlTemp = sqlTemp + ",dot.store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					sqlTemp = sqlTemp + ",dot.store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					sqlTemp = sqlTemp + ",dot.channel_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					sqlTemp = sqlTemp + ",dot.department_name ";
-				}
-				sqlTemp = sqlTemp.substring(1,sqlTemp.length()-1);
-				sql = sql + sqlTemp + " order by department_name ";
-			}
-
-			//退款
-			sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ";
-			if(dynamicDto.getSearchstr().contains("dept_city_active") || dynamicDto.getSearchstr().contains("dept_store_active")
-					|| dynamicDto.getSearchstr().contains("dept_channel_active") || dynamicDto.getSearchstr().contains("dept_active") ){
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					sql = sql + ",store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					sql = sql + ",store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					sql = sql + ",channel_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					sql = sql + ",department_name ";
-				}
-				sql = sql + "from df_mass_order_total where strleft(return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(return_time,10)<='"+dynamicDto.getEndDate()+"' " ;
-				sql = sql + "group by ";
-				String sqlTemp = "";
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					sqlTemp = sqlTemp + ",store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					sqlTemp = sqlTemp + ",store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					sqlTemp = sqlTemp + ",channel_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					sqlTemp = sqlTemp + ",department_name ";
-				}
-				sqlTemp = sqlTemp.substring(1,sqlTemp.length()-1);
-				sql = sql + sqlTemp + ") dd on (" ;
-				String onTemp = "";
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					onTemp = onTemp + "and aa.department_name=dd.department_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					onTemp = onTemp + "and aa.store_city_code=dd.store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					onTemp = onTemp + "and aa.store_code=dd.store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					onTemp = onTemp + "and aa.channel_name=dd.channel_name ";
-				}
-				onTemp = onTemp.substring(3,onTemp.length()-1);
-				sql = sql + onTemp + ") ";
-			}
-
-			if(dynamicDto.getSearchstr().contains("dept_city_active") || dynamicDto.getSearchstr().contains("dept_store_active")
-					|| dynamicDto.getSearchstr().contains("dept_channel_active") || dynamicDto.getSearchstr().contains("dept_active")){
-				sql = sql + ") tt group by  ";
-				String temp = "";
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					temp = temp + ",tt.department_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					temp = temp + ",tt.store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					temp = temp + ",tt.store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					temp = temp + ",tt.channel_name ";
-				}
-				temp = temp.substring(1,temp.length()-1);
-				sql = sql + temp + " order by department_name ";
-			}
-		}else{
-			sql = sql + "select ifnull(dround(sum(case when dot.order_tag4 is null and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"'  then dot.platform_price else 0 end),2),0) as order_fee," +
-					"ifnull(dround(sum(case when strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' then dot.order_profit else 0 end),2),0) as total_profit," +
-					"ifnull(dround(sum(case when strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10)<='"+dynamicDto.getEndDate()+"'  then order_profit else 0 end),2),0)  as return_profit " +
-					"from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc " +
-					"where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' and dot.department_name!='运营管理中心' ";
+		String sql = "select aa.*,ifnull(dd.return_profit,0) as return_profit from ( "
+				+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,"
+				+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
+				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc "
+				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  ";
+		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
+			sql = sql + "and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' ";
 		}
+		if(dynamicDto.getCityId()!=null){
+			sql = sql + "and tdc.id = "+dynamicDto.getCityId()+" ";
+		}
+		sql = sql + "group by dot.store_city_code order by dot.store_city_code ";
+
+		//退款
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total " +
+				"where strleft(return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(return_time,10)<='"+dynamicDto.getEndDate()+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
+
+		sql = sql + "order by aa.store_city_code ";
 
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 
 		int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
 		int recordsPerPage = pageInfo.getRecordsPerPage();
-		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){
-			sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+		sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
+		String total = "0";
+		List<Map<String,Object>> resultCount = ImpalaUtil.executeGuoan(sql_count);
+		if(resultCount !=null && resultCount.size()>0 ){
+			total = String.valueOf(resultCount.get(0).get("total"));
 		}
+
+		pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+		map_result.put("pageinfo", pageInfo);
+		map_result.put("data", list);
+		map_result.put("total_pages", total_pages);
+		return map_result;
+	}
+
+	public Map<String, Object> queryProfitStoreStat(DynamicDto dynamicDto,PageInfo pageInfo){
+		String sql = "select aa.city_id,aa.store_city_code,aa.city_name,aa.store_code,aa.store_name,aa.department_name,aa.channel_name,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit from ( " +
+				"select dot.real_store_id as store_id,min(ts.storeno) as store_code,min(ts.name) as store_name,min(tdc.id) as city_id,min(ts.city_name) as city_name,dot.store_city_code,min(department_name) as department_name ";
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + ",dot.bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + ",dot.channel_id ";
+		}
+		sql = sql + ",min(channel_name) as channel_name,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit,  " +
+			"ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,ifnull(dround(sum(case when dot.order_tag4 is null  " +
+			"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc " +
+			"where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' " +
+			"and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.real_store_id,dot.store_city_code ";
+
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + ",dot.bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + ",dot.channel_id ";
+		}
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_code,store_city_code ";
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + ",bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + ",channel_id ";
+		}
+
+		sql = sql + "from df_mass_order_total " +
+				"where strleft(return_time,10)>='"+dynamicDto.getBeginDate()+"'  and strleft(return_time,10)<='"+dynamicDto.getEndDate()+"' " +
+				"group by store_code,store_city_code";
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + ",bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + ",channel_id ";
+		}
+		sql = sql +	") dd on (aa.store_code=dd.store_code and aa.store_city_code=dd.store_city_code " ;
+
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + "and aa.bussiness_group_id=dd.bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + "and aa.channel_id=dd.channel_id ";
+		}
+		sql = sql +	" ) where 1=1 ";
+
+		//筛选条件
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			sql = sql + " and aa.store_code ='" + dynamicDto.getStoreNo().trim()+ "' ";
+		}
+		if(dynamicDto.getCityId()!=null){
+			sql = sql + " and aa.city_id="+dynamicDto.getCityId()+" ";
+		}
+		if(dynamicDto.getDept()!=null){
+			sql = sql + " and aa.department_name='"+dynamicDto.getDept()+"' ";
+		}
+		if(dynamicDto.getChannel()!=null){
+			sql = sql + " and aa.channel_name='"+dynamicDto.getChannel()+"' ";
+		}
+		sql = sql + "order by store_code ";
+
+		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+
+		int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+		int recordsPerPage = pageInfo.getRecordsPerPage();
+		sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
+		String total = "0";
+		List<Map<String,Object>> resultCount = ImpalaUtil.executeGuoan(sql_count);
+		if(resultCount !=null && resultCount.size()>0 ){
+			total = String.valueOf(resultCount.get(0).get("total"));
+		}
+
+		pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+		map_result.put("pageinfo", pageInfo);
+		map_result.put("data", list);
+		map_result.put("total_pages", total_pages);
+		return map_result;
+	}
+
+	public Map<String, Object> queryProfitDeptStat(DynamicDto dynamicDto,PageInfo pageInfo){
+		String sql = "select aa.department_name,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit " ;
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",aa.store_code,aa.store_name ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",aa.channel_name ";
+		}
+		sql = sql + "from ( select dot.bussiness_group_id,min(department_name) as department_name ";
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",dot.real_store_id as store_id,min(ts.storeno) as store_code,min(ts.name) as store_name ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",min(tdc.id) as city_id,min(ts.city_name) as city_name,dot.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",dot.channel_id ";
+		}
+
+		sql = sql + ",min(channel_name) as channel_name,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit,  " +
+				"ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,ifnull(dround(sum(case when dot.order_tag4 is null  " +
+				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc " +
+				"where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' " +
+				"and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.bussiness_group_id ";
+
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",dot.real_store_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",dot.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",dot.channel_id ";
+		}
+
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,bussiness_group_id ";
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",channel_id ";
+		}
+
+		sql = sql + "from df_mass_order_total " +
+				"where strleft(return_time,10)>='"+dynamicDto.getBeginDate()+"'  and strleft(return_time,10)<='"+dynamicDto.getEndDate()+"' " +
+				"group by bussiness_group_id ";
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",channel_id ";
+		}
+		sql = sql +	") dd on (aa.bussiness_group_id=dd.bussiness_group_id   " ;
+
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + "and aa.store_code=dd.store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + "and aa.store_city_code=dd.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + "and aa.channel_id=dd.channel_id ";
+		}
+		sql = sql +	" ) where 1=1 ";
+
+		//筛选条件
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			sql = sql + " and aa.store_code ='" + dynamicDto.getStoreNo().trim()+ "' ";
+		}
+		if(dynamicDto.getCityId()!=null){
+			sql = sql + " and aa.city_id="+dynamicDto.getCityId()+" ";
+		}
+		if(dynamicDto.getDept()!=null){
+			sql = sql + " and aa.department_name='"+dynamicDto.getDept()+"' ";
+		}
+		if(dynamicDto.getChannel()!=null){
+			sql = sql + " and aa.channel_name='"+dynamicDto.getChannel()+"' ";
+		}
+		sql = sql + "order by department_name ";
+
+		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+
+		int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+		int recordsPerPage = pageInfo.getRecordsPerPage();
+		sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 
 		String total = "0";
@@ -2054,134 +2138,183 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	}
 
 	public List<Map<String, Object>> exportProfitStat(DynamicDto dynamicDto){
-		String sql = "";
-		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){
-			sql = sql + "select min(city_name) as city_name,min(store_name) as store_name,min(store_code) as store_code,min(department_name) as department_name,"
-					+ "min(channel_name) as channel_name,ifnull(dround(sum(total_profit-order_fee-return_profit),2),0) as real_profit from (select aa.city_name,aa.store_city_code,aa.store_name,aa.store_code,aa.department_name,aa.channel_name,"
-					+ "order_fee,total_profit,ifnull(dd.return_profit,0) as return_profit from ("
-					+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_name) as store_name,min(dot.store_code) as store_code,"
-					+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
-					+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
-					+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
-					+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' and dot.department_name!='运营管理中心' ";
-			if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
-				sql = sql + "and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' ";
-			}
-			if(dynamicDto.getCityId()!=null){
-				sql = sql + "and tdc.id = "+dynamicDto.getCityId()+" ";
-			}
-			if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
-				Map<String,Object> position_obj = queryPlatformidByCode(dynamicDto.getStoreNo());
-				if (position_obj != null) {
-					sql = sql + " and (dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "' or dot.normal_store_id='"+(String) position_obj.get("platformid")+"')";
-				}else{
-					sql = sql + " and dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "'";
-				}
-			}
-			if(StringUtils.isNotEmpty(dynamicDto.getDept())){
-				sql = sql + "and dot.department_name like '%"+dynamicDto.getDept()+"%' ";
-			}
-			if(StringUtils.isNotEmpty(dynamicDto.getChannel())){
-				sql = sql + "and dot.channel_name like '%"+dynamicDto.getChannel()+"%' ";
-			}
-
-			if(dynamicDto.getSearchstr().contains("dept_city_active") || dynamicDto.getSearchstr().contains("dept_store_active")
-					|| dynamicDto.getSearchstr().contains("dept_channel_active") || dynamicDto.getSearchstr().contains("dept_active")){
-				sql = sql + "group by ";
-				String sqlTemp = "";
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					sqlTemp = sqlTemp + ",dot.store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					sqlTemp = sqlTemp + ",dot.store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					sqlTemp = sqlTemp + ",dot.channel_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					sqlTemp = sqlTemp + ",dot.department_name ";
-				}
-				sqlTemp = sqlTemp.substring(1,sqlTemp.length()-1);
-				sql = sql + sqlTemp + " order by department_name ";
-			}
-
-			//退款
-			sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ";
-			if(dynamicDto.getSearchstr().contains("dept_city_active") || dynamicDto.getSearchstr().contains("dept_store_active")
-					|| dynamicDto.getSearchstr().contains("dept_channel_active") || dynamicDto.getSearchstr().contains("dept_active") ){
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					sql = sql + ",store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					sql = sql + ",store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					sql = sql + ",channel_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					sql = sql + ",department_name ";
-				}
-				sql = sql + "from df_mass_order_total where strleft(return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(return_time,10)<='"+dynamicDto.getEndDate()+"' " ;
-				sql = sql + "group by ";
-				String sqlTemp = "";
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					sqlTemp = sqlTemp + ",store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					sqlTemp = sqlTemp + ",store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					sqlTemp = sqlTemp + ",channel_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					sqlTemp = sqlTemp + ",department_name ";
-				}
-				sqlTemp = sqlTemp.substring(1,sqlTemp.length()-1);
-				sql = sql + sqlTemp + ") dd on (" ;
-				String onTemp = "";
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					onTemp = onTemp + "and aa.department_name=dd.department_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					onTemp = onTemp + "and aa.store_city_code=dd.store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					onTemp = onTemp + "and aa.store_code=dd.store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					onTemp = onTemp + "and aa.channel_name=dd.channel_name ";
-				}
-				onTemp = onTemp.substring(3,onTemp.length()-1);
-				sql = sql + onTemp + ") ";
-			}
-
-			if(dynamicDto.getSearchstr().contains("dept_city_active") || dynamicDto.getSearchstr().contains("dept_store_active")
-					|| dynamicDto.getSearchstr().contains("dept_channel_active") || dynamicDto.getSearchstr().contains("dept_active")){
-				sql = sql + ") tt group by  ";
-				String temp = "";
-				if(dynamicDto.getSearchstr().contains("dept_active")){
-					temp = temp + ",tt.department_name ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_city_active")){
-					temp = temp + ",tt.store_city_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_store_active")){
-					temp = temp + ",tt.store_code ";
-				}
-				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-					temp = temp + ",tt.channel_name ";
-				}
-				temp = temp.substring(1,temp.length()-1);
-				sql = sql + temp + " order by department_name ";
-			}
-		}else{
-			sql = sql + "select ifnull(dround((total_profit-order_fee-return_profit ),2),0) as real_profit from (" +
-					"select ifnull(dround(sum(case when dot.order_tag4 is null and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"'  then dot.platform_price else 0 end),2),0) as order_fee," +
-					"ifnull(dround(sum(case when strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' then dot.order_profit else 0 end),2),0) as total_profit," +
-					"ifnull(dround(sum(case when strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10)<='"+dynamicDto.getEndDate()+"'  then order_profit else 0 end),2),0)  as return_profit " +
-					"from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc " +
-					"where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' and dot.department_name!='运营管理中心' ) tab1 ";
+		String sql = "select aa.city_name,aa.store_city_code,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit from ( "
+				+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,"
+				+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
+				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc "
+				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  ";
+		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
+			sql = sql + "and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' ";
 		}
+		if(dynamicDto.getCityId()!=null){
+			sql = sql + "and tdc.id = "+dynamicDto.getCityId()+" ";
+		}
+		sql = sql + "group by dot.store_city_code order by dot.store_city_code ";
+
+		//退款
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total " +
+				"where strleft(return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(return_time,10)<='"+dynamicDto.getEndDate()+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
+
+		sql = sql + "order by aa.store_city_code ";
+
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+		return list;
+	}
+
+	public List<Map<String, Object>> exportProfitStoreStat(DynamicDto dynamicDto){
+		String sql = "select aa.city_id,aa.store_city_code,aa.city_name,aa.store_code,aa.store_name,aa.department_name,aa.channel_name,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit from ( " +
+				"select dot.real_store_id as store_id,min(ts.storeno) as store_code,min(ts.name) as store_name,min(tdc.id) as city_id,min(ts.city_name) as city_name,dot.store_city_code,min(department_name) as department_name ";
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + ",dot.bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + ",dot.channel_id ";
+		}
+		sql = sql + ",min(channel_name) as channel_name,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit,  " +
+				"ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,ifnull(dround(sum(case when dot.order_tag4 is null  " +
+				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc " +
+				"where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' " +
+				"and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.real_store_id,dot.store_city_code ";
+
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + ",dot.bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + ",dot.channel_id ";
+		}
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_code,store_city_code ";
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + ",bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + ",channel_id ";
+		}
+
+		sql = sql + "from df_mass_order_total " +
+				"where strleft(return_time,10)>='"+dynamicDto.getBeginDate()+"'  and strleft(return_time,10)<='"+dynamicDto.getEndDate()+"' " +
+				"group by store_code,store_city_code";
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + ",bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + ",channel_id ";
+		}
+		sql = sql +	") dd on (aa.store_code=dd.store_code and aa.store_city_code=dd.store_city_code " ;
+
+		if(dynamicDto.getSearchstr().contains("store_dept")){
+			sql = sql + "and aa.bussiness_group_id=dd.bussiness_group_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("store_channel")){
+			sql = sql + "and aa.channel_id=dd.channel_id ";
+		}
+		sql = sql +	" ) where 1=1 ";
+
+		//筛选条件
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			sql = sql + " and aa.store_code ='" + dynamicDto.getStoreNo().trim()+ "' ";
+		}
+		if(dynamicDto.getCityId()!=null){
+			sql = sql + " and aa.city_id="+dynamicDto.getCityId()+" ";
+		}
+		if(dynamicDto.getDept()!=null){
+			sql = sql + " and aa.department_name='"+dynamicDto.getDept()+"' ";
+		}
+		if(dynamicDto.getChannel()!=null){
+			sql = sql + " and aa.channel_name='"+dynamicDto.getChannel()+"' ";
+		}
+		sql = sql + "order by store_code ";
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+		return list;
+	}
+
+	public List<Map<String, Object>> exportProfitDeptStat(DynamicDto dynamicDto){
+		String sql = "select aa.department_name,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit " ;
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",aa.store_code,aa.store_name ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",aa.channel_name ";
+		}
+		sql = sql + "from ( select dot.bussiness_group_id,min(department_name) as department_name ";
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",dot.real_store_id as store_id,min(ts.storeno) as store_code,min(ts.name) as store_name ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",min(tdc.id) as city_id,min(ts.city_name) as city_name,dot.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",dot.channel_id ";
+		}
+
+		sql = sql + ",min(channel_name) as channel_name,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit,  " +
+				"ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,ifnull(dround(sum(case when dot.order_tag4 is null  " +
+				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc " +
+				"where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' " +
+				"and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.bussiness_group_id ";
+
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",dot.real_store_id ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",dot.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",dot.channel_id ";
+		}
+
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,bussiness_group_id ";
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",channel_id ";
+		}
+
+		sql = sql + "from df_mass_order_total " +
+				"where strleft(return_time,10)>='"+dynamicDto.getBeginDate()+"'  and strleft(return_time,10)<='"+dynamicDto.getEndDate()+"' " +
+				"group by bussiness_group_id ";
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + ",store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + ",store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + ",channel_id ";
+		}
+		sql = sql +	") dd on (aa.bussiness_group_id=dd.bussiness_group_id   " ;
+
+		if(dynamicDto.getSearchstr().contains("dept_store")){
+			sql = sql + "and aa.store_code=dd.store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city")){
+			sql = sql + "and aa.store_city_code=dd.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel")){
+			sql = sql + "and aa.channel_id=dd.channel_id ";
+		}
+		sql = sql +	" ) where 1=1 ";
+
+		//筛选条件
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			sql = sql + " and aa.store_code ='" + dynamicDto.getStoreNo().trim()+ "' ";
+		}
+		if(dynamicDto.getCityId()!=null){
+			sql = sql + " and aa.city_id="+dynamicDto.getCityId()+" ";
+		}
+		if(dynamicDto.getDept()!=null){
+			sql = sql + " and aa.department_name='"+dynamicDto.getDept()+"' ";
+		}
+		if(dynamicDto.getChannel()!=null){
+			sql = sql + " and aa.channel_name='"+dynamicDto.getChannel()+"' ";
+		}
+		sql = sql + "order by department_name ";
 
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 		return list;

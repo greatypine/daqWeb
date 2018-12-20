@@ -134,5 +134,13 @@ public interface MassOrderItemDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dd,String cityNO,PageInfo pageInfo);
+	/**
+	 * 查询门店近7日毛利订单量散点图
+	 * @param dd
+	 * @param cityNO
+	 * @param provinceNO
+	 * @return
+	 */
+	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 	
 }

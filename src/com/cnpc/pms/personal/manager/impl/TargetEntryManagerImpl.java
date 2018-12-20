@@ -192,10 +192,15 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 	}
 
 	@Override
-	public Map<String, Object> getByTarget(String statistics,String deptName,String channelName) {
+	public Map<String, Object> getByTarget(String statistics,String deptName,String channelName,TargetEntry targetEntry) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		TargetEntryDao targetEntryDao = (TargetEntryDao)SpringHelper.getBean(TargetEntryDao.class.getName());
 		result = targetEntryDao.getStatisticsExist(statistics.replace("/", "-"),deptName,channelName);
+		String flag = result.get("statistics").toString();
+		if(flag.equals("0")){
+			targetEntry = saveOrUpdateTargetEntry(targetEntry);
+		}
+		result.put("targetEntry",targetEntry);
 		return result;
 	}
 }
