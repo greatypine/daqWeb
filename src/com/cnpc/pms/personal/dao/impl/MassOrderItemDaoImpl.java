@@ -839,4 +839,39 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		map_result.put("data", lst_data);
 		return map_result;
 	}
+	@Override
+	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,
+			List<Map<String, Object>> provinceNO) {
+		String beginDate = dynamicDto.getBeginDate();
+		String endDate = dynamicDto.getEndDate();
+		String sql = "SELECT aa.*,ifnull(dd.return_profit, 0) AS return_profit FROM( SELECT tab3.* FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
+				+ "ts. NAME AS store_name, ts.storeno AS store_code FROM ( SELECT store_id, min(store_province_code) AS store_province_code, sum(checked_order_count) AS checked_order_count, "
+				+ "order_sign_date AS order_sign_date, sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit FROM "
+				+ "( SELECT dot.real_store_id AS store_id, IFNULL(COUNT(dot.order_sn),0) AS checked_order_count, min(dot.store_province_code) AS store_province_code, min(strleft (dot.sign_time, 10)) "
+				+ "AS order_sign_date, ifnull( dround ( sum( CASE WHEN dot.eshop_joint_ims = 'no' THEN dot.order_profit ELSE 0 END), 2 ), 0 ) AS platform_profit, ifnull( dround ( sum( CASE WHEN "
+				+ "dot.eshop_joint_ims = 'yes' THEN dot.order_profit ELSE 0 END ), 2 ), 0 ) AS ims_profit, ifnull( dround ( sum( CASE WHEN dot.order_tag4 IS NULL THEN dot.platform_price ELSE 0 END ), 2 ), 0 ) "
+				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <='"+endDate+"' "
+				+ "GROUP BY dot.real_store_id,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') ) tab1 GROUP BY store_id,order_sign_date ) tab2 LEFT JOIN daqWeb.t_store ts ON tab2.store_id = ts.id ) tab3 LEFT JOIN daqWeb.t_dist_citycode "
+				+ "tdc ON tab3.store_city_code = tdc.cityno";
+		String whereStr = " WHERE 1 = 1 ";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			whereStr +=  " and tab3.store_city_code='"+cityNo+"' ";
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			whereStr += " and tab3.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		sql= sql+whereStr+ ") aa ";
+		//以日为单位不减报损和盘亏
+		//退款
+		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit, real_store_id AS store_id, min(strleft (return_time, 10)) "
+		+ "as order_return_date FROM daqWeb.df_mass_order_monthly WHERE strleft (return_time, 10) >= '"+beginDate+"' AND strleft (return_time, 10) <='"+endDate+"' GROUP BY real_store_id,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') ) "
+		+ "dd ON aa.store_id = dd.store_id and aa.order_sign_date = dd.order_return_date ORDER BY aa.order_sign_date";
+
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("lst_data", list);
+		return map_result;
+	}
 }

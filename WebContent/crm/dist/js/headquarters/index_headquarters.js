@@ -6,6 +6,9 @@ var refreshId;
 // 城市排名(GMV)柱状图
 var cityRankChartGmv;
 var cityRankGmvOption;
+//近7日门店毛利散点图
+var cityProfitRangeChart;
+var cityProfitRangeOption;
 //城市排名(GMV)矩形图
 var cityUserGMV;
 var cityUserOption;
@@ -92,6 +95,7 @@ $(document).ready(function () {
     showPageContent(pageStatusInfo);
     // 地图事件绑定处理
     bindMapEvents();
+    initSwiper();
     // 解除装载状态
     setLoadingMark(false);
     //console.log('show whole page in ' + (new Date().getTime() - startTime) + ' millisecond');
@@ -107,6 +111,7 @@ const CACHE_HEADER_HISTORY_DATA = 'historyData_';
 const CACHE_HEADER_OPEN_CARD_USER = 'openCardUser_';
 const CACHE_HEADER_CUSTOMER_COUNT_DATA = 'customerData_';
 const CACHE_HEADER_CITY_RANK_GVM = 'cityRankGmv_';
+const CACHE_HEADER_PROFIT_STORE = 'cityProfitStore_';
 const CACHE_HEADER_TWOTWOONE_RANK_GVM = 'twoTwoOneRankGmv_';
 const CACHE_HEADER_STORE_RANK_GMV = 'storeRankGmv_';
 const CACHE_HEADER_STORE_RANK_ORDER = 'storeRankOrder_';
@@ -145,6 +150,8 @@ var showPageContent = function (pageStatusInfo) {
 
     // 显示地图
     showMap(pageStatusInfo);
+    // 显示门店毛利订单量近7日散点图
+    getProfitRangeForStoreWeek(pageStatusInfo);
 
     // 显示城市排名(GMV)-修改为近七日GMV走势图
     getCityRankDataGmv(pageStatusInfo);
@@ -221,6 +228,8 @@ var initPageElements = function () {
     mapChart = echarts.init(document.getElementById('main9'));
     // 初始化城市排名
     cityRankChartGmv = echarts.init(document.getElementById('main1'));
+    // 初始化近7日门店散点图
+    cityProfitRangeChart = echarts.init(document.getElementById('main13'));
     //社员7日走势
     turnoverCustomerOrderChart = echarts.init(document.getElementById('main2'));
     //初始化城市排名矩形图
@@ -427,6 +436,299 @@ var initPageElements = function () {
         },
 
       }
+    ]
+  };
+  cityProfitRangeOption = {
+    //backgroundColor: '#e1e1e1',
+    title: {
+      text: "近7天门店散点图",
+      left: "10",
+      y: "10",
+      textStyle: {
+        color: "rgba(255,255,255,0.8)"
+      }
+    },
+    color: [
+      "#d9db1f","#fdbb01","#d97520","#d63537",
+	  "#4ed80e","#0ad852","#0ad896","#15bb86"
+    ],
+    legend: [
+     {
+	      y: 'top',
+	      top:'3%',
+	      data: titleTH,
+	      x:'center',
+	      textStyle: {
+	        color: 'rgba(255,255,255,0.8)',
+	        fontSize: 16
+	      }
+      },
+      {
+	      y: 'top',
+	      data: titleTH,
+	      top:'7%',
+	      x:'center',
+	      textStyle: {
+	        color: 'rgba(255,255,255,0.8)',
+	        fontSize: 16
+	      }
+      }
+    ],
+    grid: {
+      //x: '10%',
+      //x2: 80,
+      y: '28%',
+      y2: '20%',
+      bottom:'10%',
+      left:'10%',
+      top:'18%'
+    },
+    tooltip: {
+      padding: 10,
+      backgroundColor: '#222',
+      borderColor: '#777',
+      borderWidth: 1,
+      formatter: function (obj) {
+        var value = obj.value;
+        return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+          + '毛利：' + value[1]
+          + '</div>'
+          + schema[0].text + '：' + value[1] + '<br>'
+          + schema[1].text + '：' + value[0] + '<br>'
+          + schema[2].text + '：' + value[2] + '<br>'
+          + schema[3].text + '：' + value[3] + '<br>'
+          + schema[4].text + '：' + value[4] + '<br>';
+      }
+    },
+    xAxis: {
+      type: 'value',
+      name: '订单量',
+      nameGap: 16,
+      nameTextStyle: {
+        color: 'rgba(255,255,255,0.8)',
+        fontSize: 14
+      },
+      min: function(value){
+  	   	 return parseInt(value.min);
+  	  },
+      //max: 31,
+      splitLine: {
+        show: false
+      },
+      axisLine: {
+        lineStyle: {
+          color: 'rgba(255,255,255,0.8)'
+        }
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: '门店毛利',
+      nameLocation: 'end',
+      nameGap: 20,
+      nameTextStyle: {
+        color: 'rgba(255,255,255,0.8)',
+        fontSize: 16
+      },
+      axisLine: {
+        lineStyle: {
+          color: 'rgba(255,255,255,0.8)'
+        }
+      },
+      splitLine: {
+        show: false
+      }
+    },
+    /*visualMap: [
+      {
+        left: 'right',
+        top: '10%',
+        dimension: 2,
+        min: 0,
+        max: 250,
+        itemWidth: 30,
+        itemHeight: 150,
+        calculable: true,
+        precision: 0.1,
+        text: ['圆形大小：PM2.5'],
+        textGap: 30,
+        textStyle: {
+          color: 'rgba(255,255,255,0.8)'
+        },
+        inRange: {
+          symbolSize: [10, 70]
+        },
+        outOfRange: {
+          symbolSize: [10, 70],
+          color: ['rgba(255,255,255,.2)']
+        },
+        controller: {
+          inRange: {
+            color: ['#c23531']
+          },
+          outOfRange: {
+            color: ['rgba(255,255,255,0.8)']
+          }
+        }
+      },
+      {
+        left: 'right',
+        bottom: '5%',
+        dimension: 6,
+        min: 0,
+        max: 50,
+        itemHeight: 150,
+        calculable: true,
+        precision: 0.1,
+        text: ['明暗：二氧化硫'],
+        textGap: 30,
+        textStyle: {
+          color: 'rgba(255,255,255,0.8)'
+        },
+        inRange: {
+          colorLightness: [1, 0.5]
+        },
+        outOfRange: {
+          color: ['rgba(255,255,255,.2)']
+        },
+        controller: {
+          inRange: {
+            color: ['#c23531']
+          },
+          outOfRange: {
+            color: ['#666']
+          }
+        }
+      }
+    ],*/
+    series: [
+      {
+        name: '1',
+        type: 'scatter',
+        itemStyle: {
+          normal: {
+            opacity: 0.8,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+        data: dataBJ,
+        symbolSize: function (val) {
+          	return val[0] * 0.13;
+        },
+
+      },
+      {
+        name: '2',
+        type: 'scatter',
+        itemStyle: {
+          normal: {
+            opacity: 0.8,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+        data: dataSH,
+        symbolSize: function (val) {
+          return val[0] * 0.13;
+        },
+
+      },
+      {
+        name: '3',
+        type: 'scatter',
+        itemStyle: {
+          normal: {
+            opacity: 0.8,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+        data: dataUH,
+        symbolSize: function (val) {
+          return val[0] * 0.13;
+        },
+
+      },
+      {
+        name: '4',
+        type: 'scatter',
+        itemStyle: {
+          normal: {
+            opacity: 0.8,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+        data: dataVH,
+        symbolSize: function (val) {
+          return val[0] * 0.13;
+        },
+
+      },
+      {
+        name: '5',
+        type: 'scatter',
+        itemStyle: {
+          normal: {
+            opacity: 0.8,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+        data: dataWH,
+        symbolSize: function (val) {
+          return val[0] * 0.13;
+        },
+
+      },
+      {
+        name: '6',
+        type: 'scatter',
+        itemStyle: {
+          normal: {
+            opacity: 0.8,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+        data: dataXH,
+        symbolSize: function (val) {
+          return val[0] * 0.13;
+        },
+
+      },
+      {
+        name: '7',
+        type: 'scatter',
+        itemStyle: {
+          normal: {
+            opacity: 0.8,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+        data: dataYH,
+        symbolSize: function (val) {
+          return val[0] * 0.13;
+        },
+
+      }
+
     ]
   };
   	// 客流分析
@@ -2430,6 +2732,153 @@ var getGaodeMapData = function (pageStatusInfo) {
         }, false);
     }
     return storeServiceRange;
+};
+// 近七日GMV走势图
+var getProfitRangeForStoreWeek = function (pageStatusInfo) {
+    var cacheKey = CACHE_HEADER_PROFIT_STORE + pageStatusInfo.getCacheKey();
+    // 从缓存获取数据
+    var cityProfitStore = JsCache.get(cacheKey);
+    if (cityProfitStore) {
+        //console.log('show city profit Store graph base on js cache.')
+        showProfitRangeForStoreWeek(cityProfitStore);
+    } else {
+        // 准备服务端数据请求参数
+        var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+        }
+        //console.log('\trequest: city profit Store. ');
+        //console.log(reqestParameter);
+        // 近七日GMV走势图
+        var startTime = new Date().getTime();
+        doManager("massOrderItemManager", "getProfitRangeForStoreWeek",[reqestParameter],
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var resultJson = JSON.parse(data.data);
+                    showProfitRangeForStoreWeek(resultJson);
+                    JsCache.set(cacheKey, resultJson);
+                }
+            });
+        //console.log('request city rank gmv data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
+    }
+};
+// 显示近7天GMV走势
+var showProfitRangeForStoreWeek = function (profitStoreRange) {
+  	var data = [];
+	dataBJ.splice(0,dataBJ.length);
+	dataSH.splice(0,dataSH.length);
+	dataUH.splice(0,dataUH.length);
+	dataVH.splice(0,dataVH.length);
+	dataWH.splice(0,dataWH.length);
+	dataXH.splice(0,dataXH.length);
+	dataYH.splice(0,dataYH.length);
+	titleTH.splice(0,titleTH.length);
+    $.each(eval(profitStoreRange['lst_data']), function (idx, element) {
+    	if(element.checked_order_count==undefined){
+    		data.pushNoRepeat(element.checked_order_count);
+    	}
+    	data.pushNoRepeat(element.checked_order_count);
+    	if(element.order_sign_date==undefined){
+    		titleTH.pushNoRepeat(element.order_sign_date.substring(5,element.order_sign_date.length));
+    	}else{
+    		titleTH.pushNoRepeat(element.order_sign_date.substring(5,element.order_sign_date.length));
+    	}
+    });
+    $.each(eval(titleTH), function (idxi, ele) {
+    	$.each(eval(profitStoreRange['lst_data']), function (idx, element) {
+    		var real_profit = (element.total_profit - element.return_profit - element.order_fee).toFixed(2);
+	    	var temp = [];
+			temp.push(element.checked_order_count);
+	    	temp.push(real_profit);
+			temp.push(element.city_name);
+			temp.push(element.store_name);
+			temp.push(element.order_sign_date);
+			if(element.order_sign_date.indexOf(ele)>0&&idxi==0){
+				dataBJ.push(temp);
+			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==1){
+				dataSH.push(temp);
+			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==2){
+				dataUH.push(temp);
+			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==3){
+				dataVH.push(temp);
+			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==4){
+				dataWH.push(temp);
+			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==5){
+				dataXH.push(temp);
+			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==6){
+				dataYH.push(temp);
+			}
+    	});
+    
+    });
+    var result = [];
+	result.push(titleTH.slice(0,4));
+	result.push(titleTH.slice(4,7));
+    cityProfitRangeOption.series[0].data = dataBJ;
+    cityProfitRangeOption.series[0].name = titleTH[0];
+    cityProfitRangeOption.series[1].data = dataSH;
+    cityProfitRangeOption.series[1].name = titleTH[1];
+    cityProfitRangeOption.series[2].data = dataUH;
+    cityProfitRangeOption.series[2].name = titleTH[2];
+    cityProfitRangeOption.series[3].data = dataVH;
+    cityProfitRangeOption.series[3].name = titleTH[3];
+    cityProfitRangeOption.series[4].data = dataWH;
+    cityProfitRangeOption.series[4].name = titleTH[4];
+    cityProfitRangeOption.series[5].data = dataXH;
+    cityProfitRangeOption.series[5].name = titleTH[5];
+    cityProfitRangeOption.series[6].data = dataYH;
+    cityProfitRangeOption.series[6].name = titleTH[6];
+    cityProfitRangeOption.legend[0].data = result[0];
+    cityProfitRangeOption.legend[1].data = result[1];
+    var max = Math.max.apply(null, data);
+    if(max<150){
+	    	cityProfitRangeOption.series[0].symbolSize = function(val){
+	    		return val[0] * 0.8;
+	    	};
+	    	cityProfitRangeOption.series[1].symbolSize = function(val){
+	    		return val[0] * 0.8;
+	    	};
+	    	cityProfitRangeOption.series[2].symbolSize = function(val){
+	    		return val[0] * 0.8;
+	    	};
+	    	cityProfitRangeOption.series[3].symbolSize = function(val){
+	    		return val[0] * 0.8;
+	    	};
+	    	cityProfitRangeOption.series[4].symbolSize = function(val){
+	    		return val[0] * 0.8;
+	    	};
+	    	cityProfitRangeOption.series[5].symbolSize = function(val){
+	    		return val[0] * 0.8;
+	    	};
+	    	cityProfitRangeOption.series[6].symbolSize = function(val){
+	    		return val[0] * 0.8;
+	    	};
+    	}else{
+    		cityProfitRangeOption.series[0].symbolSize = function(val){
+	    		return val[0] * 0.08;
+	    	};
+    		cityProfitRangeOption.series[1].symbolSize = function(val){
+	    		return val[0] * 0.08;
+	    	};
+    		cityProfitRangeOption.series[2].symbolSize = function(val){
+	    		return val[0] * 0.08;
+	    	};
+    		cityProfitRangeOption.series[3].symbolSize = function(val){
+	    		return val[0] * 0.08;
+	    	};
+    		cityProfitRangeOption.series[4].symbolSize = function(val){
+	    		return val[0] * 0.08;
+	    	};
+    		cityProfitRangeOption.series[5].symbolSize = function(val){
+	    		return val[0] * 0.08;
+	    	};
+    		cityProfitRangeOption.series[6].symbolSize = function(val){
+	    		return val[0] * 0.08;
+	    	};
+    	}
+	cityProfitRangeChart.setOption(cityProfitRangeOption,true);
 };
 // 近七日GMV走势图
 var getCityRankDataGmv = function (pageStatusInfo) {
@@ -5738,3 +6187,62 @@ function dialogRemove2(){
         });
     }
 }
+function initSwiper(){
+  var swiper = new Swiper('.swiper-container', {
+    autoplay : {
+      delay:5000,
+      disableOnInteraction : false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    watchOverflow: true,//因为仅有1个slide，swiper无效
+    allowTouchMove: false
+  });
+  $('.swiper-slide').mouseenter(function () {
+    swiper.autoplay.stop();
+  })
+  $('.swiper-slide').mouseleave(function () {
+    swiper.autoplay.start();
+  })
+
+}
+//散点图
+  var dataBJ = [
+  ];
+
+  var dataSH = [
+  ];
+  var titleTH = [
+  ];
+  var dataUH = [
+  ];
+  var dataVH = [
+  ];
+  var dataWH = [
+  ];
+  var dataXH = [
+  ];
+  var dataYH = [
+  ];
+
+    var schema = [
+    {name: 'order', index: 0, text: '毛利'},
+    {name: 'gmv', index: 1, text: '订单量'},
+    {name: 'city', index: 2, text: '城市'},
+    {name: 'store', index: 3, text: '门店'},
+    {name: 'month', index: 4, text: '日期'}
+  ];
+  Array.prototype.pushNoRepeat = function(){
+    for(var i=0; i<arguments.length; i++){
+      var ele = arguments[i];
+      if(this.indexOf(ele) == -1){
+          this.push(ele);
+      }
+  }
+};
