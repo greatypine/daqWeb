@@ -167,6 +167,12 @@ function showcardinfo(file_name){
         modal : false
     });
     $("#frame_time").blur();
+    var now = new Date();
+    var date = (now.getFullYear())+"-"+((now.getMonth() + 1) < 10 ? "0" : "") + (now.getMonth() + 1);
+    if($("#frame_time").val() == ""){
+        $("#frame_time").val(date);
+    }
+
     var button = document.getElementsByClassName("ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
     button[0].style.width = "100px";
     button[1].style.width = "100px";
@@ -250,7 +256,7 @@ function yanzhenAdd(){
             var resultJson= JSON.parse(data.data);
             var task_quantity_count = JSON.parse(resultJson.statistics);
             if(parseInt(task_quantity_count)!=0){
-                alert("该目标值已录入,请返回列表修改!");
+                alert("该月份事业群目标值已录入,请返回列表修改!");
                 newWindow.close();
                 return;
             }

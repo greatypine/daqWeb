@@ -30,6 +30,8 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements TargetEntryStoreManager {
 
@@ -307,13 +309,29 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 						for(int nCellIndex = 0;nCellIndex < nCellSize ;nCellIndex ++) {
 							String str_value = getCellValue(row_human.getCell(nCellIndex));
 							if(nCellIndex == 3){
-								maori_target_list = Double.valueOf(str_value);
+								if(isNumeric(str_value)){
+									maori_target_list = Double.valueOf(str_value);
+								}else{
+									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+									return rcvmsg;
+								}
+
 							}
 							if(nCellIndex == 4){
-								profit_target_list = Double.valueOf(str_value);
+								if(isNumeric(str_value)){
+									profit_target_list = Double.valueOf(str_value);
+								}else{
+									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+									return rcvmsg;
+								}
 							}
 							if(nCellIndex == 5){
-								user_target_list = Double.valueOf(str_value);
+								if(isNumeric(str_value)){
+									user_target_list = Double.valueOf(str_value);
+								}else{
+									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+									return rcvmsg;
+								}
 							}
 							if(nCellIndex == 0){
 								frame_time = str_value;
@@ -331,19 +349,36 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 							String str_value = getCellValue(row_human.getCell(nCellIndex));
 							if(str_value != null && str_value != "" && str_value != "0"){
 								if(nCellIndex == 3){
-									maori_target =  maori_target + Double.valueOf(str_value);
+									if(isNumeric(str_value)){
+										maori_target =  maori_target + Double.valueOf(str_value);
+									}else{
+										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+										return rcvmsg;
+									}
+
 								}
 								if(nCellIndex == 4){
-									profit_target = profit_target + Double.valueOf(str_value);
+									if(isNumeric(str_value)){
+										profit_target = profit_target + Double.valueOf(str_value);
+									}else{
+										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+										return rcvmsg;
+									}
+
 								}
 								if(nCellIndex == 5){
-									user_target =  user_target + Double.valueOf(str_value);
+									if(isNumeric(str_value)){
+										user_target =  user_target + Double.valueOf(str_value);
+									}else{
+										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+										return rcvmsg;
+									}
 								}
 							}
 						}
 					}
 				}else{
-					rcvmsg = "导入文件格式不正确！导入失败！行号：" + (nRowIndex);
+					rcvmsg = "导入文件列数不正确！导入失败！行号：" + (nRowIndex + 1);
 					return rcvmsg;
 				}
 
@@ -419,7 +454,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 
 					}
 				}else{
-					rcvmsg = "导入文件数据指标不正确,请检查后导入";
+					rcvmsg = "导入失败！请确保填写门店各指标总和等于事业群指标";
 					return rcvmsg;
 				}
 			}else{
@@ -429,6 +464,15 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 
 		}
 		return rcvmsg;
+	}
+
+	public static boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+");
+		Matcher isNum = pattern.matcher(str);
+		if (!isNum.matches()) {
+			return false;
+		}
+		return true;
 	}
 
 	private String getCellValue(Cell cell) {
