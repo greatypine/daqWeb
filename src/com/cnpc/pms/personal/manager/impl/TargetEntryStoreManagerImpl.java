@@ -72,7 +72,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		String date_where = mapWhereList.get(2).get("value").toString().replace("%","");
 
 		List<Map<String, Object>> datas = targetEntryStoreDao.getTargetEntryStoreData(date_where,dept_where,
-				 obj_page);
+				obj_page);
 		List<Map<String, Object>> data = targetEntryStoreDao.getTargetEntryStoreList(sb_where.toString(), obj_page);
 		List<Map<String, Object>> data1 = targetEntryStoreDao.getTargetEntryStoreList1(sb_where.toString(), obj_page);
 
@@ -601,7 +601,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 			TargetEntryDTO.setProfit_target(targetEntry.getProfit_target());
 			TargetEntryDTO.setUser_target(targetEntry.getUser_target());
 			TargetEntryDTO.setFrame_time(targetEntry.getFrame_time());
-     			return TargetEntryDTO;
+			return TargetEntryDTO;
 		}
 		return null;
 	}
@@ -611,7 +611,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		List<?> list = this.getList(FilterFactory.getSimpleFilter("id", id));
 		if (list != null && list.size() > 0) {
 			TargetEntry targetEntry = (TargetEntry) list.get(0);
-			 return targetEntry;
+			return targetEntry;
 		}
 		return null;
 	}

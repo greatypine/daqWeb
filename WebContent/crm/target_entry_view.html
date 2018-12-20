@@ -250,7 +250,14 @@ function yanzhenAdd(){
     var statistics=$("#frame_time").val();
     var businessGroup_name=$("#businessGroup_name").val();
     var channel_name=$("#channel_name").val();
-    doManager("targetEntryManager", "getByTarget",[statistics,businessGroup_name,channel_name] , function(data,
+    var arr = [ "frame_time", "businessGroup_name","businessGroup_code","maori_target","profit_target","user_target","id"];
+    var o = {};
+    for ( var i in arr) {
+        var v = arr[i];
+        var va = $("#" + v).val();
+        o[v] = va;
+    }
+    doManager("targetEntryManager", "getByTarget",[statistics,businessGroup_name,channel_name,o] , function(data,
                                                                                     textStatus, XMLHttpRequest) {
         if (data.result) {
             var resultJson= JSON.parse(data.data);
@@ -259,8 +266,16 @@ function yanzhenAdd(){
                 alert("该月份事业群目标值已录入,请返回列表修改!");
                 newWindow.close();
                 return;
+            }else{
+                var jsonData = $.fromJSON(data.data);
+                alert("添加成功！");
+                searchList();
+                var id = jsonData.targetEntry.id;
+                var url =  "target_entry_list_edit.html?id="+id;
+//            window.open(url,"target_entry_list_edit");
+                newWindow.location.href = url;
             }
-            doSave(newWindow);
+//            doSave(newWindow);
         }else{
             $$.showMessage("系统信息", "信息加载异常");
             return;;
