@@ -735,14 +735,20 @@ public class ExcelManagerImpl extends BizBaseCommonManager implements ExcelManag
 	@Override
 	public String saveFileExcel(User user, InputStream inp, String fileName, int type, String filePath,
 			Attachment attachment) throws Exception {
+		System.out.println("进入 saveFileExcel");
 		AttachmentManager attachmentManager = (AttachmentManager) SpringHelper.getBean("attachmentManager");
+		System.out.println("attachment id:"+attachment.getId());
 		Long attachmentId = attachment.getId();
+		System.out.println("filePath:"+filePath);
 		Map<String, Object> map = ExcelDataFormat.getMapDataFromExcel(filePath);
 		// 社区
+		System.out.println("map.size"+map.size());
 		Village village = (Village) map.get("village");
+		System.out.println("社区执行完毕");
 		// 小区+楼房+住宅
 		Map<TinyVillage, List<Map<Building, List<House>>>> buildMap = (Map<TinyVillage, List<Map<Building, List<House>>>>) map
 				.get("build");
+		System.out.println("map.size"+map.size());
 		// 小区+平房住宅
 		Map<TinyVillage, List<House>> bungalowMap = (Map<TinyVillage, List<House>>) map.get("bungalow");
 		// 小区+写字楼楼层
