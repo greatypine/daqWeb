@@ -449,8 +449,7 @@ var initPageElements = function () {
       }
     },
     color: [
-      "#d9db1f","#fdbb01","#d97520","#d63537",
-	  "#4ed80e","#0ad852","#0ad896","#15bb86"
+      "#0ad852","#4ed80e","#15bb86","#0ad896","#d9db1f","#d97520","#d63537"
     ],
     legend: [
      {
@@ -2795,27 +2794,29 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
 			temp.push(element.city_name);
 			temp.push(element.store_name);
 			temp.push(element.order_sign_date);
-			if(element.order_sign_date.indexOf(ele)>0&&idxi==0){
+			if(element.order_sign_date!="2018-12-18"&&element.store_name!="金融街店"){
+				if(element.order_sign_date.indexOf(ele)>0&&idxi==0){
 				dataBJ.push(temp);
-			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==1){
-				dataSH.push(temp);
-			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==2){
-				dataUH.push(temp);
-			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==3){
-				dataVH.push(temp);
-			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==4){
-				dataWH.push(temp);
-			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==5){
-				dataXH.push(temp);
-			}else if(element.order_sign_date.indexOf(ele)>0&&idxi==6){
-				dataYH.push(temp);
+				}else if(element.order_sign_date.indexOf(ele)>0&&idxi==1){
+					dataSH.push(temp);
+				}else if(element.order_sign_date.indexOf(ele)>0&&idxi==2){
+					dataUH.push(temp);
+				}else if(element.order_sign_date.indexOf(ele)>0&&idxi==3){
+					dataVH.push(temp);
+				}else if(element.order_sign_date.indexOf(ele)>0&&idxi==4){
+					dataWH.push(temp);
+				}else if(element.order_sign_date.indexOf(ele)>0&&idxi==5){
+					dataXH.push(temp);
+				}else if(element.order_sign_date.indexOf(ele)>0&&idxi==6){
+					dataYH.push(temp);
+				}
 			}
     	});
     
     });
     var result = [];
-	result.push(titleTH.slice(0,4));
 	result.push(titleTH.slice(4,7));
+	result.push(titleTH.slice(0,4));
     cityProfitRangeOption.series[0].data = dataBJ;
     cityProfitRangeOption.series[0].name = titleTH[0];
     cityProfitRangeOption.series[1].data = dataSH;
