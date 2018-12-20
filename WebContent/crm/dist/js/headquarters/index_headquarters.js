@@ -441,7 +441,7 @@ var initPageElements = function () {
   cityProfitRangeOption = {
     //backgroundColor: '#e1e1e1',
     title: {
-      text: "近7天门店散点图",
+      text: "7日门店毛利分布",
       left: "10",
       y: "10",
       textStyle: {
