@@ -1188,7 +1188,29 @@ public interface DynamicManager extends IManager{
      * @return
      */
     public Map<String, Object> exportEmployeeOfMaoli(DynamicDto dd);
-    
+
+	/**
+	 * 毛利统计
+	 * @param dynamicDto
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> queryProfitStat(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	public Map<String, Object> queryProfitStoreStat(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	public Map<String, Object> queryProfitDeptStat(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * 导出毛利统计
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> exportProfitStat(DynamicDto dynamicDto);
+
+	public Map<String, Object> exportProfitStoreStat(DynamicDto dynamicDto);
+
+	public Map<String, Object> exportProfitDeptStat(DynamicDto dynamicDto);
     
     /**
      * 同步单点登录系统人员

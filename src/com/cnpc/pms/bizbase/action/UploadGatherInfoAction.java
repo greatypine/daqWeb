@@ -180,6 +180,13 @@ public class UploadGatherInfoAction extends HttpServlet{
             		}
                     DataTransfromUtil.preObject(attachment);
                     attachmentManager.saveObject(attachment);
+                    if("t_commtity".equals(model)){
+                    	uploadExcelToDataSource();
+                    }else if ("t_buildInfo".equals(model)) {
+                    	uploadOfficeExcelToDataSource();	
+					}else if ("t_businessInfo".equals(model)) {
+						uploadBusinessExcelToDataSource();	
+					}  
                  }else{
                  	remark=item.getString("UTF-8");
                     System.out.println(remark);

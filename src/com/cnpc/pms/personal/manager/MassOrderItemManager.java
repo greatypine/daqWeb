@@ -1,11 +1,13 @@
 package com.cnpc.pms.personal.manager;
 
+import java.util.List;
 import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
+import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.reportFiledown.entity.TReportFiledown;
 
 /**
@@ -84,4 +86,26 @@ public interface MassOrderItemManager extends IManager {
      * @return
      */
 	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd);
+	/**
+	 * 查询所有门店
+	 * @return
+	 */
+	public List<Store> queryAllStore();
+	/**
+	 * 查询城市每天GMV&毛利&消费用户数&消费社员数&注册用户数
+	 * &累计注册用户数&新增社员数&累计社员数
+	 * @param dd
+	 * @param pageInfo
+	 * @param cityNO
+	 * @return
+	 */
+	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dd,PageInfo pageInfo);
+	/**
+     * 查询门店近7日毛利订单量散点图
+     * 2018年12月19日
+     * @author zhangli
+     * @param dd
+     * @return
+     */
+	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dd);
 }

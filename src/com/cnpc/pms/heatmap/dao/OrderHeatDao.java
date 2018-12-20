@@ -130,4 +130,80 @@ public interface OrderHeatDao {
 	 */
 	public List<Map<String,Object>> getTinyVillageCustomerCountByCity(Long city_id,String beginDate,String endDate);
 
+	/**
+	 *
+	 * TODO 查询当月订单地图分布量
+	 * 2017年12月12日
+	 * @author gaoll
+	 * @param id
+	 * @return
+	 */
+	public List<Map<String, Object>> getLagLatByOrder(String string_sql,String beginDate,String endDate);
+
+	/**
+	 *
+	 * TODO 查询当月订单地图分布最大量及最小量
+	 * 2017年12月13日
+	 * @author gaoll
+	 * @param id
+	 * @return
+	 */
+	public List<Map<String, Object>> getLagLatCount(String string_sql,String beginDate,String endDate);
+
+
+	/**
+	 *
+	 * TODO 查询当月订单营业额地图分布量
+	 * 2017年12月12日
+	 * @author gaoll
+	 * @param id
+	 * @return
+	 */
+	public List<Map<String, Object>> getLagLatTradingPriceByOrder(String string_sql,String beginDate,String endDate);
+
+	/**
+	 *
+	 * TODO 查询当月订单地图分布量
+	 * 2017年12月13日
+	 * @author gaoll
+	 * @param id
+	 * @return
+	 */
+	public List<Map<String, Object>> getLagLatTradingPriceCount(String string_sql,String beginDate,String endDate);
+
+	/**
+	 * TODO 查询当月用户量分布量
+	 * 2018年3月13日
+	 * @author cityNo
+	 * @param id
+	 * @return
+	 */
+	public List<Map<String,Object>> getLatlngCustomerByCity(String cityNo,String beginDate,String endDate);
+
+	/**
+	 * TODO 查询当月用户量分布量
+	 * 2018年3月14日
+	 * @author gaoll
+	 * @param cityNo
+	 * @return
+	 */
+	public List<Map<String,Object>> getLatlngCustomerCountByCity(String cityNo,String beginDate,String endDate);
+
+	/**
+	 * TODO 查询当月用户量分布量
+	 * 2018年3月14日
+	 * @author gaoll
+	 * @param storeNo
+	 * @return
+	 */
+	public List<Map<String,Object>> getLatlngCustomerByStore(String storeNo,String beginDate,String endDate);
+
+	/**
+	 * TODO 查询当月用户量分布量
+	 * 2018年3月14日
+	 * @author gaoll
+	 * @param storeNo
+	 * @return
+	 */
+	public List<Map<String,Object>> getLatlngCustomerCountByStore(String storeNo,String beginDate,String endDate);
 }

@@ -1154,7 +1154,8 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
     	Map<String,Object> map = new HashMap<String,Object>();
     	try {
     		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    		map = orderDao.getOrderByOrderSN(order_sn);
+    		InterDao interDao = (InterDao)SpringHelper.getBean(InterDao.class.getName());
+    		map = interDao.getOrderByOrderSN(order_sn);
 			String order_id = map.get("id")==null?"":map.get("id").toString();
 			List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
 			map.put("employee", "");
@@ -1938,23 +1939,23 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 		return result;
 	}
 
-	@Override
-	public Result queryOrderListAppByAreaNew(Long store_id, String order_sn, PageInfo pageInfo, Long area_id) {
-		Result result = new Result();
-		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
-    	Map<String, Object> retMap = null;
-    	try {
-    		Area queryArea = areaManager.queryArea(area_id);
-        	retMap = orderDao.queryOrderOfAreaForApp(queryArea==null?"":queryArea.getArea_no(),pageInfo,order_sn);
-        	result.setDataMap(retMap);
-        	result.setCode(CodeEnum.success.getValue()); 
-            result.setMessage(CodeEnum.success.getDescription());
-    	} catch (Exception e) {
-			e.printStackTrace();
-		}
-        return result;
-	}
+//	@Override
+//	public Result queryOrderListAppByAreaNew(Long store_id, String order_sn, PageInfo pageInfo, Long area_id) {
+//		Result result = new Result();
+//		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
+//    	Map<String, Object> retMap = null;
+//    	try {
+//    		Area queryArea = areaManager.queryArea(area_id);
+//        	retMap = orderDao.queryOrderOfAreaForApp(queryArea==null?"":queryArea.getArea_no(),pageInfo,order_sn);
+//        	result.setDataMap(retMap);
+//        	result.setCode(CodeEnum.success.getValue());
+//            result.setMessage(CodeEnum.success.getDescription());
+//    	} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//        return result;
+//	}
 	
 	@Override
 	public Result queryCustomerStatBycity(String city_id){
@@ -4034,8 +4035,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("return_profit")));
 	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("order_fee")));
 	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("baosun")));
-	    			Double  pankui = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("pankui")));
-	    			double real_profit = (total_profit-return_profit-order_fee-baosun-pankui);
+	    			double real_profit = (total_profit-return_profit-order_fee-baosun);
 	    			storeProfitMonthCount = (double) Math.round(real_profit * 100)/100;
 	    		}else{
 	    			storeProfitMonthCount = 0.0;
@@ -4046,8 +4046,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("return_profit")));
 	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("order_fee")));
 	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("baosun")));
-	    			Double  pankui = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("pankui")));
-	    			double real_profit = (total_profit-return_profit-order_fee-baosun-pankui);
+	    			double real_profit = (total_profit-return_profit-order_fee-baosun);
 	    			storeProfitLstMonthCount = (double) Math.round(real_profit * 100)/100;
 	    		}else{
 	    			storeProfitLstMonthCount = 0.0;
