@@ -441,4 +441,33 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		}
 		return result;
 	}
+	@Override
+	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
+			String curDate = DateUtils.lastDate();
+			String beginDate = DateUtils.getBeforeDate(cur,-7);
+			dd.setBeginDate(beginDate);
+			dd.setEndDate(curDate);
+			Map<String, Object> customerOrderRate = massOrderItemDao.getProfitRangeForStoreWeek(dd,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			result.put("lst_data", lst_data);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

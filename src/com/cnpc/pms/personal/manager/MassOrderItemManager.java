@@ -100,4 +100,12 @@ public interface MassOrderItemManager extends IManager {
 	 * @return
 	 */
 	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dd,PageInfo pageInfo);
+	/**
+     * 查询门店近7日毛利订单量散点图
+     * 2018年12月19日
+     * @author zhangli
+     * @param dd
+     * @return
+     */
+	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dd);
 }
