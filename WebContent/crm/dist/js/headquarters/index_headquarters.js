@@ -2897,29 +2897,67 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     	}else{
     		var point = 0.12;
     		cityProfitRangeOption.series[0].symbolSize = function(val){
-    			if(val[0]<100000){
-    				return val[2] * point;
-    			}else{
+    			if(val[2]<10){
     				return val[2] * 2.5;
+    			}else if(val[2]>=10&&val[2]<=40){
+    				return val[2] * 0.6;
+    			}else{
+    				return val[2] * point;
     			}
 	    	};
     		cityProfitRangeOption.series[1].symbolSize = function(val){
-	    		return val[2] * point;
+    			if(val[2]<10){
+    				return val[2] * 2.5;
+    			}else if(val[2]>=10&&val[2]<=40){
+    				return val[2] * 0.6;
+    			}else{
+    				return val[2] * point;
+    			}
 	    	};
     		cityProfitRangeOption.series[2].symbolSize = function(val){
-	    		return val[2] * point;
+    			if(val[2]<10){
+    				return val[2] * 2.5;
+    			}else if(val[2]>=10&&val[2]<=40){
+    				return val[2] * 0.6;
+    			}else{
+    				return val[2] * point;
+    			}
 	    	};
     		cityProfitRangeOption.series[3].symbolSize = function(val){
-	    		return val[2] * point;
+    			if(val[2]<10){
+    				return val[2] * 2.5;
+    			}else if(val[2]>=10&&val[2]<=40){
+    				return val[2] * 0.6;
+    			}else{
+    				return val[2] * point;
+    			}
 	    	};
     		cityProfitRangeOption.series[4].symbolSize = function(val){
-	    		return val[2] * point;
+    			if(val[2]<10){
+    				return val[2] * 2.5;
+    			}else if(val[2]>=10&&val[2]<=40){
+    				return val[2] * 0.6;
+    			}else{
+    				return val[2] * point;
+    			}
 	    	};
     		cityProfitRangeOption.series[5].symbolSize = function(val){
-	    		return val[2] * point;
+    			if(val[2]<10){
+    				return val[2] * 2.5;
+    			}else if(val[2]>=10&&val[2]<=40){
+    				return val[2] * 0.6;
+    			}else{
+    				return val[2] * point;
+    			}
 	    	};
     		cityProfitRangeOption.series[6].symbolSize = function(val){
-	    		return val[2] * point;
+    			if(val[2]<10){
+    				return val[2] * 2.5;
+    			}else if(val[2]>=10&&val[2]<=40){
+    				return val[2] * 0.6;
+    			}else{
+    				return val[2] * point;
+    			}
 	    	};
     	}
 	cityProfitRangeChart.setOption(cityProfitRangeOption,true);
