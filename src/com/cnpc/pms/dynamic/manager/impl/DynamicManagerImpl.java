@@ -7671,7 +7671,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		jsonObject.put("username", user.getEmployeeId());
 		
         HttpClientUtil hClientUtil = new HttpClientUtil();
-        String result = hClientUtil.getRemoteData(SSO_SYNC_USER, jsonObject);
+        String result = hClientUtil.getRemoteDataProxy(SSO_SYNC_USER, jsonObject);
         
         //插入同步记录 
         SsoUserDataLogManager ssoUserDataLogManager = (SsoUserDataLogManager) SpringHelper.getBean("ssoUserDataLogManager");
