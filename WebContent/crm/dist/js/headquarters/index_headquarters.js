@@ -442,6 +442,7 @@ var initPageElements = function () {
     //backgroundColor: '#e1e1e1',
     title: {
       text: "7日门店毛利分布",
+      subtext: '圈的大小代表用户量',
       left: "10",
       y: "10",
       textStyle: {
@@ -492,16 +493,17 @@ var initPageElements = function () {
         return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
           + '毛利：' + value[1]
           + '</div>'
-          + schema[0].text + '：' + value[1] + '<br>'
-          + schema[1].text + '：' + value[0] + '<br>'
-          + schema[2].text + '：' + value[2] + '<br>'
-          + schema[3].text + '：' + value[3] + '<br>'
-          + schema[4].text + '：' + value[4] + '<br>';
+          + schema[0].text + '：' + value[3] + '<br>'
+          + schema[1].text + '：' + value[1] + '<br>'
+          + schema[2].text + '：' + value[0] + '<br>'
+          + schema[3].text + '：' + value[2] + '<br>'
+          + schema[4].text + '：' + value[4] + '<br>'
+          + schema[5].text + '：' + value[5] + '<br>';
       }
     },
     xAxis: {
       type: 'value',
-      name: '订单量',
+      name: 'GMV',
       nameGap: 16,
       nameTextStyle: {
         color: 'rgba(255,255,255,0.8)',
@@ -509,6 +511,9 @@ var initPageElements = function () {
       },
       min: function(value){
   	   	 return parseInt(value.min);
+  	  },
+  	  max: function(value){
+  	   	 return parseInt(value.max);
   	  },
       //max: 31,
       splitLine: {
@@ -522,7 +527,7 @@ var initPageElements = function () {
     },
     yAxis: {
       type: 'value',
-      name: '门店毛利',
+      name: '毛利',
       nameLocation: 'end',
       nameGap: 20,
       nameTextStyle: {
@@ -730,6 +735,25 @@ var initPageElements = function () {
 
     ]
   };
+  cityProfitRangeChart.on('click', function (params) {
+	  	var dataArr = [];
+	  	dataArr = params.data;
+	  	var storename = dataArr[3];
+	  	var storeno = dataArr[6];
+	  	var dayTime = dataArr[5];
+	  	var cityId = dataArr[7];
+	  	var cityName = dataArr[4];
+	  	
+	  	dayTime = dayTime.replace(/-/g,"/");
+	  	var redirectTag = "profit";
+	  	var target=pageStatusInfo.targets; 
+	    if(target==0){
+			url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&rt="+encode64(redirectTag)+"&time"+encode64(dayTime+"-"+dayTime)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&c="+encode64(cityId)+"&cn="+encode64(cityName);
+		}else if(target==1){
+			url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&rt="+encode64(redirectTag)+"&time"+encode64(dayTime+"-"+dayTime)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&c="+encode64(cityId)+"&cn="+encode64(cityName);
+		}
+		window.open(url,"dynamicData_profit_analysis");
+	});
   	// 客流分析
   turnoverCustomerOrderOption = {
     title: {
@@ -2766,6 +2790,7 @@ var getProfitRangeForStoreWeek = function (pageStatusInfo) {
 // 显示近7天GMV走势
 var showProfitRangeForStoreWeek = function (profitStoreRange) {
   	var data = [];
+  	var data2 = [];
 	dataBJ.splice(0,dataBJ.length);
 	dataSH.splice(0,dataSH.length);
 	dataUH.splice(0,dataUH.length);
@@ -2775,10 +2800,11 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
 	dataYH.splice(0,dataYH.length);
 	titleTH.splice(0,titleTH.length);
     $.each(eval(profitStoreRange['lst_data']), function (idx, element) {
-    	if(element.checked_order_count==undefined){
-    		data.pushNoRepeat(element.checked_order_count);
+    	if(element.customer_count==undefined){
+    		data.pushNoRepeat(element.customer_count);
+    	}else{
+    		data.pushNoRepeat(element.customer_count);
     	}
-    	data.pushNoRepeat(element.checked_order_count);
     	if(element.order_sign_date==undefined){
     		titleTH.pushNoRepeat(element.order_sign_date.substring(5,element.order_sign_date.length));
     	}else{
@@ -2789,12 +2815,19 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     	$.each(eval(profitStoreRange['lst_data']), function (idx, element) {
     		var real_profit = (element.total_profit - element.return_profit - element.order_fee).toFixed(2);
 	    	var temp = [];
-			temp.push(element.checked_order_count);
+			temp.push(element.gmv_price.toFixed(2));
 	    	temp.push(real_profit);
-			temp.push(element.city_name);
+			temp.push(element.customer_count);
 			temp.push(element.store_name);
+			temp.push(element.city_name);
 			temp.push(element.order_sign_date);
-			if(!(element.order_sign_date=="2018-12-18"&&element.store_name=="金融街店")){
+			temp.push(element.store_code);
+			temp.push(element.cityid);
+			var isBJTJSH = false;
+			if(element.store_city_code=="0010"||element.store_city_code=="0021"||element.store_city_code=="0022"){
+				isBJTJSH = true;
+			}
+			if(!(element.order_sign_date=="2018-12-18"&&element.store_name=="金融街店")&&isBJTJSH){
 				if(element.order_sign_date.indexOf(ele)>0&&idxi==0){
 				dataBJ.push(temp);
 				}else if(element.order_sign_date.indexOf(ele)>0&&idxi==1){
@@ -2836,47 +2869,52 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     var max = Math.max.apply(null, data);
     if(max<150){
 	    	cityProfitRangeOption.series[0].symbolSize = function(val){
-	    		return val[0] * 0.8;
+	    		return val[2] * 0.8;
 	    	};
 	    	cityProfitRangeOption.series[1].symbolSize = function(val){
-	    		return val[0] * 0.8;
+	    		return val[2] * 0.8;
 	    	};
 	    	cityProfitRangeOption.series[2].symbolSize = function(val){
-	    		return val[0] * 0.8;
+	    		return val[2] * 0.8;
 	    	};
 	    	cityProfitRangeOption.series[3].symbolSize = function(val){
-	    		return val[0] * 0.8;
+	    		return val[2] * 0.8;
 	    	};
 	    	cityProfitRangeOption.series[4].symbolSize = function(val){
-	    		return val[0] * 0.8;
+	    		return val[2] * 0.8;
 	    	};
 	    	cityProfitRangeOption.series[5].symbolSize = function(val){
-	    		return val[0] * 0.8;
+	    		return val[2] * 0.8;
 	    	};
 	    	cityProfitRangeOption.series[6].symbolSize = function(val){
-	    		return val[0] * 0.8;
+	    		return val[2] * 0.8;
 	    	};
     	}else{
+    		var point = 0.11;
     		cityProfitRangeOption.series[0].symbolSize = function(val){
-	    		return val[0] * 0.08;
+    			if(val[0]<150000){
+    				return val[2] * point;
+    			}else{
+    				return val[2] * 2;
+    			}
 	    	};
     		cityProfitRangeOption.series[1].symbolSize = function(val){
-	    		return val[0] * 0.08;
+	    		return val[2] * point;
 	    	};
     		cityProfitRangeOption.series[2].symbolSize = function(val){
-	    		return val[0] * 0.08;
+	    		return val[2] * point;
 	    	};
     		cityProfitRangeOption.series[3].symbolSize = function(val){
-	    		return val[0] * 0.08;
+	    		return val[2] * point;
 	    	};
     		cityProfitRangeOption.series[4].symbolSize = function(val){
-	    		return val[0] * 0.08;
+	    		return val[2] * point;
 	    	};
     		cityProfitRangeOption.series[5].symbolSize = function(val){
-	    		return val[0] * 0.08;
+	    		return val[2] * point;
 	    	};
     		cityProfitRangeOption.series[6].symbolSize = function(val){
-	    		return val[0] * 0.08;
+	    		return val[2] * point;
 	    	};
     	}
 	cityProfitRangeChart.setOption(cityProfitRangeOption,true);
@@ -6233,11 +6271,12 @@ function initSwiper(){
   ];
 
     var schema = [
-    {name: 'order', index: 0, text: '毛利'},
-    {name: 'gmv', index: 1, text: '订单量'},
-    {name: 'city', index: 2, text: '城市'},
-    {name: 'store', index: 3, text: '门店'},
-    {name: 'month', index: 4, text: '日期'}
+    {name: 'store', index: 0, text: '门店'},
+    {name: 'profit', index: 1, text: '毛利'},
+    {name: 'gmv', index: 2, text: 'GMV'},
+    {name: 'user', index: 3, text: '用户量'},
+    {name: 'city', index: 4, text: '城市'},
+    {name: 'month', index: 5, text: '日期'}
   ];
   Array.prototype.pushNoRepeat = function(){
     for(var i=0; i<arguments.length; i++){
