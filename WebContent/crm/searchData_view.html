@@ -830,7 +830,10 @@ function getIsManager(){
 			$('#auto_date').data('daterangepicker').setEndDate(time.split('-')[1]);
 			$('#employee_a_no').val(employeeNo);
 			$('#employee_a_no_a').val(employeeNo);
-		}
+		}else if(redirectTag=='profit'){
+            $('#auto_date').data('daterangepicker').setStartDate(time.split('-')[0]);
+            $('#auto_date').data('daterangepicker').setEndDate(time.split('-')[1]);
+        }
 	}
     
   	//更多显示

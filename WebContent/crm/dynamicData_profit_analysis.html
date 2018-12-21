@@ -470,6 +470,8 @@
     var fromBar = decode64(getUrlParamByKey("fb"));
     var beti = decode64(getUrlParamByKey("beTi"));
     var endt = decode64(getUrlParamByKey("endT"));
+    var time = decode64(getUrlParamByKey("time"));//查询时间
+    var redirectTag = decode64(getUrlParamByKey("rt"));//跳转来源标识
 
     $(function () {
         $('#auto_date_store').daterangepicker({
@@ -556,6 +558,18 @@
         $("#storenamepayhide").hide();
         $("#storenopayhide").hide();
         $("#channelnamepayhide2").hide();
+
+        //从首页大屏毛利散点图跳转  参数赋值
+        if(time!=null){
+            if(redirectTag=='profit'){
+                $("#store_id_tradetype").val(storeNo);
+                $("#store_name_tradetype").val(storeName);
+                $("#deptnamepayhide").show();
+                $("#deptSelect").attr("disabled",false);
+                $("#deptClick").prop("checked",true);
+                searchInfo_store_step1(1);
+            }
+		}
 
         //门店单位
         $("#attention").on("mouseover",function(event){
@@ -802,9 +816,9 @@
 
     function operatedCoverageDept(){
         if($('#deptClick').is(':checked')){
-            $("#deptSelect").attr("disabled",false)
+            $("#deptSelect").attr("disabled",false);
         }else{
-            $("#deptSelect").attr("disabled",true)
+            $("#deptSelect").attr("disabled",true);
             $("#deptSelect").val("");
         }
     }
@@ -1141,8 +1155,10 @@
     //查询上
     var currentPage_tradetype2 = 1;
     var totalPage_tradetype2 = 1;
+    var redirectTime = "";
     function   searchInfo_store_step2(cur_page){
         var sdate = $("#auto_date_store").val();
+        redirectTime = sdate;
         var begin_end_date=["",""];
         if(sdate!=""){
             begin_end_date = sdate.split("-");
@@ -1295,8 +1311,13 @@
                         if($('#channelClick').is(':checked')){
                             infoStr= infoStr +"<td>"+jData[i].channel_name+"</td>";
                         }
-                        infoStr = infoStr +"<td>"+jData[i].real_profit+"</td>"
-                            +"</tr>";
+                        if($('#deptClick').is(':checked')){
+                            infoStr = infoStr +"<td><a style=\"text-decoration:underline\" href=\"javascript:showprofitdetail('"+jData[i].store_name+"','"+jData[i].store_code+"','"+jData[i].department_name+"')\">"+jData[i].real_profit+"</a></td>";
+						}else{
+                            infoStr = infoStr +"<td><a style=\"text-decoration:underline\" href=\"javascript:showprofitdetail('"+jData[i].store_name+"','"+jData[i].store_code+"','')\">"+jData[i].real_profit+"</a></td>";
+						}
+
+                        infoStr = infoStr +"</tr>";
 
                         $("#tradeType_tbody_store").append(infoStr);
                     }
@@ -1326,6 +1347,12 @@
             $("#process_div").hide();
             $("#process_div_pic").hide();
         });
+    }
+
+    //数据查找-员工数据
+    function showprofitdetail(store_name,store_no,department_name){
+        var url = "searchData_view.html?t="+encode64(target)+"&sn="+encode64(store_name)+"&so="+encode64(store_no)+"&dn="+encode64(department_name)+"&time="+encode64(redirectTime)+"&rt="+encode64("profit");
+        window.open(url,"searchData_view");
     }
 
     //门店单位导出
