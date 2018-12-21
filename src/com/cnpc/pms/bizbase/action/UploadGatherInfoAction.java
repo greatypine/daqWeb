@@ -180,13 +180,6 @@ public class UploadGatherInfoAction extends HttpServlet{
             		}
                     DataTransfromUtil.preObject(attachment);
                     attachmentManager.saveObject(attachment);
-                    if("t_commtity".equals(model)&&"上传中".equals(attachment.getUploadType())){
-                    	uploadExcelToDataSource();
-                    }else if ("t_buildInfo".equals(model)&&"上传中".equals(attachment.getUploadType())) {
-                    	uploadOfficeExcelToDataSource();	
-					}else if ("t_businessInfo".equals(model)&&"上传中".equals(attachment.getUploadType())) {
-						uploadBusinessExcelToDataSource();	
-					}  
                  }else{
                  	remark=item.getString("UTF-8");
                     System.out.println(remark);
@@ -443,10 +436,7 @@ public class UploadGatherInfoAction extends HttpServlet{
 			}
 		 }
 	}
-	
-	
-	
-	
+
 	//如果导入数据库成功将文件复制到Tomcat文件夹下
 	public void copyFile(File file,String target_dir) throws Exception{
 		String str_webroot = FILE_ROOT.concat("/"+target_dir);
