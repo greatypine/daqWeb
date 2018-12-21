@@ -747,9 +747,9 @@ var initPageElements = function () {
 	  	var redirectTag = "profit";
 	  	var target=pageStatusInfo.targets; 
 	    if(target==0){
-			url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&c="+encode64(cityId)+"&s=&rt="+encode64(redirectTag)+"&time="+encode64(dayTime+"-"+dayTime)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&cn="+encode64(cityName);
+			url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&c="+encode64(cityId)+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(dayTime+"-"+dayTime)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&cn="+encode64(cityName);
 		}else if(target==1){
-			url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&c="+encode64(cityId)+"&s=&rt="+encode64(redirectTag)+"&time="+encode64(dayTime+"-"+dayTime)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&cn="+encode64(cityName);
+			url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&c="+encode64(cityId)+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(dayTime+"-"+dayTime)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&cn="+encode64(cityName);
 		}
 		window.open(url,"dynamicData_profit_analysis");
 	});
