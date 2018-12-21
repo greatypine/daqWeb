@@ -2891,7 +2891,7 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     	}else{
     		var point = 0.11;
     		cityProfitRangeOption.series[0].symbolSize = function(val){
-    			if(val[0]<150000){
+    			if(val[0]<100000){
     				return val[2] * point;
     			}else{
     				return val[2] * 2;
