@@ -447,7 +447,13 @@ var initPageElements = function () {
       y: "10",
       textStyle: {
         color: "rgba(255,255,255,0.8)"
+      },
+     // 副标题文本样式设置
+     subtextStyle: {
+      fontSize: 14,
+      color: '#d9db1f'
       }
+      
     },
     color: [
       "#0ad852","#4ed80e","#15bb86","#0ad896","#d9db1f","#d97520","#d63537"
@@ -2889,12 +2895,12 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
 	    		return val[2] * 0.8;
 	    	};
     	}else{
-    		var point = 0.11;
+    		var point = 0.12;
     		cityProfitRangeOption.series[0].symbolSize = function(val){
     			if(val[0]<100000){
     				return val[2] * point;
     			}else{
-    				return val[2] * 2;
+    				return val[2] * 2.5;
     			}
 	    	};
     		cityProfitRangeOption.series[1].symbolSize = function(val){
