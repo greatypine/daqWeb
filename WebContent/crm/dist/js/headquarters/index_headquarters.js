@@ -2794,7 +2794,7 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
 			temp.push(element.city_name);
 			temp.push(element.store_name);
 			temp.push(element.order_sign_date);
-			if(element.order_sign_date!="2018-12-18"&&element.store_name!="金融街店"){
+			if(!(element.order_sign_date=="2018-12-18"&&element.store_name=="金融街店")){
 				if(element.order_sign_date.indexOf(ele)>0&&idxi==0){
 				dataBJ.push(temp);
 				}else if(element.order_sign_date.indexOf(ele)>0&&idxi==1){
