@@ -871,7 +871,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		+ "dd ON aa.store_id = dd.store_id and aa.order_sign_date = dd.order_return_date ";
 		//查询GMV去除仓店
 		sql = sql+"LEFT JOIN( SELECT real_store_id AS store_id, min(strleft(sign_time, 10)) AS order_sign_date, SUM(IFNULL(gmv_price, 0)) AS gmv_price FROM daqWeb.df_mass_order_monthly WHERE strleft (sign_time, 10) >= '"+beginDate+"' AND "
-				+ "strleft (sign_time, 10) <= '"+endDate+"' and store_white ='normal' GROUP BY real_store_id, from_unixtime( unix_timestamp(sign_time), 'yyyy-MM-dd') ) ss on ss.order_sign_date = aa.order_sign_date and ss.store_id=aa.store_id ";
+				+ "strleft (sign_time, 10) <= '"+endDate+"' GROUP BY real_store_id, from_unixtime( unix_timestamp(sign_time), 'yyyy-MM-dd') ) ss on ss.order_sign_date = aa.order_sign_date and ss.store_id=aa.store_id ";
 		
 		sql = sql+" ORDER BY aa.order_sign_date";
 
