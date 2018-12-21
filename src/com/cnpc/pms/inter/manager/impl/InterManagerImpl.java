@@ -3482,17 +3482,23 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			String resultString = "";
             String proxydomain = PropertiesUtil.getValue("proxy.domain");
             int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+            String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+            CloseableHttpClient httpclient=null;
 			try {
 
 					String sendcode_gb2312 = URLEncoder.encode(content,"utf8");
 					System.out.println(sendcode_gb2312);
 					//String url = "http://q.hl95.com:8061/?username=gasjyz&password=Gasj0121&message="+sendcode_gb2312+"&phone="+mobilephone+"&epid=123743&linkid=&subcode=";
 					String url = "http://datatest.guoanshequ.top/eprj/dispatcher.action?phone=%s&sendcode=%s";
-					HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
-					RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
-					/** 上线时，添加代理设置 **/
-					CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();;
-//					CloseableHttpClient httpclient = HttpClients.createDefault();
+					if("off".equals(proxySwitch)){
+                        httpclient = HttpClients.custom().build();
+                    }else if("on".equals(proxySwitch)){
+                        HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
+                        RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
+                        httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
+                    }
+
+
 					HttpGet httpGet = new HttpGet(String.format(url, new Object[]{mobilephone,sendcode_gb2312}));
 					CloseableHttpResponse response = httpclient.execute(httpGet);
 					resultString = EntityUtils.toString(response.getEntity(), "utf-8");

@@ -86,18 +86,25 @@ public class HttpClientUtil {
 		CloseableHttpClient httpclient=null;
 		String proxydomain = PropertiesUtil.getValue("proxy.domain");
 		int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+		String proxySwitch = PropertiesUtil.getValue("proxy.switch");
 		try {
 
-			//设置代理IP、端口、协议（请分别替换）
-			HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
+			if("off".equals(proxySwitch)){
+				//实例化CloseableHttpClient对象
+				httpclient = HttpClients.custom().build();
+			}else if("on".equals(proxySwitch)){
+				//设置代理IP、端口、协议（请分别替换）
+				HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
 
-			//把代理设置到请求配置
-			RequestConfig defaultRequestConfig = RequestConfig.custom()
-					.setProxy(proxy)
-					.build();
+				//把代理设置到请求配置
+				RequestConfig defaultRequestConfig = RequestConfig.custom()
+						.setProxy(proxy)
+						.build();
 
-			//实例化CloseableHttpClient对象
-			 httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+				//实例化CloseableHttpClient对象
+				httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+			}
+
 
 
 			httpPost = new HttpPost(url);

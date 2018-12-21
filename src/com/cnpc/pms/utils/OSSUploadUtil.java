@@ -116,18 +116,25 @@ public class OSSUploadUtil {
     private static String putObject(File file,String fileType,String fileName){
         String proxydomain = PropertiesUtil.getValue("proxy.domain");
         int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+        String proxySwitch = PropertiesUtil.getValue("proxy.switch");
         config = config==null?new OSSConfig():config;  
         String url = null;      
         OSSClient ossClient = null;
-        // 创建ClientConfiguration实例
-        ClientConfiguration conf = new ClientConfiguration();
 
-        // 配置代理为本地8080端口
-        conf.setProxyHost(proxydomain);
-        conf.setProxyPort(proxyport);
-        try {  
+        try {
+            if("off".equals(proxySwitch)){
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret());
+            }else if("on".equals(proxySwitch)){
+                // 创建ClientConfiguration实例
+                ClientConfiguration conf = new ClientConfiguration();
 
-            ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret(),conf);
+                // 配置代理为本地8080端口
+                conf.setProxyHost(proxydomain);
+                conf.setProxyPort(proxyport);
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret(),conf);
+            }
+
+
 
 
             InputStream input = new FileInputStream(file);    
