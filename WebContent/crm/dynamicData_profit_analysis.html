@@ -569,6 +569,8 @@
                 $("#deptnamepayhide").show();
                 $("#deptSelect").attr("disabled",false);
                 $("#deptClick").prop("checked",true);
+                $('#auto_date_store').data('daterangepicker').setStartDate(time.split('-')[0]);
+                $('#auto_date_store').data('daterangepicker').setEndDate(time.split('-')[1]);
                 searchInfo_store_step1(1);
             }
 		}
