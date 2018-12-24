@@ -799,4 +799,18 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			.executeUpdate();
 		session.close();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> queryPositionByOrdersn(String order_sn) {
+		String sql="select ifnull(df.addr_latitude,'') as latitude,ifnull(df.addr_longitude,'') as longitude from df_mass_order_monthly df where order_sn = '"+order_sn+"'";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String,Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		if(lst_data!=null&&lst_data.size()>0){
+			return  lst_data.get(0);
+		}else{
+			return null;
+		}
+	}
+
 }
