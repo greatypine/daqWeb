@@ -189,9 +189,9 @@
                                 </div>
 
                                 <div class="clearfix">
-                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_country">
+                                   <!-- <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_country">
                                         <button  type="button"  style="display:block"  onclick="export_country();" class="btn btn-block btn-warning">打包下载</button>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" class="btn btn-block btn-primary" onclick="search_country_step1(1)">查询</button>
                                     </div>
@@ -231,11 +231,11 @@
                                 </div>
 
                                 <div class="clearfix">
-                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_month">
+                                    <!--<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_month">
                                         <button  type="button"   onclick="export_monthly();" class="btn btn-block btn-warning">打包下载</button>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
-                                        <button type="button" class="btn btn-block btn-primary" onclick="search_monthly_step1(1)">查询</button>
+                                        <button type="button" class="btn btn-block btn-primary" onclick="search_weekly_step1(1)">查询</button>
                                     </div>
 
                                 </div>
@@ -275,9 +275,9 @@
                                 </div>
 
                                 <div class="clearfix">
-                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_daily">
+                                   <!-- <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_daily">
                                         <button  type="button" style="display:block"  onclick="export_daily();" class="btn btn-block btn-warning">打包下载</button>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" class="btn btn-block btn-primary" onclick="search_daily_step1(1)">查询</button>
                                     </div>
@@ -352,6 +352,7 @@
     var now_month =cur_date.getMonth();
     var max_year = cur_date.getFullYear();
     var now_date =cur_date.getDate();
+    var max_month = "";
     if(now_month==0){
         max_year =cur_date.getFullYear()-1;
         max_month = "12";
@@ -363,23 +364,28 @@
         }else{
             now_month = now_month+1;
         }
+    }else{
+        max_month = now_month;
+        now_month = now_month+1;
     }
     var year_month = max_year+"-"+max_month;
     var max_date = "";
+    var max_month1 =max_month;
     var max_month =max_year+"-"+max_month +"-"+(cur_date.getDate());
     if(now_date==1){
-        if(now_month==4||now_month==6||now_month==9||now_month==1){
+        if(now_month==4||now_month==6||now_month==9||now_month==11){
             now_date =30;
         }else
-            if(max_year%4==0&&now_month==2){
-                now_date=29;
+        if(max_year%4==0&&now_month==2){
+            now_date=29;
         }else{
-                now_date=31;
-            }
-                max_date = max_year+"-"+max_month +"-"+now_date;
+            now_date=31;
+        }
+        max_date = max_year+"-"+now_month +"-"+now_date;
     }else{
         max_date = max_year+"-"+now_month +"-"+(now_date-1);
     }
+
 
     laydate.render({//月份控件
         elem:'#report_month',
@@ -387,7 +393,7 @@
         type:"month",
         btns: ['confirm'],
         theme: '#11214e',
-        min: '2018-09-1',
+        min: '2018-11-1',
         max:max_month
 
     });
@@ -399,14 +405,15 @@
         type:"date",
         btns: ['confirm'],
         theme: '#11214e',
-        min: '2018-10-28',
+        min: '2018-11-1',
         max:max_date
     });
-    var first = getWeek(4);
+    var first = getWeek(3);
     $("#report_week").val(first);
     $("#report_week").datepicker({
         autoclose: true,
-        daysOfWeekDisabled: "0,1,2,3,5,6",
+        daysOfWeekDisabled: "0,1,2,4,5,6",
+        startDate:'2018-11-1',
         endDate:new Date()
     });
 
@@ -459,31 +466,30 @@
     var currentPage_customer = 1;
     var totalPage_customer = 1;
 
-    ////////////////////////---------------月报----------------begin-------------///////////////////////////
+    ////////////////////////---------------周报----------------begin-------------///////////////////////////
 
 
     //查询
-    function search_monthly_step1(cur_page){
+    function search_weekly_step1(cur_page){
         isCreatePage1=false;
-        search_monthly(cur_page);
+        search_weekly(cur_page);
     }
     //分页
     function chnagePageRecords_monthly(t){
         $("#page_monthly").empty();
         manualPageRecordeStore  = $("#pageRecords_store").val();
-        search_monthly_step1(1);
+        search_weekly_step1(1);
     }
     var currentPage_tradetype = 1;
     var totalPage_tradetype = 1;
-    function search_monthly(cur_page){
-        var seltab = "月报";
+    function search_weekly(cur_page){
+        var seltab = "周报";
         $("#process_div").show();
         $("#process_div_pic").show();
         var filetime = $("#report_week").val();
 
         var downloadFileDto=null;
         downloadFileDto = {
-            cityId:cityId,
             employeeId:employeeId,
             filetime:filetime,
             target:seltab
@@ -492,7 +498,7 @@
         pageInfo.currentPage = cur_page;
         pageInfo.recordsPerPage = manualPageRecordeStore;
         $("#totalRecord_store").html("0");
-        doManager('downloadFileManager','queryDownloadFile',[downloadFileDto,pageInfo],function(data){
+        doManager('downloadFileManager','queryOperDownloadFile',[downloadFileDto,pageInfo],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
@@ -500,7 +506,6 @@
                     var jData = result.downfile;
                     var jtab = result.seltag;
                     var jtime = result.seltime;
-                    var jcity = result.selcity;
 
                     if(jData==null||jData.length==0){
                         crm_alert(5,"没有符合条件的数据！");
@@ -522,7 +527,7 @@
                             pageCount:totalPage_tradetype,
                             current:cur_page,
                             backFn:function(p){
-                                search_monthly(p);
+                                search_weekly(p);
                             }
                         });
                         isCreatePage1=true;
@@ -530,7 +535,7 @@
                   /*  var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
                     $("#tradeType_tbody").append(firstStr);*/
                     for(var i=0;i<jData.length;i++){
-                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/report_week/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
+                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/report_week/"+jtime+"/report_week/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
                         $("#tradeType_tbody").append(infoStr);
                     }
                 }else if(result.status=='storefail'){
@@ -564,7 +569,7 @@
 
 
 
-    ////////////////////////---------------月报----------------end-------------///////////////////////////
+    ////////////////////////---------------周报----------------end-------------///////////////////////////
 
 
 
@@ -596,7 +601,6 @@
 
         var downloadFileDto=null;
         downloadFileDto = {
-            cityId:cityId,
             employeeId:employeeId,
             filetime:filetime,
             target:seltab
@@ -605,7 +609,7 @@
         pageInfo.currentPage = cur_page;
         pageInfo.recordsPerPage = manualPageRecordeCity;
         $("#totalRecord_city").html("0");
-        doManager('downloadFileManager','queryDownloadFileOper',[downloadFileDto,pageInfo],function(data){
+        doManager('downloadFileManager','queryOperDownloadFile',[downloadFileDto,pageInfo],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
@@ -613,8 +617,6 @@
                     var jData = result.downfile;
                     var jtab = result.seltag;
                     var jtime = result.seltime;
-                    var jcity = result.selcity;
-
                     if(jData==null||jData.length==0){
                         crm_alert(5,"没有符合条件的数据！");
                         $("#page_daily").createPage({
@@ -643,7 +645,7 @@
                    /* var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
                     $("#tradeType_tbody_daily").append(firstStr);*/
                     for(var i=0;i<jData.length;i++){
-                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/report_daily/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
+                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/report_daily/"+jtime+"/report_daily/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
                         $("#tradeType_tbody_daily").append(infoStr);
                     }
                 }else if(result.status=='storefail'){
@@ -683,7 +685,7 @@
 
 
 
-    ////////////////////////---------------全国----------------begin-------------///////////////////////////
+    ////////////////////////---------------月报----------------begin-------------///////////////////////////
 
 
     var isCreateCountryPage1=false;
@@ -703,14 +705,13 @@
 
     var totalPage_country = 1;
     function search_country(cur_page){
-        var seltab = "全国";
+        var seltab = "月报";
         $("#process_div").show();
         $("#process_div_pic").show();
         var filetime = $("#report_month").val();
 
         var downloadFileDto=null;
         downloadFileDto = {
-            cityId:cityId,
             employeeId:employeeId,
             filetime:filetime,
             target:seltab
@@ -719,7 +720,7 @@
         pageInfo.currentPage = cur_page;
         pageInfo.recordsPerPage = manualPageRecordeCountry;
         $("#totalRecord_country").html("0");
-        doManager('downloadFileManager','queryDownloadFileOper',[downloadFileDto,pageInfo],function(data){
+        doManager('downloadFileManager','queryOperDownloadFile',[downloadFileDto,pageInfo],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
@@ -727,7 +728,6 @@
                     var jData = result.downfile;
                     var jtab = result.seltag;
                     var jtime = result.seltime;
-                    var jcity = result.selcity;
 
                     if(jData==null||jData.length==0){
                         crm_alert(5,"没有符合条件的数据！");
@@ -757,7 +757,7 @@
                     /*var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
                     $("#tradeType_tbody_country").append(firstStr);*/
                     for(var i=0;i<jData.length;i++){
-                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/report_month/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
+                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/report_month/"+jtime+"/report_month/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
                         $("#tradeType_tbody_country").append(infoStr);
                     }
                 }else if(result.status=='storefail'){
@@ -791,7 +791,7 @@
 
 
 
-    ////////////////////////---------------全国----------------end-------------///////////////////////////
+    ////////////////////////---------------月报----------------end-------------///////////////////////////
 
 
 //全部文件下载

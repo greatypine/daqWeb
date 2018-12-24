@@ -122,5 +122,10 @@ public interface MassOrderDao extends IDAO{
 
 	public void updataReport(Long id ,String url);
 
-
+	/**
+	 * 通过订单号查询所在位置
+	 * @param order_sn
+	 * @return
+	 */
+	public Map<String, Object> queryPositionByOrdersn(String order_sn);
 }

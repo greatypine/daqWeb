@@ -61,11 +61,17 @@ public class DownloadFileDaoImpl  extends BaseDAOHibernate implements DownloadFi
         List<?> list = null;
         Map<String, Object> map_result = new HashMap<String, Object>();
         DownLoadDto df = downloadDto;
-        String sql = "select file_name,file_insert_name from df_daily_monthly_file where file_tab='2' ";
+        String sql = "select file_name,file_insert_name from df_daily_weekly_monthly_file where file_tab='1' ";
         if(df!=null&&df.getTarget()!=null){
-            sql += " and file_type='"+df.getTarget()+"'";
+            if("日报".equals(df.getTarget())){
+                sql += " and is_daily=0";
+            }else if("周报".equals(df.getTarget())){
+                sql += " and is_weekly=0";
+            }else{
+                sql += " and is_monthly=0";
+            }
         }else{
-            sql +=" and file_type='运营月报'";
+            sql += " and is_daily=0";
         }
         Query query = this.getHibernateTemplate().getSessionFactory()
                 .getCurrentSession().createSQLQuery(sql);

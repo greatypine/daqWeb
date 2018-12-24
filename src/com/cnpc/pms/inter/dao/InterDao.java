@@ -165,4 +165,12 @@ public interface InterDao {
     * @throws
      */
     public List<Map<String, Object>> queryCustomerMoreTenOfEmployee(String employeeNo,String year,String month);
+
+    /**
+     * @Description 根据订单号查询订单信息
+     * @author gbl
+     * @date 2018/12/20 9:17
+     **/
+
+    public Map<String, Object> getOrderByOrderSN(String order_sn);
 }

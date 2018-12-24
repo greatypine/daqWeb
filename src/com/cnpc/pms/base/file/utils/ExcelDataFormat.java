@@ -1045,7 +1045,7 @@ public class ExcelDataFormat {
 	 * @return
 	 */
 	public static Map<String, Object> getMapDataFromExcel(String path) throws Exception {
-
+		System.out.println("进入getMapDataFromExcel");
 		FileInputStream inp = null;
 		// Map map = new HashMap();
 		// Sheet sheet = null;
@@ -1069,7 +1069,7 @@ public class ExcelDataFormat {
 	 * @return
 	 */
 	public static Map<String, Object> getMapDataFromExcel(InputStream inp) {
-
+		System.out.println("进入getMapDataFromExcel");
 		Map map = new HashMap();
 		Sheet sheet = null;
 		Workbook wb = null;

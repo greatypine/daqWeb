@@ -29,14 +29,6 @@ public interface MassOrderItemDao extends IDAO{
 		 * @return
 	*/
   public Map<String, Object> queryEmployeeBySN(String order_sn);
-  	/**
-	 * 根据片区编号查询信息
-	 * @param area_code
-	 * @param order_sn
-	 * @param timeFlag
-	 * @return
-	 */
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String timeFlag);
 	/**
 	 * 查询订单数据列表
 	 * @param massOrderDto
@@ -121,5 +113,26 @@ public interface MassOrderItemDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> queryRecommendUser(PageInfo pageInfo, String employee_no);
+	/**
+	 * 查询所有的门店
+	 * @return
+	 */
+	public List<Map<String, Object>> findAllStore();
+	/**
+	 * 查询城市每天GMV&毛利&消费用户数&消费社员数&注册用户数
+	 * @param dd
+	 * @param cityNO
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dd,String cityNO,PageInfo pageInfo);
+	/**
+	 * 查询门店近7日毛利订单量散点图
+	 * @param dd
+	 * @param cityNO
+	 * @param provinceNO
+	 * @return
+	 */
+	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 	
 }

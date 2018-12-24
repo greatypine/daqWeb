@@ -505,14 +505,26 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 	@Override
 	public String sendShortMessage(String mobilephone, String content, String functionname, String epid) {
 		String resultString = "";
-		String proxyip = PropertiesUtil.getValue("iproxy.sendip");
-		int proxyport = Integer.parseInt(PropertiesUtil.getValue("iproxy.sendport"));
-		String setcode = PropertiesUtil.getValue("iproxy.set");
+		String proxydomain = PropertiesUtil.getValue("proxy.domain");
+		int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
 		try {
 			//if(setcode!=null&&setcode.equals("ON")){
+
+			//设置代理IP、端口、协议（请分别替换）
+			HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
+
+			//把代理设置到请求配置
+			RequestConfig defaultRequestConfig = RequestConfig.custom()
+					.setProxy(proxy)
+					.build();
+
+			//实例化CloseableHttpClient对象
+			CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+
+
 				String sendcode_gb2312 = URLEncoder.encode(content,"utf8");
 				String url = "http://datatest.guoanshequ.top/eprj/smsSend.action?phone=%s&sendcode=%s&epid=%s";
-				CloseableHttpClient httpclient = HttpClients.createDefault();
+//				CloseableHttpClient httpclient = HttpClients.createDefault();
 				HttpGet httpGet = new HttpGet(String.format(url, new Object[]{mobilephone,sendcode_gb2312,epid}));
 				CloseableHttpResponse response = httpclient.execute(httpGet);
 				resultString = EntityUtils.toString(response.getEntity(), "utf-8");

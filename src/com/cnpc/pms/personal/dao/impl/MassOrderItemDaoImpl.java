@@ -443,36 +443,6 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		return order_obj;
 	}
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String timeFlag) {
-		String sql = "SELECT IFNULL(a.area_code,'') AS area_code, IFNULL(a.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, "
-				+ "IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code FROM ";
-		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_daily a ";
-		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_monthly a ";
-		} else {
-			sql = sql + " df_mass_order_total a ";
-		}		
-		sql = sql + "LEFT JOIN t_area ta ON a.area_code = ta.area_no LEFT JOIN tiny_village_code vc ON a.info_village_code = vc. CODE WHERE 1=1 ";
-
-		if (StringUtils.isNotEmpty(area_code) && !area_code.equals("null")) {
-			sql = sql + " AND a.area_code = '" + area_code + "'";
-		}
-		if (StringUtils.isNotEmpty(order_sn)) {
-			sql = sql + " AND a.order_sn = '" + order_sn + "'";
-		}
-
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-		// 获得查询数据
-		Map<String, Object> order_obj = null;
-		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		if (lst_data != null && lst_data.size() > 0) {
-			order_obj = (Map<String, Object>) lst_data.get(0);
-		}
-		return order_obj;
-	}
 	@Override
 	public Map<String, Object> queryDailyprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
 		String beginDate = dd.getBeginDate();
@@ -509,7 +479,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	public Map<String, Object> queryMonthprofit(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
 		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
 		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,"
-		+ "sum(ifnull(dbaosun.count_money, 0)) AS baosun,sum(ifnull(dpankui.count_money, 0)) AS pankui from ( "
+		+ "sum(ifnull(dbaosun.count_money, 0)) AS baosun from ( "
 		+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
 		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
@@ -546,11 +516,6 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				+ "baosun.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info baosun "
 				+ "join gemini.t_store ts  on baosun.store_code=ts.code where baosun.count_type='0' and baosun.count_month='"+beginDate+"' "
 				+ "group by ts.city_code,baosun.create_date ) aa having num=1) dbaosun on aa.store_city_code=dbaosun.city_code ";
-		//盘亏
-		sql = sql + "left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(pankui.count_money),2),0) as count_money,ts.city_code,"
-				+ "pankui.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info pankui "
-				+ "join gemini.t_store ts  on pankui.store_code=ts.code where pankui.count_type='1' and pankui.count_month='"+beginDate+"' "
-				+ "group by ts.city_code,pankui.create_date ) aa having num=1) dpankui on aa.store_city_code=dpankui.city_code ";
 		//退款
 		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total where strleft(return_time,7)='"+beginDate+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
 
@@ -791,6 +756,99 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			map_result.put("total_pages", total_pages);
 		}
 		map_result.put("data", lst_data);
+		return map_result;
+	}
+	@Override
+	public List<Map<String, Object>> findAllStore() {
+		String sql = "SELECT t.name as name,t.storeno as storeno from t_store t where t.flag='0' ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+	@Override
+	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dynamicDto,String cityNO,PageInfo pageInfo) {
+		String beginDate = dynamicDto.getBeginDate();
+		String sql = "select city_name,consumer,addconsumer,sumconsumer,member,addmember,summember from daqweb.dops_consumer_city_daily where 1=1 ";
+		String whereStr = "";
+		if(StringUtils.isNotEmpty(cityNO)){
+			if(cityNO.startsWith("00")){
+				cityNO = cityNO.substring(1,cityNO.length());
+			}
+			whereStr +=  " and city_code='"+cityNO.trim()+"' ";
+		}
+		/*if(StringUtils.isNotEmpty(beginDate)){
+			whereStr += "and create_date = '" + beginDate.trim()+"' ";
+		}*/
+		sql=sql+whereStr+" ORDER BY city_code ";
+		String sqlB = "SELECT count(1) as count_ from ( "+sql+" ) ttt ";
+		 List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
+        Integer count_ = 0;
+		try{
+        	lst_data_count=ImpalaUtil.executeGuoan(sqlB);
+        	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
+        	if(pageInfo.getCurrentPage()==1){
+        		sql = sql+" limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
+        	}else{
+        		sql = sql+" limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage()+1);
+        	}
+        	lst_data=ImpalaUtil.executeGuoan(sql);
+            lst_result = lst_data;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		if(pageInfo!=null){
+			Integer total_pages = (count_ - 1) / pageInfo.getRecordsPerPage() + 1;
+			pageInfo.setTotalRecords(count_);
+			pageInfo.setRecordsPerPage(pageInfo.getRecordsPerPage());
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}
+		map_result.put("data", lst_data);
+		return map_result;
+	}
+	@Override
+	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,
+			List<Map<String, Object>> provinceNO) {
+		String beginDate = dynamicDto.getBeginDate();
+		String endDate = dynamicDto.getEndDate();
+		String sql = "SELECT aa.*,ifnull(ss.gmv_price, 0) AS gmv_price,ifnull(dd.return_profit, 0) AS return_profit FROM( SELECT tab3.*,tdc.id as cityId FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
+				+ "ts. NAME AS store_name, ts.storeno AS store_code,tcs.customer_count AS customer_count  FROM ( SELECT store_id, min(store_province_code) AS store_province_code, "
+				+ "order_sign_date AS order_sign_date, sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit FROM "
+				+ "( SELECT dot.real_store_id AS store_id, min(dot.store_province_code) AS store_province_code, min(strleft (dot.sign_time, 10)) "
+				+ "AS order_sign_date, ifnull( dround ( sum( CASE WHEN dot.eshop_joint_ims = 'no' THEN dot.order_profit ELSE 0 END), 2 ), 0 ) AS platform_profit, ifnull( dround ( sum( CASE WHEN "
+				+ "dot.eshop_joint_ims = 'yes' THEN dot.order_profit ELSE 0 END ), 2 ), 0 ) AS ims_profit, ifnull( dround ( sum( CASE WHEN dot.order_tag4 IS NULL THEN dot.platform_price ELSE 0 END ), 2 ), 0 ) "
+				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <='"+endDate+"' "
+				+ "GROUP BY dot.real_store_id,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') ) tab1 GROUP BY store_id,order_sign_date ) tab2 LEFT JOIN daqWeb.t_store ts ON tab2.store_id = ts.id "
+				+ "left join( SELECT IFNULL( count(DISTINCT(customer_id)), 0) AS customer_count, store_name, strleft (sign_time, 10) AS tcs_sign_time FROM daqweb.df_mass_order_monthly GROUP BY strleft (sign_time, 10), store_name ) tcs on tcs.tcs_sign_time = tab2.order_sign_date and ts.name=tcs.store_name ) tab3 LEFT JOIN daqWeb.t_dist_citycode "
+				+ "tdc ON tab3.store_city_code = tdc.cityno";
+		String whereStr = " WHERE 1 = 1 ";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			whereStr +=  " and tab3.store_city_code='"+cityNo+"' ";
+			
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			whereStr += " and tab3.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		sql= sql+whereStr+ ") aa ";
+		//以日为单位不减报损和盘亏
+		//退款
+		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit, real_store_id AS store_id, min(strleft (return_time, 10)) "
+		+ "as order_return_date FROM daqWeb.df_mass_order_monthly WHERE strleft (return_time, 10) >= '"+beginDate+"' AND strleft (return_time, 10) <='"+endDate+"' GROUP BY real_store_id,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') ) "
+		+ "dd ON aa.store_id = dd.store_id and aa.order_sign_date = dd.order_return_date ";
+		//查询GMV去除仓店
+		sql = sql+"LEFT JOIN( SELECT real_store_id AS store_id, min(strleft(sign_time, 10)) AS order_sign_date, SUM(IFNULL(gmv_price, 0)) AS gmv_price FROM daqWeb.df_mass_order_monthly WHERE strleft (sign_time, 10) >= '"+beginDate+"' AND "
+				+ "strleft (sign_time, 10) <= '"+endDate+"' GROUP BY real_store_id, from_unixtime( unix_timestamp(sign_time), 'yyyy-MM-dd') ) ss on ss.order_sign_date = aa.order_sign_date and ss.store_id=aa.store_id ";
+		
+		sql = sql+" ORDER BY aa.order_sign_date";
+
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("lst_data", list);
 		return map_result;
 	}
 }

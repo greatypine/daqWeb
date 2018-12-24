@@ -217,8 +217,9 @@ public class AttachmentManagerImpl extends BizBaseCommonManager implements Attac
 
 	@Override
 	public Attachment findAttachmentByFilePathName(String file_path_name, String file_type_name) {
+		file_path_name="%%"+file_path_name;
 		List<?> list = this.getList(FilterFactory.getSimpleFilter(
-				"file_path='" + file_path_name + "' AND uploadType='上传中' AND file_type_name='" + file_type_name + "'"));
+				"file_path like '" + file_path_name + "' AND uploadType='上传中' AND file_type_name='" + file_type_name + "'"));
 		if (list != null && list.size() > 0) {
 			return (Attachment) list.get(0);
 		}

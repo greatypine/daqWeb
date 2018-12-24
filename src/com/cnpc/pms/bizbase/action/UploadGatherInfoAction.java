@@ -222,15 +222,17 @@ public class UploadGatherInfoAction extends HttpServlet{
 				 System.out.println(file2.getAbsolutePath()+"-----------------读取的文件夹路径-----------------");
 				 String str=null;
 				//文件是Excel
-				 String village = excelManager.getTinyVillageByVillage(file2.getName());
+				 String village = excelManager.getTinyVillageByVillage(file2.getName()); 
 				 Attachment attachment = attachmentManager.findAttachmentByFilePathName(file2.getName(),"地址文件");
 				 if(village!=null){str="thod";}
 				 
 				 try {
 					new ReadExcel().batchExcelData(file2, str, attachment);
+					System.out.println(file2.exists());
 					 if(file2.exists()){
 						 System.gc();
-						  file2.delete();
+						  boolean delete = file2.delete();
+						  System.out.println(delete+"delete......");
 					 }
 					//copyFile(file2,"house");
 				}catch (NullPointerException e){
@@ -312,7 +314,9 @@ public class UploadGatherInfoAction extends HttpServlet{
 		 if(listFiles.length>0){
 			 for (File file2 : listFiles) {//读取文件
 				 String str=null;
+				
 				 Attachment attachment = attachmentManager.findAttachmentByName(file2.getName(),"写字楼文件");
+			
 				 try {
 					 new ReadCompanyInfo().readOfficeExcel(file2,attachment);
 					 if(file2.exists()){
@@ -382,7 +386,7 @@ public class UploadGatherInfoAction extends HttpServlet{
 		 if(listFiles.length>0){
 			 for (File file2 : listFiles) {//读取文件
 				 String str=null;
-				 Attachment attachment = attachmentManager.findAttachmentByName(file2.getName(),"商业信息文件");
+					 Attachment attachment = attachmentManager.findAttachmentByName(file2.getName(),"商业信息文件");
 				 try {
 					 new ReadCompanyInfo().readBusinessDataExcel(file2,attachment);
 					 if(file2.exists()){
@@ -432,10 +436,7 @@ public class UploadGatherInfoAction extends HttpServlet{
 			}
 		 }
 	}
-	
-	
-	
-	
+
 	//如果导入数据库成功将文件复制到Tomcat文件夹下
 	public void copyFile(File file,String target_dir) throws Exception{
 		String str_webroot = FILE_ROOT.concat("/"+target_dir);

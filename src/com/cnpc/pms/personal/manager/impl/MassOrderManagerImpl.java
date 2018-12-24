@@ -272,7 +272,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
     	
     	Map<String,Object> order_obj =  new HashMap<String,Object>();
 		order_obj =  massOrderDao.queryAreaDetailByCode(area_code,order_sn);
-    	Map<String,Object> position_obj = orderDao.queryPositionByOrdersn(order_sn);
+    	Map<String,Object> position_obj = massOrderDao.queryPositionByOrdersn(order_sn);
     	String latitude = "";
     	String longitude ="";
 		if (position_obj != null) {

@@ -1154,7 +1154,8 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
     	Map<String,Object> map = new HashMap<String,Object>();
     	try {
     		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    		map = orderDao.getOrderByOrderSN(order_sn);
+    		InterDao interDao = (InterDao)SpringHelper.getBean(InterDao.class.getName());
+    		map = interDao.getOrderByOrderSN(order_sn);
 			String order_id = map.get("id")==null?"":map.get("id").toString();
 			List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
 			map.put("employee", "");
@@ -1938,23 +1939,23 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 		return result;
 	}
 
-	@Override
-	public Result queryOrderListAppByAreaNew(Long store_id, String order_sn, PageInfo pageInfo, Long area_id) {
-		Result result = new Result();
-		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
-    	Map<String, Object> retMap = null;
-    	try {
-    		Area queryArea = areaManager.queryArea(area_id);
-        	retMap = orderDao.queryOrderOfAreaForApp(queryArea==null?"":queryArea.getArea_no(),pageInfo,order_sn);
-        	result.setDataMap(retMap);
-        	result.setCode(CodeEnum.success.getValue()); 
-            result.setMessage(CodeEnum.success.getDescription());
-    	} catch (Exception e) {
-			e.printStackTrace();
-		}
-        return result;
-	}
+//	@Override
+//	public Result queryOrderListAppByAreaNew(Long store_id, String order_sn, PageInfo pageInfo, Long area_id) {
+//		Result result = new Result();
+//		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
+//    	Map<String, Object> retMap = null;
+//    	try {
+//    		Area queryArea = areaManager.queryArea(area_id);
+//        	retMap = orderDao.queryOrderOfAreaForApp(queryArea==null?"":queryArea.getArea_no(),pageInfo,order_sn);
+//        	result.setDataMap(retMap);
+//        	result.setCode(CodeEnum.success.getValue());
+//            result.setMessage(CodeEnum.success.getDescription());
+//    	} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//        return result;
+//	}
 	
 	@Override
 	public Result queryCustomerStatBycity(String city_id){
@@ -3479,24 +3480,29 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 		@Override
 		public String commonSendMessage(String mobilephone,String content,String functionname){
 			String resultString = "";
-			String proxyip = PropertiesUtil.getValue("iproxy.sendip");
-			int proxyport = Integer.parseInt(PropertiesUtil.getValue("iproxy.sendport"));
-			String setcode = PropertiesUtil.getValue("iproxy.set");
+            String proxydomain = PropertiesUtil.getValue("proxy.domain");
+            int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+            String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+            CloseableHttpClient httpclient=null;
 			try {
-				if(setcode!=null&&setcode.equals("OFF")){
+
 					String sendcode_gb2312 = URLEncoder.encode(content,"utf8");
 					System.out.println(sendcode_gb2312);
 					//String url = "http://q.hl95.com:8061/?username=gasjyz&password=Gasj0121&message="+sendcode_gb2312+"&phone="+mobilephone+"&epid=123743&linkid=&subcode=";
 					String url = "http://datatest.guoanshequ.top/eprj/dispatcher.action?phone=%s&sendcode=%s";
-					HttpHost proxy = new HttpHost(proxyip, proxyport, "http");
-					RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
-					/** 上线时，添加代理设置 **/
-					//CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();;
-					CloseableHttpClient httpclient = HttpClients.createDefault();
+					if("off".equals(proxySwitch)){
+                        httpclient = HttpClients.custom().build();
+                    }else if("on".equals(proxySwitch)){
+                        HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
+                        RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
+                        httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
+                    }
+
+
 					HttpGet httpGet = new HttpGet(String.format(url, new Object[]{mobilephone,sendcode_gb2312}));
 					CloseableHttpResponse response = httpclient.execute(httpGet);
 					resultString = EntityUtils.toString(response.getEntity(), "utf-8");
-				}
+
 				//保存发送记录 
 				/*SendMessage sendMessage = new SendMessage();
 				sendMessage.setFunctionname(functionname);
@@ -3911,37 +3917,37 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		Map<String, Object> areaOpenCardLastMonthCountMap = massOrderItemDao.queryAreaOpenCardByAreaCode(dd1);
 	    		List<Map<String,Object>> areaCustomerMonthCountList = (List<Map<String, Object>>) areaCustomerMonthCountMap.get("data");
 	    		if(areaCustomerMonthCountList!=null&&areaCustomerMonthCountList.size()>0){
-	    			areaCustomerCount = Integer.parseInt(String.valueOf(areaCustomerMonthCountList.get(0).get("pay_10_count")));
+	    			areaCustomerCount = Integer.parseInt(String.valueOf(areaCustomerMonthCountList.get(0).get("pay_10_count")==null?0:areaCustomerMonthCountList.get(0).get("pay_10_count")));
 	    		}else{
 	    			areaCustomerCount = 0;
 	    		}
 	    		List<Map<String,Object>> areaCustomerLstMonthCountList = (List<Map<String, Object>>) areaCustomerLastMonthCountMap.get("data");
 	    		if(areaCustomerLstMonthCountList!=null&&areaCustomerLstMonthCountList.size()>0){
-	    			areaLastCustomerCount = Integer.parseInt(String.valueOf(areaCustomerLstMonthCountList.get(0).get("pay_10_count")));
+	    			areaLastCustomerCount = Integer.parseInt(String.valueOf(areaCustomerLstMonthCountList.get(0).get("pay_10_count")==null?0:areaCustomerLstMonthCountList.get(0).get("pay_10_count")));
 	    		}else{
 	    			areaLastCustomerCount = 0;
 	    		}
 	    		List<Map<String,Object>> areaProfitMonthCountList = (List<Map<String, Object>>) areaProfitMonthCountMap.get("maoli");
 	    		if(areaProfitMonthCountList!=null&&areaProfitMonthCountList.size()>0){
-	    			areaProfitMonthCount = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("maoli")));
+	    			areaProfitMonthCount = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("maoli")==null?0:areaProfitMonthCountList.get(0).get("maoli")));
 	    		}else{
 	    			areaProfitMonthCount = 0.0;
 	    		}
 	    		List<Map<String,Object>> areaProfitLstMonthCountList = (List<Map<String, Object>>) areaProfitLastMonthCountMap.get("maoli");
 	    		if(areaProfitLstMonthCountList!=null&&areaProfitLstMonthCountList.size()>0){
-	    			areaProfitLstMonthCount = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("maoli")));
+	    			areaProfitLstMonthCount = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("maoli")==null?0:areaProfitLstMonthCountList.get(0).get("maoli")));
 	    		}else{
 	    			areaProfitLstMonthCount = 0.0;
 	    		}
 	    		List<Map<String,Object>> areaOpenCardMonthList = (List<Map<String, Object>>) areaOpenCardMonthCountMap.get("data");
 	    		if(areaOpenCardMonthList!=null&&areaOpenCardMonthList.size()>0){
-	    			areaOpenCardMonthCount = Integer.parseInt(String.valueOf(areaOpenCardMonthList.get(0).get("inviteCount")));
+	    			areaOpenCardMonthCount = Integer.parseInt(String.valueOf(areaOpenCardMonthList.get(0).get("inviteCount")==null?0:areaOpenCardMonthList.get(0).get("inviteCount")));
 	    		}else{
 	    			areaOpenCardMonthCount = 0;
 	    		}
 	    		List<Map<String,Object>> areaOpenCardLstMonthList = (List<Map<String, Object>>) areaOpenCardLastMonthCountMap.get("data");
 	    		if(areaOpenCardLstMonthList!=null&&areaOpenCardLstMonthList.size()>0){
-	    			areaOpenCardLastMonthCount = Integer.parseInt(String.valueOf(areaOpenCardLstMonthList.get(0).get("inviteCount")));
+	    			areaOpenCardLastMonthCount = Integer.parseInt(String.valueOf(areaOpenCardLstMonthList.get(0).get("inviteCount")==null?0:areaOpenCardLstMonthList.get(0).get("inviteCount")));
 	    		}else{
 	    			areaOpenCardLastMonthCount = 0;
 	    		}
@@ -4018,22 +4024,22 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		Map<String, Object> storeOpenCardLastMonthCountMap = dynamicDao.queryMemberInvitation(dd4,null);
 	    		List<Map<String,Object>> areaCustomerMonthCountList = (List<Map<String, Object>>) areaCustomerMonthCountMap.get("data");
 	    		if(areaCustomerMonthCountList!=null&&areaCustomerMonthCountList.size()>0){
-	    			storeCustomerCount = Integer.parseInt(String.valueOf(areaCustomerMonthCountList.get(0).get("pay_10_count")));
+	    			storeCustomerCount = Integer.parseInt(String.valueOf(areaCustomerMonthCountList.get(0).get("pay_10_count")==null?0:areaCustomerMonthCountList.get(0).get("pay_10_count")));
 	    		}else{
 	    			storeCustomerCount = 0;
 	    		}
 	    		List<Map<String,Object>> areaCustomerLstMonthCountList = (List<Map<String, Object>>) areaCustomerLastMonthCountMap.get("data");
 	    		if(areaCustomerLstMonthCountList!=null&&areaCustomerLstMonthCountList.size()>0){
-	    			storeLastCustomerCount = Integer.parseInt(String.valueOf(areaCustomerLstMonthCountList.get(0).get("pay_10_count")));
+	    			storeLastCustomerCount = Integer.parseInt(String.valueOf(areaCustomerLstMonthCountList.get(0).get("pay_10_count")==null?0:areaCustomerLstMonthCountList.get(0).get("pay_10_count")));
 	    		}else{
 	    			storeLastCustomerCount = 0;
 	    		}
 	    		List<Map<String,Object>> areaProfitMonthCountList = (List<Map<String, Object>>) areaProfitMonthCountMap.get("data");
 	    		if(areaProfitMonthCountList!=null&&areaProfitMonthCountList.size()>0){
-	    			Double  total_profit = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("total_profit")));
-	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("return_profit")));
-	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("order_fee")));
-	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("baosun")));
+	    			Double  total_profit = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("total_profit")==null?0:areaProfitMonthCountList.get(0).get("total_profit")));
+	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("return_profit")==null?0:areaProfitMonthCountList.get(0).get("return_profit")));
+	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("order_fee")==null?0:areaProfitMonthCountList.get(0).get("order_fee")));
+	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("baosun")==null?0:areaProfitMonthCountList.get(0).get("baosun")));
 	    			double real_profit = (total_profit-return_profit-order_fee-baosun);
 	    			storeProfitMonthCount = (double) Math.round(real_profit * 100)/100;
 	    		}else{
@@ -4041,10 +4047,10 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		}
 	    		List<Map<String,Object>> areaProfitLstMonthCountList = (List<Map<String, Object>>) areaProfitLastMonthCountMap.get("data");
 	    		if(areaProfitLstMonthCountList!=null&&areaProfitLstMonthCountList.size()>0){
-	    			Double  total_profit = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("total_profit")));
-	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("return_profit")));
-	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("order_fee")));
-	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("baosun")));
+	    			Double  total_profit = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("total_profit")==null?0:areaProfitLstMonthCountList.get(0).get("total_profit")));
+	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("return_profit")==null?0:areaProfitLstMonthCountList.get(0).get("return_profit")));
+	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("order_fee")==null?0:areaProfitLstMonthCountList.get(0).get("order_fee")));
+	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("baosun")==null?0:areaProfitLstMonthCountList.get(0).get("baosun")));
 	    			double real_profit = (total_profit-return_profit-order_fee-baosun);
 	    			storeProfitLstMonthCount = (double) Math.round(real_profit * 100)/100;
 	    		}else{
@@ -4052,13 +4058,13 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		}
 	    		List<Map<String,Object>> areaOpenCardMonthList = (List<Map<String, Object>>) areaOpenCardMonthCountMap.get("data");
 	    		if(areaOpenCardMonthList!=null&&areaOpenCardMonthList.size()>0){
-	    			storeKeeperOpenCardMonthCount = Integer.parseInt(String.valueOf(areaOpenCardMonthList.get(0).get("inviteCount")));
+	    			storeKeeperOpenCardMonthCount = Integer.parseInt(String.valueOf(areaOpenCardMonthList.get(0).get("inviteCount")==null?0:areaOpenCardMonthList.get(0).get("inviteCount")));
 	    		}else{
 	    			storeKeeperOpenCardMonthCount = 0;
 	    		}
 	    		List<Map<String,Object>> areaOpenCardLstMonthList = (List<Map<String, Object>>) areaOpenCardLastMonthCountMap.get("data");
 	    		if(areaOpenCardLstMonthList!=null&&areaOpenCardLstMonthList.size()>0){
-	    			storeKeeperOpenCardLastMonthCount = Integer.parseInt(String.valueOf(areaOpenCardLstMonthList.get(0).get("inviteCount")));
+	    			storeKeeperOpenCardLastMonthCount = Integer.parseInt(String.valueOf(areaOpenCardLstMonthList.get(0).get("inviteCount")==null?0:areaOpenCardLstMonthList.get(0).get("inviteCount")));
 	    		}else{
 	    			storeKeeperOpenCardLastMonthCount = 0;
 	    		}
@@ -4066,7 +4072,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		if(storeOpenCardMonthCountList!=null&&storeOpenCardMonthCountList.size()>0){
 	    			int count = 0;
 	    			for (Map<String, Object> map : storeOpenCardMonthCountList) {
-	    				count+=Integer.parseInt(String.valueOf(map.get("total")));
+	    				count+=Integer.parseInt(String.valueOf(map.get("total")==null?0:map.get("total")));
 					}
 	    			storeOpenCardMonthCount = count;
 	    		}else{
@@ -4076,7 +4082,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		if(storeOpenCardLastMonthCountList!=null&&storeOpenCardLastMonthCountList.size()>0){
 	    			int countLst = 0;
 	    			for (Map<String, Object> map : storeOpenCardMonthCountList) {
-	    				countLst+=Integer.parseInt(String.valueOf(map.get("total")));
+	    				countLst+=Integer.parseInt(String.valueOf(map.get("total")==null?0:map.get("total")));
 					}
 	    			storeOpenCardLastMonthCount = countLst;
 	    		}else{
