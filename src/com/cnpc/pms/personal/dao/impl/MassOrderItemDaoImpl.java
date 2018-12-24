@@ -443,36 +443,6 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		return order_obj;
 	}
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String timeFlag) {
-		String sql = "SELECT IFNULL(a.area_code,'') AS area_code, IFNULL(a.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, "
-				+ "IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code FROM ";
-		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_daily a ";
-		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_monthly a ";
-		} else {
-			sql = sql + " df_mass_order_total a ";
-		}		
-		sql = sql + "LEFT JOIN t_area ta ON a.area_code = ta.area_no LEFT JOIN tiny_village_code vc ON a.info_village_code = vc. CODE WHERE 1=1 ";
-
-		if (StringUtils.isNotEmpty(area_code) && !area_code.equals("null")) {
-			sql = sql + " AND a.area_code = '" + area_code + "'";
-		}
-		if (StringUtils.isNotEmpty(order_sn)) {
-			sql = sql + " AND a.order_sn = '" + order_sn + "'";
-		}
-
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-		// 获得查询数据
-		Map<String, Object> order_obj = null;
-		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		if (lst_data != null && lst_data.size() > 0) {
-			order_obj = (Map<String, Object>) lst_data.get(0);
-		}
-		return order_obj;
-	}
 	@Override
 	public Map<String, Object> queryDailyprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
 		String beginDate = dd.getBeginDate();

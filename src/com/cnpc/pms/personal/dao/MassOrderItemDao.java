@@ -29,14 +29,6 @@ public interface MassOrderItemDao extends IDAO{
 		 * @return
 	*/
   public Map<String, Object> queryEmployeeBySN(String order_sn);
-  	/**
-	 * 根据片区编号查询信息
-	 * @param area_code
-	 * @param order_sn
-	 * @param timeFlag
-	 * @return
-	 */
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String timeFlag);
 	/**
 	 * 查询订单数据列表
 	 * @param massOrderDto

@@ -79,34 +79,6 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
     	
     	return order_obj;
     }
-    @Override
-    public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String beginDate){
-    	MassOrderItemDao massOrderDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	
-    	Map<String,Object> order_obj =  new HashMap<String,Object>();
-    	String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-    	if(StringUtils.isNotEmpty(beginDate) && DateUtils.compareDate(beginDate, format.format(new Date()))==0){
-			order_obj = massOrderDao.queryAreaDetailByCode(area_code,order_sn,MassOrderDto.TimeFlag.CUR_DAY.code);
-		}else if(StringUtils.isNotEmpty(beginDate) && DateUtils.compareDate(beginDate,preMonthFirst)>=0){
-			order_obj =  massOrderDao.queryAreaDetailByCode(area_code,order_sn, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-		}else{
-			order_obj =  massOrderDao.queryAreaDetailByCode(area_code,order_sn, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-		}
-    	
-    	Map<String,Object> position_obj = orderDao.queryPositionByOrdersn(order_sn);
-    	String latitude = "";
-    	String longitude ="";
-		if (position_obj != null) {
-			latitude =  (String) position_obj.get("latitude");
-			longitude = (String) position_obj.get("longitude");
-    	}
-		order_obj.put("latitude", latitude);
-		order_obj.put("longitude",longitude);
-    	
-    	return order_obj;
-    }
 	@Override
 	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto, PageInfo pageInfo) {
 		MassOrderItemDao orderDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
