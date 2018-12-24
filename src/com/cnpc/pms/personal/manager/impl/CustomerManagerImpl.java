@@ -1704,34 +1704,38 @@ public class CustomerManagerImpl extends BizBaseCommonManager implements Custome
             }
         }else{
         	 CustomerHealth customerHealth = customerHealthManager.getCustomerHealthByCustomerId(save_customer.getId());
+        	 if(customerHealth!=null){
+        		 customerHealth.setUpdate_user(save_customer.getUpdate_user());
+                 customerHealth.setUpdate_user_id(save_customer.getUpdate_user_id());
+                 if(save_customer.getCustomerHealth()!=null){
+              	   customerHealth.setStore_name(save_customer.getCustomerHealth().getStore_name());
+                	 customerHealth.setStore_id(save_customer.getCustomerHealth().getStore_id());
+                	 customerHealth.setIs_member(save_customer.getCustomerHealth().getIs_member());
+                	 customerHealth.setWork_status(save_customer.getCustomerHealth().getWork_status());
+                	 customerHealth.setMe_is_diabetes(save_customer.getCustomerHealth().getMe_is_diabetes());
+                	 customerHealth.setFamily_is_diabetes(save_customer.getCustomerHealth().getFamily_is_diabetes());
+                	 customerHealth.setIs_cardiovascular(save_customer.getCustomerHealth().getIs_cardiovascular());
+                	 customerHealth.setMedical_insurance(save_customer.getCustomerHealth().getMedical_insurance());
+                	 customerHealth.setIs_weekly_activity(save_customer.getCustomerHealth().getIs_weekly_activity());
+                	 customerHealth.setWeekly_measure_diabetes(save_customer.getCustomerHealth().getWeekly_measure_diabetes());
+                	 customerHealth.setDiabetes_symptom(save_customer.getCustomerHealth().getDiabetes_symptom());
+                	 customerHealth.setDiabetes_complications(save_customer.getCustomerHealth().getDiabetes_complications());
+                	 customerHealth.setDiabetes_doctor_advice(save_customer.getCustomerHealth().getDiabetes_doctor_advice());
+                	 customerHealth.setDiabetes_treatment_quota(save_customer.getCustomerHealth().getDiabetes_treatment_quota());
+                	 customerHealth.setInterested_health_means(save_customer.getCustomerHealth().getInterested_health_means());
+                	 customerHealth.setDiabetes_history(save_customer.getCustomerHealth().getDiabetes_history());
+                	 customerHealth.setDiabetes_treatment_means(save_customer.getCustomerHealth().getDiabetes_treatment_means());
+                	 customerHealth.setIs_vision_damage(save_customer.getCustomerHealth().getIs_vision_damage());
+                	 customerHealth.setDiabetes_health_study(save_customer.getCustomerHealth().getDiabetes_health_study());
+                	 customerHealth.setDiabetes_control(save_customer.getCustomerHealth().getDiabetes_control());
+                	 preObject(customerHealth);
+                	 customerHealthManager.saveObject(customerHealth);
+              	   
+                 }
+        		 
+        	 }
       
-               customerHealth.setUpdate_user(save_customer.getUpdate_user());
-               customerHealth.setUpdate_user_id(save_customer.getUpdate_user_id());
-               if(save_customer.getCustomerHealth()!=null){
-            	   customerHealth.setStore_name(save_customer.getCustomerHealth().getStore_name());
-              	 customerHealth.setStore_id(save_customer.getCustomerHealth().getStore_id());
-              	 customerHealth.setIs_member(save_customer.getCustomerHealth().getIs_member());
-              	 customerHealth.setWork_status(save_customer.getCustomerHealth().getWork_status());
-              	 customerHealth.setMe_is_diabetes(save_customer.getCustomerHealth().getMe_is_diabetes());
-              	 customerHealth.setFamily_is_diabetes(save_customer.getCustomerHealth().getFamily_is_diabetes());
-              	 customerHealth.setIs_cardiovascular(save_customer.getCustomerHealth().getIs_cardiovascular());
-              	 customerHealth.setMedical_insurance(save_customer.getCustomerHealth().getMedical_insurance());
-              	 customerHealth.setIs_weekly_activity(save_customer.getCustomerHealth().getIs_weekly_activity());
-              	 customerHealth.setWeekly_measure_diabetes(save_customer.getCustomerHealth().getWeekly_measure_diabetes());
-              	 customerHealth.setDiabetes_symptom(save_customer.getCustomerHealth().getDiabetes_symptom());
-              	 customerHealth.setDiabetes_complications(save_customer.getCustomerHealth().getDiabetes_complications());
-              	 customerHealth.setDiabetes_doctor_advice(save_customer.getCustomerHealth().getDiabetes_doctor_advice());
-              	 customerHealth.setDiabetes_treatment_quota(save_customer.getCustomerHealth().getDiabetes_treatment_quota());
-              	 customerHealth.setInterested_health_means(save_customer.getCustomerHealth().getInterested_health_means());
-              	 customerHealth.setDiabetes_history(save_customer.getCustomerHealth().getDiabetes_history());
-              	 customerHealth.setDiabetes_treatment_means(save_customer.getCustomerHealth().getDiabetes_treatment_means());
-              	 customerHealth.setIs_vision_damage(save_customer.getCustomerHealth().getIs_vision_damage());
-              	 customerHealth.setDiabetes_health_study(save_customer.getCustomerHealth().getDiabetes_health_study());
-              	 customerHealth.setDiabetes_control(save_customer.getCustomerHealth().getDiabetes_control());
-              	 preObject(customerHealth);
-              	 customerHealthManager.saveObject(customerHealth);
-            	   
-               }
+               
         	 
         	 
         }
