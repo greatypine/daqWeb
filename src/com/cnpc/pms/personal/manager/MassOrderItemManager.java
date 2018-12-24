@@ -25,12 +25,6 @@ public interface MassOrderItemManager extends IManager {
 	 */
 	public Map<String, Object> queryCitynoByCode(String cityCode);
 	
-	/**
-	 * 根据片区编号查询信息
-	 * @param area_code
-	 * @return
-	 */
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String beginDate);
 	
 	/**
 	 * 根据订单号查询国安侠信息
