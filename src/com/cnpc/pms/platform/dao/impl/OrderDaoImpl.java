@@ -1808,24 +1808,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	     }
 	     return map_result;
 	}	
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, Object> queryPositionByOrdersn(String order_sn) {
-		String sql="select ifnull(df.addr_latitude,'') as latitude,ifnull(df.addr_longitude,'') as longitude from df_mass_order_monthly df where order_sn = '"+order_sn+"'";
-		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
-	 	List<Map<String, Object>> lst_data = null;
-	 	Map<String, Object> map_r = null;
-	     try{
-	        SQLQuery query = session.createSQLQuery(sql);
-	        lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	        if(lst_data!=null&&lst_data.size()>0){
-		    	 map_r =  lst_data.get(0);
-		     }
-	     }catch (Exception e){
-	         e.printStackTrace();
-	     }
-	    return map_r;
-	}
 
 	@Override
 	public List<Map<String, Object>> getDailyUserOfCurDay(DynamicDto dd,List<Map<String, Object>> cityNO,
