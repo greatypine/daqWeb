@@ -49,6 +49,7 @@ import com.cnpc.pms.personal.dao.RelationDao;
 import com.cnpc.pms.personal.entity.BeforeDateCustomer;
 import com.cnpc.pms.personal.entity.Customer;
 import com.cnpc.pms.personal.entity.CustomerData;
+import com.cnpc.pms.personal.entity.CustomerHealth;
 import com.cnpc.pms.personal.entity.CustomerOperateRecord;
 import com.cnpc.pms.personal.entity.Family;
 import com.cnpc.pms.personal.entity.HouseCustomer;
@@ -57,6 +58,7 @@ import com.cnpc.pms.personal.entity.Relation;
 import com.cnpc.pms.personal.entity.RelationContent;
 import com.cnpc.pms.personal.entity.ViewAddressCustomer;
 import com.cnpc.pms.personal.manager.CustomerDataManager;
+import com.cnpc.pms.personal.manager.CustomerHealthManager;
 import com.cnpc.pms.personal.manager.CustomerManager;
 import com.cnpc.pms.personal.manager.CustomerOperateRecordManager;
 import com.cnpc.pms.personal.manager.CustomerTemporaryManager;
@@ -419,6 +421,7 @@ public class CustomerManagerImpl extends BizBaseCommonManager implements Custome
     @Override
     public Customer findCustomerInfo(Customer customer) {
         ViewAddressCustomerManager viewAddressCustomerManager = (ViewAddressCustomerManager)SpringHelper.getBean("viewAddressCustomerManager");
+        CustomerHealthManager customerHealthManager=(CustomerHealthManager) SpringHelper.getBean("customerHealthManager");
         FamilyManager familyManager = (FamilyManager)SpringHelper.getBean("familyManager");
         String[] str_relations = {"配偶","祖父母","父母","子女","孙儿/孙女","其他"};
         String[] str_matchRelations = {"配偶","孙儿/孙女","子女","父母","祖父母","其他"};
@@ -518,6 +521,10 @@ public class CustomerManagerImpl extends BizBaseCommonManager implements Custome
                 }*/
                 obj_customer.setCus_pic(path.concat(obj_customer.getCustomer_pic()));
             }
+            CustomerHealth customerHealth=customerHealthManager.getCustomerHealthByCustomerId(customer_id);
+            obj_customer.setCustomerHealth(customerHealth);
+            
+            
         }
         return obj_customer;
     }
@@ -1530,6 +1537,258 @@ public class CustomerManagerImpl extends BizBaseCommonManager implements Custome
         
 		return result;
 	}
+
+
+
+	@Override
+	public Result findCustomerorHhealthList(Customer customer) {
+		ViewAddressCustomerManager viewAddressCustomerManager = (ViewAddressCustomerManager)SpringHelper.getBean("viewAddressCustomerManager");
+        UserManager userManager = (UserManager)SpringHelper.getBean("userManager");
+        CustomerHealthManager customerHealthManager = (CustomerHealthManager)SpringHelper.getBean("customerHealthManager");
+
+        Result result = new Result();
+
+        IFilter filter = FilterFactory.getSimpleFilter("1=1");
+
+        if(ValueUtil.checkValue(customer.getName())){
+            filter = filter.appendAnd(FilterFactory.getEq("name",customer.getName()));
+        }
+
+        if(ValueUtil.checkValue(customer.getMobilephone())){
+            filter =  filter.appendAnd(FilterFactory.getEq("mobilephone",customer.getMobilephone()));
+        }
+
+        if(ValueUtil.checkValue(customer.getAddress())){
+            filter =  filter.appendAnd(FilterFactory.getSimpleFilter("address like '%"+customer.getAddress()+"%'"));
+        } 
+
+        if(ValueUtil.checkValue(customer.getCreate_time())){
+            Date sdate = new Date();
+            filter =  filter.appendAnd(FilterFactory.getBetween("create_time",customer.getCreate_time(),sdate)
+                    .appendOr(FilterFactory.getBetween("update_time",customer.getCreate_time(),sdate)));
+        }
+
+        if(ValueUtil.checkValue(customer.getEmployee_no())){
+            filter =  filter.appendAnd(FilterFactory.getSimpleFilter("employee_no",customer.getEmployee_no()));
+        }
+
+        if(ValueUtil.checkValue(customer.getStore_id())){
+            List<User> lst_employee = userManager.findNamesBySid(customer.getStore_id().toString()).getUserList();
+            if(lst_employee != null && lst_employee.size() > 0){
+                List<String> lst_employeeno = new ArrayList<String>();
+                for(User user : lst_employee){
+                    lst_employeeno.add(user.getEmployeeId());
+                }
+                filter =  filter.appendAnd(FilterFactory.getInFilter("employee_no",lst_employeeno));
+            }
+        }
+
+        List<?> lst_result = this.getList(filter);
+
+        result.setCode(CodeEnum.success.getValue());
+        result.setMessage(CodeEnum.success.getDescription());
+
+
+        if(lst_result == null || lst_result.size() == 0){
+            result.setListCustomer(new ArrayList<Customer>());
+        }else{
+            result.setListCustomer((List<Customer>) lst_result);
+            String path = PropertiesUtil.getValue("file.oss.root").concat("user_image/");
+            for(Customer obj_customer : result.getListCustomer()){
+                obj_customer.setRelations(obj_customer.getRelations());
+                obj_customer.setCustomerHealth(customerHealthManager.getCustomerHealthByCustomerId(obj_customer.getId()));
+                FSP fsp = new FSP();
+                fsp.setSort(SortFactory.createSort("house_id", ISort.DESC));
+                fsp.setUserFilter(FilterFactory.getSimpleFilter("customer_id",obj_customer.getId()));
+                List<?> lst_address = viewAddressCustomerManager.getList(fsp);
+                if(lst_address != null && lst_address.size() > 0){
+                    obj_customer.setCustomer_address((ViewAddressCustomer)lst_address.get(0));
+                    if(obj_customer.getCustomer_address().getHouse_type() == 1){
+                    	
+                    	String building_name = obj_customer.getCustomer_address().getBuilding_name()==null?"":obj_customer.getCustomer_address().getBuilding_name();
+                        String unit_no = obj_customer.getCustomer_address().getUnit_no()==null?"":obj_customer.getCustomer_address().getUnit_no();
+                    	String house_no = obj_customer.getCustomer_address().getHouse_no()==null?"":obj_customer.getCustomer_address().getHouse_no();
+                    	String tvName = obj_customer.getCustomer_address().getTv_name()==null?"":obj_customer.getCustomer_address().getTv_name();
+
+                       
+                    	obj_customer.setAddress(tvName
+                                .concat(building_name.concat("号楼"))
+                                .concat(unit_no.concat("单元"))
+                                .concat(house_no.concat("号")));
+                    }else if(obj_customer.getCustomer_address().getHouse_type() == 0){
+                    	String house_no = obj_customer.getCustomer_address().getHouse_no()==null?"":obj_customer.getCustomer_address().getHouse_no();
+                        obj_customer.setAddress(obj_customer.getCustomer_address().getTv_name()
+                                .concat(house_no.concat("号")));
+                    }
+                }
+                if(obj_customer.getCustomer_pic() != null && !"".equals(obj_customer.getCustomer_pic())){
+                    /*File pic_dir = new File(picPath);
+                    final String customer_pic = obj_customer.getCustomer_pic();
+                    File[] file_pics = pic_dir.listFiles(new FileFilter() {
+                        @Override
+                        public boolean accept(File pathname) {
+                            return pathname.getName().contains(customer_pic);
+                        }
+                    });
+                    obj_customer.setCus_pic(file_pics == null || file_pics.length == 0 ? null : file_pics[0].getName());
+                    if(obj_customer.getCus_pic() != null) {
+                        obj_customer.setCus_pic(web.concat(obj_customer.getCus_pic()));
+                    }*/
+                    obj_customer.setCus_pic(path.concat(obj_customer.getCustomer_pic()));
+
+                }
+            }
+        }
+
+        return result;
+	}
+
+
+
+	@Override
+	public Customer saveOrUpdateCustomerAndHouseAndHealth(Customer customer) {
+		FamilyManager familyManager = (FamilyManager) SpringHelper.getBean("familyManager");
+        CustomerDao customerDao = (CustomerDao)SpringHelper.getBean(CustomerDao.class.getName());
+        HouseCustomerManager houseCustomerManager = (HouseCustomerManager) SpringHelper.getBean("houseCustomerManager");
+        HouseStyleManager houseStyleManager = (HouseStyleManager) SpringHelper.getBean("houseStyleManager");
+        CustomerHealthManager customerHealthManager = (CustomerHealthManager) SpringHelper.getBean("customerHealthManager");
+        UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+        CustomerOperateRecordManager coRecordManager = (CustomerOperateRecordManager) SpringHelper.getBean("customerOperateRecordManager");
+        StringBuilder familySb  = new StringBuilder();
+        Date sdate = new Date();
+        Customer save_customer = null;
+        if(ValueUtil.checkValue(customer.getId())){//当前顾客已存在
+            save_customer = (Customer)this.getObject(customer.getId());
+        }else if(ValueUtil.checkValue(customer.getName()) && ValueUtil.checkValue(customer.getMobilephone())){//当前顾客已存在
+            save_customer = getCustomerByNameAndMobilephone(customer);
+        }
+        boolean isAdd = false;
+        if(save_customer == null){//当前客户是新客户（还不存在）
+            isAdd = true;
+            save_customer = new Customer();
+            
+        }else{
+        	if(save_customer.getChilds() != null){//原客户信息有家庭成员
+                for (Family family : save_customer.getChilds()) {
+                    familyManager.removeObject(family);
+                }
+            }
+        }
+        
+        if(isAdd){
+            BeanUtils.copyProperties(customer,save_customer,new String[]{"id","create_time","create_user","create_user_id"});
+        }else{
+            BeanUtils.copyProperties(customer,save_customer,new String[]{"id","employee_no","create_time","create_user","create_user_id"});
+        }
+        if(save_customer.getCreate_user_id()  == null){
+            save_customer.setCreate_time(sdate);
+            save_customer.setCreate_user(customer.getUpdate_user());
+            save_customer.setCreate_user_id(customer.getUpdate_user_id());
+        }
+        save_customer.setUpdate_time(sdate);
+        Set<Family> familySet = customer.getChilds();
+        save_customer.setChilds(null);
+        preObject(save_customer);
+        saveObject(save_customer);
+        
+        //健康档案保存
+        if(isAdd){
+            CustomerHealth customerHealth = customer.getCustomerHealth();
+            if(customerHealth != null){
+               customerHealth.setCustomer_id(save_customer.getId());
+               customerHealth.setCreate_user(customer.getCreate_user());
+               customerHealth.setCreate_user_id(customer.getCreate_user_id());
+            
+               preObject(customerHealth);
+               customerHealthManager.saveObject(customerHealth);
+            }
+        }else{
+        	 CustomerHealth customerHealth = customerHealthManager.getCustomerHealthByCustomerId(save_customer.getId());
+      
+               customerHealth.setUpdate_user(save_customer.getUpdate_user());
+               customerHealth.setUpdate_user_id(save_customer.getUpdate_user_id());
+               if(save_customer.getCustomerHealth()!=null){
+            	   customerHealth.setStore_name(save_customer.getCustomerHealth().getStore_name());
+              	 customerHealth.setStore_id(save_customer.getCustomerHealth().getStore_id());
+              	 customerHealth.setIs_member(save_customer.getCustomerHealth().getIs_member());
+              	 customerHealth.setWork_status(save_customer.getCustomerHealth().getWork_status());
+              	 customerHealth.setMe_is_diabetes(save_customer.getCustomerHealth().getMe_is_diabetes());
+              	 customerHealth.setFamily_is_diabetes(save_customer.getCustomerHealth().getFamily_is_diabetes());
+              	 customerHealth.setIs_cardiovascular(save_customer.getCustomerHealth().getIs_cardiovascular());
+              	 customerHealth.setMedical_insurance(save_customer.getCustomerHealth().getMedical_insurance());
+              	 customerHealth.setIs_weekly_activity(save_customer.getCustomerHealth().getIs_weekly_activity());
+              	 customerHealth.setWeekly_measure_diabetes(save_customer.getCustomerHealth().getWeekly_measure_diabetes());
+              	 customerHealth.setDiabetes_symptom(save_customer.getCustomerHealth().getDiabetes_symptom());
+              	 customerHealth.setDiabetes_complications(save_customer.getCustomerHealth().getDiabetes_complications());
+              	 customerHealth.setDiabetes_doctor_advice(save_customer.getCustomerHealth().getDiabetes_doctor_advice());
+              	 customerHealth.setDiabetes_treatment_quota(save_customer.getCustomerHealth().getDiabetes_treatment_quota());
+              	 customerHealth.setInterested_health_means(save_customer.getCustomerHealth().getInterested_health_means());
+              	 customerHealth.setDiabetes_history(save_customer.getCustomerHealth().getDiabetes_history());
+              	 customerHealth.setDiabetes_treatment_means(save_customer.getCustomerHealth().getDiabetes_treatment_means());
+              	 customerHealth.setIs_vision_damage(save_customer.getCustomerHealth().getIs_vision_damage());
+              	 customerHealth.setDiabetes_health_study(save_customer.getCustomerHealth().getDiabetes_health_study());
+              	 customerHealth.setDiabetes_control(save_customer.getCustomerHealth().getDiabetes_control());
+              	 preObject(customerHealth);
+              	 customerHealthManager.saveObject(customerHealth);
+            	   
+               }
+        	 
+        	 
+        }
+        if(familySet != null){
+            for (Family family : familySet) {
+            	
+                family.setCustomer_id(save_customer.getId());
+                family.setCreate_user(save_customer.getCreate_user());
+                family.setCreate_user_id(save_customer.getCreate_user_id());
+                family.setCreate_time(save_customer.getCreate_time());
+                family.setUpdate_user(save_customer.getUpdate_user());
+                family.setUpdate_user_id(save_customer.getUpdate_user_id());
+                family.setUpdate_time(save_customer.getUpdate_time());
+                family.setId(null);
+                familyManager.saveObject(family);
+                familySb.append(family.getFamily_name()+"_"+family.getFamily_phone()+",");
+            }
+        }
+
+        if(customer.getCustomer_address() != null && customer.getCustomer_address().getHouse_id() != null){
+        	
+        	
+            HouseCustomer houseCustomer = new HouseCustomer();
+            houseCustomer.setHouse_id(customer.getCustomer_address().getHouse_id());
+            houseCustomer.setCustomer_id(save_customer.getId());
+            int house_customer_count = houseCustomerManager.checkedHouseCustomer(houseCustomer);
+            if(house_customer_count == 0){
+                preObject(houseCustomer);
+                houseCustomerManager.saveHouseCustomer(houseCustomer);
+            }
+           
+            HouseStyle houseStyle = houseStyleManager.getHouseStyleByHouseId(houseCustomer.getHouse_id());
+            if(houseStyle == null){
+                houseStyle = new HouseStyle();
+                houseStyle.setHouse_id(houseCustomer.getHouse_id());
+                houseStyle.setCreate_user(save_customer.getCreate_user());
+                houseStyle.setCreate_user_id(save_customer.getCreate_user_id());
+                houseStyle.setCreate_time(sdate);
+            }
+            houseStyle.setHouse_area(customer.getCustomer_address().getHouse_area()==""?null:customer.getCustomer_address().getHouse_area());
+            houseStyle.setHouse_toward(customer.getCustomer_address().getHouse_toward());
+            houseStyle.setHouse_style(customer.getCustomer_address().getHouse_style());
+            houseStyle.setHouse_pic(customer.getCustomer_address().getHouse_pic());
+            houseStyle.setUpdate_user(save_customer.getUpdate_user());
+            houseStyle.setUpdate_user_id(save_customer.getUpdate_user_id());
+            houseStyle.setUpdate_time(save_customer.getUpdate_time());
+            houseStyle.setEmployee_no(save_customer.getEmployee_no());
+            houseStyleManager.saveObject(houseStyle);
+          
+            
+           
+        }
+        
+        return save_customer;
+	}
+
+
 
 	
 }

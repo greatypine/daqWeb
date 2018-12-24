@@ -261,6 +261,24 @@ public interface CustomerManager extends IManager {
      * @return
      */
     public Map<String, Object>  editCustomerAddress(ViewAddressCustomer addressCustomer);
+    /**
+     * 
+     * TODO 查询用户画像集合包含健康增加字段
+     * 2018年12月17日
+     * @author gaolei
+     * @param customer 客户对象，要查询的条件
+     * @return 客户集合
+     */
+    Result findCustomerorHhealthList(Customer customer);
+    /**
+     * 
+     * TODO 保存或者修改客户以及房屋信息、健康档案
+     * 2018年12月18日
+     * @author gaolei
+     * @param customer 客户对象，要查询的条件
+     * @return 保存的对象
+     */
+    Customer saveOrUpdateCustomerAndHouseAndHealth(Customer customer);
     
    
 }
