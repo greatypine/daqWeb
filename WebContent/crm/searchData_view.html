@@ -833,6 +833,10 @@ function getIsManager(){
 		}else if(redirectTag=='profit'){
             $('#auto_date').data('daterangepicker').setStartDate(time.split('-')[0]);
             $('#auto_date').data('daterangepicker').setEndDate(time.split('-')[1]);
+            $("#profit_sort_label").removeClass("fa fa-angle-up");
+            $("#profit_sort_label").addClass("fa fa-angle-down");
+            sort_tag_value = "down";
+            sort_tag_type = "profit_sort";
         }
 	}
     
