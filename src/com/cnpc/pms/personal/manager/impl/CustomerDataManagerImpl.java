@@ -40,7 +40,8 @@ public class CustomerDataManagerImpl extends BizBaseCommonManager implements Cus
 		if(find_customerData.getId()!=null){
 			
 	        BeanUtils.copyProperties(customerData, find_customerData,new String[]{"id","customer_id","version","create_time","create_user","create_user_id"});
-
+	        find_customerData.setUpdate_user(customerData.getCreate_user());
+	        find_customerData.setUpdate_user_id(customerData.getCreate_user_id());
 			preObject(find_customerData);
 			saveObject(find_customerData);
 			
