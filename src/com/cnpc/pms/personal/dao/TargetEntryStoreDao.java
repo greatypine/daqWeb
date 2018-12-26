@@ -18,7 +18,7 @@ public interface TargetEntryStoreDao extends IDAO{
 	List<Map<String, Object>> getTargetEntryStoreList(String where, PageInfo pageInfo);
 	List<Map<String, Object>> getTargetEntryStoreList1(String where, PageInfo pageInfo);
 
-	List<Map<String, Object>> getTargetEntryStoreData(String frame_time,String dept,String channel, PageInfo pageInfo);
+	List<Map<String, Object>> getTargetEntryStoreData(String frame_time,String dept, PageInfo pageInfo);
 
 	List<Map<String, Object>> exportFile(TargetEntryStore targetEntryStore);
 

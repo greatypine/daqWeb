@@ -13,6 +13,7 @@ import com.cnpc.pms.base.security.UserSession;
 import com.cnpc.pms.reportFiledown.entity.ExportRunableSPXSDA;
 import com.cnpc.pms.reportFiledown.entity.HttpClientUtils;
 import com.cnpc.pms.reportFiledown.entity.TReportFiledown;
+
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -39,11 +40,13 @@ import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.personal.dao.StoreDao;
+import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.manager.MassOrderItemManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.platform.manager.impl.OrderManagerImpl;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
+import com.cnpc.pms.utils.TypeChangeUtil;
 
 public class MassOrderItemManagerImpl extends BizBaseCommonManager implements MassOrderItemManager {
 
@@ -76,50 +79,13 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
     	
     	return order_obj;
     }
-    @Override
-    public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String beginDate){
-    	MassOrderItemDao massOrderDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	
-    	Map<String,Object> order_obj =  new HashMap<String,Object>();
-    	String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-    	if(StringUtils.isNotEmpty(beginDate) && DateUtils.compareDate(beginDate, format.format(new Date()))==0){
-			order_obj = massOrderDao.queryAreaDetailByCode(area_code,order_sn,MassOrderDto.TimeFlag.CUR_DAY.code);
-		}else if(StringUtils.isNotEmpty(beginDate) && DateUtils.compareDate(beginDate,preMonthFirst)>=0){
-			order_obj =  massOrderDao.queryAreaDetailByCode(area_code,order_sn, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-		}else{
-			order_obj =  massOrderDao.queryAreaDetailByCode(area_code,order_sn, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-		}
-    	
-    	Map<String,Object> position_obj = orderDao.queryPositionByOrdersn(order_sn);
-    	String latitude = "";
-    	String longitude ="";
-		if (position_obj != null) {
-			latitude =  (String) position_obj.get("latitude");
-			longitude = (String) position_obj.get("longitude");
-    	}
-		order_obj.put("latitude", latitude);
-		order_obj.put("longitude",longitude);
-    	
-    	return order_obj;
-    }
 	@Override
 	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto, PageInfo pageInfo) {
-//		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		MassOrderItemDao orderDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
 
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
-				result = orderDao.queryMassOrderItem(massOrderDto, pageInfo,MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) &&DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
-				result = orderDao.queryMassOrderItem(massOrderDto, pageInfo,MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = orderDao.queryMassOrderItem(massOrderDto, pageInfo,MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = orderDao.queryMassOrderItem(massOrderDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,7 +95,6 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 	}
 	@Override
   	public Map<String, Object> exportOrder(MassOrderItemDto massOrderDto, TReportFiledown tReportFiledown) {
-		//OrderDao massOrderItemDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
 		
   		Map<String, Object> result = new HashMap<String,Object>();
@@ -412,6 +377,65 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 				}
 				lst_data.add(lst_map);
 	         }
+			result.put("lst_data", lst_data);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public List<Store> queryAllStore() {
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		List<Store> listStore = new ArrayList<Store>();
+		try {
+			List<Map<String, Object>> allStoreList = massOrderItemDao.findAllStore();
+			for (Map<String, Object> map : allStoreList) {
+				Store store = (Store) TypeChangeUtil.mapToObject(map, Store.class);
+				listStore.add(store);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listStore;
+	}
+	@Override
+	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dd,PageInfo pageInfo) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		String cityNO = dd.getSearchstr();
+		try{
+			Map<String, Object> dayGMVUserMemberProfitList = massOrderItemDao.queryDayGMVUserMemberProfit(dd,cityNO,pageInfo);
+			result.put("cityDayGMVUserMemberProfit", dayGMVUserMemberProfitList);
+			result.put("status","success");
+		}catch(Exception e){
+			e.printStackTrace();
+			result.put("status","fail");
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
+			String curDate = DateUtils.lastDate();
+			String beginDate = DateUtils.getBeforeDate(cur,-7);
+			dd.setBeginDate(beginDate);
+			dd.setEndDate(curDate);
+			Map<String, Object> customerOrderRate = massOrderItemDao.getProfitRangeForStoreWeek(dd,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
 			result.put("lst_data", lst_data);
 		}catch (Exception e) {
 			e.printStackTrace();

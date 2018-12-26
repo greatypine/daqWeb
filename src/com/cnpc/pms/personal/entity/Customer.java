@@ -146,9 +146,16 @@ public class Customer extends DataEntity {
 	/** 拜访客户记录. */
 	@OneToMany(targetEntity = Relation.class, cascade = CascadeType.ALL, mappedBy = "customer_id")
 	private Set<Relation> relations;
+	
+	/** 健康档案. */
+	@Transient
+	private CustomerHealth customerHealth;
 
 	@Transient
 	private ViewAddressCustomer customer_address;
+	
+	@Transient
+	private String nearStore;
 
 	public String getName() {
 		return name;
@@ -343,4 +350,25 @@ public class Customer extends DataEntity {
 		}
 
 	}
+
+	public CustomerHealth getCustomerHealth() {
+		return customerHealth;
+	}
+
+	public void setCustomerHealth(CustomerHealth customerHealth) {
+		this.customerHealth = customerHealth;
+	}
+
+	public String getNearStore() {
+		return nearStore;
+	}
+
+	public void setNearStore(String nearStore) {
+		this.nearStore = nearStore;
+	}
+	
+	
+
+	
+	
 }

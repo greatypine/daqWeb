@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.aliyun.oss.ClientConfiguration;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
@@ -19,6 +20,7 @@ import com.aliyun.oss.model.OSSObjectSummary;
 import com.aliyun.oss.model.ObjectListing;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
+import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.personal.entity.OssRefFile;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
@@ -111,12 +113,30 @@ public class OSSUploadUtil {
         return count;  
     }  
       
-    private static String putObject(File file,String fileType,String fileName){  
+    private static String putObject(File file,String fileType,String fileName){
+        String proxydomain = PropertiesUtil.getValue("proxy.domain");
+        int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+        String proxySwitch = PropertiesUtil.getValue("proxy.switch");
         config = config==null?new OSSConfig():config;  
         String url = null;      
-        OSSClient ossClient = null;    
-        try {  
-            ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret());   
+        OSSClient ossClient = null;
+
+        try {
+            if("off".equals(proxySwitch)){
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret());
+            }else if("on".equals(proxySwitch)){
+                // 创建ClientConfiguration实例
+                ClientConfiguration conf = new ClientConfiguration();
+
+                // 配置代理为本地8080端口
+                conf.setProxyHost(proxydomain);
+                conf.setProxyPort(proxyport);
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret(),conf);
+            }
+
+
+
+
             InputStream input = new FileInputStream(file);    
             ObjectMetadata meta = new ObjectMetadata();             
             meta.setContentType(OSSUploadUtil.contentType(fileType));  

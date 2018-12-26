@@ -74,7 +74,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		String mfSql = "select " + 
 				"COUNT(case when duuf.sex = '男' then sex end  ) as mCount," + 
 				"COUNT(case when duuf.sex = '女' then sex end  ) as fCount" + 
-				" from df_user_member duuf where  duuf.associator_expiry_date>now()";
+				" from df_user_member duuf where  duuf.associator_expiry_date>now()  and duuf.status = 1 ";
 		if(!"0000".equals(dd)) {
 			mfSql = mfSql+" and duuf.regist_cityno='"+dd+"'";
 		}
@@ -123,7 +123,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 				"COUNT(case when birthday>'19791231' and birthday<'19900101' then 1 else null end) as age90, " + 
 				"COUNT(case when birthday>'19891231' and birthday<'20000101' then 1 else null end) as age00, " + 
 				"COUNT(case when birthday>'19991231'  then 1 else null end) as ageNow " + 
-				" from df_user_member duuf where duuf.associator_expiry_date>now()";
+				" from df_user_member duuf where duuf.associator_expiry_date>now()  and duuf.status = 1 ";
 		if(!"0000".equals(dd)) {
 			ageSql = ageSql+" and duuf.regist_cityno='"+dd+"'";
 		}
@@ -168,7 +168,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * 2018年5月18日
 		 */
 		//查询社员增长sql
-				String birSql = "select t.monthNo as memMonth,count(1) as birCount from(select month(duuf.birthday) as monthNo,year(duuf.birthday) as myYear from df_user_member duuf where duuf.birthday is not null and duuf.associator_expiry_date>now() ";
+				String birSql = "select t.monthNo as memMonth,count(1) as birCount from(select month(duuf.birthday) as monthNo,year(duuf.birthday) as myYear from df_user_member duuf where duuf.birthday is not null and duuf.associator_expiry_date>now() and  duuf.status = 1 ";
 				if(!"0000".equals(dd)) {
 					birSql = birSql+" and duuf.regist_cityno='"+dd+"'";
 				}
@@ -196,7 +196,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * 2018年5月18日
 		 */
         //查询社员增长sql
-        String sql = "select count(*) as allcount,DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum.opencard_time) and CURDATE()> date(dum.opencard_time) and dum.associator_expiry_date>now() ";
+        String sql = "select count(*) as allcount,DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum.opencard_time) and CURDATE()> date(dum.opencard_time) and dum.associator_expiry_date>now() and  dum.status = 1 ";
         if(!"0000".equals(dd)) {
             sql = sql+" and dum.regist_cityno='"+dd+"'";
         }
@@ -241,7 +241,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 */
 		
 		//查询新注册社员sql
-		String sql = "select count(*) as newcount,DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") as crtime   from df_user_member dum2 where dum2.isnew_member=1 and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum2.opencard_time) and dum2.associator_expiry_date>now() ";
+		String sql = "select count(*) as newcount,DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") as crtime   from df_user_member dum2 where dum2.isnew_member=1 and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum2.opencard_time) and dum2.associator_expiry_date>now()  and dum2.status = 1 ";
 		if(!"0000".equals(dd)) {
 			sql = sql+" and dum2.regist_cityno='"+dd+"'";
 		}
@@ -283,7 +283,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 */
 		
 		//查询老用户转社员sql
-		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member=0 or dum.isnew_member is null and '2018-04-29' <= date(dum1.opencard_time) and dum1.associator_expiry_date>now() ";
+		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member=0 or dum.isnew_member is null and '2018-04-29' <= date(dum1.opencard_time) and dum1.associator_expiry_date>now() and dum1.status = 1 ";
 		if(!"0000".equals(dd)) {
 			sql = sql+" and dum1.regist_cityno='"+dd+"'";
 		}
@@ -340,7 +340,7 @@ public List<Map<String, Object>> getAllCount(String dd) {
 	 */
 	
 	//查询社员总量sql
-	String sql = "select count(*) as allCount from  df_user_member dum where dum.associator_expiry_date>now()";
+	String sql = "select count(*) as allCount from  df_user_member dum where dum.associator_expiry_date>now() and dum.status = 1 ";
 	if(!"0000".equals(dd)) {
 		sql = sql+ " and dum.regist_cityno='"+dd+"'";
 	}
@@ -373,7 +373,7 @@ public List<Map<String, Object>> getNewCount(String dd) {
 	 */
 	
 	//查询新用户注册社员sql
-	String sql = "select count(*) as newCount from  df_user_member dum where dum.isnew_member=1 and dum.associator_expiry_date>now()";
+	String sql = "select count(*) as newCount from  df_user_member dum where dum.isnew_member=1 and dum.associator_expiry_date>now() and dum.status = 1 ";
 	if(!"0000".equals(dd)) {
 		sql = sql+ " and dum.regist_cityno='"+dd+"'";
 	}
@@ -407,7 +407,7 @@ public List<Map<String, Object>> getOldCount(String dd) {
      */
 
     //查询老用户转社员sql
-    String sql = "select count(*) as oldcount from  df_user_member dum where (dum.isnew_member=0 or dum.isnew_member is null and dum.associator_expiry_date>now()) ";
+    String sql = "select count(*) as oldcount from  df_user_member dum where (dum.isnew_member=0 or dum.isnew_member is null and dum.associator_expiry_date>now()  and dum.status = 1 ) ";
     if (!"0000".equals(dd)) {
         sql = sql + " and dum.regist_cityno='" + dd + "'";
     }
@@ -439,7 +439,7 @@ public String getAllCmIds(String dd) {
 	 * @author wuxinxin
 	 * 2018年5月18日
 	 */
-	String sql = "select replace(idds,\",\",\"','\") as ids  from (select group_concat(customer_id) as idds from  df_user_member dum where dum.associator_expiry_date>now()) as idtable";
+	String sql = "select replace(idds,\",\",\"','\") as ids  from (select group_concat(customer_id) as idds from  df_user_member dum where dum.associator_expiry_date>now()  and dum.status = 1) as idtable";
 	try{
 		Query query = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql);
@@ -475,7 +475,7 @@ public List<Map<String, Object>> getAllMembers(String dd) {
             "			ifnull(sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 3 DAY)  then  1 else 0 end),0) as day5," +
             "			ifnull(sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 2 DAY)  then  1 else 0 end),0) as day6," +
             "			ifnull(sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 1 DAY)  then  1 else 0 end),0) as day7" +
-            "			 from df_user_member dum where dum.associator_expiry_date>now()";
+            "			 from df_user_member dum where dum.associator_expiry_date>now()  and dum.status = 1 ";
     if(!"0000".equals(dd)) {
         sql = sql+ " and dum.regist_cityno='"+dd+"'";
     }
@@ -519,7 +519,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	 * 2018年5月22日
 	 */
 	
-	String birSql = "select dii.placename as mePro, count(*) as meCount from df_user_member dum,ds_idcard_item dii  where dum.born_province is not null and dum.born_province=dii.placecode and dum.associator_expiry_date>now() ";
+	String birSql = "select dii.placename as mePro, count(*) as meCount from df_user_member dum,ds_idcard_item dii  where dum.born_province is not null and dum.born_province=dii.placecode and dum.associator_expiry_date>now()  and dum.status = 1 ";
 	if(!"0000".equals(dd)) {
 		birSql = birSql+ " and dum.regist_cityno='"+dd+"'";
 	}
@@ -566,7 +566,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		// 查询社员注册城市sql
 		String citySql = "select tdc.cityname cityname, duuf.usedCount cou from (SELECT DISTINCT uw.regist_cityno uwci, IFNULL( tb.count, 0) usedCount from df_user_member uw  left join (select regist_cityno , count( *) count   from df_user_member  where date(opencard_time)<'"
 				+ sdf.format(calendar.getTime())
-				+ "' and regist_cityno is not null and associator_expiry_date>now() group by regist_cityno) AS tb  on uw.regist_cityno = tb.regist_cityno  where uw.regist_cityno is not null) as duuf,t_dist_citycode tdc where LPAD(duuf.uwci, 4, '0') = tdc.cityno";
+				+ "' and regist_cityno is not null and associator_expiry_date>now()  and status = 1 group by regist_cityno) AS tb  on uw.regist_cityno = tb.regist_cityno  where uw.regist_cityno is not null) as duuf,t_dist_citycode tdc where LPAD(duuf.uwci, 4, '0') = tdc.cityno";
 
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(citySql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -589,7 +589,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		// 查询当月新注册社员注册城市sql
 		String citySql = "select tdc.cityname cityname, duuf.usedCount cou from (SELECT DISTINCT uw.regist_cityno uwci, IFNULL( tb.count, 0) usedCount from df_user_member uw  left join (select regist_cityno , count( *) count   from df_user_member  where date(opencard_time)>'"
 				+ sdf.format(calendar.getTime())
-				+ "' and regist_cityno is not null and associator_expiry_date>now() group by regist_cityno) AS tb  on uw.regist_cityno = tb.regist_cityno  where uw.regist_cityno is not null) as duuf,t_dist_citycode tdc where LPAD(duuf.uwci, 4, '0') = tdc.cityno";
+				+ "' and regist_cityno is not null and associator_expiry_date>now() and status = 1 group by regist_cityno) AS tb  on uw.regist_cityno = tb.regist_cityno  where uw.regist_cityno is not null) as duuf,t_dist_citycode tdc where LPAD(duuf.uwci, 4, '0') = tdc.cityno";
 
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(citySql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -603,7 +603,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年5月24日
 		 */
-		String citySql = "SELECT tdc.cityname cityname, count(*) cou FROM df_user_member dfum, t_dist_citycode tdc WHERE dfum.regist_cityno IS NOT NULL AND LPAD(dfum.regist_cityno, 4, '0') = tdc.cityno and dfum.associator_expiry_date>now() GROUP BY dfum.regist_cityno order by cou  asc ";
+		String citySql = "SELECT tdc.cityname cityname, count(*) cou FROM df_user_member dfum, t_dist_citycode tdc WHERE dfum.regist_cityno IS NOT NULL AND LPAD(dfum.regist_cityno, 4, '0') = tdc.cityno and dfum.associator_expiry_date>now()  and dfum.status = 1 GROUP BY dfum.regist_cityno order by cou  asc ";
 		try{
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(citySql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -774,7 +774,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * 2018年6月7日
 		 */
 		
-		String daySumSql = "select ifnull(sum(dmod.trading_price),0) dealsum,count(1) cou from df_mass_order_daily dmod,df_user_member dum,ds_member_eshop dme where CURDATE()=date(dmod.sign_time) and dmod.customer_id=dum.customer_id and dmod.eshop_id=dme.eshop_id and dum.associator_expiry_date>now()";
+		String daySumSql = "select ifnull(sum(dmod.trading_price),0) dealsum,count(1) cou from df_mass_order_daily dmod,df_user_member dum,ds_member_eshop dme where CURDATE()=date(dmod.sign_time) and dmod.customer_id=dum.customer_id and dmod.eshop_id=dme.eshop_id and dum.associator_expiry_date>now()  and dum.status = 1 ";
 		
 		if(!"0000".equals(string)) {
 			daySumSql = daySumSql+" and dmod.store_city_code='"+string+"'";
@@ -797,7 +797,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月7日
 		 */
-		String daySumSql = "SELECT count(dmod.customer_id) alldealcount, sum(dmod.trading_price) alldealsum, DATE_FORMAT(dmod.sign_time, '%Y-%m-%d') dealtime from df_mass_order_monthly dmod,df_user_member  dum where date(dmod.sign_time) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(dmod.sign_time) < CURDATE() and dmod.customer_id=dum.customer_id and dum.associator_expiry_date>now() ";
+		String daySumSql = "SELECT count(dmod.customer_id) alldealcount, sum(dmod.trading_price) alldealsum, DATE_FORMAT(dmod.sign_time, '%Y-%m-%d') dealtime from df_mass_order_monthly dmod,df_user_member  dum where date(dmod.sign_time) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(dmod.sign_time) < CURDATE() and dmod.customer_id=dum.customer_id and dum.associator_expiry_date>now()  and dum.status = 1  ";
         if(!"0000".equals(string)) {
             daySumSql = daySumSql+" and dmod.store_city_code='"+string+"'";
         }
@@ -1230,7 +1230,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
         /**
          * 查询城市名称，code码
          */
-        String citySql = "select distinct dum.regist_cityno cityno,tdc.cityname cityname from df_user_member dum,t_dist_citycode tdc where  dum.associator_expiry_date>now() and LPAD(dum.regist_cityno, 4, '0') = tdc.cityno";
+        String citySql = "select distinct dum.regist_cityno cityno,tdc.cityname cityname from df_user_member dum,t_dist_citycode tdc where  dum.associator_expiry_date>now()  and dum.status = 1  and LPAD(dum.regist_cityno, 4, '0') = tdc.cityno";
         try {
             Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(citySql);
             List<Map<String, Object>> list_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1266,7 +1266,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
          */
 
         //2018-07-12      查询30天前社员量
-        String sql = "select ifnull(count(1),0) oldcount from df_user_member dum where date(dum.opencard_time)<DATE_SUB(CURDATE(), INTERVAL 30 DAY) and dum.associator_expiry_date>now() ";
+        String sql = "select ifnull(count(1),0) oldcount from df_user_member dum where date(dum.opencard_time)<DATE_SUB(CURDATE(), INTERVAL 30 DAY) and dum.associator_expiry_date>now()  and dum.status = 1  ";
         if(!"0000".equals(dd)) {
             sql = sql+ " and dum.regist_cityno='"+dd+"'";
         }
@@ -1283,7 +1283,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
     @Override
     public List<Map<String, Object>> getMonGrowMembers(String dd) {
         //查询社员增长sql
-        String sql = "select date1.seldate mondate, ifnull(data1.allcount,0) newcount from (select DISTINCT DATE_FORMAT(duda.opencard_time,\"%Y-%m-%d\") seldate from df_user_member duda where duda.opencard_time>=DATE_SUB(CURDATE(), INTERVAL 30 DAY) and CURDATE()> date(duda.opencard_time)) as date1 left join (select count(*) as allcount,DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <= date(dum.opencard_time) and CURDATE()> date(dum.opencard_time) and dum.associator_expiry_date>now() ";
+        String sql = "select date1.seldate mondate, ifnull(data1.allcount,0) newcount from (select DISTINCT DATE_FORMAT(duda.opencard_time,\"%Y-%m-%d\") seldate from df_user_member duda where duda.opencard_time>=DATE_SUB(CURDATE(), INTERVAL 30 DAY) and CURDATE()> date(duda.opencard_time)) as date1 left join (select count(*) as allcount,DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <= date(dum.opencard_time) and CURDATE()> date(dum.opencard_time) and dum.associator_expiry_date>now()  and dum.status = 1 ";
         if(!"0000".equals(dd)) {
             sql = sql+" and dum.regist_cityno='"+dd+"'";
         }
@@ -1301,7 +1301,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
         /**
          * @author wuxinxin 2018年7月12日
          */
-        String daySumSql = "select  tdc.cityname cityname,count(1) citycou from df_user_member dum,t_dist_citycode tdc where CURDATE() = date(dum.opencard_time) and dum.associator_expiry_date>now() and LPAD(dum.regist_cityno, 4, '0') = tdc.cityno group by dum.regist_cityno";
+        String daySumSql = "select  tdc.cityname cityname,count(1) citycou from df_user_member dum,t_dist_citycode tdc where CURDATE() = date(dum.opencard_time) and dum.associator_expiry_date>now()  and dum.status = 1 and LPAD(dum.regist_cityno, 4, '0') = tdc.cityno group by dum.regist_cityno";
 
         try {
             Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
@@ -1414,7 +1414,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
         /**
          * @author wuxinxin 2018年7月12日
          */
-        String daySumSql = "select ts.name storename,tdc.cityname cityname from df_user_member dum,t_store  ts,t_dist_citycode tdc where dum.mobilephone='"+dd+"' and dum.associator_expiry_date>now() and dum.regist_storeid= ts.id and LPAD(dum.regist_cityno, 4, '0') = tdc.cityno";
+        String daySumSql = "select ts.name storename,tdc.cityname cityname from df_user_member dum,t_store  ts,t_dist_citycode tdc where dum.mobilephone='"+dd+"' and dum.associator_expiry_date>now()  and dum.status = 1 and dum.regist_storeid= ts.id and LPAD(dum.regist_cityno, 4, '0') = tdc.cityno";
 
         try {
             Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
@@ -1467,7 +1467,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
          * 2018年7月30日
          */
         String daySumSql = "select sum(dmom.trading_price) trygmv from  df_mass_order_monthly dmom,df_user_try_member dutm  where dmom.customer_id=dutm.customer_id " +
-				"and dmom.sign_time> '2018-07-26' and dutm.associator_expiry_date> '2018-07-26'  and dmom.sign_time<dutm.associator_expiry_date and dmom.order_tag1 like '%E%' ";
+				"and dmom.sign_time> '2018-07-26' and dutm.associator_expiry_date> '2018-07-26'  and dmom.sign_time<dutm.associator_expiry_date and dmom.order_tag1 like '%M%' ";
 
         try {
             Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
@@ -1483,7 +1483,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
          * @author wuxinxin
          * 2018年7月30日
          */
-        String daySumSql = "select count(1) cou from  df_user_try_member dutm  where dutm.associator_expiry_date>curdate()";
+        String daySumSql = "select count(1) cou from  df_user_try_member dutm  where dutm.associator_expiry_date>curdate()  and dutm.status = 1 ";
 
         try {
             Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
@@ -1542,7 +1542,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
                 " ifnull( sum( CASE when dum.customer_source = 'action' then 1 else 0 end ), 0 ) as action," +
                 " DATE_FORMAT( dum.opencard_time, \"%Y-%m-%d\" ) as crtime " +
                 " from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <= date(dum.opencard_time) and CURDATE() > date(dum.opencard_time) " +
-                " and dum.associator_expiry_date > now() ";
+                " and dum.associator_expiry_date > now()  and dum.status = 1 ";
         if(!"0000".equals(dd)) {
             dayFromSql = dayFromSql+ "  and dum.regist_cityno='"+dd+"'";
         }

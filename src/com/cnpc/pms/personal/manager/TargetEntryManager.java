@@ -21,6 +21,8 @@ public interface TargetEntryManager extends IManager {
 
 	void insertTargetEntry(TargetEntry saveTargetEntry);
 
+	Map<String, Object> getUserInfo();
+
 	/**
 	 * 查询是否录入过合作店和自营店目标值
 	 * @param cityname
@@ -33,7 +35,7 @@ public interface TargetEntryManager extends IManager {
 	 * @param
 	 * @return
 	 */
-	Map<String, Object> getByTarget(String statistics, String deptName,String channelName);
+	Map<String, Object> getByTarget(String statistics, String deptName,String channelName,TargetEntry targetEntry);
 	/**
 	 * 通过id查询目标值信息
 	 * @param id

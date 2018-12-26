@@ -30,6 +30,8 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements TargetEntryStoreManager {
 
@@ -65,12 +67,12 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		// 返回的对象，包含数据集合、分页对象等
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		List<Map<String, Object>> mapWhereList = conditions.getConditions();
-		String  channel_where = mapWhereList.get(4).get("value").toString().replace("%","");
+//		String  channel_where = mapWhereList.get(4).get("value").toString().replace("%","");
 		String dept_where = mapWhereList.get(3).get("value").toString().replace("%","");
 		String date_where = mapWhereList.get(2).get("value").toString().replace("%","");
 
 		List<Map<String, Object>> datas = targetEntryStoreDao.getTargetEntryStoreData(date_where,dept_where,
-				channel_where, obj_page);
+				obj_page);
 		List<Map<String, Object>> data = targetEntryStoreDao.getTargetEntryStoreList(sb_where.toString(), obj_page);
 		List<Map<String, Object>> data1 = targetEntryStoreDao.getTargetEntryStoreList1(sb_where.toString(), obj_page);
 
@@ -83,7 +85,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 					targetEntryStore.setCity_name(dataRow.get("city_name").toString());
 					targetEntryStore.setStore_name(dataRow.get("store_name").toString());
 					targetEntryStore.setStore_code(dataRow.get("store_code").toString());
-					targetEntryStore.setChannel_name(channel_where);
+//					targetEntryStore.setChannel_name(channel_where);
 					targetEntryStore.setFrame_time(date_where);
 					targetEntryStore.setMaori_target(new BigDecimal(0));
 					targetEntryStore.setProfit_target(new BigDecimal(0));
@@ -94,7 +96,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 			for(int i = 0; i < data.size(); i++){
 				Map dataRow = data.get(i);
 				dataRow.put("frame_time",date_where);
-				dataRow.put("channel_name",channel_where);
+//				dataRow.put("channel_name",channel_where);
 			}
 			map_result.put("data", data);
 		}else{
@@ -154,8 +156,8 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 			unlockstyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);//垂直居中
 			unlockstyle.setWrapText(true);//设置自动换行
 
-			String[] str_headers1 = {"月份","事业群名称","频道名称","频道毛利指标","频道利润指标","频道用户指标"};
-			String[] headers_value = {targetEntryStore.getFrame_time(),targetEntryStore.getBusinessGroup_name(),targetEntryStore.getChannel_name(),targetEntryStore.getMaori_target().toString(),targetEntryStore.getProfit_target().toString(),targetEntryStore.getUser_target().toString()};
+			String[] str_headers1 = {"月份","事业群名称","","事业群毛利指标","事业群利润指标","事业群用户指标"};
+			String[] headers_value = {targetEntryStore.getFrame_time(),targetEntryStore.getBusinessGroup_name(),"",targetEntryStore.getMaori_target().toString(),targetEntryStore.getProfit_target().toString(),targetEntryStore.getUser_target().toString()};
 			row.setHeightInPoints(40);
 			for(int i = 0;i < str_headers1.length;i++){
 				XSSFCell cell = row.createCell(i);
@@ -307,13 +309,50 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 						for(int nCellIndex = 0;nCellIndex < nCellSize ;nCellIndex ++) {
 							String str_value = getCellValue(row_human.getCell(nCellIndex));
 							if(nCellIndex == 3){
-								maori_target_list = Double.valueOf(str_value);
+								if(isNumeric(str_value)){
+									if(str_value.contains(".")){
+										String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+										if(str_value1.length() > 2){
+											rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+											return rcvmsg;
+										}
+									}
+									maori_target_list = Double.valueOf(str_value);
+								}else{
+									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+									return rcvmsg;
+								}
+
 							}
 							if(nCellIndex == 4){
-								profit_target_list = Double.valueOf(str_value);
+								if(isNumeric(str_value)){
+									if(str_value.contains(".")){
+										String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+										if(str_value1.length() > 2){
+											rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+											return rcvmsg;
+										}
+									}
+									profit_target_list = Double.valueOf(str_value);
+								}else{
+									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+									return rcvmsg;
+								}
 							}
 							if(nCellIndex == 5){
-								user_target_list = Double.valueOf(str_value);
+								if(str_value.contains(".")){
+									String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+									if(str_value1.length() > 2){
+										rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+										return rcvmsg;
+									}
+								}
+								if(isNumeric(str_value)){
+									user_target_list = Double.valueOf(str_value);
+								}else{
+									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+									return rcvmsg;
+								}
 							}
 							if(nCellIndex == 0){
 								frame_time = str_value;
@@ -321,9 +360,9 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 							if(nCellIndex == 1){
 								dept_name = str_value;
 							}
-							if(nCellIndex == 2){
-								channel_name = str_value;
-							}
+//							if(nCellIndex == 2){
+//								channel_name = str_value;
+//							}
 						}
 					}
 					if(nRowIndex > 2){
@@ -331,19 +370,57 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 							String str_value = getCellValue(row_human.getCell(nCellIndex));
 							if(str_value != null && str_value != "" && str_value != "0"){
 								if(nCellIndex == 3){
-									maori_target =  maori_target + Double.valueOf(str_value);
+									if(isNumeric(str_value)){
+										if(str_value.contains(".")){
+											String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+											if(str_value1.length() > 2){
+												rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+												return rcvmsg;
+											}
+										}
+										maori_target =  maori_target + Double.valueOf(str_value);
+									}else{
+										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+										return rcvmsg;
+									}
+
 								}
 								if(nCellIndex == 4){
-									profit_target = profit_target + Double.valueOf(str_value);
+									if(isNumeric(str_value)){
+										if(str_value.contains(".")){
+											String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+											if(str_value1.length() > 2){
+												rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+												return rcvmsg;
+											}
+										}
+										profit_target = profit_target + Double.valueOf(str_value);
+									}else{
+										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+										return rcvmsg;
+									}
+
 								}
 								if(nCellIndex == 5){
-									user_target =  user_target + Double.valueOf(str_value);
+									if(isNumeric(str_value)){
+										if(str_value.contains(".")){
+											String str_value1 = str_value.substring(str_value.indexOf(".")+1,str_value.length());
+											if(str_value1.length() > 2){
+												rcvmsg = "导入文件指标请保留到小数点后两位！导入失败！行号：" + (nRowIndex + 1);
+												return rcvmsg;
+											}
+										}
+										user_target =  user_target + Double.valueOf(str_value);
+									}else{
+										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
+										return rcvmsg;
+									}
 								}
 							}
 						}
 					}
 				}else{
-					rcvmsg = "导入文件格式不正确！导入失败！行号：" + (nRowIndex);
+					rcvmsg = "导入文件列数不正确！导入失败！行号：" + (nRowIndex + 1);
 					return rcvmsg;
 				}
 
@@ -378,7 +455,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 								}
 								targetEntry.setFrame_time(frame_time);
 								targetEntry.setBusinessGroup_name(dept_name);
-								targetEntry.setChannel_name(channel_name);
+//								targetEntry.setChannel_name(channel_name);
 								targetEntryDao.updateTargetEntry(targetEntry);
 							}
 							if(nRowIndex > 2){
@@ -412,14 +489,14 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 								}
 								targetEntryStore.setFrame_time(frame_time);
 								targetEntryStore.setBusinessGroup_name(dept_name);
-								targetEntryStore.setChannel_name(channel_name);
+//								targetEntryStore.setChannel_name(channel_name);
 								targetEntryStoreDao.updateTargetEntryStore(targetEntryStore);
 							}
 						}
 
 					}
 				}else{
-					rcvmsg = "导入文件数据指标不正确,请检查后导入";
+					rcvmsg = "导入失败！请确保填写门店各指标总和等于事业群指标";
 					return rcvmsg;
 				}
 			}else{
@@ -429,6 +506,15 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 
 		}
 		return rcvmsg;
+	}
+
+	public static boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+");
+		Matcher isNum = pattern.matcher(str);
+		if (!isNum.matches()) {
+			return false;
+		}
+		return true;
 	}
 
 	private String getCellValue(Cell cell) {
@@ -524,8 +610,8 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		try{
 			saveTargetEntry.setBusinessGroup_code(targetEntry.getBusinessGroup_code());
 			saveTargetEntry.setBusinessGroup_name(targetEntry.getBusinessGroup_name());
-			saveTargetEntry.setChannel_code(targetEntry.getChannel_code());
-			saveTargetEntry.setChannel_name(targetEntry.getChannel_name());
+//			saveTargetEntry.setChannel_code(targetEntry.getChannel_code());
+//			saveTargetEntry.setChannel_name(targetEntry.getChannel_name());
 			saveTargetEntry.setMaori_target(targetEntry.getMaori_target());
 			saveTargetEntry.setProfit_target(targetEntry.getProfit_target());
 			saveTargetEntry.setUser_target(targetEntry.getUser_target());
@@ -551,13 +637,13 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 			TargetEntryDTO.setId(targetEntry.getId());
 			TargetEntryDTO.setBusinessGroup_code(targetEntry.getBusinessGroup_code());
 			TargetEntryDTO.setBusinessGroup_name(targetEntry.getBusinessGroup_name());
-			TargetEntryDTO.setChannel_code(targetEntry.getChannel_code());
-			TargetEntryDTO.setChannel_name(targetEntry.getChannel_name());
+//			TargetEntryDTO.setChannel_code(targetEntry.getChannel_code());
+//			TargetEntryDTO.setChannel_name(targetEntry.getChannel_name());
 			TargetEntryDTO.setMaori_target(targetEntry.getMaori_target());
 			TargetEntryDTO.setProfit_target(targetEntry.getProfit_target());
 			TargetEntryDTO.setUser_target(targetEntry.getUser_target());
 			TargetEntryDTO.setFrame_time(targetEntry.getFrame_time());
-     			return TargetEntryDTO;
+			return TargetEntryDTO;
 		}
 		return null;
 	}
@@ -567,7 +653,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		List<?> list = this.getList(FilterFactory.getSimpleFilter("id", id));
 		if (list != null && list.size() > 0) {
 			TargetEntry targetEntry = (TargetEntry) list.get(0);
-			 return targetEntry;
+			return targetEntry;
 		}
 		return null;
 	}
@@ -579,8 +665,8 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		try {
 			targetEntry.setBusinessGroup_code(saveTargetEntry.getBusinessGroup_code());
 			targetEntry.setBusinessGroup_name(saveTargetEntry.getBusinessGroup_name());
-			targetEntry.setChannel_code(saveTargetEntry.getChannel_code());
-			targetEntry.setChannel_name(saveTargetEntry.getChannel_name());
+//			targetEntry.setChannel_code(saveTargetEntry.getChannel_code());
+//			targetEntry.setChannel_name(saveTargetEntry.getChannel_name());
 			targetEntry.setMaori_target(saveTargetEntry.getMaori_target());
 			targetEntry.setProfit_target(saveTargetEntry.getProfit_target());
 			targetEntry.setUser_target(saveTargetEntry.getUser_target());

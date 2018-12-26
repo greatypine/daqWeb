@@ -29,21 +29,13 @@ public interface MassOrderItemDao extends IDAO{
 		 * @return
 	*/
   public Map<String, Object> queryEmployeeBySN(String order_sn);
-  	/**
-	 * 根据片区编号查询信息
-	 * @param area_code
-	 * @param order_sn
-	 * @param timeFlag
-	 * @return
-	 */
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String timeFlag);
 	/**
 	 * 查询订单数据列表
 	 * @param massOrderDto
 	 * @param pageInfo
 	 * @return
 	 */
-	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto,PageInfo pageInfo,String timeFlag);
+	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto,PageInfo pageInfo);
 	
 	/**
 	 * 导出订单数据列表
@@ -88,5 +80,59 @@ public interface MassOrderItemDao extends IDAO{
 	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 
 	public void updataReport(Long id ,String url);
+	/**
+	 * 查询片区某月消费超10元用户量
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryAreaUserByAreaCode(DynamicDto dd);
+	/**
+	 * 查询门店某月消费超10元用户量
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryAreaUserByStoreNo(DynamicDto dd);
+	/**
+	 * 查询片区某月开卡数
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryAreaOpenCardByAreaCode(DynamicDto dd);
+	/**
+	 * 查询店长某月开卡数
+	 * @param dd
+	 * @param employee_no
+	 * @return
+	 */
+	public Map<String, Object> queryAreaOpenCardByStoreKeeperNo(DynamicDto dd,String employee_no);
+	/**
+	 * 查询推荐产品列表
+	 * @param dd
+	 * @param pageInfo
+	 * @param platformid
+	 * @return
+	 */
+	public Map<String, Object> queryRecommendUser(PageInfo pageInfo, String employee_no);
+	/**
+	 * 查询所有的门店
+	 * @return
+	 */
+	public List<Map<String, Object>> findAllStore();
+	/**
+	 * 查询城市每天GMV&毛利&消费用户数&消费社员数&注册用户数
+	 * @param dd
+	 * @param cityNO
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dd,String cityNO,PageInfo pageInfo);
+	/**
+	 * 查询门店近7日毛利订单量散点图
+	 * @param dd
+	 * @param cityNO
+	 * @param provinceNO
+	 * @return
+	 */
+	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 	
 }

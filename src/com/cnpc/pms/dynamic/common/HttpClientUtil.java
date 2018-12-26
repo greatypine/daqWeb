@@ -11,14 +11,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.cnpc.pms.base.util.PropertiesUtil;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
@@ -72,12 +77,67 @@ public class HttpClientUtil {
 			return result;
 		}
 		return result;
-	} 
-	
-	
-	
-	
-	
+	}
+
+	public String getRemoteDataProxy(String url,JSONObject param){
+
+		HttpPost httpPost  = null;
+		String result="";
+		CloseableHttpClient httpclient=null;
+		String proxydomain = PropertiesUtil.getValue("proxy.domain");
+		int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+		String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+		try {
+
+			if("off".equals(proxySwitch)){
+				//实例化CloseableHttpClient对象
+				httpclient = HttpClients.custom().build();
+			}else if("on".equals(proxySwitch)){
+				//设置代理IP、端口、协议（请分别替换）
+				HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
+
+				//把代理设置到请求配置
+				RequestConfig defaultRequestConfig = RequestConfig.custom()
+						.setProxy(proxy)
+						.build();
+
+				//实例化CloseableHttpClient对象
+				httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+			}
+
+
+
+			httpPost = new HttpPost(url);
+			httpPost.addHeader("Content-type","application/json; charset=utf-8");
+			httpPost.setHeader("Accept", "application/json");
+
+			//设置参数
+ 			httpPost.setEntity(new StringEntity(param.toString(), Charset.forName("UTF-8")));
+
+			HttpResponse response = httpclient.execute(httpPost);
+			if(response != null){
+				HttpEntity resEntity = response.getEntity();
+				if(resEntity != null){
+					result = EntityUtils.toString(resEntity,"UTF-8");
+				}
+			}
+		} catch (ConnectTimeoutException e) {
+			result = "connectTimeout";
+			return result;
+		}catch (SocketTimeoutException e) {
+			result = "socketTimeout";
+			return result;
+		}catch (Exception e) {
+			result = "other";
+			return result;
+		}
+		return result;
+	}
+
+
+
+
+
 	/**
 	 * 调用接口方法 
 	 * @param url  URL

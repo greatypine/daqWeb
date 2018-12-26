@@ -132,15 +132,15 @@ public interface OrderDao {
      */
     public Map<String, Object> queryOrderOfArea(String employee_no,PageInfo pageInfo,String order_sn);
     
-    /**
-     * 
-     * TODO  根据订单id查询订单
-     * 2017年11月8日
-     * @author gaobaolei
-     * @param orderid
-     * @return
-     */
-    public Map<String, Object> getOrderByOrderSN(String order_sn);
+//    /**
+//     *
+//     * TODO  根据订单id查询订单
+//     * 2017年11月8日
+//     * @author gaobaolei
+//     * @param orderid
+//     * @return
+//     */
+//    public Map<String, Object> getOrderByOrderSN(String order_sn);
     
 
     /**
@@ -352,13 +352,6 @@ public interface OrderDao {
 	 * @return
 	 */
 	public Map<String, Object> queryStoreCustomerOfMonth(String plateformId,PageInfo pageInfo);
-	
-	/**
-	 * 通过订单号查询所在位置
-	 * @param order_sn
-	 * @return
-	 */
-	public Map<String, Object> queryPositionByOrdersn(String order_sn);
 	
 	/**
 	 * 查询当日实时累计用户量

@@ -1107,6 +1107,8 @@
             $("#store_name_manual_more").attr("readonly",true);
             $("#store_name_manual_areamore").attr("readonly",true);
             $("#store_name_manual_daymore").attr("readonly",true);
+            $("#storeClickDaypay").attr("disabled","disabled");
+            $("#storeClickDayNewcus").attr("disabled",true);
         }
 
         //iCheck for checkbox and radio inputs
@@ -1240,10 +1242,13 @@
                 $("#dimension_manual").val(name);
             }
         });
-        //新增用户/消费用户 默认不勾选
-        $('#storeClickDayNewcus').removeAttr('checked');
+        //新增用户/消费用户 门店默认不勾选 除店长外
+        if(target==2){
+        }else{
+            $('#storeClickDayNewcus').removeAttr('checked');
+            $('#storeClickDaypay').removeAttr('checked');
+        }
         $('#storeClickDayNewcusArea').removeAttr('checked');
-        $('#storeClickDaypay').removeAttr('checked');
         $('#storeClickDaypayArea').removeAttr('checked');
     });
 

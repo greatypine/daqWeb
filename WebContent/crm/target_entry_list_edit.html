@@ -71,6 +71,18 @@
 		initcurruser();
 		getEditInfo();
         searchList();
+        doManager("targetEntryManager", "getUserInfo", null, function(
+            data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                if (data.data != "null") {
+                    var jsonData = $.fromJSON(data.data);
+                    code = jsonData.data.usergroup;
+                    if (code.code != "ZBMBZLRJSZ") {
+                        document.getElementById("file").disabled=true;
+                    }
+                }
+            }
+        })
 
 	});
 
@@ -178,7 +190,7 @@
         targetEntryStore = {
             frame_time: $("#frame_time").val(),
             businessGroup_name: $("#businessGroup_name").val(),
-            channel_name: $("#channel_name").val(),
+//            channel_name: $("#channel_name").val(),
             maori_target: $("#maori_target").val(),
             profit_target: $("#profit_target").val(),
             user_target: $("#user_target").val()
@@ -314,11 +326,11 @@
 </style>
 <body>
 	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
-    <div class="panel-heading" style="height: 75px">频道总体目标值
+    <div class="panel-heading" style="height: 75px">总体目标值
 		<div style="margin-top: -18px">
-			<span style="position: absolute;left: 200px;color: #ee2626;margin-right: 30%">提示：1、请先导出数据再导入数据。</span><br>
-			<span style="position: absolute;left: 240px;color: #ee2626;margin-right: 30%">2、请确保填写门店各指标总和等于频道指标。</span><br>
-			<span style="position: absolute;left: 240px;color: #ee2626;margin-right: 30%">3、请确认导入数据的月份、事业群、频道与页面相同。</span>
+			<span style="position: absolute;left: 200px;color: #eee826;margin-right: 30%">使用说明：1、请先导出数据再导入数据。</span><br>
+			<span style="position: absolute;left: 270px;color: #eee826;margin-right: 30%">2、请确保填写门店各指标总和等于事业群指标。</span><br>
+			<span style="position: absolute;left: 270px;color: #eee826;margin-right: 30%">3、请确认导入数据的月份、事业群与页面相同。</span>
 		</div>
 		<span class="but" style="position: relative;top: -35px;">
 			<button name="file" style="height: 38px" class="btn btn-outline btn-default" id="file" onclick="showFile()">导入数据</button>
@@ -350,19 +362,19 @@
 				<td>
 					<p class="read">事业群名称：<input name="businessGroup_name" id="businessGroup_name" readonly style="width: 38%;color: #333333;border: 0;"></p>
 				</td>
-				<td>
-					<p class="read">频道名称：<input name="channel_name" id="channel_name" readonly style="width: 38%;color: #333333;border: 0;"></p>
-				</td>
+				<!--<td>-->
+					<!--<p class="read">频道名称：<input name="channel_name" id="channel_name" readonly style="width: 38%;color: #333333;border: 0;"></p>-->
+				<!--</td>-->
 			</tr>
 			<tr>
 				<td width="33.33%">
-					<p>频道毛利指标：<input name="maori_target" id="maori_target" readonly style="width: 38%;color: #333333;border: 0;"></p>
+					<p>事业群毛利指标：<input name="maori_target" id="maori_target" readonly style="font-weight: bold;width: 38%;color: #333333;border: 0;"></p>
 				</td>
 				<td width="33.33%">
-					<p class="read">频道利润指标：<input name="profit_target" readonly id="profit_target" style="width: 38%;color: #333333;border: 0;"></p>
+					<p class="read">事业群利润指标：<input name="profit_target" readonly id="profit_target" style="font-weight: bold;width: 38%;color: #333333;border: 0;"></p>
 				</td>
 				<td width="33.33%">
-					<p>频道用户指标：<input name="user_target" id="user_target" readonly style="width: 38%;color: #333333;border: 0;"></p>
+					<p>事业群用户指标：<input name="user_target" id="user_target" readonly style="font-weight: bold;width: 38%;color: #333333;border: 0;"></p>
 				</td>
 
 

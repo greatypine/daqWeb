@@ -39,7 +39,7 @@ public class OrderHeatManagerImpl extends BizBaseCommonManager implements OrderH
 
 	@Override
 	public Map<String, Object> getLagLatByOrder(OrderHeatDto orderHeatDto) {
-		OrderDao orderHeatDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+		OrderHeatDao orderHeatDao = (OrderHeatDao)SpringHelper.getBean(OrderHeatDao.class.getName());
 		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 		MongoDBManager mongoDBManager = (MongoDBManager)SpringHelper.getBean("mongoDBManager");
 		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
