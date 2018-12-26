@@ -132,6 +132,14 @@ public class DateUtil extends DateUtils
         }
         return false;
     }
+    
+    public static Date getYesterday() {
+    	Calendar ca = Calendar.getInstance();//得到一个Calendar的实例 
+    	ca.setTime(new Date()); //设置时间为当前时间 
+    	ca.add(Calendar.DATE, -1); //天减1 
+    	Date lastMonth = ca.getTime(); //结果
+    	return lastMonth;
+    }
 
     public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
     private static final Logger log = LoggerFactory.getLogger(DateUtil.class);

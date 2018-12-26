@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.naming.InsufficientResourcesException;
+import javax.swing.Spring;
 
 import com.cnpc.pms.personal.dao.*;
 import org.apache.http.HttpHost;
@@ -32,6 +33,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 
+import com.cnpc.pms.base.entity.DataEntity;
 import com.cnpc.pms.base.file.comm.utils.DateUtil;
 import com.cnpc.pms.base.paging.FSP;
 import com.cnpc.pms.base.paging.FilterFactory;
@@ -41,6 +43,7 @@ import com.cnpc.pms.base.paging.ISort;
 import com.cnpc.pms.base.paging.SortFactory;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
+import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
@@ -69,9 +72,10 @@ import com.cnpc.pms.personal.entity.CodeLogin;
 import com.cnpc.pms.personal.entity.Customer;
 import com.cnpc.pms.personal.entity.Express;
 import com.cnpc.pms.personal.entity.Humanresources;
-
+import com.cnpc.pms.personal.entity.OnLineHumanresources;
+import com.cnpc.pms.personal.entity.OnLineHumanresourcesSub;
 import com.cnpc.pms.personal.entity.SendMessage;
-
+import com.cnpc.pms.personal.entity.SendShortUrl;
 import com.cnpc.pms.personal.entity.BannerInfo;
 import com.cnpc.pms.personal.entity.DistCityCode;
 import com.cnpc.pms.personal.entity.SiteSelection;
@@ -82,6 +86,7 @@ import com.cnpc.pms.personal.entity.StoreRequirement;
 import com.cnpc.pms.personal.entity.StoreStandard;
 import com.cnpc.pms.personal.entity.Storexpand;
 import com.cnpc.pms.personal.entity.UserLoginLog;
+import com.cnpc.pms.personal.entity.WarnProduct;
 import com.cnpc.pms.personal.entity.WorkRecordTotal;
 import com.cnpc.pms.personal.entity.WxUserAuth;
 import com.cnpc.pms.personal.manager.AppDownLoadLogManager;
@@ -92,7 +97,10 @@ import com.cnpc.pms.personal.manager.CustomerManager;
 import com.cnpc.pms.personal.manager.DistCityCodeManager;
 import com.cnpc.pms.personal.manager.ExpressManager;
 import com.cnpc.pms.personal.manager.HumanresourcesManager;
+import com.cnpc.pms.personal.manager.OnLineHumanresourcesManager;
+import com.cnpc.pms.personal.manager.OnLineHumanresourcesSubManager;
 import com.cnpc.pms.personal.manager.SendMessageManager;
+import com.cnpc.pms.personal.manager.SendShortUrlManager;
 import com.cnpc.pms.personal.manager.SiteSelectionManager;
 import com.cnpc.pms.personal.manager.StoreAddressManager;
 import com.cnpc.pms.personal.manager.StoreKeeperManager;
@@ -103,6 +111,7 @@ import com.cnpc.pms.personal.manager.StorexpandManager;
 import com.cnpc.pms.personal.manager.SyncRecordManager;
 import com.cnpc.pms.personal.manager.TinyVillageManager;
 import com.cnpc.pms.personal.manager.UserLoginLogManager;
+import com.cnpc.pms.personal.manager.WarnProductManager;
 import com.cnpc.pms.personal.manager.WorkRecordTotalManager;
 import com.cnpc.pms.personal.manager.WxUserAuthManager;
 import com.cnpc.pms.platform.dao.OrderDao;
@@ -116,9 +125,10 @@ import com.cnpc.pms.utils.BarCodeUtils;
 import com.cnpc.pms.utils.ValidationCode;
 
 import com.cnpc.pms.utils.PhoneFormatCheckUtils;
-
+import com.cnpc.pms.utils.ShortUrlUtils;
 import com.cnpc.pms.utils.DateUtils;
-
+import com.cnpc.pms.utils.ImpalaUtil;
+import com.cnpc.pms.utils.MD5Utils;
 import com.cnpc.pms.utils.ValueUtil;
 
 /**
@@ -3868,4 +3878,185 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			}
 			return result;
 		}
+		
+		
+		
+		/**
+		 * 取得密串 解密根据 解密后的信息 取得 消息 展示 
+		 * @return
+		 */
+		@Override
+		public Result showMessage(String nowDate,String aesphone,String channelid,PageInfo pageInfo) {
+			Result result = new Result(); 
+			if(nowDate==null||channelid==null||channelid==null) {
+				return result;
+			}
+			//解密 根据 取得消息 
+			String decryptDate = MD5Utils.decrypt(nowDate, MD5Utils.KEY); 
+			String decryptPhone = MD5Utils.decrypt(aesphone, MD5Utils.KEY);  
+			String decryptchannelid = MD5Utils.decrypt(channelid, MD5Utils.KEY);  
+	        System.out.println("解密后的:" + decryptPhone+"---"+decryptchannelid);
+			//根据 解密信息 查询消息 
+	        WarnProductManager warnProductManager = (WarnProductManager) SpringHelper.getBean("warnProductManager");
+	    	
+	        //根据事业群 查询Impala 洗出的表 并更新可读
+	        //List<Map<String, Object>> warnList = ImpalaUtil.executeGuoan("select * from gabase.b_inventory_warning where create_time='"+decryptDate+"' and channel_id='"+decryptchannelid+"' order by warn_num desc;");
+	        List<Map<String, Object>> warnList = ImpalaUtil.executeGuoan("select * from gabase.b_inventory_warning where store_white='front' and create_time='"+decryptDate+"' and channel_id='"+decryptchannelid+"' order by store_id,warn_num desc limit "+pageInfo.getRecordsPerPage()+" offset ("+pageInfo.getCurrentPage()+"-1)*"+pageInfo.getRecordsPerPage());
+	        if(warnList==null&&warnList.size()==0) {
+	        	return result;
+	        }
+	        
+	        //IFilter iFilter =FilterFactory.getSimpleFilter(" career_name='"+decryptCareer+"'");
+	        //List<WarnProduct> products = (List<WarnProduct>) warnProductManager.getList(iFilter);
+	        //按手机号 事业群查询 标记可读 
+	        SendShortUrlManager sendShortUrlManager = (SendShortUrlManager) SpringHelper.getBean("sendShortUrlManager");
+	    	IFilter sendUrliFilter =FilterFactory.getSimpleFilter(" phone='"+decryptPhone+"' and senddate='"+decryptDate+"' ");
+	    	List<SendShortUrl> sendShortUrls = (List<SendShortUrl>) sendShortUrlManager.getList(sendUrliFilter);
+	      
+	    	Express express = new Express();
+	    	express.setExpress_date_str(decryptDate);
+	    	if(sendShortUrls!=null&&sendShortUrls.size()>0) {
+	        	SendShortUrl sendShortUrl = sendShortUrls.get(0);
+	        	
+	        	sendShortUrl.setSendstatus("已读");
+	        	preSaveObject(sendShortUrl);
+	        	sendShortUrlManager.saveObject(sendShortUrl);
+	        	
+	        	express.setSend_name(sendShortUrl.getChannelname());
+	        	
+	        }
+	        
+	        result.setCode(CodeEnum.success.getValue());
+			result.setMessage(CodeEnum.success.getDescription());
+			result.setData(warnList);
+			express.setEmployee_phone(decryptPhone);
+			result.setExpress(express);
+			return result;
+		}
+		
+		
+		/**
+		 * 发送预警消息的方法(频道负责人)
+		 * @return
+		 */
+		@Override
+		public Result sendWarningMessage(String sendmsg) {
+			Result result = new Result(); 
+			//取得昨天日期
+			String yesterdayDate=new SimpleDateFormat("yyyy-MM-dd").format(com.cnpc.pms.base.util.DateUtil.getYesterday());
+			//根据洗的数据 取得发送人(根据频道，查询频道负责人) 如果存在 则发送 如果不存在 则不发送 
+			
+			//查询所有的频道
+			List<Map<String,Object>> channelList = ImpalaUtil.executeGuoan("SELECT DISTINCT channel_id,channel_name from gabase.b_inventory_warning  where store_white='front' and create_time='"+yesterdayDate+"' ");
+			if(channelList!=null&&channelList.size()>0) {
+				for(Map<String,Object> map:channelList) {
+					String channel_id = (String) map.get("channel_id");
+					String channel_name = (String) map.get("channel_name");
+					//循环给频道负责人 发消息  
+					
+					initSendMessage(yesterdayDate,channel_id,channel_name);
+					
+				}
+			}else {
+				return result;
+			}
+			
+			
+			
+			
+			
+			
+			return result;
+		}
+
+		private void initSendMessage(String yesterdayDate, String channelid,String channelname) {
+			OnLineHumanresourcesManager onLineHumanresourcesManager = (OnLineHumanresourcesManager) SpringHelper.getBean("onLineHumanresourcesManager");
+	    	IFilter onLineiFilter =FilterFactory.getSimpleFilter(" groupcode='ZBPDFZRJSZ' ");
+	    	Map<String, OnLineHumanresources> map = new HashMap<String, OnLineHumanresources>();
+			
+			OnLineHumanresourcesSubManager onLineHumanresourcesSubManager = (OnLineHumanresourcesSubManager) SpringHelper.getBean("onLineHumanresourcesSubManager");
+	    	IFilter subiFilter =FilterFactory.getSimpleFilter(" channelid='"+channelid+"'");
+	    	//所有频道
+	    	List<OnLineHumanresourcesSub> subs = (List<OnLineHumanresourcesSub>) onLineHumanresourcesSubManager.getList(subiFilter);
+			if(subs!=null&&subs.size()>0){
+				for(OnLineHumanresourcesSub sub:subs) {
+					if(sub.getChannelid()!=null&&sub.getChannelid().equals(channelid)) {
+						Long online_id = sub.getOnline_id();
+						OnLineHumanresources oHuman=(OnLineHumanresources) onLineHumanresourcesManager.getObject(online_id);
+						if(oHuman.getGroupcode()!=null&&oHuman.getGroupcode().equals("ZBPDFZRJSZ")&&(oHuman.getLefttime()==null||oHuman.getLefttime().trim().equals(""))) {
+							map.put(channelid, oHuman);
+							break;
+						}
+					}
+				}
+			}
+			if(map!=null&&map.size()>0) {
+				//可以发短信 频道存在负责人
+				//根据洗的数据 生成短连接 存入表中
+				String phone = map.get(channelid).getPhone();
+				String encryptPhone = MD5Utils.encrypt(phone, MD5Utils.KEY);
+				String encryptCareer=MD5Utils.encrypt(channelid, MD5Utils.KEY);
+				String encryptnowyesterdayDate=MD5Utils.encrypt(yesterdayDate, MD5Utils.KEY);
+				//需要改成从配置文件里读取 
+				
+				String webUrl = PropertiesUtil.getValue("web.url");
+				String longUrl = webUrl+"/daqWeb/bizbase/message.html?nowDate="+encryptnowyesterdayDate+"&phone="+encryptPhone+"&career="+encryptCareer;
+				
+				String shortUrl = ShortUrlUtils.buildShortUrl(longUrl);
+				
+				SendShortUrlManager sendShortUrlManager = (SendShortUrlManager) SpringHelper.getBean("sendShortUrlManager");
+				SendShortUrl sendShortUrl = new SendShortUrl();
+				sendShortUrl.setChannelid(channelid);
+				sendShortUrl.setChannelname(channelname);
+				sendShortUrl.setPhone(phone);
+				sendShortUrl.setShorturl(shortUrl);
+				sendShortUrl.setSenddate(yesterdayDate);
+				sendShortUrl.setSendstatus("未读");
+				preSaveObject(sendShortUrl);
+				sendShortUrlManager.saveObject(sendShortUrl);
+				
+				//发送短链接的方法 
+				String rt = commonSendMessage(phone, "您有一条国安数据消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
+				
+				SendMessageManager sendMessageManager = (SendMessageManager) SpringHelper.getBean("sendMessageManager");
+				SendMessage sendMessage = new SendMessage();
+				sendMessage.setFunctionname("库存消息提示");
+				sendMessage.setMobilephone(phone);
+				sendMessage.setCode(sendShortUrl.getShorturl());
+				sendMessage.setRcvmessage(rt);
+				sendMessage.setMsgstatus(1L);
+				sendMessageManager.saveSendMessage(sendMessage);
+				
+			}
+		}
+		
+		
+		protected void preSaveObject(Object o) {
+			if (o instanceof DataEntity) {
+				User sessionUser = null;
+				if (null != SessionManager.getUserSession()
+						&& null != SessionManager.getUserSession().getSessionData()) {
+					sessionUser = (User) SessionManager.getUserSession()
+							.getSessionData().get("user");
+				}
+				DataEntity dataEntity = (DataEntity) o;
+				java.util.Date date = new java.util.Date();
+				java.sql.Date sdate = new java.sql.Date(date.getTime());
+				// insert处理时添加创建人和创建时间
+				if (null == dataEntity.getCreate_time()) {
+					dataEntity.setCreate_time(sdate);
+					if (null != sessionUser) {
+						dataEntity.setCreate_user(sessionUser.getCode());
+						dataEntity.setCreate_user_id(sessionUser.getId());
+					}
+				}
+				dataEntity.setUpdate_time(sdate);
+				if (null != sessionUser) {
+					dataEntity.setUpdate_user(sessionUser.getCode());
+					dataEntity.setUpdate_user_id(sessionUser.getId());
+				}
+			}
+		}
+		
+		
 }

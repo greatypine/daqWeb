@@ -1,0 +1,71 @@
+.ui-page-login,
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	background-color: #f2f2f2;
+	color:#333;
+}
+.layout{padding-left:0.4rem; padding-right: 0.4rem;}
+.fl{float:left;}
+.fr{float:right;}
+
+.mui-content{margin-bottom: 1.2rem;overflow: hidden;padding-top:1rem;}
+
+footer{ width:100%; height:0.9rem; position: fixed; bottom: 0;border-top:1px solid #dbdbdb; background-color:#fff;z-index: 1000000;}
+footer a{width: 33.33333333%; color: #666; text-align: center;display: inline-block;float: left;margin-top: 0.2rem;}
+footer a p{margin-top:-0.05rem;}
+.foot1 span{background:url(../images/icon7.png) no-repeat;width:0.35rem;height:0.35rem;background-size:0.38rem;display:inline-block}
+.foot1_on span{background:url(../images/icon6.png) no-repeat !important;background-size:0.35rem !important;}
+.foot1_on p{ color:#bf0a11;}
+.foot2{position: relative;}
+.foot2 span{background:url(../images/icon9.png) no-repeat;width:0.33rem;height:0.35rem;background-size:0.32rem;display:inline-block;}
+.foot2_num{position: absolute;top: 0;left: 50%;width:10px; height:10px; color:#fff;margin: -3px 0 0 7px; background-color: #f32d2d; border: 1px solid #bf0a11;border-radius: 50%; font-size: 0.18rem;}
+
+.foot2_num_on{position: absolute;top: 0;left: 50%;width:14px; height:14px; color:#000;margin: -7px 0 0 2px; background-color: #fff; border: 1px solid #999999;border-radius: 50%; font-size: 0.18rem;}
+.foot2_on span{background:url(../images/icon8.png) no-repeat !important;background-size:0.32rem !important;}
+.foot2_on p{ color:#bf0a11;}
+.foot3 span{background:url(../images/icon11.png) no-repeat;width:0.33rem;height:0.35rem;background-size:0.3rem;display:inline-block}
+.foot3_on span{background:url(../images/icon10.png) no-repeat !important;background-size:0.32rem !important;}
+.foot3_on p{ color:#bf0a11;}
+
+/*header*/
+.titleheader {
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(24,188,156)), to(rgb(24,188,156)));
+	background: -webkit-linear-gradient(rgb(24,188,156), rgb(24,188,156));
+	background: -moz-linear-gradient(rgb(24,188,156), rgb(24,188,156));
+	background: -o-linear-gradient(rgb(24,188,156), rgb(24,188,156));
+	background: linear-gradient(rgb(24,188,156), rgb(24,188,156));     height: 64px;line-height: 64px;color: white;font-size: 20px;position: fixed; text-align: center;padding: 0.3rem 0 0.7rem 0;}
+.back{height: 0.8rem;width: 2rem;position: absolute;left:0;top:0;}
+.back a{position: absolute;left:0.4rem;top:0.2rem;background:url(../images/icon15.png) no-repeat;width:0.4rem;height:0.4rem;background-size: 0.2rem;}
+.camera a{position:absolute;right:0.2rem;top:0.5rem;background: url(../images/icon22.png) no-repeat;width: 0.5rem;height: 0.5rem;background-size: 0.4rem;}
+.camera label{position:absolute;right:0.2rem;top:0.25rem;background: url(../images/icon22.png) no-repeat;width: 0.5rem;height: 0.5rem;background-size: 0.4rem;}
+.save a{position:absolute;right:0rem;top:0.15rem;width: 2rem;height: 0.5rem;color: white;font-size: 18px;}
+.mui-icon-left-nav{position: absolute;top:0rem;width:1rem;height:0.6rem;background-size: 0.2rem;color: white;}
+.mui-icon-left-nav:before {
+	/*content:none;*/
+}
+.titleheader h1{
+	font-size: 20px;
+	color: white;
+}
+.crmtitleheader {
+    height: 0.8rem;line-height: 0.8rem;color: white;font-size: 0.32rem;position: fixed; text-align: center;padding: 0.3rem 0 0.8rem 0;}
+.crmtitleheader h1{
+	font-size: 0.32rem;
+	color: white;
+}
+.takephotos{
+	background: url(../images/icon22.png) no-repeat;width: 0.5rem;height: 0.5rem;background-size: 0.4rem;margin-top: 0.2rem;
+}
+.history {width: 3em;font-size: 18px;display: inline-block;color: #fff;margin-top: -10px;}
+@media screen and (device-width:375px) and (device-height:812px){
+    header {
+        height: 88px;
+        padding-top: 44px !important;
+    }
+    .mui-content {
+        padding-top: 88px !important;
+    }
+  }

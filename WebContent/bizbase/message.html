@@ -1,33 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=0.6, maximum-scale=1, user-scalable=yes" name="viewport">
   <title>国安数据-消息提示</title>
   <link rel="shortcut icon" type="image/x-icon" href="../icon.png"  />
   <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/font-awesome.min.css">
-  <link rel="stylesheet" href="css/ionicons.min.css">
-  <link rel="stylesheet" href="css/AdminLTE.min.css">
-  <link rel="stylesheet" href="css/blue.css">
-  <link rel="stylesheet" href="css/mbox.css">
+  <link rel="stylesheet" href="css/mscss/mui.min2.css">
+  <link rel="stylesheet" href="css/mscss/common.css">
+  <link rel="stylesheet" href="css/mscss/style.css">
+  <link rel="stylesheet" href="css/mscss/myClients.css">
   <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
   <style>
-  
+		body {
+			background-color: #FAFAFA;
+		}
   
   </style>
 </head>
-<body class="hold-transition register-page">
+<body>
+	
+	<h1 style="text-align: center;color: red;">库存消息提示<br /><label id="title"></label></h1>
+	<hr>
+	<h3 id="content"></h3> 
 
-	<h1>XXXX库存消息通知 </h1>
-	<h3>您的商品名称为：[盛海棠甘草]，货号为：2018-110414 的商品库存数量过少，请及时补货</h3>
-	<h3>您的商品名称为：[盛海棠甘草]，货号为：2018-110414 的商品库存数量过少，请及时补货</h3>
-	<h3>您的商品名称为：[盛海棠甘草]，货号为：2018-110414 的商品库存数量过少，请及时补货</h3>
-	<h3>您的商品名称为：[盛海棠甘草]，货号为：2018-110414 的商品库存数量过少，请及时补货</h3>
+
+	<input type="hidden" id="phone" value=""/>
+	<input type="hidden" id="career" value=""/>
+	<input type="hidden" id="nowDate" value=""/>
+
+
+
+<!--下拉刷新容器-->
+		<div id="pullrefresh" class="" style="margin-top: 0px;">
+			<!--数据列表-->
+			<ul id="customerlist" class="mui-table-view mui-table-view-chevron ul_style" style="margin-top: 0px;">
+				<!-- <li class="list_content" style="margin-bottom: 10px; margin-top: 0px;">
+					<div class="list_item">
+						<div class="title" >门店：呼家楼门店仓店</div>
+						<div class="content juzhong" id="callPhone" >
+							<h5 id="phone">商品名：大白菜啊</h5>
+						</div>
+					</div>
+					<div class="list_item">
+						<div class="title">可销售数量：22</div>
+						<div class="content">参考补充数据：44</div>
+					</div>
+				</li> -->
+
+				
+			</ul>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script language="javascript" src="../scripts/lib/jquery/jquery-1.5.js"></script>
+
+<link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="../scripts/css/datatables.css" rel="stylesheet">
+
+<script type="text/javascript" src="../startbootstrap/js/jquery.1.10.2.min.js"></script>
+<script type="text/javascript" src="../startbootstrap/js/layer.js"></script>
+
 <script language="javascript" src="../scripts/common/common-tool.js"></script>
 <script language="javascript" src="../scripts/common/common-core.js"></script>
 <script language="javascript" src="../scripts/lib/jquery/validate/jquery.validate.js"></script>
@@ -41,29 +93,148 @@
 
 <script>
 		
+	var phone = getUrlParamByKey("phone");
+	var career = getUrlParamByKey("career");
+	var nowDate = getUrlParamByKey("nowDate");
+	var pageInfo = {
+			currentPage: 0,
+			recordsPerPage: 50,
+			totalRecords: 0,
+			tooManySearchReturn: false 
+		};
+	
 	$(function() {
-		    
+		
+		$("#phone").val(phone);
+		$("#career").val(career);
+		$("#nowDate").val(nowDate);
+		
+		pullupRefresh();
 	});
-
 	
 	
-	function saveLoginLog(rtObj){
-		var loguser={};
-		loguser.citynames=returnCitySN.cname;
-		loguser.loginip=returnCitySN.cip;
-		loguser.token=rtObj.user.token;
-		doManager("UserLoginLogManager","saveUserLoginLog",[loguser], function(data, textStatus, XMLHttpRequest){
-		}); 
+	function pullupRefresh() {
+		setTimeout(function() {
+			initView();
+		}, 500);
+	}
+	
+	
+	function testSend(){
+		 /*  doManager("InterManager","sendWarningMessage",["sendmsg"], function(data, textStatus, XMLHttpRequest){
+		});  */ 
+	}
+	
+	
+	function saveLoginLog(date,phone){
+		/* doManager("UserLoginLogManager","saveUserLoginLog",[loguser], function(data, textStatus, XMLHttpRequest){
+		});  */
 		
 	}
 	
 	
 	
-	
-	
+	var totalno=0;
+	function initView(){
+			
+		var p_phone=$("#phone").val();
+		var p_career=$("#career").val();
+		var p_nowdate=$("#nowDate").val();
+		
+		pageInfo.currentPage = pageInfo.currentPage + 1;
+		doManager("InterManager","showMessage",[p_nowdate,p_phone,p_career,pageInfo], function(data, textStatus, XMLHttpRequest){
+			if (data.result) {
+				var careerobj = $.fromJSON(data.data);
+				var senddate = careerobj.express.express_date_str;
+				var channelname = careerobj.express.send_name;
+				employee_phone=careerobj.express.employee_phone;
+				nowDate=senddate;
+				var title="["+channelname+ "]频道"+ senddate;
+				$("#title").html(title); 
+				
+				var jsonData = $.fromJSON(data.data);
+				var showHtml="";
+				var $customerlist = $("#customerlist");
+
+				$(jsonData.data).each(function(i,obj){
+					var storename=obj.store_name;
+					var name=obj.content_name;
+					var number=obj.pro_number;
+					var warnnum = obj.warn_num;
+					totalno++;
+					
+					$customerlist.append('<li class="list_content" style="margin-bottom: 5px;"></li>');
+					$li = $customerlist.find("li:last");
+					$li.append('<div class="list_item">' + '<div class="title" style="width:45%;"><strong>门店： '+storename+'</strong></div>' + '<div class="content juzhong" id="callPhone" style="margin-left:10px;" ><h5 id="phone">商品名：'+name+'</h5></div></div>');
+					$li.append('<div class="list_item">' + '<div class="title" style="width:45%;">可销售数量：'+number+'</div>' + '<div class="content" style="margin-left:10px;">参考补充：'+warnnum+'</div></div>');
+					
+					//showHtml+="["+storename+"] 产品:"+name+"  ，可销售数量："+number+" 参考补充数量："+ warnnum +" ,请及时查看！<br> ";
+				});
+				//$("#content").html(showHtml);
+			}
+		},false);
+	}
 	
 
+	
+	
+	
+	
+	
+	
+	//滚动条在Y轴上的滚动距离
+
+	function getScrollTop(){
+	　　var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+	　　if(document.body){
+	　　　　bodyScrollTop = document.body.scrollTop;
+	　　}
+	　　if(document.documentElement){
+	　　　　documentScrollTop = document.documentElement.scrollTop;
+	　　}
+	　　scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+	　　return scrollTop;
+	}
+
+	//文档的总高度
+
+	function getScrollHeight(){
+	　　var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+	　　if(document.body){
+	　　　　bodyScrollHeight = document.body.scrollHeight;
+	　　}
+	　　if(document.documentElement){
+	　　　　documentScrollHeight = document.documentElement.scrollHeight;
+	　　}
+	　　scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+	　　return scrollHeight;
+	}
+
+	//浏览器视口的高度
+
+	function getWindowHeight(){
+	　　var windowHeight = 0;
+	　　if(document.compatMode == "CSS1Compat"){
+	　　　　windowHeight = document.documentElement.clientHeight;
+	　　}else{
+	　　　　windowHeight = document.body.clientHeight;
+	　　}
+	　　return windowHeight;
+	}
+
+	window.onscroll = function(){
+	　　if(getScrollTop() + getWindowHeight() == getScrollHeight()){
+	　　　　//alert("you are in the bottom!");
+		var index = layer.load(1, {
+		    	  shade: [0.5,'#fff'] //0.1透明度的白色背景
+		    	 });
+		initView();
+		layer.close(index);
+	　　}
+	};
+
+	
 </script>
-
+<!--  <button onclick="testSend()">sendMSG</button>  -->
 </body>
 </html>

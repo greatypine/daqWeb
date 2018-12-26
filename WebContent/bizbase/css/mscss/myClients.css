@@ -1,0 +1,99 @@
+.mui-table-view {
+	font-size: 14px;
+	background-color: transparent;
+	list-style: none;
+	background: #f2f2f2;
+}
+.mui-content{
+	background-color: #FAFAFA
+}
+.list_content {
+	background-color: white;
+}
+
+.list_content div {
+	padding-top: 4px;
+}
+
+.list_content h5 {
+	color: black;
+	font-size: 14px;
+}
+
+.list_item {
+	width: 100%;
+	display: flex;
+}
+
+.list_item .title {
+	width: 27%;
+	padding-left: 4.5%;
+	/*background-color: red;*/
+}
+
+.list_item .content {
+	width: 70%;
+	/*background-color: yellow;*/
+}
+
+.mt {
+	margin-bottom: 10px!important;
+}
+
+.pb {
+	padding-bottom: 5px;
+	box-shadow: 0px 15px 10px -15px #ccc;
+	/*border-bottom: 1px solid lightgray;*/
+}
+
+.ul_style {
+	/*border-bottom: 1px solid lightgray;
+border-top: 1px solid lightgray;*/
+	/*background: #f2f2f2;*/
+}
+
+.juzhong {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	display: flex;
+}
+
+.phoneStyle {
+	width: 17px;
+	height: 17px;
+	margin-left: 5px;
+}
+
+
+/*当屏幕是iphone5的时候*/
+
+@media screen and (device-width:320px) and (device-height:568px) {
+	.list_item .title {
+		width: 29%;
+		padding-left: 4.5%;
+	}
+}
+//iphoneX、iphoneXs
+
+/*@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+	.mui-content{
+		margin-top: -20px!important;
+	}
+}
+
+//iphone Xs Max
+@media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio:3) {
+	.mui-content{
+		margin-top: -20px!important;
+	}
+}
+
+ 
+
+//iphone XR
+@media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio:2) {
+	.mui-content{
+		margin-top: -20px!important;
+	}
+}*/

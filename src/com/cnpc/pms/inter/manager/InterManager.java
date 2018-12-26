@@ -580,4 +580,10 @@ public interface InterManager extends IManager {
   	//测试接口 
   	public String testNoProxySendMessage(String mobilephone,String content);
   	
+  	
+  	public Result showMessage(String nowDate,String aesphone,String aescareer,PageInfo pageinfo);
+  	
+  	
+  	public Result sendWarningMessage(String sendmsg);
+  	
 }
