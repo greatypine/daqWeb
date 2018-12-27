@@ -68,10 +68,24 @@ public class OSSUploadUtil {
           
         String bucketName = OSSUploadUtil.getBucketName(fileUrl);       
         String fileName = OSSUploadUtil.getFileName(fileUrl);             
-        if(bucketName==null||fileName==null) return false;  
+        if(bucketName==null||fileName==null) return false;
+        String proxydomain = PropertiesUtil.getValue("proxy.domain");
+        int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+        String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+        config = config==null?new OSSConfig():config;
         OSSClient ossClient = null;   
-        try {  
-            ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret());   
+        try {
+            if("off".equals(proxySwitch)){
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret());
+            }else if("on".equals(proxySwitch)){
+                // 创建ClientConfiguration实例
+                ClientConfiguration conf = new ClientConfiguration();
+
+                // 配置代理为本地8080端口
+                conf.setProxyHost(proxydomain);
+                conf.setProxyPort(proxyport);
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret(),conf);
+            }
             GenericRequest request = new DeleteObjectsRequest(bucketName).withKey(fileName);  
             ossClient.deleteObject(request);  
         } catch (Exception oe) {  
@@ -86,10 +100,24 @@ public class OSSUploadUtil {
         int deleteCount = 0;   
         String bucketName = OSSUploadUtil.getBucketName(fileUrls.get(0));     
         List<String> fileNames = OSSUploadUtil.getFileName(fileUrls);           
-        if(bucketName==null||fileNames.size()<=0) return 0;  
+        if(bucketName==null||fileNames.size()<=0) return 0;
+        String proxydomain = PropertiesUtil.getValue("proxy.domain");
+        int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+        String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+        config = config==null?new OSSConfig():config;
         OSSClient ossClient = null;   
-        try {  
-            ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret());   
+        try {
+            if("off".equals(proxySwitch)){
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret());
+            }else if("on".equals(proxySwitch)){
+                // 创建ClientConfiguration实例
+                ClientConfiguration conf = new ClientConfiguration();
+
+                // 配置代理为本地8080端口
+                conf.setProxyHost(proxydomain);
+                conf.setProxyPort(proxyport);
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret(),conf);
+            }
             DeleteObjectsRequest request = new DeleteObjectsRequest(bucketName).withKeys(fileNames);  
             DeleteObjectsResult result = ossClient.deleteObjects(request);  
             deleteCount = result.getDeletedObjects().size();  
@@ -110,7 +138,7 @@ public class OSSUploadUtil {
                 count++;  
             }  
         }  
-        return count;  
+        return count;
     }  
       
     private static String putObject(File file,String fileType,String fileName){
@@ -259,9 +287,24 @@ public class OSSUploadUtil {
     
     public static List<String> queryOssListByPath(String rootPath) {
     	List<String> result = new ArrayList<String>();
-    	if(rootPath.indexOf("house")>-1&&rootPath.indexOf("house_type")==-1) {
-        	OSSConfig ossConfig = new OSSConfig();
-            OSSClient ossClient = new OSSClient(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());   
+        String proxydomain = PropertiesUtil.getValue("proxy.domain");
+        int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+        String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+        OSSClient ossClient = null;
+        config = config==null?new OSSConfig():config;
+        if("off".equals(proxySwitch)){
+            ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret());
+        }else if("on".equals(proxySwitch)){
+            // 创建ClientConfiguration实例
+            ClientConfiguration conf = new ClientConfiguration();
+
+            // 配置代理为本地8080端口
+            conf.setProxyHost(proxydomain);
+            conf.setProxyPort(proxyport);
+            ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret(),conf);
+        }
+        if(rootPath.indexOf("house")>-1&&rootPath.indexOf("house_type")==-1) {
+
         	// 构造ListObjectsRequest请求
         	ListObjectsRequest listObjectsRequest = new ListObjectsRequest("guoanshuju");
         	// "/" 为文件夹的分隔符
@@ -297,8 +340,22 @@ public class OSSUploadUtil {
     public static void deleteObjectByUrl(String url) {
     	if(url.indexOf("house")>-1&&url.indexOf("house_type")==-1) {
     		// 初始化OSSClient
-        	OSSConfig ossConfig = new OSSConfig();
-            OSSClient ossClient = new OSSClient(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());   
+            String proxydomain = PropertiesUtil.getValue("proxy.domain");
+            int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+            String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+            OSSClient ossClient = null;
+            config = config==null?new OSSConfig():config;
+            if("off".equals(proxySwitch)){
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret());
+            }else if("on".equals(proxySwitch)){
+                // 创建ClientConfiguration实例
+                ClientConfiguration conf = new ClientConfiguration();
+
+                // 配置代理为本地8080端口
+                conf.setProxyHost(proxydomain);
+                conf.setProxyPort(proxyport);
+                ossClient = new OSSClient(config.getEndpoint(), config.getAccessKeyId(), config.getAccessKeySecret(),conf);
+            }
             // 删除Object
             if(url.indexOf(".")>-1) {
             	ossClient.deleteObject("guoanshuju", url);
