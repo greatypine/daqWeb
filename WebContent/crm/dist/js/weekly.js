@@ -6195,7 +6195,7 @@ function oneyearorsixweek(){
 				var cityDataArray = new Array();
 				var datetime = new Date().getDate();
 				var monthArray = getmonthArray();
-				var yearmonth = new Date().format("yyyyMM");
+				var yearmonth = new Date().format("yyyy-MM");
 				var jsonData = $.fromJSON(data.data).sixMonthCustomer;
 				var appendstr = "";
 				$("#month_1").html(monthArray[0]);$("#month_2").html(monthArray[1]);$("#month_3").html(monthArray[2]);$("#month_4").html(monthArray[3]);$("#month_5").html(monthArray[4]);$("#month_6").html(monthArray[5]);
