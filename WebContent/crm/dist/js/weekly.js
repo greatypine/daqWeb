@@ -2841,9 +2841,11 @@ option12 = {
 };
 
 //18年自营店拓展进度
+var datestore = new Date();
+var curyear = datestore.format('yyyy');
 option13 = {
   title: {
-    text: '18年自营店拓展进度',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
+    text: curyear+'年自营店拓展进度',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
   },
   color:["#f72929","#529ea8","#9bbcc8"],
   tooltip : {
@@ -2989,7 +2991,7 @@ option13 = {
 //18年合作店拓展进度
 option14 = {
   title: {
-    text: '18年合作店拓展进度',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
+    text: curyear+'年合作店拓展进度',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
   },
   color:["#f72929","#529ea8","#9bbcc8"],
   tooltip : {
@@ -4880,6 +4882,11 @@ function oneyearorsixweek(){
 		myChart12.setOption(option12);
 		myChart13.setOption(option13);
 		myChart14.setOption(option14);
+		$("#store1").html(curyear+"年自营店拓展进度");
+        $("#store3").html(curyear+"年自营店拓展进度");
+        $("#store2").html(curyear+"年合作店拓展进度");
+        $("#store4").html(curyear+"年合作店拓展进度");
+
 		
 		var dateArray = new Array();
 		var citynameArrayx1 = new Array();
@@ -6201,7 +6208,7 @@ function oneyearorsixweek(){
 				$("#month_1").html(monthArray[0]);$("#month_2").html(monthArray[1]);$("#month_3").html(monthArray[2]);$("#month_4").html(monthArray[3]);$("#month_5").html(monthArray[4]);$("#month_6").html(monthArray[5]);
 				$("#month_6_1").html(monthArray[5]);$("#one").html(monthArray[2]+'月第'+Math.ceil(datetime/7)+'周');$("#two").html(monthArray[3]+'月第'+Math.ceil(datetime/7)+'周');$("#three").html(monthArray[4]+'月第'+Math.ceil(datetime/7)+'周');
 				$("#four").html(monthArray[5]+'月第'+Math.ceil(datetime/7)+'周');
-				var xdata = [monthArray[3]+'月第'+Math.ceil(datetime/7)+'周',monthArray[3]+'月第'+Math.ceil(datetime/7)+'周',monthArray[4]+'月第'+Math.ceil(datetime/7)+'周',monthArray[5]+'月第'+Math.ceil(datetime/7)+'周'];
+				var xdata = [monthArray[2]+'月第'+Math.ceil(datetime/7)+'周',monthArray[3]+'月第'+Math.ceil(datetime/7)+'周',monthArray[4]+'月第'+Math.ceil(datetime/7)+'周',monthArray[5]+'月第'+Math.ceil(datetime/7)+'周'];
 				ydate = [];
 				if(jsonData != null &&jsonData.length >0){
 					for (var i = 0; i <jsonData.length; i++){
