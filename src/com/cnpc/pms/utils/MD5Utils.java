@@ -118,7 +118,11 @@ public final class MD5Utils {
     public static String encrypt(String content, String password) {  
         try {  
         	KeyGenerator kgen = KeyGenerator.getInstance(ALGORITHM);
-            kgen.init(128, new SecureRandom(password.getBytes()));
+        	
+        	SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+       	 	random.setSeed(password.getBytes());
+        	
+            kgen.init(128, random);
             SecretKey secretKey = kgen.generateKey();
             byte[] enCodeFormat = secretKey.getEncoded();
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, ALGORITHM);
