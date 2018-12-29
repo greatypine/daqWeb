@@ -565,6 +565,11 @@ public class AuthFilter extends OncePerRequestFilter {
 				return;
 			}
 			
+			if (url.contains("messagedz.html")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+			
 			/**
 			 * 2018-03-22 大屏
 			 * 

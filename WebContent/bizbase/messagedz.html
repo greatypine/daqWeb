@@ -21,13 +21,13 @@
 </head>
 <body>
 	
-	<h1 style="text-align: center;color: red;">品类库存消息预警<br /><label id="title"></label></h1>
+	<h1 style="text-align: center;color: red;">门店选品推荐<br /><label id="title"></label></h1>
 	<hr>
 	<h3 id="content"></h3> 
 
 
 	<input type="hidden" id="phone" value=""/>
-	<input type="hidden" id="career" value=""/>
+	<input type="hidden" id="storeid" value=""/>
 	<input type="hidden" id="nowDate" value=""/>
 
 
@@ -94,7 +94,7 @@
 <script>
 		
 	var phone = getUrlParamByKey("phone");
-	var career = getUrlParamByKey("career");
+	var storeid = getUrlParamByKey("storeid");
 	var nowDate = getUrlParamByKey("nowDate");
 	var pageInfo = {
 			currentPage: 0,
@@ -106,7 +106,7 @@
 	$(function() {
 		
 		$("#phone").val(phone);
-		$("#career").val(career);
+		$("#storeid").val(storeid);
 		$("#nowDate").val(nowDate);
 		
 		pullupRefresh();
@@ -138,18 +138,18 @@
 	function initView(){
 			
 		var p_phone=$("#phone").val();
-		var p_career=$("#career").val();
+		var p_storeid=$("#storeid").val();
 		var p_nowdate=$("#nowDate").val();
 		
 		pageInfo.currentPage = pageInfo.currentPage + 1;
-		doManager("InterManager","showMessage",[p_nowdate,p_phone,p_career,pageInfo], function(data, textStatus, XMLHttpRequest){
+		doManager("InterManager","showMessageDz",[p_nowdate,p_phone,p_storeid,pageInfo], function(data, textStatus, XMLHttpRequest){
 			if (data.result) {
 				var careerobj = $.fromJSON(data.data);
 				var senddate = careerobj.express.express_date_str;
-				var channelname = careerobj.express.send_name;
+				var storename = careerobj.express.store_name;
 				employee_phone=careerobj.express.employee_phone;
 				nowDate=senddate;
-				var title="["+channelname+ "]品类"+ senddate;
+				var title="["+storename+ "]门店 "+ senddate;
 				$("#title").html(title); 
 				
 				var jsonData = $.fromJSON(data.data);

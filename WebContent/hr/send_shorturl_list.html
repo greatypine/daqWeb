@@ -167,7 +167,13 @@ Date.prototype.format=function(fmt) {
   
   
   function doSendMessage(){
-	  doManager("InterManager","sendWarningMessage",["sendmsg"], function(data, textStatus, XMLHttpRequest){
+	  doManager("InterManager","sendWarningMessage",null, function(data, textStatus, XMLHttpRequest){
+		}); 
+  }
+  
+  
+  function doSendMessageDz(){
+	  doManager("InterManager","sendWarningMessageDz",null, function(data, textStatus, XMLHttpRequest){
 		}); 
   }
     
@@ -277,7 +283,9 @@ Date.prototype.format=function(fmt) {
         <div class="panel-footer" style="text-align: right">
             <button class="btn btn-primary" onclick="searchList()">查询</button>
             <button class="btn btn-primary" onclick="doClean();">重置</button>
-            <button class="btn btn-primary" onclick="doSendMessage();">发送短信</button>
+            <button class="btn btn-primary" onclick="doSendMessage();">发送品类负责人短信</button>
+            <button class="btn btn-primary" onclick="doSendMessageDz();">发送门店店长短信</button>
+            
         </div>
     </div>  
     <div id="centerQueryGridContainer" class="panel panel-primary" queryid="queryshorturlmessagelist" operators="$pmspage.opArr"

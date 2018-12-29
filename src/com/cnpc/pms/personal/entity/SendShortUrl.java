@@ -31,6 +31,15 @@ public class SendShortUrl extends DataEntity{
 	
 	@Column(length = 128, name = "shorturl")
 	private String shorturl;
+	
+	
+	
+	
+	@Column(length = 25, name = "storename")
+	private String storename;
+	
+	@Column(length = 64, name = "platformid")
+	private String platformid;
 
 	
 	public String getPhone() {
@@ -79,6 +88,22 @@ public class SendShortUrl extends DataEntity{
 
 	public void setChannelid(String channelid) {
 		this.channelid = channelid;
+	}
+
+	public String getStorename() {
+		return storename;
+	}
+
+	public void setStorename(String storename) {
+		this.storename = storename;
+	}
+
+	public String getPlatformid() {
+		return platformid;
+	}
+
+	public void setPlatformid(String platformid) {
+		this.platformid = platformid;
 	}
 	
 

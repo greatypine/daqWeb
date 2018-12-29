@@ -133,6 +133,7 @@ import com.cnpc.pms.utils.ImpalaUtil;
 import com.cnpc.pms.utils.MD5Utils;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.ValueUtil;
+import com.schooner.MemCached.SchoonerSockIOPool.UDPSockIO;
 
 /**
  * App接口实现类interDao
@@ -3903,14 +3904,14 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			//解密 根据 取得消息 
 			String decryptDate = MD5Utils.decrypt(nowDate, MD5Utils.KEY); 
 			String decryptPhone = MD5Utils.decrypt(aesphone, MD5Utils.KEY);  
-			String decryptchannelid = MD5Utils.decrypt(channelid, MD5Utils.KEY);  
-	        System.out.println("解密后的:" + decryptPhone+"---"+decryptchannelid);
+			String decryptcategory_name = MD5Utils.decrypt(channelid, MD5Utils.KEY);  
+	        System.out.println("解密后的:" + decryptPhone+"---"+decryptcategory_name);
 			//根据 解密信息 查询消息 
 	        WarnProductManager warnProductManager = (WarnProductManager) SpringHelper.getBean("warnProductManager");
 	    	
 	        //根据事业群 查询Impala 洗出的表 并更新可读
 	        //List<Map<String, Object>> warnList = ImpalaUtil.executeGuoan("select * from gabase.b_inventory_warning where create_time='"+decryptDate+"' and channel_id='"+decryptchannelid+"' order by warn_num desc;");
-	        List<Map<String, Object>> warnList = ImpalaUtil.executeGuoan("select * from gabase.b_inventory_warning where store_white='front' and create_time='"+decryptDate+"' and channel_id='"+decryptchannelid+"' order by store_id,warn_num desc limit "+pageInfo.getRecordsPerPage()+" offset ("+pageInfo.getCurrentPage()+"-1)*"+pageInfo.getRecordsPerPage());
+	        List<Map<String, Object>> warnList = ImpalaUtil.executeGuoan("select * from gabase.b_inventory_warning where store_white='front' and create_time='"+decryptDate+"' and linkman_phone='"+decryptPhone+"' and category_name='"+decryptcategory_name+"' order by store_id,warn_num desc limit "+pageInfo.getRecordsPerPage()+" offset ("+pageInfo.getCurrentPage()+"-1)*"+pageInfo.getRecordsPerPage());
 	        if(warnList==null&&warnList.size()==0) {
 	        	return result;
 	        }
@@ -3944,26 +3945,182 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 		}
 		
 		
+		
+		/**
+		 * 取得密串 解密根据 解密后的信息 取得 消息 展示 
+		 * @return
+		 */
+		@Override
+		public Result showMessageDz(String nowDate,String aesphone,String storeid,PageInfo pageInfo) {
+			Result result = new Result(); 
+			if(nowDate==null||storeid==null||storeid==null) {
+				return result;
+			}
+			//解密 根据 取得消息 
+			String decryptDate = MD5Utils.decrypt(nowDate, MD5Utils.KEY); 
+			String decryptPhone = MD5Utils.decrypt(aesphone, MD5Utils.KEY);  
+			String decryptstoreid = MD5Utils.decrypt(storeid, MD5Utils.KEY);  
+	        System.out.println("解密后的:" + decryptPhone+"---"+decryptstoreid);
+			//根据 解密信息 查询消息 
+	        WarnProductManager warnProductManager = (WarnProductManager) SpringHelper.getBean("warnProductManager");
+	    	
+	        //根据事业群 查询Impala 洗出的表 并更新可读
+	        //List<Map<String, Object>> warnList = ImpalaUtil.executeGuoan("select * from gabase.b_inventory_warning where create_time='"+decryptDate+"' and channel_id='"+decryptchannelid+"' order by warn_num desc;");
+	        List<Map<String, Object>> warnList = ImpalaUtil.executeGuoan("select * from gabase.b_inventory_warning where store_white='normal' and create_time='"+decryptDate+"' and store_id='"+decryptstoreid+"' order by warn_num desc limit "+pageInfo.getRecordsPerPage()+" offset ("+pageInfo.getCurrentPage()+"-1)*"+pageInfo.getRecordsPerPage());
+	        if(warnList==null&&warnList.size()==0) {
+	        	return result;
+	        }
+	        
+	        //IFilter iFilter =FilterFactory.getSimpleFilter(" career_name='"+decryptCareer+"'");
+	        //List<WarnProduct> products = (List<WarnProduct>) warnProductManager.getList(iFilter);
+	        //按手机号 事业群查询 标记可读 
+	        SendShortUrlManager sendShortUrlManager = (SendShortUrlManager) SpringHelper.getBean("sendShortUrlManager");
+	    	IFilter sendUrliFilter =FilterFactory.getSimpleFilter(" phone='"+decryptPhone+"' and senddate='"+decryptDate+"' ");
+	    	List<SendShortUrl> sendShortUrls = (List<SendShortUrl>) sendShortUrlManager.getList(sendUrliFilter);
+	      
+	    	Express express = new Express();
+	    	express.setExpress_date_str(decryptDate);
+	    	if(sendShortUrls!=null&&sendShortUrls.size()>0) {
+	        	SendShortUrl sendShortUrl = sendShortUrls.get(0);
+	        	
+	        	sendShortUrl.setSendstatus("已读");
+	        	preSaveObject(sendShortUrl);
+	        	sendShortUrlManager.saveObject(sendShortUrl);
+	        	
+	        	express.setStore_name(sendShortUrl.getStorename());
+	        	
+	        }
+	        
+	        result.setCode(CodeEnum.success.getValue());
+			result.setMessage(CodeEnum.success.getDescription());
+			result.setData(warnList);
+			express.setEmployee_phone(decryptPhone);
+			result.setExpress(express);
+			return result;
+		}
+		
+		/**
+		 * 发送预警消息的方法(门店店长)
+		 * @return
+		 */
+		@Override
+		public Result sendWarningMessageDz() {
+			Result result = new Result(); 
+			//取得昨天日期
+			String yesterdayDate=new SimpleDateFormat("yyyy-MM-dd").format(com.cnpc.pms.base.util.DateUtil.getYesterday());
+			
+			//取得所的门店(非仓店)
+			String searchAllStoreSql = "SELECT DISTINCT store_id,store_name from gabase.b_inventory_warning where store_white='normal' and create_time='"+yesterdayDate+"' ";
+			
+			List<Map<String,Object>> storeList = ImpalaUtil.executeGuoan(searchAllStoreSql);
+			
+			UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+			StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+			
+			//循环给店长发消息 
+			if(storeList!=null&&storeList.size()>0) {
+				Map<String, String> map = new HashMap<String, String>();//所有的门店对应的店长电话
+				for(Map<String,Object> store:storeList) {
+				   //根据门店ID查询门店店长 电话 如果电话为空则不发送
+					String store_id = (String) store.get("store_id");
+					String store_name = (String) store.get("store_name");
+					
+			    	IFilter storeFilter =FilterFactory.getSimpleFilter(" platformid='"+store_id+"' ");
+			    	List<Store> stores = (List<Store>) storeManager.getList(storeFilter);
+					if(stores!=null&&stores.size()>0) {
+						Store s = stores.get(0);
+						Long skid = s.getSkid();
+						if(skid!=null) {
+							User user = (User) userManager.getObject(skid);
+							if(user!=null&&user.getMobilephone()!=null) {
+								//取出店长电话 发消息  
+								String encryptPhone = MD5Utils.encrypt(user.getMobilephone(), MD5Utils.KEY);
+								String encryptStoreId=MD5Utils.encrypt(store_id, MD5Utils.KEY);
+								String encryptnowyesterdayDate=MD5Utils.encrypt(yesterdayDate, MD5Utils.KEY);
+								
+								
+								String webUrl = PropertiesUtil.getValue("web.url");
+								String longUrl = webUrl+"/daqWeb/bizbase/messagedz.html?nowDate="+encryptnowyesterdayDate+"&phone="+encryptPhone+"&storeid="+encryptStoreId;
+								
+								String shortUrl = ShortUrlUtils.buildShortUrl(longUrl);
+								
+								SendShortUrlManager sendShortUrlManager = (SendShortUrlManager) SpringHelper.getBean("sendShortUrlManager");
+								SendShortUrl sendShortUrl = new SendShortUrl();
+								sendShortUrl.setPlatformid(store_id);
+								sendShortUrl.setStorename(store_name);
+								sendShortUrl.setPhone(user.getMobilephone());
+								sendShortUrl.setShorturl(shortUrl);
+								sendShortUrl.setSenddate(yesterdayDate);
+								sendShortUrl.setSendstatus("未读");
+								preSaveObject(sendShortUrl);
+								sendShortUrlManager.saveObject(sendShortUrl);
+								
+								//发送短链接的方法 
+								String rt="测试店长没发";
+								if(user.getMobilephone()!=null&&user.getMobilephone().trim().length()>0) {
+									//rt = commonSendMessage(user.getMobilephone(), "您有一条国安数据消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
+								}else {
+									rt="电话为空，未发送";
+								}
+								
+								SendMessageManager sendMessageManager = (SendMessageManager) SpringHelper.getBean("sendMessageManager");
+								SendMessage sendMessage = new SendMessage();
+								sendMessage.setFunctionname("门店库存消息提示");
+								sendMessage.setMobilephone(user.getMobilephone());
+								sendMessage.setCode(sendShortUrl.getShorturl());
+								sendMessage.setRcvmessage(rt);
+								sendMessage.setMsgstatus(1L);
+								sendMessageManager.saveSendMessage(sendMessage);
+								
+								
+							}
+						}
+					}
+				}
+				
+			}
+			
+			
+			return result;
+		}
 		/**
 		 * 发送预警消息的方法(频道负责人)
 		 * @return
 		 */
 		@Override
-		public Result sendWarningMessage(String sendmsg) {
+		public Result sendWarningMessage() {
 			Result result = new Result(); 
 			//取得昨天日期
 			String yesterdayDate=new SimpleDateFormat("yyyy-MM-dd").format(com.cnpc.pms.base.util.DateUtil.getYesterday());
 			//根据洗的数据 取得发送人(根据频道，查询频道负责人) 如果存在 则发送 如果不存在 则不发送 
 			
-			//查询所有的频道
-			List<Map<String,Object>> channelList = ImpalaUtil.executeGuoan("SELECT DISTINCT channel_id,channel_name from gabase.b_inventory_warning  where store_white='front' and create_time='"+yesterdayDate+"' ");
+			//查询所有的品类
+			//List<Map<String,Object>> channelList = ImpalaUtil.executeGuoan("SELECT DISTINCT category_name,linkman_phone FROM gabase.b_inventory_warning where store_white='front' and create_time='"+yesterdayDate+"' and linkman_phone is not null;");
+			
+			//--------测试--------------
+			List<Map<String,Object>> channelList = new ArrayList<Map<String,Object>>();
+			Map<String,Object> testmap1 = new HashMap<String,Object>();
+			testmap1.put("linkman_phone", "13811368008");
+			testmap1.put("category_name", "生鲜");
+			Map<String,Object> testmap2 = new HashMap<String,Object>();
+			testmap2.put("linkman_phone", "13051745039");
+			testmap2.put("category_name", "果蔬");
+			Map<String,Object> testmap3 = new HashMap<String,Object>();
+			testmap3.put("linkman_phone", "13552926097");
+			testmap3.put("category_name", "日用百货");
+			channelList.add(testmap1);
+			channelList.add(testmap2);
+			channelList.add(testmap3);
+			//----------------------
+			
+			
 			if(channelList!=null&&channelList.size()>0) {
 				for(Map<String,Object> map:channelList) {
-					String channel_id = (String) map.get("channel_id");
-					String channel_name = (String) map.get("channel_name");
+					String linkman_phone = (String) map.get("linkman_phone");
+					String category_name = (String) map.get("category_name");
 					//循环给频道负责人 发消息  
 					
-					initSendMessage(yesterdayDate,channel_id,channel_name);
+					initSendMessage(yesterdayDate,linkman_phone,category_name);
 					
 				}
 			}else {
@@ -3978,33 +4135,12 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			return result;
 		}
 
-		private void initSendMessage(String yesterdayDate, String channelid,String channelname) {
+		private void initSendMessage(String yesterdayDate, String phone,String category_name) {
 			OnLineHumanresourcesManager onLineHumanresourcesManager = (OnLineHumanresourcesManager) SpringHelper.getBean("onLineHumanresourcesManager");
-	    	IFilter onLineiFilter =FilterFactory.getSimpleFilter(" groupcode='ZBPDFZRJSZ' ");
-	    	Map<String, OnLineHumanresources> map = new HashMap<String, OnLineHumanresources>();
-			
-			OnLineHumanresourcesSubManager onLineHumanresourcesSubManager = (OnLineHumanresourcesSubManager) SpringHelper.getBean("onLineHumanresourcesSubManager");
-	    	IFilter subiFilter =FilterFactory.getSimpleFilter(" channelid='"+channelid+"'");
-	    	//所有频道
-	    	List<OnLineHumanresourcesSub> subs = (List<OnLineHumanresourcesSub>) onLineHumanresourcesSubManager.getList(subiFilter);
-			if(subs!=null&&subs.size()>0){
-				for(OnLineHumanresourcesSub sub:subs) {
-					if(sub.getChannelid()!=null&&sub.getChannelid().equals(channelid)) {
-						Long online_id = sub.getOnline_id();
-						OnLineHumanresources oHuman=(OnLineHumanresources) onLineHumanresourcesManager.getObject(online_id);
-						if(oHuman.getGroupcode()!=null&&oHuman.getGroupcode().equals("ZBPDFZRJSZ")&&(oHuman.getLefttime()==null||oHuman.getLefttime().trim().equals(""))) {
-							map.put(channelid, oHuman);
-							break;
-						}
-					}
-				}
-			}
-			if(map!=null&&map.size()>0) {
 				//可以发短信 频道存在负责人
 				//根据洗的数据 生成短连接 存入表中
-				String phone = map.get(channelid).getPhone();
 				String encryptPhone = MD5Utils.encrypt(phone, MD5Utils.KEY);
-				String encryptCareer=MD5Utils.encrypt(channelid, MD5Utils.KEY);
+				String encryptCareer=MD5Utils.encrypt(category_name, MD5Utils.KEY);
 				String encryptnowyesterdayDate=MD5Utils.encrypt(yesterdayDate, MD5Utils.KEY);
 				//需要改成从配置文件里读取 
 				
@@ -4015,8 +4151,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				
 				SendShortUrlManager sendShortUrlManager = (SendShortUrlManager) SpringHelper.getBean("sendShortUrlManager");
 				SendShortUrl sendShortUrl = new SendShortUrl();
-				sendShortUrl.setChannelid(channelid);
-				sendShortUrl.setChannelname(channelname);
+				sendShortUrl.setChannelname(category_name);
 				sendShortUrl.setPhone(phone);
 				sendShortUrl.setShorturl(shortUrl);
 				sendShortUrl.setSenddate(yesterdayDate);
@@ -4025,7 +4160,8 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				sendShortUrlManager.saveObject(sendShortUrl);
 				
 				//发送短链接的方法 
-				String rt = commonSendMessage(phone, "您有一条国安数据消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
+				//String rt = commonSendMessage(phone, "您有一条国安数据消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
+				String rt="测试频道没发";
 				
 				SendMessageManager sendMessageManager = (SendMessageManager) SpringHelper.getBean("sendMessageManager");
 				SendMessage sendMessage = new SendMessage();
@@ -4036,7 +4172,6 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				sendMessage.setMsgstatus(1L);
 				sendMessageManager.saveSendMessage(sendMessage);
 				
-			}
 		}
 		
 		

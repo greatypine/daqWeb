@@ -602,7 +602,10 @@ public interface InterManager extends IManager {
   	
   	public Result showMessage(String nowDate,String aesphone,String aescareer,PageInfo pageinfo);
   	
+  	public Result showMessageDz(String nowDate,String aesphone,String storeid,PageInfo pageInfo);
   	
-  	public Result sendWarningMessage(String sendmsg);
+  	public Result sendWarningMessage();
+  	
+  	public Result sendWarningMessageDz();
   	
 }

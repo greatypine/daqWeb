@@ -851,7 +851,8 @@
     <!-- 短链接列表 -->
     <query id="queryshorturlmessagelist" header="短链接列表" baseclass="com.cnpc.pms.personal.entity.SendShortUrl" order="id desc">
         <column key="id" header="序号" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>
-        <column key="channelname" header="频道 " type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="18%"/>
+        <column key="channelname" header="品类 " type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="18%"/>
+        <column key="storename" header="门店" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="18%"/>
         <column key="phone" header="电话号码" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="18%"/>
         <column key="shorturl" header="链接" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="18%"/>
         <column key="senddate" header="时间" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="18%"/>
