@@ -3297,7 +3297,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			begindate = "29";
 			enddate = "31";
 		}
-		String sql = "select t1.cityname,t1.`month`,round(if(t2.humancounts is null,t1.customer_count,t1.customer_count/t2.humancounts),0) as customer_count,"
+		String sql = "select t1.cityname,CONCAT(left(t1.`month`,4),'-',right(t1.`month`,2)) as `month`,round(if(t2.humancounts is null,t1.customer_count,t1.customer_count/t2.humancounts),0) as customer_count,"
 				+"round(if(t2.humancounts is null,t1.customer_new_count,t1.customer_new_count/t2.humancounts),0) as customer_new_count,"
 				+"round(if(t2.humancounts is null,t3.week_cus_count,t3.week_cus_count/t2.humancounts),0) as week_cus_count from ( "
 				+"SELECT cityname,SUM(ds_cus.pay_count) AS  customer_count,SUM(ds_cus.new_count) AS  customer_new_count,ds_cus.order_ym as month FROM  ds_cusum_month_city ds_cus LEFT JOIN t_dist_citycode d ON d.id = ds_cus.city_id "
@@ -3355,7 +3355,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			begindate = "29";
 			enddate = "31";
 		}
-		String sql = "select '全国' as cityname,t1.`month`,round(if(t2.humancounts is null,t1.customer_count,t1.customer_count/t2.humancounts),0) as customer_count,"
+		String sql = "select '全国' as cityname,CONCAT(left(t1.`month`,4),'-',right(t1.`month`,2)) as `month`,round(if(t2.humancounts is null,t1.customer_count,t1.customer_count/t2.humancounts),0) as customer_count,"
 				+"round(if(t2.humancounts is null,t1.customer_new_count,t1.customer_new_count/t2.humancounts),0) as customer_new_count,"
 				+"round(if(t2.humancounts is null,t3.week_cus_count,t3.week_cus_count/t2.humancounts),0) as week_cus_count from ( "
 				+"SELECT cityname,SUM(ds_cus.pay_count) AS  customer_count,SUM(ds_cus.new_count) AS  customer_new_count,ds_cus.order_ym as month FROM  ds_cusum_month_city ds_cus LEFT JOIN t_dist_citycode d ON d.id = ds_cus.city_id "

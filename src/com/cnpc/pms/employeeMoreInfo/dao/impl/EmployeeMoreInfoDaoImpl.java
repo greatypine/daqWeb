@@ -8,10 +8,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ProjectName: daqWeb
@@ -74,10 +71,11 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
 
     @Override
     public List<Map<String, Object>> queryAvgWorkTime() {
+        String year = Calendar.getInstance().get(Calendar.YEAR)+"";
         String curDate = DateUtils.dateFormat(new Date(), "yyyy-MM");
         String sql = "select ROUND(sum(realovertime)/sum(workdays),2) as avgtime from (SELECT recode.employee_no,recode.realovertime,recode.workdays,recode.work_month from t_work_record recode LEFT JOIN " +
-                "t_work_record_total total ON (recode.workrecord_id = total.id) where substring_index(recode.work_month,'-',1) = '2018' and total.commit_status =3 " +
-                ") t1 INNER JOIN (select yearmonth,zw,employeeno from t_topdata_human where substring_index(yearmonth,'-',1) = '2018' ) t2 ON (t1.employee_no = t2.employeeno and t1.work_month = t2.yearmonth) " +
+                "t_work_record_total total ON (recode.workrecord_id = total.id) where substring_index(recode.work_month,'-',1) = '"+year+"' and total.commit_status =3 " +
+                ") t1 INNER JOIN (select yearmonth,zw,employeeno from t_topdata_human where substring_index(yearmonth,'-',1) = '"+year+"' ) t2 ON (t1.employee_no = t2.employeeno and t1.work_month = t2.yearmonth) " +
                 "where t2.zw = '国安侠' and t2.yearmonth != '"+curDate+"'";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -139,7 +137,7 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
         String curYearMonth = DateUtils.dateFormat(new Date(), "yyyy-MM");
         String curYear = DateUtils.dateFormat(new Date(), "yyyy");
         Integer curMonth = Integer.parseInt(DateUtils.dateFormat(new Date(), "MM"));
-        String sql = "select ROUND(sum(datanum)/COUNT(DISTINCT username)) as avgcount,month from ds_pes_order_empchannel_month where employee_no is not null and employee_no != '' and year = '"+curYear+"' and month != "+curMonth+" GROUP BY month";
+        String sql = "select ROUND(sum(datanum)/COUNT(DISTINCT username)) as avgcount,CONCAT(`year`,'-',LPAD(month,2,'0')) as month  from ds_pes_order_empchannel_month where employee_no is not null and employee_no != '' and month != "+curMonth+" GROUP BY month";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
         return list;
@@ -193,9 +191,9 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
             append_sql =  " table_total.empcount >10 ";
         }
 
-        String sql = "select count(store_id) as count,substring_index(yearmonth,'-',-1) as work_month  from (" +
+        String sql = "select count(store_id) as count,yearmonth as work_month  from (" +
                 "select count(DISTINCT human.employeeno) as empcount,t.store_id,human.yearmonth from t_topdata_human human INNER JOIN t_store t ON (t.store_id = human.storeid)  where " +
-                "substring_index(human.yearmonth,'-',1) = '2018' and human.zw = '国安侠' and  t.name NOT LIKE '%测试%' AND t.name NOT LIKE '%储备%' " +
+                "substring_index(human.yearmonth,'-',1) > '2017' and human.yearmonth != '"+curYearMonth+"' and human.zw = '国安侠' and  t.name NOT LIKE '%测试%' AND t.name NOT LIKE '%储备%' " +
                 "AND t.name NOT LIKE '%办公室%' and humanstatus !=2 AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' and t.storetype = 'Y' GROUP BY human.yearmonth,t.store_id "+
                 ") table_total where "+append_sql+" GROUP BY table_total.yearmonth";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);

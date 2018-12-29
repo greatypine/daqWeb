@@ -106,7 +106,7 @@
       <section class="content-header">
         <div class="box box-default ">
           <div class="box-body report">
-            <div class="box-header h4"><strong>2018年国安侠送单量分析</strong></div>
+            <div class="box-header h4"><strong id="year_calss">2018</strong><strong>年国安侠送单量分析</strong></div>
             <div class="gax-head">
               <p class="gax text-center">国安侠<span id="gaxcount">加载中...</span>&nbsp;人</p>
               <p class="col-sm-6 no-padding">城市：<span id="citycount">加载中...</span>个</p>
@@ -170,14 +170,44 @@
 <script src="dist/js/base64.js"></script>
 
 <script>
-    var xData_month = function() {
-        var now = new Date();
-        var data = [];
-        var curMonth = now.getFullYear()+'-'+now.getMonth()+'-31';
-        var startMonth = (now.getFullYear()-1)+'-'+'12-1';
-        data = getYearAndMonth(startMonth,curMonth);
-        return data;
-    }();
+    Date.prototype.format=function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1, //月份
+            "d+" : this.getDate(), //日
+            "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+            "H+" : this.getHours(), //小时
+            "m+" : this.getMinutes(), //分
+            "s+" : this.getSeconds(), //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S" : this.getMilliseconds() //毫秒
+        };
+        var week = {
+            "0" : "\u65e5",
+            "1" : "\u4e00",
+            "2" : "\u4e8c",
+            "3" : "\u4e09",
+            "4" : "\u56db",
+            "5" : "\u4e94",
+            "6" : "\u516d"
+        };
+        if(/(y+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        if(/(E+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);
+        }
+        for(var k in o){
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            }
+        }
+        return fmt;
+    }
+
+    var date_year = new Date();
+    var curyear = date_year.format("yyyy");
+
+
   var myChart1 = echarts.init(document.getElementById('main1'));
   var myChart2 = echarts.init(document.getElementById('main2'));
   var myChart3 = echarts.init(document.getElementById('main3'));
@@ -203,7 +233,7 @@
   //人均送单量分布图
   option1 = {
     title: [ {
-      text: '2018年人均日送单量分布图',
+      text: curyear+'年人均日送单量分布图',
       x: 'center',
       top: '20px',
       textStyle: {
@@ -215,7 +245,7 @@
       formatter: "{b} : {c} ({d}%)"
     },
     series: [{
-      name: '2018年人均日送单量分布图',
+      name: curyear+'年人均日送单量分布图',
       type: 'pie',
       radius: '65%',
 //      center: ['50%', '55%'],
@@ -258,12 +288,12 @@
       '#e59f1d',
     ],
   };
-  var avgSendOrderArray = [0,0,0,0,0,0,0,0,0,0,0,0];
-var array1 = xData_month;
+  var avgSendOrderArray = [];
+var array1 = new Array();
   //人均月送单量
   option2 = {
     title: [ {
-      text: '2018年人均月送单量走势',
+      text: curyear+'年人均月送单量走势',
       left: '3%',
       top: '2%',
     }],
@@ -285,14 +315,14 @@ var array1 = xData_month;
       },
     grid: {
       left: '5%',
-      right: '10%',
+      right: '12%',
       bottom: '13%',
       top:'20%',
       containLabel: true
     },
     dataZoom: {
       show: true,
-      start: 0,
+      start: 50,
       end: 100,
       maxSpan: 100
       // zoomLock: true
@@ -338,7 +368,7 @@ var array1 = xData_month;
   //城市人均送单量
   option3 = {
     title: [ {
-      text: '2018年各城市人均日送单量',
+      text: curyear+'年各城市人均日送单量',
       left: '3%',
       top: '0',
     }],
@@ -354,7 +384,7 @@ var array1 = xData_month;
           data: ['送单量']
       },
     grid: {
-      left: '3%',
+      left: '5%',
       right: '4%',
       bottom: '3%',
       top: '20%',
@@ -442,13 +472,13 @@ var array1 = xData_month;
       data: empDiscribtionArray
     }]
   };
- var dataarray1 = [0,0,0,0,0,0,0,0,0,0,0,0];
-  var dataarray2 = [0,0,0,0,0,0,0,0,0,0,0,0];
-  var dataarray3 = [0,0,0,0,0,0,0,0,0,0,0,0];
+ var dataarray1 = [];
+  var dataarray2 = [];
+  var dataarray3 = [];
   //满编门店占比
   option5 = {
     title: [{
-      text: '2018年满编、缺编月店走势',
+      text: curyear+'年满编、缺编月店走势',
       x: 'center',
       top: '2%',
       textBaseline: 'middle',
@@ -468,8 +498,8 @@ var array1 = xData_month;
     },
     grid: {
       left: '5%',
-      right: '8%',
-      bottom: '5%',
+      right: '12%',
+      bottom: '13%',
       top: '20%',
       containLabel: true
     },
@@ -478,6 +508,13 @@ var array1 = xData_month;
       top:'6%',
       data: ['满编', '超编','缺编',]
     },
+      dataZoom: {
+          show: true,
+          start: 50,
+          end: 100,
+          maxSpan: 100
+          // zoomLock: true
+      },
     xAxis: [
       {
         type: 'category',
@@ -494,7 +531,7 @@ var array1 = xData_month;
           }
         },
         axisTick: {show: false},
-        data: xData_month
+        data: array1
       }],
     yAxis: [{
       type: 'value',
@@ -778,6 +815,7 @@ var array1 = xData_month;
 <script>
 var screenlogin=getUrlParamByKey("su");
 $(function(){
+    $("#year_calss").html(curyear);
     loginShow();
     $("#showattention").on("mouseover",function(event){
         $("#attention").show();
@@ -929,12 +967,15 @@ function showEmpAvgSendOrderInfo(){
             var resultJson = JSON.parse(data.data);
             var avgSendOrderMonthTrend = resultJson.avgSendOrderMonthTrend;
             if(avgSendOrderMonthTrend != null && avgSendOrderMonthTrend.length >0){
+                var montharray = new Array();
                 for(var i = 0; i <avgSendOrderMonthTrend.length; i++){
                     var avgSendOrder = avgSendOrderMonthTrend[i];
-                    var index = jQuery.inArray('2018-'+parseInt(avgSendOrder.month),array1);
-                    avgSendOrderArray[index] = avgSendOrder.avgcount;
+                    montharray.push(avgSendOrder.month)
+                    avgSendOrderArray.push(avgSendOrder.avgcount);
                 }
             }
+            option2.xAxis[0]["data"] = montharray;
+            option2.series[0].data=avgSendOrderArray;
             myChart2.setOption(option2);
         }
     });
@@ -980,31 +1021,30 @@ function showEmpAvgAtAnalysisInfo(){
             var empAtAnalysisByMonthFull =  resultJson.empAtAnalysisByMonthFull;
             var empAtAnalysisByMonthBeloy =  resultJson.empAtAnalysisByMonthBeloy;
             var empAtAnalysisByMonthLose =  resultJson.empAtAnalysisByMonthLose;
+            var montharray = new Array();
             if(empAtAnalysisByMonthLose != null && empAtAnalysisByMonthLose.length >0){
                 for(var i = 0; i<empAtAnalysisByMonthLose.length; i++){
                     var empAtAnalysisByMonth = empAtAnalysisByMonthLose[i];
+                    montharray.push(empAtAnalysisByMonth.work_month);
                     var count = empAtAnalysisByMonth.count;
-                    var work_month = parseInt(empAtAnalysisByMonth.work_month);
-                    dataarray3[work_month-1] = count ;
+                    dataarray3.push(count);
                 }
             }
             if(empAtAnalysisByMonthFull != null && empAtAnalysisByMonthFull.length >0){
                 for(var i = 0; i<empAtAnalysisByMonthFull.length; i++){
                     var empAtAnalysisByMonth = empAtAnalysisByMonthFull[i];
                     var count = empAtAnalysisByMonth.count;
-                    var work_month = parseInt(empAtAnalysisByMonth.work_month);
-                    dataarray1[work_month-1] = count;
+                    dataarray1.push(count);
                 }
             }
             if(empAtAnalysisByMonthBeloy != null && empAtAnalysisByMonthBeloy.length >0){
                 for(var i = 0; i<empAtAnalysisByMonthBeloy.length; i++){
                     var empAtAnalysisByMonth = empAtAnalysisByMonthBeloy[i];
                     var count = empAtAnalysisByMonth.count;
-                    var work_month = parseInt(empAtAnalysisByMonth.work_month);
-                    dataarray2[work_month-1] = count;
+                    dataarray2.push(count);
                 }
             }
-
+            option5.xAxis[0]["data"] = montharray;
             myChart5.setOption(option5);
         }
     });
