@@ -1,11 +1,15 @@
 package com.cnpc.pms.personal.util;
 import org.apache.log4j.Logger;
 
+import com.cnpc.pms.base.util.PropertiesUtil;
+
 import javax.xml.soap.*;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
@@ -72,6 +76,11 @@ public class SearchDataServiceUtils {
      * @return response
      */
     private String invokeWebservice(String url, String soapStr) {
+    	
+    	String proxydomain = PropertiesUtil.getValue("proxy.domain");
+        int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+        String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+    	
         String xml = "";
         SOAPConnection con = null;
         try {
@@ -92,7 +101,16 @@ public class SearchDataServiceUtils {
                 @Override
                 protected URLConnection openConnection(URL url) throws IOException {
                     URL target = new URL(url.toString());
-                    URLConnection connection = target.openConnection();
+                    
+    	            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxydomain, proxyport));
+    	            URLConnection connection = null;
+    	            if("off".equals(proxySwitch)){
+    	            	connection = target.openConnection();
+                    }else if("on".equals(proxySwitch)){
+                    	connection = target.openConnection(proxy);
+                    }
+    	            
+                    //URLConnection connection = target.openConnection();
                     // Connection settings
                     connection.setConnectTimeout(3 * 1000);
                     connection.setReadTimeout(30 * 1000);
