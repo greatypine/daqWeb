@@ -4,9 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.http.impl.client.HttpClients;
+
+import com.cnpc.pms.base.util.PropertiesUtil;
 import com.gexin.fastjson.JSONArray;
 import com.gexin.fastjson.JSONObject;
 
@@ -54,7 +59,19 @@ public class ShortUrlUtils {
 	        String result = "";
 	        try {
 	            URL realUrl = new URL(url);
-	            URLConnection conn = realUrl.openConnection();
+	            
+	            String proxydomain = PropertiesUtil.getValue("proxy.domain");
+	            int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+	            String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+	            URLConnection conn =null;
+	            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxydomain, proxyport));
+
+	            if("off".equals(proxySwitch)){
+	            	conn = realUrl.openConnection();
+                }else if("on".equals(proxySwitch)){
+                	conn = realUrl.openConnection(proxy);
+                }
+	            
 	            conn.setRequestProperty("accept", "*/*");
 	            conn.setRequestProperty("connection", "Keep-Alive");
 	            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
