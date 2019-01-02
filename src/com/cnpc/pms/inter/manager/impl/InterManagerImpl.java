@@ -4095,23 +4095,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			//根据洗的数据 取得发送人(根据频道，查询频道负责人) 如果存在 则发送 如果不存在 则不发送 
 			
 			//查询所有的品类
-			//List<Map<String,Object>> channelList = ImpalaUtil.executeGuoan("SELECT DISTINCT category_name,linkman_phone FROM gabase.b_inventory_warning where store_white='front' and create_time='"+yesterdayDate+"' and linkman_phone is not null;");
-			
-			//--------测试--------------
-			List<Map<String,Object>> channelList = new ArrayList<Map<String,Object>>();
-			Map<String,Object> testmap1 = new HashMap<String,Object>();
-			testmap1.put("linkman_phone", "13811368008");
-			testmap1.put("category_name", "生鲜");
-			Map<String,Object> testmap2 = new HashMap<String,Object>();
-			testmap2.put("linkman_phone", "13051745039");
-			testmap2.put("category_name", "果蔬");
-			Map<String,Object> testmap3 = new HashMap<String,Object>();
-			testmap3.put("linkman_phone", "13552926097");
-			testmap3.put("category_name", "日用百货");
-			channelList.add(testmap1);
-			channelList.add(testmap2);
-			channelList.add(testmap3);
-			//----------------------
+			List<Map<String,Object>> channelList = ImpalaUtil.executeGuoan("SELECT DISTINCT category_name,linkman_phone FROM gabase.b_inventory_warning where store_white='front' and create_time='"+yesterdayDate+"' and linkman_phone is not null;");
 			
 			
 			if(channelList!=null&&channelList.size()>0) {
