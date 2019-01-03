@@ -274,10 +274,6 @@
     var now_date =cur_date.getDate();
     var max_month = "";
     var use_month = max_year+"-"+(now_month+1)+"-"+now_date;
-    if(now_month==0){
-        max_year =cur_date.getFullYear()-1;
-        max_month = "12";
-    }
     if(now_month>0&&now_month<10){
         max_month = "0"+now_month;
         if(now_month<9){
@@ -286,7 +282,15 @@
             now_month = now_month+1;
         }
     }else{
-        max_month = now_month;
+        if(now_month==0){
+            max_year =cur_date.getFullYear()-1;
+            max_month = "12";
+            now_month = now_month+1;
+        }else{
+            max_month = now_month;
+            now_month = now_month+1;
+        }
+
     }
     var year_month = max_year+"-"+max_month;
     var max_date = "";
@@ -301,9 +305,14 @@
         }else{
             now_date=31;
         }
-        max_date = max_year+"-"+max_month1 +"-"+now_date;
+        if(max_month=="12"){
+            max_date = max_year+"-"+now_month +"-"+now_date;
+
+        }else{
+            max_date = cur_date.getFullYear()+"-"+now_month +"-"+now_date;
+        }
     }else{
-        max_date = max_year+"-"+now_month +"-"+(now_date-1);
+        max_date = cur_date.getFullYear()+"-"+now_month +"-"+(now_date-1);
     }
     laydate.render({//月份控件
         elem:'#be_date1',
