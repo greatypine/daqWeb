@@ -4042,7 +4042,7 @@ var initchart2 = function(){
        height: '30',
        xAxisIndex: [0],
        bottom: '30',
-       start: '80',
+       start: '50',
        end: '100',
        handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
        handleSize: '110%',
@@ -4198,7 +4198,7 @@ var initchart4 = function(){
       height: '30',
       xAxisIndex: [0],
       bottom: '30',
-      start: '0',
+      start: '50',
       end: '100',
       handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
       handleSize: '110%',
@@ -4894,126 +4894,133 @@ function oneyearorsixweek(){
 		var selfStoreArray = [0,0,0,0,0,0];
 		doManager("storeManager","finyStoreCountOfCity",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
-				var jsonData = $.fromJSON(data.data);
-				//合作店近六周
-				var cooperativeStore=jsonData.cooperativeStore;
-				//自营店近六周
-				var selfStore = jsonData.selfStore;
-				if(selfStore.length>0){
-					var weektimeArray = new Array();
-					var vauleParam = {};
-					for(var z = 0; z < selfStore.length; z++){
-						var self_store =  selfStore[z];
-						var weektime = self_store.week_time;
-						var storeCount = self_store.count;					
-						var index = jQuery.inArray(weektime,six_week_data_array);
-						selfStoreArray[index] = storeCount;
-					}
-				}
-				option12.series[0].data=selfStoreArray;
-				if(cooperativeStore.length>0){
-					var weektimeArray = new Array();
-					var vauleParam = {};
-					for(var z = 0; z < cooperativeStore.length; z++){
-						var cooperative_store =  cooperativeStore[z];
-						var weektime = cooperative_store.week_time;
-						var storeCount = cooperative_store.count;
-						var index = jQuery.inArray(weektime,six_week_data_array);
-						cooperativeStoreArray[index] = storeCount;
-					}
-				}
-				option12.series[1].data=cooperativeStoreArray;
-				
-				var preString = "";
-				var nowString = "";
-				//全国门店的数据2017
-				var cooperative_task2017 = 0,cooperative2017 = 0, self_task2017 = 0,self2017 = 0,after2017 = 0;
-				var cooperative_task2018 = 0,cooperative2018 = 0, self_task2018 = 0,self2018 = 0,after2018 = 0;
-				//当年内门店拓展进度
-				var storeNatureOfCityByYear = jsonData.storeNatureByYear;
-				for(var i = 0; i < storeNatureOfCityByYear.length; i++){
-					var storeNatureByYear = storeNatureOfCityByYear[i];
-					var cityname = storeNatureByYear.cityname;
+                var jsonData = $.fromJSON(data.data);
+                //合作店近六周
+                var cooperativeStore = jsonData.cooperativeStore;
+                //自营店近六周
+                var selfStore = jsonData.selfStore;
+                if (selfStore.length > 0) {
+                    var weektimeArray = new Array();
+                    var vauleParam = {};
+                    for (var z = 0; z < selfStore.length; z++) {
+                        var self_store = selfStore[z];
+                        var weektime = self_store.week_time;
+                        var storeCount = self_store.count;
+                        var index = jQuery.inArray(weektime, six_week_data_array);
+                        selfStoreArray[index] = storeCount;
+                    }
+                }
+                option12.series[0].data = selfStoreArray;
+                if (cooperativeStore.length > 0) {
+                    var weektimeArray = new Array();
+                    var vauleParam = {};
+                    for (var z = 0; z < cooperativeStore.length; z++) {
+                        var cooperative_store = cooperativeStore[z];
+                        var weektime = cooperative_store.week_time;
+                        var storeCount = cooperative_store.count;
+                        var index = jQuery.inArray(weektime, six_week_data_array);
+                        cooperativeStoreArray[index] = storeCount;
+                    }
+                }
+                option12.series[1].data = cooperativeStoreArray;
 
-					//合作店
-					var cooperative_complete = storeNatureByYear.cooperative_complete;
-					//包含展示合作店目标值
-					var cooperative_task_content = 0;
-					var cooperative_task = storeNatureByYear.cooperative_task;
-					cooperative_task_content = cooperative_task - cooperative_complete;
-					if(cooperative_task_content < 0){
-						cooperative_obj[cityname]=cooperative_task_content;
-						cooperative_task_content = 0;				
-					}
-					var cooperative_rate = 0;
-					if(cooperative_task > 0){
-						cooperative_rate = (cooperative_complete/cooperative_task)*100;
-					}
-					//if(cooperative_complete != 0){
+                var preString = "";
+                var nowString = "";
+                //全国门店的数据2017
+                var cooperative_task2017 = 0, cooperative2017 = 0, self_task2017 = 0, self2017 = 0, after2017 = 0;
+                var cooperative_task2018 = 0, cooperative2018 = 0, self_task2018 = 0, self2018 = 0, after2018 = 0;
+                //当年内门店拓展进度
+                var storeNatureOfCityByYear = jsonData.storeNatureByYear;
+				if(storeNatureOfCityByYear != null && storeNatureOfCityByYear.length >0){
+					for (var i = 0; i < storeNatureOfCityByYear.length; i++) {
+						var storeNatureByYear = storeNatureOfCityByYear[i];
+						var cityname = storeNatureByYear.cityname;
+
+						//合作店
+						var cooperative_complete = storeNatureByYear.cooperative_complete;
+						//包含展示合作店目标值
+						var cooperative_task_content = 0;
+						var cooperative_task = storeNatureByYear.cooperative_task;
+						cooperative_task_content = cooperative_task - cooperative_complete;
+						if (cooperative_task_content < 0) {
+							cooperative_obj[cityname] = cooperative_task_content;
+							cooperative_task_content = 0;
+						}
+						var cooperative_rate = 0;
+						if (cooperative_task > 0) {
+							cooperative_rate = (cooperative_complete / cooperative_task) * 100;
+						}
+						//if(cooperative_complete != 0){
 						citynameArrayx2.push(cityname);
 						cooperative_completeArray.push(cooperative_complete);
 						cooperative_taskArray.push(cooperative_task_content);
 						cooperative_rateArray.push(cooperative_rate.toFixed(2));
-					//}
-					//自营店
-					var self_complete = storeNatureByYear.self_complete;
-					
-					//包含展示自营店目标值
-					var self_support_task_content = 0;
-					var self_support_task = storeNatureByYear.self_support_task;
-					self_support_task_content = self_support_task-self_complete;
-					if(self_support_task_content < 0){
-						self_obj[cityname]=self_support_task_content;
-						self_support_task_content = 0;				
-					}
-					var self_rate = 0;
-					if(self_support_task > 0){
-						self_rate = (self_complete/self_support_task)*100;
-					}
-					//if(self_complete != 0){
+						//}
+						//自营店
+						var self_complete = storeNatureByYear.self_complete;
+
+						//包含展示自营店目标值
+						var self_support_task_content = 0;
+						var self_support_task = storeNatureByYear.self_support_task;
+						self_support_task_content = self_support_task - self_complete;
+						if (self_support_task_content < 0) {
+							self_obj[cityname] = self_support_task_content;
+							self_support_task_content = 0;
+						}
+						var self_rate = 0;
+						if (self_support_task > 0) {
+							self_rate = (self_complete / self_support_task) * 100;
+						}
+						//if(self_complete != 0){
 						self_completeArray.push(self_complete);
 						citynameArrayx1.push(cityname);
 						self_support_taskArry.push(self_support_task_content);
 						self_rateArray.push(self_rate.toFixed(2));
-					//}
-					if(storeNatureByYear.create_year == '2017'){
-						cooperative_task2017 += cooperative_task;
-						cooperative2017 += cooperative_complete;
-						self2017 += self_complete;
-						self_task2017 += self_support_task;
-						preString += '<tr><td title="'+cityname+'">'+cityname+'</td><td class="text-red">'+self_support_task+'</td><td>'+self_complete+'</td><td>'+self_rate.toFixed(2)+'%</td>'
-								+'<td class="text-red">'+cooperative_task+'</td><td>'+cooperative_complete+'</td><td>'+cooperative_rate.toFixed(2)+'%</td></tr>';
-						
-					}else{
-						cooperative_task2018 += cooperative_task;
-						cooperative2018 += cooperative_complete;
-						self2018 += self_complete;
-						self_task2018 += self_support_task;
-						nowString += '<tr><td title="'+cityname+'">'+cityname+'</td><td class="text-red">'+self_support_task+'</td><td>'+self_complete+'</td><td>'+self_rate.toFixed(2)+'%</td>'
-								+'<td class="text-red">'+cooperative_task+'</td><td>'+cooperative_complete+'</td><td>'+cooperative_rate.toFixed(2)+'%</td></tr>';
+						//}
+						if (storeNatureByYear.create_year == '2017') {
+							cooperative_task2017 += cooperative_task;
+							cooperative2017 += cooperative_complete;
+							self2017 += self_complete;
+							self_task2017 += self_support_task;
+							preString += '<tr><td title="' + cityname + '">' + cityname + '</td><td class="text-red">' + self_support_task + '</td><td>' + self_complete + '</td><td>' + self_rate.toFixed(2) + '%</td>'
+								+ '<td class="text-red">' + cooperative_task + '</td><td>' + cooperative_complete + '</td><td>' + cooperative_rate.toFixed(2) + '%</td></tr>';
+
+						} else {
+							cooperative_task2018 += cooperative_task;
+							cooperative2018 += cooperative_complete;
+							self2018 += self_complete;
+							self_task2018 += self_support_task;
+							nowString += '<tr><td title="' + cityname + '">' + cityname + '</td><td class="text-red">' + self_support_task + '</td><td>' + self_complete + '</td><td>' + self_rate.toFixed(2) + '%</td>'
+								+ '<td class="text-red">' + cooperative_task + '</td><td>' + cooperative_complete + '</td><td>' + cooperative_rate.toFixed(2) + '%</td></tr>';
+						}
+						if (i == storeNatureOfCityByYear.length - 1) {
+							var rate1_2017 = 0;
+							var rate2_2017 = 0;
+							var rate1_2018 = 0;
+							var rate2_2018 = 0;
+							if (self_task2017 != 0) {
+								rate1_2017 = (self2017 / self_task2017) * 100
+							}
+							if (cooperative_task2017 != 0) {
+								rate2_2017 = (cooperative2017 / cooperative_task2017) * 100
+							}
+							if (self_task2018 != 0) {
+								rate1_2018 = (self2018 / self_task2018) * 100
+							}
+							if (cooperative_task2018 != 0) {
+								rate2_2018 = (cooperative2018 / cooperative_task2018) * 100
+							}
+							preString += '<tr class="text-red"><td>全国</td><td>' + self_task2017 + '</td><td>' + self2017 + '</td><td>' + rate1_2017.toFixed(2) + '%</td>'
+								+ '<td class="text-red">' + cooperative_task2017 + '</td><td>' + cooperative2017 + '</td><td>' + rate2_2017.toFixed(2) + '%</td></tr>';
+							nowString += '<tr class="text-red"><td>全国</td><td>' + self_task2018 + '</td><td>' + self2018 + '</td><td>' + rate1_2018.toFixed(2) + '%</td>'
+								+ '<td class="text-red">' + cooperative_task2018 + '</td><td>' + cooperative2018 + '</td><td>' + rate2_2018.toFixed(2) + '%</td></tr>';
+						}
 					}
-					if(i == storeNatureOfCityByYear.length - 1 ){
-						var rate1_2017 = 0;
-						var rate2_2017 = 0;
-						var rate1_2018 = 0;
-						var rate2_2018 = 0;
-						if(self_task2017 != 0){
-							rate1_2017 = (self2017/self_task2017)*100
-						}
-						if(cooperative_task2017 != 0){
-							rate2_2017 = (cooperative2017/cooperative_task2017)*100
-						}
-						if(self_task2018 != 0){
-							rate1_2018 = (self2018/self_task2018)*100
-						}
-						if(cooperative_task2018 != 0){
-							rate2_2018 = (cooperative2018/cooperative_task2018)*100
-						}
-						preString += '<tr class="text-red"><td>全国</td><td>'+self_task2017+'</td><td>'+self2017+'</td><td>'+rate1_2017.toFixed(2)+'%</td>'
-								+'<td class="text-red">'+cooperative_task2017+'</td><td>'+cooperative2017+'</td><td>'+rate2_2017.toFixed(2)+'%</td></tr>';
-						nowString += '<tr class="text-red"><td>全国</td><td>'+self_task2018+'</td><td>'+self2018+'</td><td>'+rate1_2018.toFixed(2)+'%</td>'
-								+'<td class="text-red">'+cooperative_task2018+'</td><td>'+cooperative2018+'</td><td>'+rate2_2018.toFixed(2)+'%</td></tr>';
-					}
+				}else{
+					$("#main13").hide();
+                    $("#main14").hide();
+                    $("#penstoreshow").hide();
+                    $("#showview_1").hide();
 				}
 				
 				option13.series[0].data=self_rateArray;
@@ -5065,7 +5072,8 @@ function oneyearorsixweek(){
 						throughQuantityArray.push(throughQuantity);
 					}
 				}else{
-					
+					$("#main4").hide();
+                    $("#main5").hide();
 				}
 				option4.series[0].data=throughQuantityArray;
 				option4.series[1].data=contractQuantityArray;
@@ -6185,16 +6193,15 @@ function oneyearorsixweek(){
 				function(data,textStatus,XmlHttpRequest){
 			if(data.result){
 				var cityDataArray = new Array();
-				var month = new Date().getMonth()+1;
 				var datetime = new Date().getDate();
 				var monthArray = getmonthArray();
 				var yearmonth = new Date().format("yyyyMM");
 				var jsonData = $.fromJSON(data.data).sixMonthCustomer;
 				var appendstr = "";
-				$("#month_1").html(month-5);$("#month_2").html(month-4);$("#month_3").html(month-3);$("#month_4").html(month-2);$("#month_5").html(month-1);$("#month_6").html(month);
-				$("#month_6_1").html(month);$("#one").html(month-3+'月第'+Math.ceil(datetime/7)+'周');$("#two").html(month-2+'月第'+Math.ceil(datetime/7)+'周');$("#three").html(month-1+'月第'+Math.ceil(datetime/7)+'周');
-				$("#four").html(month+'月第'+Math.ceil(datetime/7)+'周');
-				var xdata = [month-3+'月第'+Math.ceil(datetime/7)+'周',month-2+'月第'+Math.ceil(datetime/7)+'周',month-1+'月第'+Math.ceil(datetime/7)+'周',month+'月第'+Math.ceil(datetime/7)+'周'];
+				$("#month_1").html(monthArray[0]);$("#month_2").html(monthArray[1]);$("#month_3").html(monthArray[2]);$("#month_4").html(monthArray[3]);$("#month_5").html(monthArray[4]);$("#month_6").html(monthArray[5]);
+				$("#month_6_1").html(monthArray[5]);$("#one").html(monthArray[2]+'月第'+Math.ceil(datetime/7)+'周');$("#two").html(monthArray[3]+'月第'+Math.ceil(datetime/7)+'周');$("#three").html(monthArray[4]+'月第'+Math.ceil(datetime/7)+'周');
+				$("#four").html(monthArray[5]+'月第'+Math.ceil(datetime/7)+'周');
+				var xdata = [monthArray[3]+'月第'+Math.ceil(datetime/7)+'周',monthArray[3]+'月第'+Math.ceil(datetime/7)+'周',monthArray[4]+'月第'+Math.ceil(datetime/7)+'周',monthArray[5]+'月第'+Math.ceil(datetime/7)+'周'];
 				ydate = [];
 				if(jsonData != null &&jsonData.length >0){
 					for (var i = 0; i <jsonData.length; i++){
@@ -6263,22 +6270,22 @@ function oneyearorsixweek(){
 		var monthArray = new Array();
 		var date1 = new Date();
 		date1.setMonth(date1.getMonth()-5);
-		var month1 = date1.format("yyyyMM");
+		var month1 = date1.format("yyyy-MM");
 		var date2 = new Date();
 		date2.setMonth(date2.getMonth()-4);
-		var month2 = date2.format("yyyyMM");
+		var month2 = date2.format("yyyy-MM");
 		var date3 = new Date();
 		date3.setMonth(date3.getMonth()-3);
-		var month3 = date3.format("yyyyMM");
+		var month3 = date3.format("yyyy-MM");
 		var date4 = new Date();
 		date4.setMonth(date4.getMonth()-2);
-		var month4 = date4.format("yyyyMM");
+		var month4 = date4.format("yyyy-MM");
 		var date5 = new Date();
 		date5.setMonth(date5.getMonth()-1);
-		var month5 = date5.format("yyyyMM");
+		var month5 = date5.format("yyyy-MM");
 		var date6 = new Date();
 		date6.setMonth(date6.getMonth());
-		var month6 = date6.format("yyyyMM");
+		var month6 = date6.format("yyyy-MM");
 		monthArray.push(month1+"");
 		monthArray.push(month2+"");
 		monthArray.push(month3+"");
