@@ -3438,18 +3438,30 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			String appid = PropertiesUtil.getValue("wx.appid");
 			String secret= PropertiesUtil.getValue("wx.secret");
 			String grant_type=PropertiesUtil.getValue("wx.grant_type");
-			String proxyset = PropertiesUtil.getValue("iproxy.set");
+			/*String proxyset = PropertiesUtil.getValue("iproxy.set");*/
+			String proxydomain = PropertiesUtil.getValue("proxy.domain");
+            int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+            String proxySwitch = PropertiesUtil.getValue("proxy.switch");
+            
 			String resultString = null;
 			try {
-				HttpHost proxy = new HttpHost("10.0.1.11", 3128, "http");
-				RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
+				 HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
+                 RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
 				/** 上线时，添加代理设置 **/
 				CloseableHttpClient httpclient = null;
-				if(proxyset!=null&&proxyset.equals("ON")){
+				
+				if("off".equals(proxySwitch)){
+					httpclient = HttpClients.createDefault();
+                }else if("on".equals(proxySwitch)){
+					httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
+
+                }
+				
+				/*if(proxyset!=null&&proxyset.equals("ON")){
 					httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
 				}else{
 					httpclient = HttpClients.createDefault();
-				}
+				}*/
 				HttpGet httpGet = new HttpGet(String.format(url, new Object[]{appid,secret,code,grant_type}));
 				CloseableHttpResponse response = httpclient.execute(httpGet);
 				resultString = EntityUtils.toString(response.getEntity(), "utf-8");
