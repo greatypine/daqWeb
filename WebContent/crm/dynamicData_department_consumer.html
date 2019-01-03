@@ -284,27 +284,36 @@
 var cur_date = new Date();
 var year = cur_date.getFullYear();
 var month = cur_date.getMonth();
+var lastMonth = null;
+var curMonth = null;
 if(month==0){
+    curMonth = year + "-01";
     month=12;
     year=year-1;
-}
-if (month < 10) {
-    month = "0" + month;
-}
-var firstDay = year + "-" + month ;//上个月的第一天
-month++;
-var endDay = year + "-" + month ;//这个月的第一天
+    lastMonth = year + "-" + month ;
+}else if (month <=9&&month>0) {
+    curMonth = year + "-0"+(month+1);
 
-	laydate.render({//月份控件
-		elem:'#be_date1',
-		value:endDay,
-		type:"month",
-		btns: ['confirm','now'],
-		theme: '#11214e',
-		min: firstDay+"-01",
-		max:endDay
-		
-	});
+    lastMonth = year + "-0" + month;
+
+}else if (month>9) {
+    curMonth = year +"-"+(month+1);
+
+    lastMonth = year + "-" +month;
+
+}
+
+
+laydate.render({//月份控件
+    elem:'#be_date1',
+    value:new Date(),
+    type:"month",
+    btns: ['confirm','now'],
+    theme: '#11214e',
+    min: lastMonth+"-01",
+    max:curMonth
+
+});
 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
 	var initCity = cityId;
 	var cityName = decode64(getUrlParamByKey("cn"));//城市名称
