@@ -608,4 +608,6 @@ public interface InterManager extends IManager {
   	
   	public Result sendWarningMessageDz();
   	
+  	public Result queryWarningListByPhone(String phone,String platformid);
+  	
 }

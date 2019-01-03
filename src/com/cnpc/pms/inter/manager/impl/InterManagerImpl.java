@@ -19,9 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import javax.naming.InsufficientResourcesException;
-import javax.swing.Spring;
-
 import com.cnpc.pms.personal.dao.*;
 
 import org.apache.http.HttpHost;
@@ -131,9 +128,7 @@ import com.cnpc.pms.utils.ShortUrlUtils;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.ImpalaUtil;
 import com.cnpc.pms.utils.MD5Utils;
-import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.ValueUtil;
-import com.schooner.MemCached.SchoonerSockIOPool.UDPSockIO;
 
 /**
  * App接口实现类interDao
@@ -4440,5 +4435,30 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				result.setMessage(CodeEnum.error.getDescription());
 			}
 	        return result;
+		}
+		
+		
+		/**
+		 * 根据电话 门店ID查询所有的预警信息短连接 
+		 * @param phone
+		 * @param platformid
+		 * @return
+		 */
+		@Override
+		public Result queryWarningListByPhone(String phone,String platformid) {
+			Result result = new Result();
+			try {
+	    		SendShortUrlManager sendShortUrlManager = (SendShortUrlManager) SpringHelper.getBean("sendShortUrlManager");
+	       	 	IFilter iFilter =FilterFactory.getSimpleFilter(" phone='"+phone+"' and platformid='"+platformid+"' ");
+	       	    List<SendShortUrl> sendShortUrls = (List<SendShortUrl>) sendShortUrlManager.getList(iFilter);
+    			result.setCode(CodeEnum.success.getValue());
+				result.setMessage(CodeEnum.success.getDescription());
+	    		result.setData(sendShortUrls);
+	    	} catch (Exception e) {
+				e.printStackTrace();
+				result.setCode(CodeEnum.error.getValue());
+				result.setMessage(CodeEnum.error.getDescription());
+			}
+			return result;
 		}
 }
