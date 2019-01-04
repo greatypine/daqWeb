@@ -68,7 +68,7 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 					+ userProfile.getOpen_card_time_end() + " 23:59:59')";
 		}
 		if(StringUtils.isNotEmpty(userProfile.getMt_flag())){
-			sql=sql+" AND dum.member_type ='"+userProfile.getMt_flag()+"' ";
+			sql=sql+" AND (dum.member_type = 'associator_start_2' or dum.member_type = 'yearCard' or dum.member_type = 'yearCard-19')";
 		}
 		if(StringUtils.isNotEmpty(userProfile.getTrading_price_min())){
 			sql=sql+" AND dup.trading_price_sum >="+userProfile.getTrading_price_min();
