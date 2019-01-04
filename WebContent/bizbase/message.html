@@ -159,6 +159,9 @@
 
 				$(jsonData.data).each(function(i,obj){
 					var storename=obj.store_name;
+					var storecode=obj.storecode;
+					var cgcode=obj.cgcode;
+					var barcode=obj.barcode;
 					var name=obj.content_name;
 					var number=obj.pro_number;
 					var warnnum = obj.warn_num;
@@ -167,6 +170,7 @@
 					$customerlist.append('<li class="list_content" style="margin-bottom: 5px;"></li>');
 					$li = $customerlist.find("li:last");
 					$li.append('<div class="list_item">' + '<div class="title" style="width:45%;"><strong>门店： '+storename+'</strong></div>' + '<div class="content juzhong" id="callPhone" style="margin-left:10px;" ><h5 id="phone">商品名：'+name+'</h5></div></div>');
+					$li.append('<div class="list_item">' + '<div class="title" style="width:45%;">商品编码：'+cgcode+'</div>' + '<div class="content" style="margin-left:10px;">条形码：'+barcode+'</div></div>');
 					$li.append('<div class="list_item">' + '<div class="title" style="width:45%;">可销售数量：'+number+'</div>' + '<div class="content" style="margin-left:10px;">参考补充：'+warnnum+'</div></div>');
 					
 					//showHtml+="["+storename+"] 产品:"+name+"  ，可销售数量："+number+" 参考补充数量："+ warnnum +" ,请及时查看！<br> ";
