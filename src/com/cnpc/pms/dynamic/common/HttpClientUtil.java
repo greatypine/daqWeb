@@ -53,7 +53,7 @@ public class HttpClientUtil {
 			httpPost.setEntity(new StringEntity(param.toString(), Charset.forName("UTF-8")));
 			if("on".equals(proxySwitch)){
 
-				HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
+				HttpHost proxy = new HttpHost(proxydomain, proxyport, "https");
 				//把代理设置到请求配置
 				RequestConfig defaultRequestConfig = RequestConfig.custom().setProxy(proxy).build();
 				httpPost.setConfig(defaultRequestConfig);
@@ -176,7 +176,7 @@ public class HttpClientUtil {
 
 			if("on".equals(proxySwitch)){
 
-				HttpHost proxy = new HttpHost(proxydomain, proxyport, "http");
+				HttpHost proxy = new HttpHost(proxydomain, proxyport, "https");
 				//把代理设置到请求配置
 				RequestConfig defaultRequestConfig = RequestConfig.custom().setProxy(proxy).build();
 				httpPost.setConfig(defaultRequestConfig);
@@ -217,12 +217,22 @@ public class HttpClientUtil {
 		HttpClient client = null;
 		HttpPost httpPost  = null;
 		String result="";
+		String proxydomain = PropertiesUtil.getValue("proxy.domain");
+		int proxyport = Integer.parseInt(PropertiesUtil.getValue("proxy.port"));
+		String proxySwitch = PropertiesUtil.getValue("proxy.switch");
 		try {
 			client = new SSLClient();
 			httpPost = new HttpPost(url);
 			httpPost.addHeader("Content-type","application/x-www-form-urlencoded");  
 			//设置参数  
-			httpPost.setEntity(new StringEntity(param.toString(), Charset.forName("UTF-8")));  
+			httpPost.setEntity(new StringEntity(param.toString(), Charset.forName("UTF-8")));
+			if("on".equals(proxySwitch)){
+
+				HttpHost proxy = new HttpHost(proxydomain, proxyport, "https");
+				//把代理设置到请求配置
+				RequestConfig defaultRequestConfig = RequestConfig.custom().setProxy(proxy).build();
+				httpPost.setConfig(defaultRequestConfig);
+			}
 	       /* List<NameValuePair> list = new ArrayList<NameValuePair>();  
 	        Iterator iterator = param.entrySet().iterator();  
 	        while(iterator.hasNext()){  
