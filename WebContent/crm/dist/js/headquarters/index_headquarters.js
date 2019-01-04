@@ -6884,21 +6884,21 @@ function createTableProfitData(resultJson,profit_store_num){
 	  			console.log(cityName);
 	            if(profit_store_num=='profit_store_1'){//30
 	            	if(target==0){
-						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
 					}else if(target==1){
-						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
 					}
 	            }else if(profit_store_num=='profit_store_5'){//昨天
 	            	if(target==0){
-						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
 					}else if(target==1){
-						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
 					}
 	            }else if(profit_store_num=='profit_store_3'){//7
 	            	if(target==0){
-						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
 					}else if(target==1){
-						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
 					}
 	            }
     			var th_td_more = $('<td colspan="5"><a href="#" onclick="openProfitUrl(\''+profit_store_url+'\')">查看更多</a></td>');
