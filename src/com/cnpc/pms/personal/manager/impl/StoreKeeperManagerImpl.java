@@ -265,6 +265,19 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 				user.setDisabledFlag(0);
 				preSaveObject(user);
 				userManager.saveObject(user);
+				
+				
+				
+				//同步sso单点--start
+		    	try {
+		    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+		        	dynamicManager.saveOrUpdateSsoUser(user);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		    	//同步sso单点--end
+				
+				
 			}
 			return sKeeper;
 		} else {
@@ -295,6 +308,19 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 					user.setDisabledFlag(0);
 					preSaveObject(user);
 					userManager.saveObject(user);
+					
+					
+					
+					//同步sso单点--start
+			    	try {
+			    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+			        	dynamicManager.saveOrUpdateSsoUser(user);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+			    	//同步sso单点--end
+			    	
+			    	
 				}
 				return sKeeper;
 			}
@@ -385,8 +411,26 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 					userManager.saveObject(user);
 				}
 			}
+			
+			
+			
+			//同步sso单点--start
+	    	try {
+	    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+	        	dynamicManager.saveOrUpdateSsoUser(user);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    	//同步sso单点--end
+	    	
+	    	
 		}
 
+		
+		
+		
+    	
+    	
 		// 同步店长信息
 		try {
 			syncStoreKeeper(sKeeper);

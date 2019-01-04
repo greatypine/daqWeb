@@ -21,6 +21,7 @@ import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.UserGroup;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserGroupManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
+import com.cnpc.pms.dynamic.manager.DynamicManager;
 import com.cnpc.pms.personal.dao.OnLineHumanresourcesDao;
 import com.cnpc.pms.personal.dto.CareerChannelDto;
 import com.cnpc.pms.personal.entity.DistCity;
@@ -205,6 +206,19 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 				user.setLogicDel(0);
 				preSaveObject(user);
 				userManager.saveObject(user);
+				
+				
+				
+				//同步sso单点--start
+		    	try {
+		    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+		        	dynamicManager.saveOrUpdateSsoUser(user);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		    	//同步sso单点--end
+		    	
+		    	
 	        }
 	        
 		}

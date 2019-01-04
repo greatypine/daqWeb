@@ -183,11 +183,6 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
     private static final String NEWAREATRADEAMOUNT="https://ds.guoanshequ.cn/ds/rest/queryEmployeePesgmvByEmp";
    
     
-    
-    //同步人员到单点登录系统中
-    private static final String SSO_SYNC_USER="http://123.56.204.170:9999/systemuser/saveOrUpdate";
-    
-    
     private HSSFCellStyle style_header = null;
 	private CellStyle cellStyle_common = null;
 
@@ -7653,25 +7648,67 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	@Override
 	public String saveOrUpdateSsoUser(User user) {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("address", ""+user.getId());
-		jsonObject.put("age",0);
-		jsonObject.put("cardId", user.getZw());
-		jsonObject.put("companyid", user.getStore_id());
-		jsonObject.put("createTime", new SimpleDateFormat("yyyy-MM-dd").format(user.getCreateDate()));
-		jsonObject.put("email", user.getEmail());
-		jsonObject.put("groupName", user.getUsergroup().getCode());
-		jsonObject.put("id", "");
-		jsonObject.put("isvalid", user.getDisabledFlag()==1?true:false);
-		jsonObject.put("nickname", user.getName());
-		jsonObject.put("password", user.getPassword());
-		jsonObject.put("phonenum", user.getMobilephone());
-		jsonObject.put("sex", 0);
-		jsonObject.put("status", 0);
-		jsonObject.put("updateTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-		jsonObject.put("username", user.getEmployeeId());
+		String result = "";
+		if(user!=null&&user.getCreateDate()!=null) {
+			jsonObject.put("address", ""+user.getId());
+			jsonObject.put("age",0);
+			jsonObject.put("cardId", user.getZw());
+			jsonObject.put("companyid", user.getStore_id());
+			
+			try {
+				jsonObject.put("createTime", new SimpleDateFormat("yyyy-MM-dd").format(user.getCreateDate()));
+			} catch (Exception e) {
+				jsonObject.put("createTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+			}
+			
+			jsonObject.put("email", user.getEmail());
+			jsonObject.put("groupName", user.getUsergroup().getCode());
+			jsonObject.put("id", "");
+			jsonObject.put("isvalid", user.getDisabledFlag()==1?true:false);
+			jsonObject.put("nickname", user.getName());
+			jsonObject.put("password", user.getPassword());
+			jsonObject.put("phonenum", user.getMobilephone());
+			jsonObject.put("sex", 0);
+			jsonObject.put("status", 0);
+			jsonObject.put("updateTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+			jsonObject.put("username", user.getEmployeeId());
+			jsonObject.put("code", user.getCode());
+			
+	        HttpClientUtil hClientUtil = new HttpClientUtil();
+	        
+	        String web = PropertiesUtil.getValue("sso.user.saveorupdate");
+	        String SSO_SYNC_USER=web+"/systemuser/saveOrUpdate";
+	        result = hClientUtil.getRemoteDataProxy(SSO_SYNC_USER, jsonObject);
+	        
+	        //插入同步记录 
+	        SsoUserDataLogManager ssoUserDataLogManager = (SsoUserDataLogManager) SpringHelper.getBean("ssoUserDataLogManager");
+	        SsoUserDataLog ssoUserDataLog = new SsoUserDataLog();
+	        ssoUserDataLog.setSendsyncdata(jsonObject.toString());
+	        ssoUserDataLog.setRcvsyncdata(result);
+	        preSaveObject(ssoUserDataLog);
+	        ssoUserDataLogManager.saveObject(ssoUserDataLog);
+		}
 		
+        return result;
+        
+	}
+	
+	
+	
+	
+	
+	/**
+     * 同步单点登录系统人员
+     */
+	@Override
+	public String saveOrUpdateSsoStore(Store store) {
+		JSONObject jsonObject = new JSONObject(store);
+		String result = "";
         HttpClientUtil hClientUtil = new HttpClientUtil();
-        String result = hClientUtil.getRemoteDataProxy(SSO_SYNC_USER, jsonObject);
+        
+        String web = PropertiesUtil.getValue("sso.user.saveorupdate");
+        String SSO_SYNC_USER=web+"/store/saveOrUpdate";
+        result = hClientUtil.getRemoteDataProxy(SSO_SYNC_USER, jsonObject);
         
         //插入同步记录 
         SsoUserDataLogManager ssoUserDataLogManager = (SsoUserDataLogManager) SpringHelper.getBean("ssoUserDataLogManager");
@@ -7680,6 +7717,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
         ssoUserDataLog.setRcvsyncdata(result);
         preSaveObject(ssoUserDataLog);
         ssoUserDataLogManager.saveObject(ssoUserDataLog);
+		
         return result;
         
 	}

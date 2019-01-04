@@ -34,6 +34,7 @@ import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserGroupManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserGroupRoleManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserLoginInfoManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
+import com.cnpc.pms.dynamic.manager.DynamicManager;
 import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.personal.dao.CustomerDao;
@@ -167,6 +168,18 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		userDTO.setId(userEntity.getId());
 		// 设置附件与单据的关联
 		//addAttachmentByProject(userDTO, "tb_bizbase_user");
+		
+		
+		//同步sso单点--start
+    	try {
+    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+        	dynamicManager.saveOrUpdateSsoUser(userEntity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	//同步sso单点--end
+    	
+    	
 		return userDTO;
 	}
 
@@ -395,6 +408,18 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		this.saveObject(userEntity);
 		// 设置附件与单据的关联
 		//addAttachmentByProject(userDTO, "tb_bizbase_user");
+		
+		
+		//同步sso单点--start
+    	try {
+    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+        	dynamicManager.saveOrUpdateSsoUser(userEntity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	//同步sso单点--end
+    	
+    	
 		return userDTO;
 	}
 
@@ -1212,6 +1237,18 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		// 从自开发页面添加的用户设定已激活,不能从门户再点击激活帐号
 		userEntity.setEnablestate(Enablestate_ON);
 		saveObject(userEntity);
+		
+		
+		//同步sso单点--start
+    	try {
+    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+        	dynamicManager.saveOrUpdateSsoUser(userEntity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	//同步sso单点--end
+    	
+    	
 		return userDTO;
 	}
 
@@ -1248,6 +1285,18 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		portalUser.setPassword(psw);
 		// 检查开关
 		this.saveObject(userEntity);
+		
+		
+		//同步sso单点--start
+    	try {
+    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+        	dynamicManager.saveOrUpdateSsoUser(userEntity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	//同步sso单点--end
+    	
+    	
 		return userDTO;
 	}
 
@@ -1286,6 +1335,15 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		BeanUtils.copyProperties(currentUser, portalUser);
 		currentUser.setPassword(MD5Utils.getMD5Str(newPassword));
 		this.saveObject(currentUser);
+		
+		//同步sso单点--start
+    	try {
+    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+        	dynamicManager.saveOrUpdateSsoUser(currentUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	//同步sso单点--end
 
 	}
 
@@ -1779,6 +1837,18 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 				result.setUser(userDTO);
 				result.setMessage("修改成功");
 				result.setCode(CodeEnum.success.getValue());
+				
+				
+				//同步sso单点--start
+		    	try {
+		    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+		        	dynamicManager.saveOrUpdateSsoUser(employee2);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		    	//同步sso单点--end
+		    	
+		    	
 			}
 		}else{
 			result.setMessage("修改失败");
@@ -1786,6 +1856,8 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 			result.setUser(userDTO);
 			result.setCode(CodeEnum.error.getValue());
 		}
+		
+		
 		return result;
 	}
 
@@ -1899,6 +1971,18 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 			u.setStore_id(store_id);
 			preSaveObject(u);
 			saveObject(u);
+			
+			
+			
+			//同步sso单点--start
+	    	try {
+	    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+	        	dynamicManager.saveOrUpdateSsoUser(u);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    	//同步sso单点--end
+	    	
 		}
 	}
 	
@@ -2361,9 +2445,21 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 			// 检查开关
 			this.saveObject(userEntity);
 			ret_msg="修改成功！";
+			
+			//同步sso单点--start
+	    	try {
+	    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+	        	dynamicManager.saveOrUpdateSsoUser(userEntity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    	//同步sso单点--end
+	    	
+	    	
 		}else{
 			ret_msg="原密码不符，修改失败！ ";
 		}
+    	
 		return ret_msg;
 	}
 	
@@ -2385,6 +2481,22 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 			// 检查开关
 			this.saveObject(userEntity);
 			ret_msg="修改成功！";
+			
+			
+			
+			//同步sso单点--start
+	    	try {
+	    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+	        	dynamicManager.saveOrUpdateSsoUser(userEntity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    	//同步sso单点--end
+	    	
+			
+			
+			
+			
 		}else{
 			ret_msg="原密码不符，修改失败！ ";
 		}
@@ -2405,6 +2517,18 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 			// 检查开关
 			this.saveObject(userEntity);
 			ret_msg="修改成功！";
+			
+			
+			//同步sso单点--start
+	    	try {
+	    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+	        	dynamicManager.saveOrUpdateSsoUser(userEntity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    	//同步sso单点--end
+	    	
+	    	
 		}else{
 			ret_msg="原密码不符，修改失败！ ";
 		}
@@ -2708,6 +2832,18 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 			// 检查开关
 			this.saveObject(userEntity);
 			ret_msg="修改成功！";
+			
+			
+			//同步sso单点--start
+	    	try {
+	    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+	        	dynamicManager.saveOrUpdateSsoUser(userEntity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    	//同步sso单点--end
+	    	
+	    	
 		}else{
 			ret_msg="原密码不符，修改失败！ ";
 		}

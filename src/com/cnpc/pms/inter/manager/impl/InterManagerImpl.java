@@ -4066,7 +4066,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 								//String rt="测试店长没发";
 								String rt="";
 								if(user.getMobilephone()!=null&&user.getMobilephone().trim().length()>0) {
-									rt = commonSendMessage(user.getMobilephone(), "您有一条国安数据消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
+									rt = commonSendMessage(user.getMobilephone(), "您有一条选品建议（库存预警）消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
 								}else {
 									rt="电话为空，未发送";
 								}
@@ -4152,7 +4152,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				sendShortUrlManager.saveObject(sendShortUrl);
 				
 				//发送短链接的方法 
-				String rt = commonSendMessage(phone, "您有一条国安数据消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
+				String rt = commonSendMessage(phone, "您有一条选品建议（库存预警）消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
 				//String rt="测试频道没发";
 				
 				SendMessageManager sendMessageManager = (SendMessageManager) SpringHelper.getBean("sendMessageManager");

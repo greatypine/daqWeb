@@ -1932,6 +1932,17 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 						store.getGaode_provinceCode(), store.getGaode_cityCode(), store.getGaode_adCode(),
 						store.getAddress(),lat,nat,type,store.getMobilephone());
 				rt = jsonObject.toString();
+				
+				
+				
+				//同步sso单点--start
+		    	try {
+		        	dynamicManager.saveOrUpdateSsoStore(store);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		    	//同步sso单点--end
+		    	
 			}
 
 		}

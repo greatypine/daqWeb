@@ -16,6 +16,7 @@ import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.dynamic.entity.AbnormalOrderDto;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.personal.entity.Humanresources;
+import com.cnpc.pms.personal.entity.Store;
 
 import ar.com.fdvs.dj.domain.constants.Page;
 
@@ -1218,5 +1219,7 @@ public interface DynamicManager extends IManager{
      * @return
      */
     public String saveOrUpdateSsoUser(User user);
+    
+    public String saveOrUpdateSsoStore(Store store);
     
 }

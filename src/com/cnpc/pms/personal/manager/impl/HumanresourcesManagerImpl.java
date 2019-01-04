@@ -422,6 +422,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 			
     	}
     	
+    	
     	//操作完 进行同步 方法 
     	try {
     		syncEmployee(humanresources);
@@ -486,6 +487,17 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		user.setLogicDel(0);
 		preSaveObject(user);
 		userManager.saveObject(user);
+		
+		
+		//同步sso单点--start
+    	try {
+    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+        	dynamicManager.saveOrUpdateSsoUser(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	//同步sso单点--end
+    	
 		return user;
     }
     /**
@@ -850,6 +862,15 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	//保存完成 、最后 插入记录表
     	HumanresourcesLogManager h = (HumanresourcesLogManager)SpringHelper.getBean("humanresourcesLogManager");
     	h.saveHumanresources(hr);
+    	
+    	//同步sso单点--start
+    	try {
+    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+        	dynamicManager.saveOrUpdateSsoUser(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	//同步sso单点--end
     	
     	if(isLeave){
     		//调用 如果人员离职。更新用户画像等其它地方的方法 。
@@ -3512,6 +3533,17 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     				
     				//批量分配门店后。同步数据
     				syncEmployee(humanresources);
+    				
+    				
+    				//同步sso单点--start
+    		    	try {
+    		    		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
+    		        	dynamicManager.saveOrUpdateSsoUser(save_user);
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    				}
+    		    	//同步sso单点--end
+    				
     				
     				//发送短信----
     				if(humanresources.getPhone()!=null&&humanresources.getInviteCode()!=null&&humanresources.getHumanstatus().equals(1L)) {
