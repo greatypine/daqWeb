@@ -8,9 +8,6 @@ import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.utils.DateUtils;
-import com.cnpc.pms.utils.HikariGuoanInner;
-import com.cnpc.pms.utils.HikariInner;
-import com.opencsv.CSVWriter;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -18,21 +15,21 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -88,11 +85,11 @@ public class HttpClientUtils {
             //定义表头 以及 要填入的 字段
             String[] str_headers = {"订单号","片区编号","小区编号","片区A国安侠编号","用户电话","用户ID","有效金额","交易金额","应付金额","下单时间","预约时间","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称",
                     "门店编号","事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单","是否开卡礼订单","是否试用礼订单",
-                    "是否积分订单","是否221商品类订单","是否221服务类订单","是否221团购订单","是否社员订单","是否过账工资","是否无精确成本","是否A类营销费用","订单来源","销售收入","结算方式","平台优惠券金额","粮票"};
+                    "是否积分订单","是否221商品类订单","是否221服务类订单","是否221团购订单","是否社员订单","是否过账工资","是否无精确成本","是否A类营销费用","订单来源","销售收入","销售毛利","结算方式","平台优惠券金额","粮票"};
             String[] headers_key = {"order_sn","area_code","village_code","info_employee_a_no","customer_mobile_phone","customer_id","gmv_price","trading_price","payable_price","create_time","appointment_start_time","sign_time","return_time",
                     "employee_name","employee_phone","eshop_name","store_name","store_code","department_name","channel_name","store_city_name","pubseas_label","abnormal_label","return_label","loan_label","quick_label","gift_label",
                     "customer_isnew_flag","order_tag_b","order_tag_k","order_tag_s","score","order_tag_product","order_tag_service","order_tag_groupon","order_tag_member","pay_label","no_cost_label","a_fee_label",
-                    "order_source","order_profit","contract_method","apportion_coupon","apportion_rebate"};
+                    "order_source","order_profit","sale_profit","contract_method","apportion_coupon","apportion_rebate"};
 
             String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
             String str_web_path = PropertiesUtil.getValue("file.web.root");

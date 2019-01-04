@@ -465,8 +465,8 @@
                         <div class="sl-v-list">
                             <div class="form-group has-success col-lg-3">
                                 <div style="display:block">
-                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="销售收入最小金额"  id="min_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
-                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="销售收入最大金额"  id="max_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="销售毛利最小金额"  id="min_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
+                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="销售毛利最大金额"  id="max_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
                                 </div>
                             </div>
                             <div class="form-group has-success col-lg-2">
@@ -616,7 +616,7 @@
                   <td width="9%" style="font-weight:bold;">业务信息</td>
                   <td width="10%" style="font-weight:bold;">人员信息</td>
                   <td width="9%" style="font-weight:bold;" id="profit_sort"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-                      <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">订单销售收入</font>销售收入（元）<i class="fa fa-angle-up" id="profit_sort_label"></i></td>
+                      <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">销售收入-平台优惠券（非A类）</font>销售毛利（元）<i class="fa fa-angle-up" id="profit_sort_label"></i></td>
                   <td width="10%" style="font-weight:bold;">营销费用</td>
                   <td width="10%" style="font-weight:bold;">订单标签</td>
                 </tr>
@@ -1845,7 +1845,7 @@ function getIsManager(){
                        } else if(jData[i].contract_method=='price' && jData[i].cost_price==0){
                            infoStr = infoStr + "<a href=\"javascript:;\">成本为0无利润</a>";
                        } else {
-                           infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a>";
+                           infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].sale_profit+"</a>";
                        }
                     infoStr = infoStr
                         +"<td><a href=\"javascript:;\" onmouseover=\"showfee('"+feecontent+"');\" id=\""+feeid+"\">"+jData[i].apportion_coupon+"</a></td>";
