@@ -97,6 +97,34 @@
     .swiper-pagination-bullet{background: #007aff; opacity: 0.5}
     .swiper-pagination-bullet-active{background: #fff; opacity: 1}
     
+        .swiper-slide{color: #ccc;}
+    .progress-group{}
+    .swiper-slide .rise{width: 1px; height: 22px; background-color: #ccc; position: relative; display: inline-block}
+    .swiper-slide .rise:after{content: ''; width: 1px; height: 10px; position: absolute; transform: rotate(45deg); -webkit-transform: rotate(45deg); top: -2px; left: -4px; background-color: #ccc;}
+    .swiper-slide .rise:before{content: ''; width: 1px; height: 10px; position: absolute; transform: rotate(135deg); -webkit-transform: rotate(135deg); top: -2px; right: -4px; background-color: #ccc;}
+    .swiper-slide .col-sm-2 i{font-size: 24px;}
+    .swiper-slide .col-sm-2 span{font-size: 18px; padding-left: 6px;}
+    .swiper-slide .col-sm-2,.swiper-slide .col-sm-1{padding: 0 3px;}
+
+    .swiper-slide table{width: 100%;color: #fff;border-collapse:collapse; border-spacing:0; table-layout: fixed;}
+    .swiper-slide table td{height: 40px; line-height: 40px;background: linear-gradient(top, rgba(250,246,245,0.1), rgba(247,247,247,0.1)); background: -webkit-linear-gradient(top, rgba(250,246,245,0.1), rgba(247,247,247,0.1)); background:-moz-linear-gradient(top, rgba(250,246,245,0.1), rgba(247,247,247,0.1)); white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden; position: relative;}
+    .swiper-slide table th{padding-top: 18px; color: #fff;height: 40px; line-height: 40px;}
+    .ranking_h{background: url("../../img/ranking-h.png") no-repeat; background-size: 100% 100%;}
+    /*.swiper-slide table tr:nth-child(2) td{background: linear-gradient(top, rgba(255,212,209,0.1), rgba(251,219,222,0.1)); background: -webkit-linear-gradient(top, rgba(255,212,209,0.1), rgba(251,219,222,0.1)); background: -moz-linear-gradient(top, rgba(255,212,209,0.1), rgba(251,219,222,0.1));}
+    .swiper-slide table tr:nth-child(3) td{background: linear-gradient(top, rgba(254,230,230,0.1), rgba(251,229,231,0.1)); background: -webkit-linear-gradient(top, rgba(254,230,230,0.1), rgba(251,229,231,0.1)); background: -moz-linear-gradient(top, rgba(254,230,230,0.1), rgba(251,229,231,0.1));}
+    .swiper-slide table tr:nth-child(4) td{background: linear-gradient(top, rgba(255,239,239,0.1), rgba(254,244,243,0.1)); background: -webkit-linear-gradient(top, rgba(255,239,239,0.1), rgba(254,244,243,0.1)); background: -moz-linear-gradient(top, rgba(255,239,239,0.1), rgba(254,244,243,0.1));}*/
+    .swiper-slide table .text_up{color: #da3d46;}
+    .swiper-slide table .text_down{color: #827f92;}
+    .swiper-slide table .text_up span,.swiper-slide table .text_down span{font-size: 12px; padding-left: 2px;}
+    .swiper-slide table .fa-un{color: #a9a9a9;}
+    .swiper-slide table .text_big1{font-size: 14px; background: url("../../img/pai1.png") no-repeat; height: 25px; width: 25px; display: block; background-size: 100% 100%; margin: 0 auto;}
+    .swiper-slide table .text_big2{font-size: 14px; background: url("../../img/pai2.png") no-repeat; height: 25px; width: 25px; display: block; background-size: 100% 100%; margin: 0 auto;}
+    .swiper-slide table .text_big3{font-size: 14px; background: url("../../img/pai3.png") no-repeat; height: 25px; width: 25px; display: block; background-size: 100% 100%; margin: 0 auto;}
+    .swiper-slide table td a{color: #1d7df4; text-decoration: underline;}
+    .swiper-slide table td em{position: absolute; width: 20px; top: -10px;}
+    .swiper-slide table td em img{width: 100%}
+    
+    
     .gaugetb2{color: #ffc203;}
     .gaugetb3{color: #f88962}
     .gaugetb4{color: #ea89ed}
@@ -104,7 +132,16 @@
     .increase{color: #30d7c7;}
     .decline{color: #ff3064;}
     .info_bottom p{border-bottom: 1px solid #ffc203; margin: 0; font-size: 14px; font-weight: bold;}
-
+    
+    .nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
+    .nav-tabs-custom > .nav-tabs > li{border: 0; margin: 0;}
+    .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active:hover > a{background-color: transparent; border: 0;}
+    .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a{color:#00ffe6;}
+    .nav-tabs-custom > .nav-tabs{color: #efefef; border: 0;}
+    .gaugetb1 p{font-size: 26px; font-weight: bold;}
+    .nav-tabs-custom > .nav-tabs > li.active a{color: #00ffe6;}
+    .nav-tabs-custom > .nav-tabs > li a{color: #b9b9b9;}
+    
     .gaugetb1{color: #efefef;}
     .gaugetb5{color: #00ffe6}
     .gaugetb1 p{font-size: 26px; font-weight: bold;}

@@ -565,7 +565,7 @@
             $("#city_name_try").val(cityName);
             $("#city_name_try").attr("readonly",true);
 		}
-		if(fromBar == "1"){
+		if(fromBar == "1"){//定位城市tab
 			$("#first_date").attr("value",beti +'-'+ endt);
 		    $("#startDateFirst").attr("value",beti);
 		    $("#endDateFirst").attr("value",endt);
@@ -574,12 +574,12 @@
 			$("#tab_2").addClass("active");
 			$("#tab_1_avtive").removeClass("active");
 			$("#tab_1").removeClass("active");
-		}else if(fromBar == "2"){
+		}else if(fromBar == "2"){//定位门店tab
 			$("#searchTime").attr("value",beti +'-'+ endt);
 		    $("#startOpenCardDate").attr("value",beti);
 		    $("#endOpenCardDate").attr("value",endt);
 			searchInfo_tradetype_step2();
-		}else if(fromBar == "3"){
+		}else if(fromBar == "3"){//定位试用社员tab
             $("#tab_3_avtive").addClass("active");
             $("#tab_3").addClass("active");
             $("#tab_1_avtive").removeClass("active");

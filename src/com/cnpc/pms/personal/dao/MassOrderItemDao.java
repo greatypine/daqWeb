@@ -78,6 +78,16 @@ public interface MassOrderItemDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
+	/**
+	 * 查询近七日毛利走势图(北京&上海&天津的毛利)
+	 * @author zhangli
+	 * 2018年10月21日
+	 * @param dd
+	 * @param provinceNO 
+	 * @param cityNO 
+	 * @return
+	 */
+	public Map<String, Object> getOtherProfitRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 
 	public void updataReport(Long id ,String url);
 	/**
@@ -134,5 +144,71 @@ public interface MassOrderItemDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
-	
+	/**
+	 * 查询门店某日毛利
+	 * @param dd
+	 * @param cityNO
+	 * @param provinceNO
+	 * @return
+	 */
+	public Map<String, Object> getProfitYesterdayRangeForStoreWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
+	/**
+	 * 查询门店近(时间段)日毛利
+	 * @param dd
+	 * @param cityNO
+	 * @param provinceNO
+	 * @return
+	 */
+	public Map<String, Object> queryprofitForStoreIntervalDay(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
+	/**
+	 * 查询昨日门店销售商品排名
+	 * @param dd
+	 * @param cityNO
+	 * @param provinceNO
+	 * @return
+	 */
+	public Map<String, Object> getYesterdayStoreProduct(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
+	/**
+	 * 查询近(时间段)门店销售商品排名
+	 * @param dd
+	 * @param dd2
+	 * @param cityNO
+	 * @param provinceNO
+	 * @return
+	 */
+	public Map<String, Object> getStoreProductIntervalDay(DynamicDto dd,DynamicDto dd2,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
+	/**
+	 * 查询昨日门店销售商品排名(带分页)
+	 * @param dd
+	 * @param cityNO
+	 * @param provinceNO
+	 * @return
+	 */
+	public Map<String, Object> getProductYesteryRank(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO, PageInfo pageInfo);
+	/**
+	 * 查询近(时间段)门店销售商品排名(带分页)
+	 * @param dd
+	 * @param dd2
+	 * @param cityNO
+	 * @param provinceNO
+	 * @return
+	 */
+	public Map<String, Object> getStoreProductIntervalDay(DynamicDto dd,DynamicDto dd1, List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO, PageInfo pageInfo);
+	/**
+	 * 查询昨日门店开卡社员数
+	 * @param dynamicDto
+	 * @param cityNo
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> getStoreYesterdayMember(DynamicDto dynamicDto,List<Map<String, Object>> cityNO, PageInfo pageInfo);
+	/**
+	 * 查询近7日门店开卡社员数
+	 * @param dd
+	 * @param cityNO
+	 * @param provinceNO
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> getStoreMemberIntervalDay(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO,PageInfo pageInfo);
 }

@@ -154,7 +154,7 @@ var showPageContent = function (pageStatusInfo) {
     getProfitRangeForStoreWeek(pageStatusInfo);
 
     // 显示城市排名(GMV)-修改为近七日GMV走势图
-    getCityRankDataGmv(pageStatusInfo);
+    //getCityRankDataGmv(pageStatusInfo);
     
     // 显示近七日221GMV走势
     getTwoTwoOneRankGmv(pageStatusInfo);
@@ -194,6 +194,25 @@ var showPageContent = function (pageStatusInfo) {
 	
     // 设置导航
     showCrumbs();
+    //获得昨日门店毛利
+    getYesterdayStorePorfit(pageStatusInfo);
+    //获得近7日门店毛利
+    getStorePorfitForSevenday(pageStatusInfo);
+    //获得近30日门店毛利
+    getStorePorfitForThirtyday(pageStatusInfo);
+    //查询昨日门店社员开卡数
+    getStoreYesterdayMember(pageStatusInfo);
+    //查询近7日门店社员开卡数
+    getStoreSevendayMember(pageStatusInfo);
+    //查询近30日门店社员开卡数
+    getStoreThirtydayMember(pageStatusInfo);
+    //查询昨日门店商品销售排名
+    getYesterdayStoreProduct(pageStatusInfo);
+    //查询近7日门店商品销售排名
+    getStoreProductSevenDay(pageStatusInfo);
+    //查询近30日门店商品销售排名
+    getStoreProductThirtyDay(pageStatusInfo);
+    
 };
 // 设置页面初始状态信息
 var initPageStatusInfo = function (reqData) {
@@ -250,13 +269,7 @@ var initPageElements = function () {
     ],
     legend: {
             show: 'true',
-            data: [{
-	            name:'GMV走势',
-	            textStyle:{color:"#fff"}
-            },{
-            	name:'毛利走势',
-            	textStyle:{color:"#fff"}
-            	}],
+            data: [],
             right: '3%',
             top: '6%',
      },
@@ -270,7 +283,9 @@ var initPageElements = function () {
             var relVal = params[0].name+"<br/>";
             relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[0]['value']),1);
             if(params.length>1){
-            	relVal += "<br/>"+params[1]['marker']+params[1]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[1]['value']),1);
+            	for(var i=0;i<params.length-1;i++){
+            		relVal += "<br/>"+params[i+1]['marker']+params[i+1]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[i+1]['value']),1);
+            	}
             }
             return relVal;
        }
@@ -360,11 +375,23 @@ var initPageElements = function () {
         }
       }
     ],
+    dataZoom: [{
+                  type: 'inside',
+                  start:80,
+                  end: 100
+                 },
+                 {
+	               show: true,
+	               type: 'slider',
+	               y: '90%',
+	               start: 8,
+	               end: 30
+                 }],
     series : [
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: 'GMV走势',
+        name: '北京',
         type:'line',
         data:[],
         smooth: true,
@@ -373,9 +400,9 @@ var initPageElements = function () {
         symbolSize: 10,
         itemStyle : {  
             normal : {  
-                color:'#D7504B',  //圈圈的颜色
+                color:'#FF346E',  //圈圈的颜色
                 lineStyle:{  
-                    color:'#D7504B'  //线的颜色
+                    color:'#FF346E'  //线的颜色
                 } 
             }  
         },
@@ -403,7 +430,8 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '毛利走势',        type:'line',
+        name: '上海',        
+        type:'line',
         data:[],
         smooth: true,
         showAllSymbol: true,
@@ -411,9 +439,46 @@ var initPageElements = function () {
         symbolSize: 10,
         itemStyle : {  
             normal : {  
-                color:'#ea89ed',  //圈圈的颜色
+                color:'#FF6B00',  //圈圈的颜色
                 lineStyle:{  
-                    color:'#ea89ed'  //线的颜色
+                    color:'#FF6B00'  //线的颜色
+                }  
+            }
+        },
+        markPoint: {
+          itemStyle: {
+            normal: {
+	             borderWidth: 1,            // 标注边线线宽，单位px，默认为1
+	             label: {
+                        show: true,
+                        formatter: function(value) { 
+						   return changeMoneyByDigit(value.value,1); 
+						} 
+	               }
+	          }
+          },
+          data: [
+            {type: 'max', name: '最大值'},
+            {type: 'min', name: '最小值'}
+          ]
+        },
+
+      },
+      {
+        cursor: 'default',
+        //name:'一街坊、八街坊东、八街西、永定路社区社区部',
+        name: '天津',        
+        type:'line',
+        data:[],
+        smooth: true,
+        showAllSymbol: true,
+        symbol: 'emptyCircle',
+        symbolSize: 10,
+        itemStyle : {  
+            normal : {  
+                color:'#0135F7',  //圈圈的颜色
+                lineStyle:{  
+                    color:'#0135F7'  //线的颜色
                 }  
             }
         },
@@ -768,12 +833,13 @@ var initPageElements = function () {
       trigger: 'axis',
       formatter:function(params)//数据格式
             {
-            var relVal = params[0]['name']+"<br/>";
-            //relVal += params[1]['marker']+params[1]['seriesName']+ ' : ' + String(params[1]['value']);
-	        //relVal+="<br/>";
-            relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + String(params[0]['value']);
-	        relVal+="<br/>";
-             return relVal;
+            var relVal = params[0].name+"<br/>";
+            if(params.length>1){
+            	for(var i=0;i<params.reverse().length;i++){
+            		relVal += "<br/>"+params[i]['marker']+params[i]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[i]['value']),1);
+            	}
+            }
+            return relVal;
         },
     },
     legend: {
@@ -846,7 +912,7 @@ var initPageElements = function () {
     ],
     series: [
       {
-        name:'新增社员人数',
+        name:'北京',
         cursor:'pointer',
         type: 'bar',
         yAxis: 1,
@@ -874,9 +940,8 @@ var initPageElements = function () {
         },
 
       },
-      /*
 	  {
-        name:'累计社员人数',
+        name:'天津',
         cursor: 'default',
         type: 'bar',
         yAxis: 1,
@@ -903,7 +968,34 @@ var initPageElements = function () {
           }
         },
       },
-		*/
+	  {
+        name:'上海',
+        cursor: 'default',
+        type: 'bar',
+        yAxis: 1,
+        stack: '总量',
+        label: {
+          show: true,
+          position: 'top',
+          formatter: '{c} ',
+          textStyle:{
+            color:"#DF7B2D"
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: "#DF7B2D",
+            label: {
+              show: false,
+              textStyle: {
+                color: "#DF7B2D"
+              },
+              position: "top",
+
+            }
+          }
+        },
+      }
     ]
   };
       // 事件绑定
@@ -2796,6 +2888,7 @@ var getProfitRangeForStoreWeek = function (pageStatusInfo) {
 var showProfitRangeForStoreWeek = function (profitStoreRange) {
   	var data = [];
   	var data2 = [];
+  	var listcount=eval(profitStoreRange['lst_data']).length;
 	dataBJ.splice(0,dataBJ.length);
 	dataSH.splice(0,dataSH.length);
 	dataUH.splice(0,dataUH.length);
@@ -2872,94 +2965,66 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     cityProfitRangeOption.legend[0].data = result[0];
     cityProfitRangeOption.legend[1].data = result[1];
     var max = Math.max.apply(null, data);
-    if(max<150){
-	    	cityProfitRangeOption.series[0].symbolSize = function(val){
-	    		return val[2] * 0.8;
-	    	};
-	    	cityProfitRangeOption.series[1].symbolSize = function(val){
-	    		return val[2] * 0.8;
-	    	};
-	    	cityProfitRangeOption.series[2].symbolSize = function(val){
-	    		return val[2] * 0.8;
-	    	};
-	    	cityProfitRangeOption.series[3].symbolSize = function(val){
-	    		return val[2] * 0.8;
-	    	};
-	    	cityProfitRangeOption.series[4].symbolSize = function(val){
-	    		return val[2] * 0.8;
-	    	};
-	    	cityProfitRangeOption.series[5].symbolSize = function(val){
-	    		return val[2] * 0.8;
-	    	};
-	    	cityProfitRangeOption.series[6].symbolSize = function(val){
-	    		return val[2] * 0.8;
-	    	};
-    	}else{
-    		var point = 0.12;
-    		cityProfitRangeOption.series[0].symbolSize = function(val){
-    			if(val[2]<10){
-    				return val[2] * 2.5;
-    			}else if(val[2]>=10&&val[2]<=40){
-    				return val[2] * 0.6;
-    			}else{
-    				return val[2] * point;
-    			}
-	    	};
-    		cityProfitRangeOption.series[1].symbolSize = function(val){
-    			if(val[2]<10){
-    				return val[2] * 2.5;
-    			}else if(val[2]>=10&&val[2]<=40){
-    				return val[2] * 0.6;
-    			}else{
-    				return val[2] * point;
-    			}
-	    	};
-    		cityProfitRangeOption.series[2].symbolSize = function(val){
-    			if(val[2]<10){
-    				return val[2] * 2.5;
-    			}else if(val[2]>=10&&val[2]<=40){
-    				return val[2] * 0.6;
-    			}else{
-    				return val[2] * point;
-    			}
-	    	};
-    		cityProfitRangeOption.series[3].symbolSize = function(val){
-    			if(val[2]<10){
-    				return val[2] * 2.5;
-    			}else if(val[2]>=10&&val[2]<=40){
-    				return val[2] * 0.6;
-    			}else{
-    				return val[2] * point;
-    			}
-	    	};
-    		cityProfitRangeOption.series[4].symbolSize = function(val){
-    			if(val[2]<10){
-    				return val[2] * 2.5;
-    			}else if(val[2]>=10&&val[2]<=40){
-    				return val[2] * 0.6;
-    			}else{
-    				return val[2] * point;
-    			}
-	    	};
-    		cityProfitRangeOption.series[5].symbolSize = function(val){
-    			if(val[2]<10){
-    				return val[2] * 2.5;
-    			}else if(val[2]>=10&&val[2]<=40){
-    				return val[2] * 0.6;
-    			}else{
-    				return val[2] * point;
-    			}
-	    	};
-    		cityProfitRangeOption.series[6].symbolSize = function(val){
-    			if(val[2]<10){
-    				return val[2] * 2.5;
-    			}else if(val[2]>=10&&val[2]<=40){
-    				return val[2] * 0.6;
-    			}else{
-    				return val[2] * point;
-    			}
-	    	};
-    	}
+    var min = Math.min.apply(null, data);
+    var average = (max - min)/listcount;
+    if(average<1){
+    	average = average*0.35;
+    }else if(average>=1&&average<=10){
+    	average = average*0.18;
+    }else if(average>10&&average<=100){
+    	average = average*0.07;
+    }else if(average>100&&average<1000){
+    	average = average*0.05;
+    }
+	cityProfitRangeOption.series[0].symbolSize = function(val){
+		if(val[2]<50){
+			return val[2]*average*6;
+		}else{
+			return val[2]*average;
+		}
+	};
+	cityProfitRangeOption.series[1].symbolSize = function(val){
+		if(val[2]<50){
+			return val[2]*average*6;
+		}else{
+			return val[2]*average;
+		}
+	};
+	cityProfitRangeOption.series[2].symbolSize = function(val){
+		if(val[2]<50){
+			return val[2]*average*6;
+		}else{
+			return val[2]*average;
+		}
+	};
+	cityProfitRangeOption.series[3].symbolSize = function(val){
+		if(val[2]<50){
+			return val[2]*average*6;
+		}else{
+			return val[2]*average;
+		}
+	};
+	cityProfitRangeOption.series[4].symbolSize = function(val){
+		if(val[2]<50){
+			return val[2]*average*6;
+		}else{
+			return val[2]*average;
+		}
+	};
+	cityProfitRangeOption.series[5].symbolSize = function(val){
+		if(val[2]<50){
+			return val[2]*average*6;
+		}else{
+			return val[2]*average;
+		}
+	};
+	cityProfitRangeOption.series[6].symbolSize = function(val){
+		if(val[2]<50){
+			return val[2]*average*6;
+		}else{
+			return val[2]*average;
+		}
+	};
 	cityProfitRangeChart.setOption(cityProfitRangeOption,true);
 };
 // 近七日GMV走势图
@@ -3003,7 +3068,7 @@ var showCityRankGmv = function (cityRankDataGmv) {
     });
 	cityRankGmvOption.xAxis[0].data = data.reverse();
     cityRankGmvOption.series[0].data = data1.reverse();
-    cityRankGmvOption.title[0].text = "近7日GMV走势";
+    cityRankGmvOption.title[0].text = "近30日毛利走势";
     cityRankChartGmv.setOption(cityRankGmvOption,true);
 };
 var getTwoTwoOneRankGmv = function(pageStatusInfo){
@@ -3038,18 +3103,87 @@ var getTwoTwoOneRankGmv = function(pageStatusInfo){
     }
 
 }
-// 显示近7天221GMV走势-修改为近7天毛利走势
+// 显示近7天221GMV走势-修改为近30天毛利走势
 var showTwoTwoOneRankGmv = function (twoTwoOneRankDataGmv) {
   	var data = [];
     var data1 = [];
+    var data2 = [];
+    var data3 = [];
+    var data4 = [];
     $.each(eval(twoTwoOneRankDataGmv['lst_data']), function (idx, val) {
     	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
     	data.push(val['week_date']);
     	data1.push(real_profit);
     });
-	//cityRankGmvOption.xAxis[0].data = data.reverse();
-    cityRankGmvOption.series[1].data = data1.reverse();
-    //cityRankGmvOption.title[0].text = "近7日GMV走势";
+    $.each(eval(twoTwoOneRankDataGmv['lst_data_bj']), function (idx, val) {
+    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	data.push(val['week_date']);
+    	data2.push(real_profit);
+    });
+    $.each(eval(twoTwoOneRankDataGmv['lst_data_tj']), function (idx, val) {
+    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	//data.push(val['week_date']);
+    	data3.push(real_profit);
+    });
+    $.each(eval(twoTwoOneRankDataGmv['lst_data_sh']), function (idx, val) {
+    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	//data.push(val['week_date']);
+    	data4.push(real_profit);
+    });
+	cityRankGmvOption.legend.data.slice(0,cityRankGmvOption.legend.data.length);
+	cityRankGmvOption.xAxis[0].data = data.reverse();
+	if(pageStatusInfo.provinceId==""&&pageStatusInfo.cityId==""){
+		if(data2.length>0){
+	    	cityRankGmvOption.series[0].data = data2.reverse();
+	    	cityRankGmvOption.series[0].name = "北京";
+	    	var dataLegend = new Object();
+	    	dataLegend.name = "北京";
+	    	var textStyle = new Object();
+	    	textStyle.color = "#fff";
+	    	dataLegend.textStyle = textStyle;
+	    	cityRankGmvOption.legend.data.push(dataLegend);
+	    }
+	    if(data3.length>0){
+		    cityRankGmvOption.series[1].data = data3.reverse();
+		    cityRankGmvOption.series[1].name = "天津";
+		    var dataLegend = new Object();
+	    	dataLegend.name = "天津";
+	    	var textStyle = new Object();
+	    	textStyle.color = "#fff";
+	    	dataLegend.textStyle = textStyle;
+	    	cityRankGmvOption.legend.data.push(dataLegend);
+	    }
+	    if(data4.length>0){
+		    cityRankGmvOption.series[2].data = data4.reverse();
+		    cityRankGmvOption.series[2].name = "上海";
+		    var dataLegend = new Object();
+	    	dataLegend.name = "上海";
+	    	var textStyle = new Object();
+	    	textStyle.color = "#fff";
+	    	dataLegend.textStyle = textStyle;
+	    	cityRankGmvOption.legend.data.push(dataLegend);
+	    }
+	}else{
+    var dataLegend = new Object();
+    if(pageStatusInfo.cityName!=""){
+		dataLegend.name = pageStatusInfo.cityName;
+		cityRankGmvOption.series[0].name = pageStatusInfo.cityName;
+    }else if(pageStatusInfo.cityName==""&&pageStatusInfo.provinceName!=""){
+		dataLegend.name = pageStatusInfo.provinceName;
+		cityRankGmvOption.series[0].name = pageStatusInfo.provinceName;
+    }
+	var textStyle = new Object();
+	textStyle.color = "#fff";
+	dataLegend.textStyle = textStyle;
+	cityRankGmvOption.legend.data.push(dataLegend);
+	cityRankGmvOption.series[0].data = [];
+	cityRankGmvOption.series[0].data = data1.reverse();
+	cityRankGmvOption.series[1].data = [];
+	cityRankGmvOption.series[1].name = [];
+	cityRankGmvOption.series[2].data = [];
+	cityRankGmvOption.series[2].name = [];
+	}
+    cityRankGmvOption.title[0].text = "近30日毛利走势";
     cityRankChartGmv.setOption(cityRankGmvOption,true);
 };
 // 获取门店排名(GMV)数据
@@ -3838,18 +3972,78 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
   	var data1 = [];
     var data2 = [];
     var data3 = [];
+    var data4 = [];
+    var data5 = [];
+    var data6 = [];
     $.each(eval(turnoverCustomer['week_new_data']), function (idx, val) {
     	data.push(val['crtime']);
     	data1.push(val['newcount']);
     	data3.push(val['year_date']);
     });
-    for(var i=0;i<7;i++){
-    	var key = 'day'+(i+1);
-    	data2.push(turnoverCustomer["growAllCounts"][0][key]==null?'0':turnoverCustomer["growAllCounts"][0][key]);
-    }
+    $.each(eval(turnoverCustomer['lst_data_bj']), function (idx, val) {
+    	data4.push(val['newcount']);
+    });
+    $.each(eval(turnoverCustomer['lst_data_tj']), function (idx, val) {
+    	data5.push(val['newcount']);
+    });
+    $.each(eval(turnoverCustomer['lst_data_sh']), function (idx, val) {
+    	data6.push(val['newcount']);
+    });
 	turnoverCustomerOrderOption.xAxis.data = data.reverse();
 	turnoverCustomerOrderOption.xAxis.extdata = data3.reverse();
-	turnoverCustomerOrderOption.series[0].data = data1.reverse();
+	if(pageStatusInfo.provinceId==""&&pageStatusInfo.cityId==""){
+		if(data6.length>0){
+		    turnoverCustomerOrderOption.series[2].data = data6.reverse();
+		    turnoverCustomerOrderOption.series[2].name = "上海";
+		    var dataLegend = new Object();
+	    	dataLegend.name = "上海";
+	    	var textStyle = new Object();
+	    	textStyle.color = "#fff";
+	    	dataLegend.textStyle = textStyle;
+	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
+	    }
+	    if(data5.length>0){
+		    turnoverCustomerOrderOption.series[1].data = data5.reverse();
+		    turnoverCustomerOrderOption.series[1].name = "天津";
+		    var dataLegend = new Object();
+	    	dataLegend.name = "天津";
+	    	var textStyle = new Object();
+	    	textStyle.color = "#fff";
+	    	dataLegend.textStyle = textStyle;
+	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
+	    }
+		if(data4.length>0){
+	    	turnoverCustomerOrderOption.series[0].data = data4.reverse();
+	    	turnoverCustomerOrderOption.series[0].name = "北京";
+	    	var dataLegend = new Object();
+	    	dataLegend.name = "北京";
+	    	var textStyle = new Object();
+	    	textStyle.color = "#fff";
+	    	dataLegend.textStyle = textStyle;
+	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
+	    }
+	}else{
+		var dataLegend = new Object();
+	    if(pageStatusInfo.cityName!=""){
+			dataLegend.name = pageStatusInfo.cityName;
+			turnoverCustomerOrderOption.series[0].name = pageStatusInfo.cityName;
+	    }else if(pageStatusInfo.cityName==""&&pageStatusInfo.provinceName!=""){
+			dataLegend.name = pageStatusInfo.provinceName;
+			turnoverCustomerOrderOption.series[0].name = pageStatusInfo.provinceName;
+	    }
+		var textStyle = new Object();
+		textStyle.color = "#fff";
+		dataLegend.textStyle = textStyle;
+		turnoverCustomerOrderOption.legend.data.push(dataLegend);
+		turnoverCustomerOrderOption.series[0].data = [];
+		turnoverCustomerOrderOption.series[0].data = data1.reverse();
+		turnoverCustomerOrderOption.series[1].data = [];
+		turnoverCustomerOrderOption.series[1].name = [];
+		turnoverCustomerOrderOption.series[2].data = [];
+		turnoverCustomerOrderOption.series[2].name = [];
+	
+	}
+	//turnoverCustomerOrderOption.series[0].data = data1.reverse();
 	//turnoverCustomerOrderOption.series[1].data = data2;
 	//customerNewChartOption.title.text="社员7日走势";
   	turnoverCustomerOrderChart.setOption(turnoverCustomerOrderOption,true);
@@ -4448,6 +4642,7 @@ var bindMapEvents = function () {
         isClickChart = false;
         // 准备全屏显示
         $("#mask").empty();
+        $("#mask").attr("style","background-color: rgba(0,0,0,0.7)");
         var maskHeader = $("<div>").attr("id","mask-header").attr("style","width: 1483px;");
         var maskBody = $("<div>").attr("id","mask-body").attr("style","width: 100%;");
         var goout = $("<button>").attr("class","btn btn-primary").html("退出").attr("onclick","goout()");//加退出按钮
@@ -4477,6 +4672,43 @@ var bindMapEvents = function () {
         // 显示大图
         $("#mask").css("display", "block");
     });
+        // 设置全屏显示处理
+    $('#fullScreenSwiper').on('click', function () {
+        isClickChart = false;
+        // 准备全屏显示
+        $("#mask").empty();
+        $("#mask").attr("style","background-color: rgba(0,0,0,0.9)");
+        var maskHeader = $("<div>").attr("id","mask-header").attr("style","width: 1483px;");
+        var maskBody = $("<div>").attr("id","mask-body").attr("style","width: 100%;");
+        var goout = $("<button>").attr("class","btn btn-primary").html("退出").attr("onclick","goout2()").attr("style","margin-top:20px;");//加退出按钮
+        $("#mask").append(maskBody);
+        maskHeader.append(goout);
+        $("#mask-body").before(maskHeader);
+        $("#mask-body").width($(window).width());
+        $("#mask-body").height($(window).height());
+        fullScreenChart = echarts.init(document.getElementById("mask-body"));
+        fullScreenChart.setOption(cityProfitRangeChart.getOption(), true);
+        fullScreenChart.on('click', function (params) {
+        		var dataArr = [];
+			  	dataArr = params.data;
+			  	var storename = dataArr[3];
+			  	var storeno = dataArr[6];
+			  	var dayTime = dataArr[5];
+			  	var cityId = dataArr[7];
+			  	var cityName = dataArr[4];
+			  	dayTime = dayTime.replace(/-/g,"/");
+			  	var redirectTag = "profit";
+			  	var target=pageStatusInfo.targets; 
+			    if(target==0){
+					url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&c="+encode64(cityId)+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(dayTime+"-"+dayTime)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&cn="+encode64(cityName);
+				}else if(target==1){
+					url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&c="+encode64(cityId)+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(dayTime+"-"+dayTime)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&cn="+encode64(cityName);
+				}
+				window.open(url,"dynamicData_profit_analysis");
+        });
+        // 显示大图
+        $("#mask").css("display", "block");
+    });
     // 事件绑定
     /*
     $("#mask").on('click', function () {
@@ -4494,6 +4726,9 @@ var goout = function(){
     if (pageStatusInfo.showLevel == SHOW_LEVEL_CITY) {
         $("#mapHeight").html($("#mask-body"));
     }
+}
+var goout2 = function(){
+	$("#mask").hide();
 }
 //初始化城市数据
 var initCityInfo = function () {
@@ -6271,10 +6506,13 @@ function dialogRemove2(){
 }
 function initSwiper(){
   var swiper = new Swiper('.swiper-container', {
+  /*
     autoplay : {
       delay:5000,
       disableOnInteraction : false,
     },
+    */
+    autoplay:false,
     pagination: {
       el: '.swiper-pagination',
       clickable: true,
@@ -6286,13 +6524,14 @@ function initSwiper(){
     watchOverflow: true,//因为仅有1个slide，swiper无效
     allowTouchMove: false
   });
+  /*
   $('.swiper-slide').mouseenter(function () {
     swiper.autoplay.stop();
   })
   $('.swiper-slide').mouseleave(function () {
     swiper.autoplay.start();
   })
-
+  */
 }
 //散点图
   var dataBJ = [
@@ -6329,3 +6568,561 @@ function initSwiper(){
       }
   }
 };
+var getYesterdayStorePorfit = function(pageStatusInfo){
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "queryYesterdayprofitForStore",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var profit_store_num = "profit_store_5";
+	            $("#"+profit_store_num).empty();
+	            var th_tr = $('<tr class="ranking_h"/>');
+	            var th_td_1 = $('<th style="width:20%">排名</th>');
+	            var th_td_2 = $('<th style="width:30%">门店名称</th>');
+	            var th_td_3 = $('<th style="width:30%">毛利(元)</th>');
+	            var th_td_4 = $('<th style="width:20%">趋势</th>');
+	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            var profit_store_num = "profit_store_5";
+	            $("#"+profit_store_num).append(th_tr);
+	            createTableProfitData(resultJson,profit_store_num);
+	        }
+    });
+
+}
+var getStorePorfitForSevenday = function(pageStatusInfo){
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "queryprofitForStoreSevenDay",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var profit_store_num = "profit_store_3";
+	            $("#"+profit_store_num).empty();
+	            var th_tr = $('<tr class="ranking_h"/>');
+	            var th_td_1 = $('<th style="width:20%">排名</th>');
+	            var th_td_2 = $('<th style="width:30%">门店名称</th>');
+	            var th_td_3 = $('<th style="width:30%">毛利(元)</th>');
+	            var th_td_4 = $('<th style="width:20%">趋势</th>');
+	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            $("#"+profit_store_num).append(th_tr);
+	            createTableProfitData(resultJson,profit_store_num);
+	        }
+    });
+
+}
+var getStorePorfitForThirtyday = function(pageStatusInfo){
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "queryprofitForStoreThirtyday",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var profit_store_num = "profit_store_1";
+	            $("#"+profit_store_num).empty();
+	            var th_tr = $('<tr class="ranking_h"/>');
+	            var th_td_1 = $('<th style="width:20%">排名</th>');
+	            var th_td_2 = $('<th style="width:30%">门店名称</th>');
+	            var th_td_3 = $('<th style="width:30%">毛利(元)</th>');
+	            var th_td_4 = $('<th style="width:20%">趋势</th>');
+	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            $("#"+profit_store_num).append(th_tr);
+	            createTableProfitData(resultJson,profit_store_num);
+	        }
+    });
+
+}
+var getStoreYesterdayMember = function(pageStatusInfo){
+	var reqestParameter = {
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "getStoreYesterdayMember",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var member_num = "member_6";
+	            $("#"+member_num).empty();
+	            var th_tr = $('<tr class="ranking_h"/>');
+	            var th_td_1 = $('<th style="width:20%">排名</th>');
+	            var th_td_2 = $('<th style="width:30%">门店名称</th>');
+	            var th_td_3 = $('<th style="width:30%">社员开卡数</th>');
+	            var th_td_4 = $('<th style="width:20%">趋势</th>');
+	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            $("#"+member_num).append(th_tr);
+	            createTableMemberData(resultJson,member_num);
+	        }
+    });
+}
+var getStoreSevendayMember = function(pageStatusInfo){
+	var reqestParameter = {
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "getStoreSevendayMember",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var member_num = "member_4";
+	            $("#"+member_num).empty();
+	            var th_tr = $('<tr class="ranking_h"/>');
+	            var th_td_1 = $('<th style="width:20%">排名</th>');
+	            var th_td_2 = $('<th style="width:30%">门店名称</th>');
+	            var th_td_3 = $('<th style="width:30%">社员开卡数</th>');
+	            var th_td_4 = $('<th style="width:20%">趋势</th>');
+	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            $("#"+member_num).append(th_tr);
+	            createTableMemberData(resultJson,member_num);
+	        }
+    });
+}
+var getStoreThirtydayMember = function(pageStatusInfo){
+	var reqestParameter = {
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "getStoreThirtydayMember",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var member_num = "member_2";
+	            $("#"+member_num).empty();
+	            var th_tr = $('<tr class="ranking_h"/>');
+	            var th_td_1 = $('<th style="width:20%">排名</th>');
+	            var th_td_2 = $('<th style="width:30%">门店名称</th>');
+	            var th_td_3 = $('<th style="width:30%">社员开卡数</th>');
+	            var th_td_4 = $('<th style="width:20%">趋势</th>');
+	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            $("#"+member_num).append(th_tr);
+	            createTableMemberData(resultJson,member_num);
+	        }
+    });
+}
+var getYesterdayStoreProduct = function(pageStatusInfo){
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "getYesterdayStoreProduct",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var product_num = "product_3";
+	            $("#"+product_num).empty();
+	            var th_tr = $('<tr class="ranking_h"/>');
+	            var th_td_1 = $('<th style="width:20%">排名</th>');
+	            var th_td_2 = $('<th style="width:30%">商品名称</th>');
+	            var th_td_3 = $('<th style="width:20%">门店名称</th>');
+	            var th_td_4 = $('<th style="width:10%">GMV</th>');
+	            var th_td_5 = $('<th style="width:20%">趋势</th>');
+	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
+	            $("#"+product_num).append(th_tr);
+	            createTableProductData(resultJson,product_num);
+	        }
+    });
+
+}
+var getStoreProductSevenDay = function(pageStatusInfo){
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "getStoreProductSevenDay",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var product_num = "product_2";
+	            $("#"+product_num).empty();
+	            var th_tr = $('<tr class="ranking_h"/>');
+	            var th_td_1 = $('<th style="width:20%">排名</th>');
+	            var th_td_2 = $('<th style="width:30%">商品名称</th>');
+	            var th_td_3 = $('<th style="width:20%">门店名称</th>');
+	            var th_td_4 = $('<th style="width:10%">GMV</th>');
+	            var th_td_5 = $('<th style="width:20%">趋势</th>');
+	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
+	            $("#"+product_num).append(th_tr);
+	            createTableProductData(resultJson,product_num);
+	        }
+    });
+
+}
+var getStoreProductThirtyDay = function(pageStatusInfo){
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "getStoreProductThirtyDay",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var product_num = "product_1";
+	            $("#"+product_num).empty();
+	            var th_tr = $('<tr class="ranking_h"/>');
+	            var th_td_1 = $('<th style="width:20%">排名</th>');
+	            var th_td_2 = $('<th style="width:30%">商品名称</th>');
+	            var th_td_3 = $('<th style="width:20%">门店名称</th>');
+	            var th_td_4 = $('<th style="width:10%">GMV</th>');
+	            var th_td_5 = $('<th style="width:20%">趋势</th>');
+	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
+	            $("#"+product_num).append(th_tr);
+	            createTableProductData(resultJson,product_num);
+	        }
+    });
+
+}
+function createTableProfitData(resultJson,profit_store_num){
+	var lstLength = resultJson['lst_data'].length;
+	            $.each(eval(resultJson['lst_data']), function (idx, val) {
+	            	if(idx==0){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td><span class="text_big1"></span></td>');
+	            		var th_td_2 = $('<td class="text-red" title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['maoli']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+profit_store_num).append(th_tr);
+	            	}else if(idx==1){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td><span class="text_big2"></span></td>');
+	            		var th_td_2 = $('<td class="text-red" title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['maoli']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+profit_store_num).append(th_tr);
+	            	}else if(idx==2){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td><span class="text_big3"></span></td>');
+	            		var th_td_2 = $('<td class="text-red" title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['maoli']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+profit_store_num).append(th_tr);
+	            	}else if(idx>2&&idx<=4){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td>'+(idx+1)+'</td>');
+	            		var th_td_2 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['maoli']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+profit_store_num).append(th_tr);
+	            	}else if(idx==5){
+	            		var th_tr_ = $('<tr/>');
+            			var th_td_1 = $('<td colspan="4">---</td>');
+            			th_tr_.append(th_td_1);
+            			$("#"+profit_store_num).append(th_tr_);
+	            	}else if(idx>=lstLength-5&&idx<=lstLength){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td>'+(idx+1)+'</td>');
+	            		var th_td_2 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['maoli']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 =  $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');;
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+profit_store_num).append(th_tr);
+	            	}
+	            });
+	            var th_tr_more = $('<tr/>');
+	            var profit_store_url = "" ;
+	            var betime = resultJson['betime'].replace(/-/g,"/");
+	            var entime = resultJson['entime'].replace(/-/g,"/");
+	            var cityId = encode64(pageStatusInfo.cityId==""?'':pageStatusInfo.cityId);
+	  			var cityName = encode64(pageStatusInfo.cityName==""?'':pageStatusInfo.cityName);
+	  			var target=pageStatusInfo.targets; 
+	  			var redirectTag = "profit";
+	  			console.log(cityName);
+	            if(profit_store_num=='profit_store_1'){//30
+	            	if(target==0){
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+					}else if(target==1){
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&e="+encode64(curr_user.id)+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+					}
+	            }else if(profit_store_num=='profit_store_5'){//昨天
+	            	if(target==0){
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+					}else if(target==1){
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+					}
+	            }else if(profit_store_num=='profit_store_3'){//7
+	            	if(target==0){
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+					}else if(target==1){
+						profit_store_url = "dynamicData_profit_analysis.html?t="+encode64('1')+"&c="+cityId+"&s=&e=&rt="+encode64(redirectTag)+"&time="+encode64(betime+"-"+entime)+"&so=&sn=&cn="+cityName;
+					}
+	            }
+    			var th_td_more = $('<td colspan="5"><a href="#" onclick="openProfitUrl(\''+profit_store_url+'\')">查看更多</a></td>');
+    			th_tr_more.append(th_td_more);
+    			$("#"+profit_store_num).append(th_tr_more);
+
+}
+function createTableMemberData(resultJson,member_num){
+	var lstLength = resultJson['lst_data'].length;
+	            $.each(eval(resultJson['lst_data']), function (idx, val) {
+	            	if(idx==0){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td><span class="text_big1"></span></td>');
+	            		var th_td_2 = $('<td class="text-red" title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['nowcount']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+member_num).append(th_tr);
+	            	}else if(idx==1){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td><span class="text_big2"></span></td>');
+	            		var th_td_2 = $('<td class="text-red" title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['nowcount']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+member_num).append(th_tr);
+	            	}else if(idx==2){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td><span class="text_big3"></span></td>');
+	            		var th_td_2 = $('<td class="text-red" title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['nowcount']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+member_num).append(th_tr);
+	            	}else if(idx>2&&idx<=4){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td>'+(idx+1)+'</td>');
+	            		var th_td_2 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['nowcount']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+member_num).append(th_tr);
+	            	}else if(idx==5){
+	            		var th_tr_ = $('<tr/>');
+            			var th_td_1 = $('<td colspan="4">---</td>');
+            			th_tr_.append(th_td_1);
+            			$("#"+member_num).append(th_tr_);
+	            	}else if(idx>=lstLength-5&&idx<=lstLength){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td>'+(idx+1)+'</td>');
+	            		var th_td_2 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_3 = $('<td>'+val['nowcount']+'</td>');
+	            		var th_td_4;
+	            		if(val['rank']>=0){
+	            			th_td_4 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_4 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_4 =  $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');;
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4);
+	            		$("#"+member_num).append(th_tr);
+	            	}
+	            });
+	            var th_tr_more = $('<tr/>');
+	            var member_url = "" ;
+	            var betime = resultJson['betime'].replace(/-/g,"/");
+	            var entime = resultJson['entime'].replace(/-/g,"/");
+	            var cId = encode64(pageStatusInfo.cityId==""?'':pageStatusInfo.cityId);
+	  			var cName = encode64(pageStatusInfo.cityName==""?'':pageStatusInfo.cityName);
+	  			var flagBar = encode64("2");
+	            if(member_num=='member_2'){//30
+	            	member_url = "user_member_view.html?t="+encode64(0)+"&r=&c="+cId+"&cn="+cName+"&e="+encode64(curr_user.id)+"&beTi="+encode64(betime)+"&endT="+encode64(entime)+"&fb="+flagBar; 
+	            }else if(member_num=='member_6'){//昨天
+	            	dayTime = findTodayYesterdayDay().replace("-","/");;
+	            	member_url = "user_member_view.html?t="+encode64(0)+"&r=&c="+cId+"&cn="+cName+"&e="+encode64(curr_user.id)+"&beTi="+encode64(betime)+"&endT="+encode64(entime)+"&fb="+flagBar; 
+	            }else if(member_num=='member_4'){//7
+	            	member_url = "user_member_view.html?t="+encode64(0)+"&r=&c="+cId+"&cn="+cName+"&e="+encode64(curr_user.id)+"&beTi="+encode64(betime)+"&endT="+encode64(entime)+"&fb="+flagBar; 
+	            }
+    			var th_td_more = $('<td colspan="5"><a href="#" onclick="openMemberUrl(\''+member_url+'\')">查看更多</a></td>');
+    			th_tr_more.append(th_td_more);
+    			$("#"+member_num).append(th_tr_more);
+
+}
+function createTableProductData(resultJson,product_num){
+	var lstLength = resultJson['lst_data'].length;
+	var count = resultJson['count'];
+	            $.each(eval(resultJson['lst_data']), function (idx, val) {
+	            	if(idx==0){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td><span class="text_big1"></span></td>');
+	            		var th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
+	            		var th_td_5;
+	            		if(val['rank']>=0){
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_5 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
+	            		$("#"+product_num).append(th_tr);
+	            	}else if(idx==1){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td><span class="text_big2"></span></td>');
+	            		var th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
+	            		var th_td_5;
+	            		if(val['rank']>=0){
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_5 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
+	            		$("#"+product_num).append(th_tr);
+	            	}else if(idx==2){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td><span class="text_big3"></span></td>');
+	            		var th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
+	            		var th_td_5;
+	            		if(val['rank']>=0){
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_5 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
+	            		$("#"+product_num).append(th_tr);
+	            	}else if(idx>2&&idx<=4){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td>'+(idx+1)+'</td>');
+	            		var th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
+	            		var th_td_5;
+	            		if(val['rank']>=0){
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_5 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
+	            		$("#"+product_num).append(th_tr);
+	            		if(idx==4){
+	            			var th_tr_ = $('<tr/>');
+	            			var th_td_1 = $('<td colspan="5">---</td>');
+	            			th_tr_.append(th_td_1);
+	            			$("#"+product_num).append(th_tr_);
+	            		}
+	            	}else if(idx>4){
+	            		var th_tr = $("<tr/>");
+	            		var th_td_1 = $('<td>'+(count-idx)+'</td>');
+	            		var th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
+	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
+	            		var th_td_5;
+	            		if(val['rank']>=0){
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+val['rank']+'</span></td>');
+	            		}else if(val['rank']<0){
+	            			th_td_5 = $('<td class="text_down"><i class="fa fa-long-arrow-down"></i><span>'+val['rank']+'</span></td>');
+	            		}else{
+	            			th_td_5 = $('<td class="text_up"><i class="fa fa-long-arrow-up"></i><span>'+0+'</span></td>');
+	            		}
+	            		th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
+	            		$("#"+product_num).append(th_tr);
+	            	}
+	            });
+	            var th_tr_more = $('<tr/>');
+	            var th_td_more = "";
+	            var product_url = "";
+	            if(product_num=='product_1'){//30
+	            	product_url = "ranking.html?type="+encode64('yesterday')+"&cs="+encode64(pageStatusInfo.cityId)+"&ps="+encode64(pageStatusInfo.provinceId);
+	            }else if(product_num=='product_3'){//昨天
+	            	product_url = "ranking.html?type="+encode64('thirty')+"&cs="+encode64(pageStatusInfo.cityId)+"&ps="+encode64(pageStatusInfo.provinceId);
+	            }else if(product_num=='product_2'){//7
+	            	product_url = "ranking.html?type="+encode64('seven')+"&cs="+encode64(pageStatusInfo.cityId)+"&ps="+encode64(pageStatusInfo.provinceId);
+	            }
+    			//var th_td_more = $('<td colspan="5"><a href="'+product_url+'">查看更多</a></td>');
+    			//var th_td_more = $('<td colspan="5"><a href="#">查看更多</a></td>');
+    			var th_td_more = $('<td colspan="5"></td>');
+    			th_tr_more.append(th_td_more);
+    			$("#"+product_num).append(th_tr_more);
+
+}
+function openProfitUrl(url){
+	window.open(url,"dynamicData_profit_analysis");
+}
+function openMemberUrl(url){
+	window.open(url,"user_member_view");
+}
