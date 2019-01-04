@@ -102,4 +102,78 @@ public interface MassOrderItemManager extends IManager {
      * @return
      */
 	public Map<String, Object> getProfitRangeForStoreWeek(DynamicDto dd);
+	/**
+	 * 查询昨日门店毛利
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryYesterdayprofitForStore(DynamicDto dd);
+	/**
+	 * 查询近7日门店毛利
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryprofitForStoreSevenDay(DynamicDto dd);
+	/**
+	 * 查询近30日门店毛利
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryprofitForStoreThirtyday(DynamicDto dd);
+	/**
+	 * 查询昨日门店销售商品排名
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> getYesterdayStoreProduct(DynamicDto dd);
+	/**
+	 * 查询近(7天)门店销售商品排名
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> getStoreProductSevenDay(DynamicDto dd);
+	/**
+	 * 查询近(30天)门店销售商品排名
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> getStoreProductThirtyDay(DynamicDto dd);
+	
+	/**
+	 * 查询昨日门店销售商品排名列表(带分页)
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> getProductYesteryRank(DynamicDto dd,PageInfo pageInfo);
+	/**
+	 * 查询近(7天)门店销售商品排名(带分页)
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> getProductSevendayRank(DynamicDto dd,PageInfo pageInfo);
+	/**
+	 * 查询近(30天)门店销售商品排名(带分页)
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> getProductthirtydayRank(DynamicDto dd,PageInfo pageInfo);
+	/**
+	 * 查询昨日门店开卡社员数
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> getStoreYesterdayMember(DynamicDto dynamicDto);
+	/**
+	 * 查询近7日门店开卡社员数
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> getStoreSevendayMember(DynamicDto dynamicDto);
+	/**
+	 * 查询近30日门店开卡社员数
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> getStoreThirtydayMember(DynamicDto dynamicDto);
+	
 }

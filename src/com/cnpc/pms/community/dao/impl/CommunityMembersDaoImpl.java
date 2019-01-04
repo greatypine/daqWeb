@@ -110,6 +110,33 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 		return lst_result;
 	}
 	@Override
+	public List<Map<String, Object>> getWeekOtherMembersCount(DynamicDto dd) {
+		String sql = "SELECT count(*) AS newcount,DATE_FORMAT(dum.opencard_time,'%m-%d') AS crtime,ts.cityno AS cityno FROM df_user_member dum " +
+				"LEFT JOIN (select province_id,cityno,city_name from t_store t WHERE t.province_id IS NOT NULL GROUP BY cityno) ts ON LPAD(dum.regist_cityno,4,'0') = " +
+				"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name where 1=1 AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
+				"<= date(dum.opencard_time) AND date(dum.opencard_time)<CURDATE() ";
+		String groupOrderBySql = " GROUP BY DATE_FORMAT(dum.opencard_time,'%Y-%m-%d'),ts.cityno ORDER BY dum.opencard_time ";
+		String likeSql = "";
+		likeSql=" and (d.id='1' or d.id='2' or d.id='3' ) ";
+		sql=sql+likeSql+groupOrderBySql;
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			
+	        if(lst_data != null){
+	        	  for(Object obj : lst_data){
+	                  Map<String,Object> map_content = (Map<String,Object>)obj;
+	                  lst_result.add(map_content);
+	              }
+	        }
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lst_result;
+	}
+	@Override
 	public List<Map<String, Object>> getWeekTotalMembersCount(DynamicDto dd) {
 		String sql = "select sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 6 DAY)  then 1 else 0 end) as day1," + 
 				"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 5 DAY)  then  1 else 0 end) as day2," + 

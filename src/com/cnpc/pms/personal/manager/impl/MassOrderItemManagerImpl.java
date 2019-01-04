@@ -1,5 +1,6 @@
 package com.cnpc.pms.personal.manager.impl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -339,49 +340,84 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 			}
 			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
 			String curDate = DateUtils.lastDate();
-			String beginDate = DateUtils.getBeforeDate(cur,-7);
-			dd.setBeginDate(beginDate);
-			dd.setEndDate(curDate);
-			Map<String, Object> customerOrderRate = massOrderItemDao.getProfitRangeForWeek(dd,cityNO,provinceNO);
-			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
-			SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
-			String maxDateStr = curDate;    
-		    String minDateStr = "";    
-		    Calendar calc =Calendar.getInstance();      
-	         for(int i=0;i<7;i++){  
-	        	 calc.setTime(sdf.parse(maxDateStr));    
-	             calc.add(calc.DATE, -i);    
-	             Date minDate = calc.getTime();    
-	             minDateStr = sdf.format(minDate);   
-	           	 Map<String,Object> lst_map = new HashMap<String, Object>();
-	           	 lst_map.put("week_date", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
-	           	 lst_map.put("platform_profit", 0);
-	           	 lst_map.put("ims_profit", 0);
-	           	 lst_map.put("order_fee", 0);
-	           	 lst_map.put("total_profit", 0);
-	           	 lst_map.put("return_profit", 0);
-				 for(int j=0;j<lst_data.size();j++){
-	    			Map<String,Object> lst_map_week = lst_data.get(j);
-	    			String dateStr = String.valueOf(lst_map_week.get("week_date"));
-	    			if(minDateStr.contains(dateStr)){
-	    				lst_data.remove(j);
-	    				String week_date = String.valueOf(lst_map_week.get("week_date"));
-	    				lst_map.put("week_date", week_date);
-	    				lst_map.put("platform_profit", lst_map_week.get("platform_profit"));
-	    				lst_map.put("ims_profit", lst_map_week.get("ims_profit"));
-	    				lst_map.put("order_fee", lst_map_week.get("order_fee"));
-	    				lst_map.put("total_profit", lst_map_week.get("total_profit"));
-	    				lst_map.put("return_profit", lst_map_week.get("return_profit"));
-	    				
-	    			}
+			String beginDate = DateUtils.getBeforeDate(cur,-30);
+			//查询当查询全国时，查询北京上海天津和其他
+			if(city_id==null&&province_id==null){
+				DynamicDto bjDto = new DynamicDto();
+				bjDto.setBeginDate(beginDate);
+				bjDto.setEndDate(curDate);
+				Map<String, Object> customerOrderTCRate = massOrderItemDao.getOtherProfitRangeForWeek(bjDto,null,null);
+				List<Map<String,Object>> lst_data_bj = new ArrayList<Map<String,Object>>();
+				List<Map<String,Object>> lst_data_tj = new ArrayList<Map<String,Object>>();
+				List<Map<String,Object>> lst_data_sh = new ArrayList<Map<String,Object>>();
+				List<Map<String,Object>> customerOrderTCRateList = (List<Map<String, Object>>) customerOrderTCRate.get("lst_data");
+				for (Map<String, Object> map : customerOrderTCRateList) {
+					String cityno = String.valueOf(map.get("store_city_code"));
+					if("010".equals(cityno)){
+						lst_data_bj.add(map);
+					}else if("022".equals(cityno)){
+						lst_data_tj.add(map);
+					}else if("021".equals(cityno)){
+						lst_data_sh.add(map);
+					}
 				}
-				lst_data.add(lst_map);
-	         }
-			result.put("lst_data", lst_data);
+				//北京近30日毛利
+				lst_data_bj = getListByListMap(curDate,lst_data_bj);
+				//天津近30日毛利
+				lst_data_tj = getListByListMap(curDate,lst_data_tj);
+				//上海近30日毛利
+				lst_data_sh = getListByListMap(curDate,lst_data_sh);
+				result.put("lst_data_bj", lst_data_bj);
+				result.put("lst_data_tj", lst_data_tj);
+				result.put("lst_data_sh", lst_data_sh);
+			}else{
+				dd.setBeginDate(beginDate);
+				dd.setEndDate(curDate);
+				Map<String, Object> customerOrderRate = massOrderItemDao.getProfitRangeForWeek(dd,cityNO,provinceNO);
+				List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+				lst_data = getListByListMap(curDate,lst_data);
+				result.put("lst_data", lst_data);
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	List<Map<String,Object>> getListByListMap(String curDate,List<Map<String,Object>> lst_data) throws ParseException{
+		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+		String maxDateStr = curDate;    
+	    String minDateStr = "";    
+	    Calendar calc =Calendar.getInstance();      
+         for(int i=0;i<30;i++){  
+        	 calc.setTime(sdf.parse(maxDateStr));    
+             calc.add(calc.DATE, -i);    
+             Date minDate = calc.getTime();    
+             minDateStr = sdf.format(minDate);   
+           	 Map<String,Object> lst_map = new HashMap<String, Object>();
+           	 lst_map.put("week_date", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
+           	 lst_map.put("platform_profit", 0);
+           	 lst_map.put("ims_profit", 0);
+           	 lst_map.put("order_fee", 0);
+           	 lst_map.put("total_profit", 0);
+           	 lst_map.put("return_profit", 0);
+			 for(int j=0;j<lst_data.size();j++){
+    			Map<String,Object> lst_map_week = lst_data.get(j);
+    			String dateStr = String.valueOf(lst_map_week.get("week_date"));
+    			if(minDateStr.contains(dateStr)){
+    				lst_data.remove(j);
+    				String week_date = String.valueOf(lst_map_week.get("week_date"));
+    				lst_map.put("week_date", week_date);
+    				lst_map.put("platform_profit", lst_map_week.get("platform_profit"));
+    				lst_map.put("ims_profit", lst_map_week.get("ims_profit"));
+    				lst_map.put("order_fee", lst_map_week.get("order_fee"));
+    				lst_map.put("total_profit", lst_map_week.get("total_profit"));
+    				lst_map.put("return_profit", lst_map_week.get("return_profit"));
+    				
+    			}
+			}
+			lst_data.add(lst_map);
+         }
+		return lst_data;
 	}
 	@Override
 	public List<Store> queryAllStore() {
@@ -437,6 +473,495 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 			Map<String, Object> customerOrderRate = massOrderItemDao.getProfitRangeForStoreWeek(dd,cityNO,provinceNO);
 			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
 			result.put("lst_data", lst_data);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> queryYesterdayprofitForStore(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
+			String curDate = DateUtils.lastDate();
+			dd.setBeginDate(curDate);
+			dd.setEndDate(curDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.getProfitYesterdayRangeForStoreWeek(dd,cityNO,provinceNO);
+			DynamicDto dd1 = new DynamicDto();
+			String beginDate = DateUtils.getBeforeDate(cur,-2);
+			dd1.setBeginDate(beginDate);
+			dd1.setEndDate(beginDate);
+			Map<String, Object> customerBeforeYesterdayOrderRate = massOrderItemDao.getProfitYesterdayRangeForStoreWeek(dd1,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			List<Map<String,Object>> lst_before_data = (List<Map<String, Object>>) customerBeforeYesterdayOrderRate.get("lst_data");
+			for(int i=0;i<lst_data.size();i++){
+				Map<String,Object> map_lst = lst_data.get(i);
+				String storeno = String.valueOf(map_lst.get("store_code"));
+				for (int j = 0; j < lst_before_data.size(); j++) {
+					Map<String,Object> map_before_lst = lst_before_data.get(j);
+					String storeno_bef = String.valueOf(map_before_lst.get("store_code"));
+					if(storeno.equals(storeno_bef)){
+						map_lst.put("rank", j-i);
+					}
+				}
+			}
+			result.put("lst_data", lst_data);
+			result.put("betime", curDate);
+			result.put("entime", curDate);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> queryprofitForStoreThirtyday(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(curDate,-29);
+			dd.setBeginDate(endDate);
+			dd.setEndDate(curDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.queryprofitForStoreIntervalDay(dd,cityNO,provinceNO);
+			DynamicDto dd1 = new DynamicDto();
+			String endDate2 = DateUtils.getBeforeDate(endDate,-30);
+			dd1.setBeginDate(endDate2);
+			dd1.setEndDate(endDate);
+			Map<String, Object> customerBeforeYesterdayOrderRate = massOrderItemDao.queryprofitForStoreIntervalDay(dd1,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			List<Map<String,Object>> lst_before_data = (List<Map<String, Object>>) customerBeforeYesterdayOrderRate.get("lst_data");
+			for(int i=0;i<lst_data.size();i++){
+				Map<String,Object> map_lst = lst_data.get(i);
+				String storeno = String.valueOf(map_lst.get("store_code"));
+				for (int j = 0; j < lst_before_data.size(); j++) {
+					Map<String,Object> map_before_lst = lst_before_data.get(j);
+					String storeno_bef = String.valueOf(map_before_lst.get("store_code"));
+					if(storeno.equals(storeno_bef)){
+						map_lst.put("rank", j-i);
+					}
+				}
+			}
+			result.put("lst_data", lst_data);
+			result.put("betime", endDate);
+			result.put("entime", curDate);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> queryprofitForStoreSevenDay(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(curDate,-6);
+			dd.setBeginDate(endDate);
+			dd.setEndDate(curDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.queryprofitForStoreIntervalDay(dd,cityNO,provinceNO);
+			DynamicDto dd1 = new DynamicDto();
+			String endDate2 = DateUtils.getBeforeDate(endDate,-7);
+			dd1.setBeginDate(endDate2);
+			dd1.setEndDate(endDate);
+			Map<String, Object> customerBeforeYesterdayOrderRate = massOrderItemDao.queryprofitForStoreIntervalDay(dd1,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			List<Map<String,Object>> lst_before_data = (List<Map<String, Object>>) customerBeforeYesterdayOrderRate.get("lst_data");
+			for(int i=0;i<lst_data.size();i++){
+				Map<String,Object> map_lst = lst_data.get(i);
+				String storeno = String.valueOf(map_lst.get("store_code"));
+				for (int j = 0; j < lst_before_data.size(); j++) {
+					Map<String,Object> map_before_lst = lst_before_data.get(j);
+					String storeno_bef = String.valueOf(map_before_lst.get("store_code"));
+					if(storeno.equals(storeno_bef)){
+						map_lst.put("rank", j-i);
+					}
+				}
+			}
+			result.put("lst_data", lst_data);
+			result.put("betime", endDate);
+			result.put("entime", curDate);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getYesterdayStoreProduct(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(cur,-2);
+			dd.setBeginDate(curDate);
+			dd.setEndDate(endDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.getYesterdayStoreProduct(dd,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			List<Map<String,Object>> lst_data2 = (List<Map<String, Object>>) customerOrderRate.get("lst_data2");
+			lst_data.addAll(lst_data2);
+			result.put("lst_data", lst_data);
+			result.put("count", customerOrderRate.get("count"));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getStoreProductSevenDay(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(curDate,-6);
+			dd.setBeginDate(endDate);
+			dd.setEndDate(curDate);
+			//昨日门店毛利
+			DynamicDto dd1 = new DynamicDto();
+			String endDate2 = DateUtils.getBeforeDate(endDate,-7);
+			dd1.setBeginDate(endDate2);
+			dd1.setEndDate(endDate);
+			Map<String, Object> customerOrderRate = massOrderItemDao.getStoreProductIntervalDay(dd,dd1,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			List<Map<String,Object>> lst_data2 = (List<Map<String, Object>>) customerOrderRate.get("lst_data2");
+			lst_data.addAll(lst_data2);
+			result.put("lst_data", lst_data);
+			result.put("count", customerOrderRate.get("count"));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getStoreProductThirtyDay(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(curDate,-29);
+			dd.setBeginDate(endDate);
+			dd.setEndDate(curDate);
+			DynamicDto dd1 = new DynamicDto();
+			String endDate2 = DateUtils.getBeforeDate(endDate,-30);
+			dd1.setBeginDate(endDate2);
+			dd1.setEndDate(endDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.getStoreProductIntervalDay(dd,dd1,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			List<Map<String,Object>> lst_data2 = (List<Map<String, Object>>) customerOrderRate.get("lst_data2");
+			lst_data.addAll(lst_data2);
+			result.put("lst_data", lst_data);
+			result.put("count", customerOrderRate.get("count"));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getProductYesteryRank(DynamicDto dd,PageInfo pageInfo) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(cur,-2);
+			dd.setBeginDate(curDate);
+			dd.setEndDate(endDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.getProductYesteryRank(dd,cityNO,provinceNO,pageInfo);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			result.put("lst_data", lst_data);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getProductSevendayRank(DynamicDto dd,PageInfo pageInfo) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(curDate,-6);
+			dd.setBeginDate(endDate);
+			dd.setEndDate(curDate);
+			//昨日门店毛利
+			DynamicDto dd1 = new DynamicDto();
+			String endDate2 = DateUtils.getBeforeDate(endDate,-7);
+			dd1.setBeginDate(endDate2);
+			dd1.setEndDate(endDate);
+			Map<String, Object> customerOrderRate = massOrderItemDao.getStoreProductIntervalDay(dd,dd1,cityNO,provinceNO,pageInfo);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			result.put("lst_data", lst_data);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getProductthirtydayRank(DynamicDto dd,PageInfo pageInfo) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(curDate,-29);
+			dd.setBeginDate(endDate);
+			dd.setEndDate(curDate);
+			DynamicDto dd1 = new DynamicDto();
+			String endDate2 = DateUtils.getBeforeDate(endDate,-30);
+			dd1.setBeginDate(endDate2);
+			dd1.setEndDate(endDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.getStoreProductIntervalDay(dd,dd1,cityNO,provinceNO,pageInfo);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			result.put("lst_data", lst_data);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getStoreYesterdayMember(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
+			String curDate = DateUtils.lastDate();
+			dd.setBeginDate(curDate);
+			dd.setEndDate(curDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.getStoreYesterdayMember(dd,cityNO,null);
+			DynamicDto dd1 = new DynamicDto();
+			String beginDate = DateUtils.getBeforeDate(cur,-2);
+			dd1.setBeginDate(beginDate);
+			dd1.setEndDate(beginDate);
+			Map<String, Object> customerBeforeYesterdayOrderRate = massOrderItemDao.getStoreYesterdayMember(dd1,cityNO,null);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("member");
+			List<Map<String,Object>> lst_before_data = (List<Map<String, Object>>) customerBeforeYesterdayOrderRate.get("member");
+			for(int i=0;i<lst_data.size();i++){
+				Map<String,Object> map_lst = lst_data.get(i);
+				String storeno = String.valueOf(map_lst.get("storeno"));
+				for (int j = 0; j < lst_before_data.size(); j++) {
+					Map<String,Object> map_before_lst = lst_before_data.get(j);
+					String storeno_bef = String.valueOf(map_before_lst.get("storeno"));
+					if(storeno.equals(storeno_bef)){
+						map_lst.put("rank", j-i);
+					}
+				}
+			}
+			result.put("lst_data", lst_data);
+			result.put("betime", curDate);
+			result.put("entime", curDate);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getStoreSevendayMember(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(curDate,-6);
+			dd.setBeginDate(endDate);
+			dd.setEndDate(curDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.getStoreMemberIntervalDay(dd,cityNO,provinceNO,null);
+			DynamicDto dd1 = new DynamicDto();
+			String endDate2 = DateUtils.getBeforeDate(endDate,-7);
+			dd1.setBeginDate(endDate2);
+			dd1.setEndDate(endDate);
+			Map<String, Object> customerBeforeYesterdayOrderRate = massOrderItemDao.getStoreMemberIntervalDay(dd1,cityNO,provinceNO,null);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("member");
+			List<Map<String,Object>> lst_before_data = (List<Map<String, Object>>) customerBeforeYesterdayOrderRate.get("member");
+			for(int i=0;i<lst_data.size();i++){
+				Map<String,Object> map_lst = lst_data.get(i);
+				String storeno = String.valueOf(map_lst.get("storeno"));
+				for (int j = 0; j < lst_before_data.size(); j++) {
+					Map<String,Object> map_before_lst = lst_before_data.get(j);
+					String storeno_bef = String.valueOf(map_before_lst.get("storeno"));
+					if(storeno.equals(storeno_bef)){
+						map_lst.put("rank", j-i);
+					}
+				}
+			}
+			result.put("lst_data", lst_data);
+			result.put("betime", endDate);
+			result.put("entime", curDate);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public Map<String, Object> getStoreThirtydayMember(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			String curDate = DateUtils.lastDate();
+			String endDate = DateUtils.getBeforeDate(curDate,-29);
+			dd.setBeginDate(endDate);
+			dd.setEndDate(curDate);
+			//昨日门店毛利
+			Map<String, Object> customerOrderRate = massOrderItemDao.getStoreMemberIntervalDay(dd,cityNO,provinceNO,null);
+			DynamicDto dd1 = new DynamicDto();
+			String endDate2 = DateUtils.getBeforeDate(endDate,-30);
+			dd1.setBeginDate(endDate2);
+			dd1.setEndDate(endDate);
+			Map<String, Object> customerBeforeYesterdayOrderRate = massOrderItemDao.getStoreMemberIntervalDay(dd1,cityNO,provinceNO,null);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("member");
+			List<Map<String,Object>> lst_before_data = (List<Map<String, Object>>) customerBeforeYesterdayOrderRate.get("member");
+			for(int i=0;i<lst_data.size();i++){
+				Map<String,Object> map_lst = lst_data.get(i);
+				String storeno = String.valueOf(map_lst.get("storeno"));
+				for (int j = 0; j < lst_before_data.size(); j++) {
+					Map<String,Object> map_before_lst = lst_before_data.get(j);
+					String storeno_bef = String.valueOf(map_before_lst.get("storeno"));
+					if(storeno.equals(storeno_bef)){
+						map_lst.put("rank", j-i);
+					}
+				}
+			}
+			result.put("lst_data", lst_data);
+			result.put("betime", endDate);
+			result.put("entime", curDate);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
