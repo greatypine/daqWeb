@@ -691,9 +691,9 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@Override
 	public Map<String, Object> queryOrderDetailBySN(String order_sn) {
 		String sql = "SELECT CONCAT(a.id, '') AS id, a.order_sn, CONCAT(a.customer_id, '') AS customer_id, CONCAT(a.order_address_id, '') AS order_address_id, " +
-				"a.total_quantity, a.trading_price, a.payable_price, CONCAT(a.order_status, '') AS order_status, CONCAT(a.order_type, '') AS order_type, a.employee_name, " +
-				"a.employee_phone, a.appointment_start_time, a.create_time, a.sign_time AS receivedTime, a.appointment_end_time, a.seller_remark, a.addr_address AS address, " +
-				"a.addr_name AS short_name, a.addr_mobilephone AS mobilephone FROM df_mass_order_total a WHERE a.order_sn = '" + order_sn + "'";
+				"a.total_quantity, dround(a.trading_price,2) as trading_price, dround(a.payable_price,2) as payable_price, CONCAT(a.order_status, '') AS order_status, " +
+				"CONCAT(a.order_type, '') AS order_type, a.employee_name, a.employee_phone, a.appointment_start_time, a.create_time, a.sign_time AS receivedTime, a.appointment_end_time, " +
+				"a.seller_remark, a.addr_address AS address, a.addr_name AS short_name, a.addr_mobilephone AS mobilephone FROM df_mass_order_total a WHERE a.order_sn = '" + order_sn + "'";
 		// 获得查询数据
 		Map<String, Object> order_obj = null;
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);

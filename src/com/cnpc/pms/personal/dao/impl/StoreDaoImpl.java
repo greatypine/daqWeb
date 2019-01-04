@@ -1454,14 +1454,18 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public Map<String, Object> queryStoreTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo){
-		String sql = "select aa.*,ifnull(dd.return_profit,0) as return_profit,ifnull(dbaosun.count_money,0) as baosun from ( "
+		String sql = "select aa.*,ifnull(dd.return_profit,0) as return_profit,ifnull(dd.return_profit_new,0) as return_profit_new,ifnull(dd.return_gayy_subsidy,0) as return_gayy_subsidy " +
+				",ifnull(dbaosun.count_money,0) as baosun from ( "
 				+"select tab3.* from ("
-				+ "select tab2.*,ts.city_name as city_name,ts.cityno as store_city_code,ts.name as store_name,ts.storeno as store_code from (" +
-				"select store_id,sum(platform_profit) as platform_profit,sum(ims_profit) as ims_profit,sum(order_fee) as order_fee,sum(total_profit) as total_profit from ( " +
+				+ "select tab2.*,ifnull(ts.city_name,'无') as city_name,ts.cityno as store_city_code,ifnull(ts.name,'无') as store_name,ifnull(ts.storeno,'无') as store_code from (" +
+				"select store_id,sum(platform_profit) as platform_profit,sum(ims_profit) as ims_profit,sum(order_fee) as order_fee,sum(order_fee_new) as order_fee_new " +
+				",sum(total_profit) as total_profit,sum(total_profit_new) as total_profit_new,sum(gayy_subsidy) as gayy_subsidy from ( " +
 				"select dot.real_store_id as store_id,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit,  " +
 				"ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,ifnull(dround(sum(case when dot.order_tag4 is null  " +
-				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot where strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"'  " +
-				"group by dot.real_store_id " +
+				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround(sum(dot.gayy_subsidy),2),0) as gayy_subsidy " +
+				",ifnull(dround(sum(case when dot.order_tag4 is null AND dot.sale_profit > 0 then dot.platform_price else 0 end),2),0) as order_fee_new " +
+				",ifnull(dround(sum(case when dot.sale_profit > 0 then dot.order_profit else 0 end),2),0) as total_profit_new " +
+				"from df_mass_order_total dot where strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"'  group by dot.real_store_id " +
 				") tab1 group by store_id " +
 				") tab2 left join t_store ts on tab2.store_id=ts.id ) tab3 left join t_dist_citycode tdc on tab3.store_city_code=tdc.cityno where 1=1 ";
 
@@ -1479,7 +1483,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ "from df_pankui_baosun_info baosun where baosun.count_type='0' and baosun.count_month='"+dynamicDto.getBeginDate()+"' group by baosun.store_code,baosun.create_date "
 				+ ") aa having num=1 ) dbaosun on (aa.store_code=dbaosun.store_code) ";
 		//退款
-		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_code from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' group by store_code) dd on aa.store_code=dd.store_code ";
+		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit,ifnull(dround(sum(gayy_subsidy),2),0) as return_gayy_subsidy " +
+				",store_code ,ifnull(dround(sum(case when sale_profit > 0 then order_profit else 0 end),2),0) as return_profit_new  from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' " +
+				"group by store_code) dd on aa.store_code=dd.store_code ";
 
 		sql = sql + "order by aa.store_code ";
 
@@ -1566,7 +1572,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
 	public Map<String, Object> queryDeptTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo){
 		String sql = "select aa.department_name,dround(ifnull(aa.ims_profit,0),2) as ims_profit,dround(ifnull(aa.platform_profit,0),2) as platform_profit" +
-				",dround(ifnull(aa.order_fee,0),2) as order_fee,dround(ifnull(dd.return_profit,0),2) as return_profit,dround(ifnull(aa.total_profit,0),2) as total_profit " ;
+				",dround(ifnull(aa.order_fee,0),2) as order_fee,dround(ifnull(dd.return_profit,0),2) as return_profit,dround(ifnull(aa.total_profit,0),2) as total_profit "+
+				",dround(ifnull(aa.gayy_subsidy,0),2) as gayy_subsidy,dround(ifnull(dd.return_gayy_subsidy,0),2) as return_gayy_subsidy ";
 		if(dynamicDto.getSearchstr().contains("dept_city_active")){
 			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
 		}
@@ -1589,8 +1596,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 		sql = sql + ",min(channel_name) as channel_name,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit,  " +
 				"ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,ifnull(dround(sum(case when dot.order_tag4 is null  " +
-				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc " +
-				"where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(sign_time,7)='"+dynamicDto.getBeginDate()+"' " +
+				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround(sum(dot.gayy_subsidy),2),0) as gayy_subsidy " +
+				"from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(sign_time,7)='"+dynamicDto.getBeginDate()+"' "+
 				"and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.bussiness_group_id ";
 
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
@@ -1603,7 +1610,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",dot.channel_id ";
 		}
 
-		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,bussiness_group_id ";
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit,ifnull(dround(sum(gayy_subsidy),2),0) as return_gayy_subsidy ,bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
 		}
@@ -1678,17 +1685,19 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> exportStoreTradeProfit(DynamicDto dynamicDto){
-		String sql = "select min(store_city_name) as city_name,min(store_name) as store_name,ifnull(min(store_code),'') as store_code," +
+		String sql = "select ifnull(min(store_city_name),'无') as city_name,ifnull(min(store_name),'无') as store_name,ifnull(min(store_code),'无') as store_code," +
 				"sum(platform_profit) as platform_profit,sum(ims_profit) as ims_profit,sum(total_profit) as total_profit, sum(platform_coupon) as platform_coupon," +
 				"sum(ims_coupon) as ims_coupon,sum(total_coupon) as total_coupon,sum(platform_rebate) as platform_rebate,sum(ims_rebate) as ims_rebate,sum(total_rebate) as total_rebate," +
 				"sum(platform_fee) as platform_fee,sum(ims_fee) as ims_fee,sum(baosun) as baosun,sum(return_profit) as return_profit, " +
-				"ifnull(dround(sum(total_profit-return_profit-platform_fee-ims_fee-baosun),2),0) as real_profit from ( "
-				+ "select aa.*,ifnull(dbaosun.count_money,0) as baosun,ifnull(dd.return_profit,0) as return_profit from ("
+				"ifnull(dround(sum(total_profit-return_profit-platform_fee-ims_fee-baosun),2),0) as real_profit,ifnull(dround(sum(gayy_subsidy-return_gayy_subsidy),2),0) as real_subsidy," +
+				"ifnull(dround(sum(total_profit_new-return_profit_new-order_fee_new-baosun)*0.8,2),0) as actual_profit from ( "
+				+ "select aa.*,ifnull(dbaosun.count_money,0) as baosun,ifnull(dd.return_profit,0) as return_profit,ifnull(dd.return_profit_new,0) as return_profit_new," +
+				"ifnull(dd.return_gayy_subsidy,0) as return_gayy_subsidy from ("
 				+"select tab3.* from ("
 				+ "select tab2.*,ts.city_name as store_city_name,ts.cityno as store_city_code,ts.name as store_name,ts.storeno as store_code from ("
 				+ "select store_id,sum(platform_profit) as platform_profit,sum(ims_profit) as ims_profit,sum(total_profit) as total_profit,sum(platform_coupon) as platform_coupon," +
 				"sum(ims_coupon) as ims_coupon,sum(total_coupon) as total_coupon,sum(platform_rebate) as platform_rebate,sum(ims_rebate) as ims_rebate,sum(total_rebate) as total_rebate," +
-				"sum(platform_fee) as platform_fee,sum(ims_fee) as ims_fee from (" +
+				"sum(platform_fee) as platform_fee,sum(ims_fee) as ims_fee,sum(total_profit_new) as total_profit_new,sum(order_fee_new) as order_fee_new,sum(gayy_subsidy) as gayy_subsidy from (" +
 				"select real_store_id as store_id,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
 				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,"
@@ -1699,7 +1708,10 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' and dot.order_tag4 is null then dot.apportion_rebate else 0 end),2),0) as ims_rebate,"
 				+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.apportion_rebate else 0 end),2),0) as total_rebate,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' and dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as platform_fee,"
-				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' and dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as ims_fee "
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' and dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as ims_fee,"
+				+ "ifnull(dround(sum(dot.gayy_subsidy),2),0) as gayy_subsidy "
+				+ ",ifnull(dround(sum(case when dot.order_tag4 is null AND dot.sale_profit > 0 then dot.platform_price else 0 end),2),0) as order_fee_new "
+				+ ",ifnull(dround(sum(case when dot.sale_profit > 0 then dot.order_profit else 0 end),2),0) as total_profit_new "
 				+  "from df_mass_order_total dot where strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' group by dot.real_store_id "
 				+ ") tab1 group by store_id ) tab2 left join t_store ts on tab2.store_id=ts.id ) tab3 left join t_dist_citycode tdc on tab3.store_city_code=tdc.cityno where 1=1 ";
 
@@ -1717,7 +1729,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ "from df_pankui_baosun_info baosun where baosun.count_type='0' and baosun.count_month='"+dynamicDto.getBeginDate()+"' group by baosun.store_code,baosun.create_date "
 				+ ") aa having num=1 ) dbaosun on (aa.store_code=dbaosun.store_code) ";
 		//退款
-		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_code from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' group by store_code) dd on aa.store_code=dd.store_code ";
+		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,ifnull(dround(sum(gayy_subsidy),2),0) as return_gayy_subsidy " +
+				",store_code ,ifnull(dround(sum(case when sale_profit > 0 then order_profit else 0 end),2),0) as return_profit_new from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' ";
+		sql = sql + "group by store_code) dd on aa.store_code=dd.store_code ";
 
 		sql = sql + ") tt group by tt.store_code order by tt.store_code ";
 
@@ -1776,7 +1790,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		String sql = "select aa.department_name,dround(ifnull(aa.ims_profit,0),2) as ims_profit,dround(ifnull(aa.platform_profit,0),2) as platform_profit" +
 				",dround(ifnull(aa.order_fee,0),2) as order_fee,dround(ifnull(dd.return_profit,0),2) as return_profit" +
 				",dround(ifnull(aa.total_profit,0),2) as total_profit,dround(ifnull(aa.platform_fee,0),2) as platform_fee,dround(ifnull(aa.ims_fee,0),2) as ims_fee " +
-				",dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit " ;
+				",dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit,dround(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0),2) as real_subsidy " +
+				",dround((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0))* 0.2 - (ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0)),2) as dept_profit ";
 		if(dynamicDto.getSearchstr().contains("dept_city_active")){
 			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
 		}
@@ -1802,6 +1817,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit " +
 				",ifnull(dround(sum(case when dot.eshop_joint_ims='no' and dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as platform_fee "+
 				",ifnull(dround(sum(case when dot.eshop_joint_ims='yes' and dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as ims_fee "+
+				",ifnull(dround(sum(gayy_subsidy),2),0) as gayy_subsidy "+
 				" from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc " +
 				"where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(sign_time,7)='"+dynamicDto.getBeginDate()+"' " +
 				"and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.bussiness_group_id ";
@@ -1816,7 +1832,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",dot.channel_id ";
 		}
 
-		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,bussiness_group_id ";
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit,ifnull(dround(sum(gayy_subsidy),2),0) as return_gayy_subsidy ,bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
 		}

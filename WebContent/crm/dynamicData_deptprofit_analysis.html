@@ -189,16 +189,19 @@
                     <tbody id="tradeType_tbody">
 	                    <tr>
 	                      <th width="8%" id="citynamepayhide">城市</th>
-	                      <th width="10%" id="storenamepayhide">门店名称</th>
+	                      <th width="8%" id="storenamepayhide">门店名称</th>
 	                      <th width="10%" id="storenopayhide">门店编号</th>
-                          <th width="10%">事业群</th>
-                          <th width="10%" id="channelnamepayhide">频道</th>
-	                      <th width="10%">销售收入<br/>（平台）</th>
-                          <th width="13%">销售收入<br/>（优易-进销存系统商品）</th>
-                          <th width="10%">已退货<br/></th>
-                          <th width="10%">营销费用<br/></th>
-                          <th width="10%"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-                              <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">销售收入-已退货-营销费用</font>毛利</th>
+                          <th width="8%">事业群</th>
+                          <th width="8%" id="channelnamepayhide">频道</th>
+	                      <th width="8%">销售收入<br/>（平台）</th>
+                          <th width="10%">销售收入<br/>（优易-进销存系统商品）</th>
+                          <th width="7%">已退货<br/></th>
+                          <th width="8%">营销费用<br/></th>
+                          <th width="8%">补贴费用<br/></th>
+                          <th width="8%"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                              <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:50px">销售收入-已退货-营销费用</font>整体毛利</th>
+                          <th width="8%"><font id="columnattention2" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                              <font id="forcolumnattention2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:50px">（销售收入-已退货-营销费用）×0.2-补贴费用</font>事业群毛利</th>
 	                    </tr>
                     </tbody>
                   </table>
@@ -353,6 +356,12 @@
     });
     $("#columnattention").on("mouseout",function(event){
         $("#forcolumnattention").hide();
+    });
+    $("#columnattention2").on("mouseover",function(event){
+        $("#forcolumnattention2").show();
+    });
+    $("#columnattention2").on("mouseout",function(event){
+        $("#forcolumnattention2").hide();
     });
 
     var searchChannelStr = "dept_active";
@@ -673,11 +682,15 @@
                                infoStr= infoStr +"<td>"+jData[i].channel_name+"</td>";
                            }
                        var real_profit = (jData[i].total_profit -jData[i].return_profit- jData[i].order_fee).toFixed(2);
+                       var real_subsidy =  (jData[i].gayy_subsidy -jData[i].return_gayy_subsidy).toFixed(2);
+                       var dept_profit = (real_profit * 0.2 - real_subsidy).toFixed(2);
                            infoStr = infoStr+"<td>"+jData[i].platform_profit+"</td>"
                            +"<td>"+jData[i].ims_profit+"</td>"
                            +"<td>"+jData[i].return_profit+"</td>"
                            +"<td>"+jData[i].order_fee+"</td>"
+                           +"<td>"+real_subsidy+"</td>"
                            +"<td>"+real_profit+"</td>"
+                           +"<td>"+dept_profit+"</td>"
                            +"</tr>";
 		                       
 		                  $("#tradeType_tbody").append(infoStr);     

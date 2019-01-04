@@ -7343,8 +7343,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			List<List<MergedRegionParam>> targetMergeList = null;
 
 			//城市毛利
-			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损盘亏","毛利"};
-			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","return_profit","baosun","real_profit"};
+			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损盘亏","补贴费用","整体毛利"};
+			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","return_profit","baosun","real_subsidy","real_profit"};
 
 			//所需合并的单元格参数
 			MergedRegionParam param1 = new MergedRegionParam("城市","城市","城市");
@@ -7353,10 +7353,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			MergedRegionParam param4 = new MergedRegionParam("优惠券（平台）","优惠券（合计）","优惠券");
 			MergedRegionParam param5 = new MergedRegionParam("营销费用（平台）","营销费用（优易）","营销费用");
 			MergedRegionParam param6 = new MergedRegionParam("销售收入（已退货）","销售收入（已退货）","已退货");
-			MergedRegionParam param7 = new MergedRegionParam("毛利","毛利","毛利");
+			MergedRegionParam param7 = new MergedRegionParam("整体毛利","整体毛利","整体毛利");
 			MergedRegionParam param8 = new MergedRegionParam("事业群","事业群","事业群");
 			MergedRegionParam param9 = new MergedRegionParam("频道","频道","频道");
 			MergedRegionParam param10 = new MergedRegionParam("报损盘亏","报损盘亏","进销存系统费用");
+			MergedRegionParam param11 = new MergedRegionParam("补贴费用","补贴费用","补贴费用");
+			MergedRegionParam param12 = new MergedRegionParam("事业群毛利","事业群毛利","事业群毛利");
+			MergedRegionParam param13 = new MergedRegionParam("门店毛利","门店毛利","门店毛利");
 			List cityList = new ArrayList();
 			cityList.add(param1);
 			cityList.add(param3);
@@ -7372,9 +7375,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			//门店毛利
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
 				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（平台）","销售收入（优易）","销售收入（合计）",
-						"优惠券（平台）","优惠券（优易）","优惠券（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损盘亏","毛利"};
+						"优惠券（平台）","优惠券（优易）","优惠券（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损盘亏","整体毛利","补贴费用","门店毛利"};
 				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","ims_profit","total_profit",
-						"platform_coupon","ims_coupon","total_coupon","platform_fee","ims_fee","return_profit","baosun","real_profit"};
+						"platform_coupon","ims_coupon","total_coupon","platform_fee","ims_fee","return_profit","baosun","real_profit","real_subsidy","actual_profit"};
 				List storeList = new ArrayList();
 				storeList.add(param1);
 				storeList.add(param2);
@@ -7384,6 +7387,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				storeList.add(param6);
 				storeList.add(param7);
 				storeList.add(param10);
+				storeList.add(param11);
+				storeList.add(param13);
 				List<List<MergedRegionParam>> storeMergeList = new ArrayList<>();
 				storeMergeList.add(storeList);
 				targetMergeList = storeMergeList;
@@ -7413,7 +7418,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				content.put("营销费用（平台）","platform_fee");
 				content.put("营销费用（优易）","ims_fee");
 				content.put("销售收入（已退货）","return_profit");
-				content.put("毛利","real_profit");
+				content.put("补贴费用","real_subsidy");
+				content.put("整体毛利","real_profit");
+				content.put("事业群毛利","dept_profit");
 
 				str_headers = content.keySet().toArray(new String[0]);
 				headers_key = content.values().toArray(new String[0]);
@@ -7423,6 +7430,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				deptList.add(param6);
 				deptList.add(param7);
 				deptList.add(param8);
+				deptList.add(param11);
+				deptList.add(param12);
 				List<List<MergedRegionParam>> deptMergeList = new ArrayList<>();
 				deptMergeList.add(deptList);
 				targetMergeList = deptMergeList;
