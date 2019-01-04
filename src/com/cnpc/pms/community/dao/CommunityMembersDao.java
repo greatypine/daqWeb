@@ -22,6 +22,13 @@ public interface CommunityMembersDao extends IDAO {
 	 */
 	public List<Map<String, Object>> getWeekMembersCount(DynamicDto dynamicDto);
 	/**
+	 * 获取近7日每日北京&上海&天津新开社员总数
+	 * author:zhangli
+	 * @param dynamicDto
+	 * @return
+	 */
+	public List<Map<String, Object>> getWeekOtherMembersCount(DynamicDto dynamicDto);
+	/**
 	 * 获取近7日每日的累计社员总数
 	 * @param dynamicDto
 	 * @return

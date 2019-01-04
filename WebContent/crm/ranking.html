@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 2 | Blank Page</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../startbootstrap/bower_components/datatables/media/css/dataTables.bootstrap.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+
+    .content-wrapper{color: #666;}
+    .ranking_h{background: url("dist/img/ranking-h.png") no-repeat; background-size: 100% 100%;}
+    table th{padding-top: 18px; color: #fff;height: 40px; line-height: 40px;}
+    table td{height: 40px; line-height: 40px!important;background: linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0.4)); background: -webkit-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0.4)); background:-moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0.4)); white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden; position: relative; color: #444;}
+    table .text_up{color: #da3d46;}
+    table .text_down{color: #827f92;}
+    table .text_up span,.swiper-slide table .text_down span{font-size: 12px; padding-left: 2px;}
+    table .fa-un{color: #a9a9a9;}
+    .tr_bg1 td{background: linear-gradient(top, rgba(255,212,209,0.8), rgba(251,219,222,0.8));
+      background:-webkit-linear-gradient(top, rgba(255,212,209,0.8), rgba(251,219,222,0.8)); background: -moz-linear-gradient(top, rgba(255,212,209,0.8), rgba(251,219,222,0.8));}
+    .tr_bg2 td{background: linear-gradient(top, rgba(254,230,230,0.8), rgba(251,229,231,0.8));
+      background:-webkit-linear-gradient(top, rgba(254,230,230,0.8), rgba(251,229,231,0.8)); background: -moz-linear-gradient(top, rgba(254,230,230,0.8), rgba(251,229,231,0.8));}
+    .tr_bg3 td{background: linear-gradient(top, rgba(255,239,239,0.8), rgba(254,244,243,0.8));
+      background:-webkit-linear-gradient(top, rgba(255,239,239,0.8), rgba(254,244,243,0.8)); background: -moz-linear-gradient(top, rgba(255,239,239,0.8), rgba(254,244,243,0.8));}
+    table .text_big1{font-size: 14px; background: url("dist/img/pai1.png") no-repeat; height: 25px; width: 25px; display: block; background-size: 100% 100%; margin: 0 auto;}
+    table .text_big2{font-size: 14px; background: url("dist/img/pai2.png") no-repeat; height: 25px; width: 25px; display: block; background-size: 100% 100%; margin: 0 auto;}
+    table .text_big3{font-size: 14px; background: url("dist/img/pai3.png") no-repeat; height: 25px; width: 25px; display: block; background-size: 100% 100%; margin: 0 auto;}
+    table td a{color: #1d7df4; text-decoration: underline;}
+    table td em{position: absolute; width: 20px; top: -10px;}
+    table td em img{width: 100%}
+    table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after{top:28px;}
+    .odd,.table-striped > tbody > tr:nth-of-type(odd){background-color: transparent;}
+    .pagination > li > a{padding: 4px 10px; margin: 0 3px; background-color: transparent;border-color:transparent;}
+    .pagination > li > a:hover{background-color: transparent;border-color:transparent;}
+    .pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover{background-color: transparent;border-color:transparent; color: #ccc;}
+    .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover{color: rgba(238,55,51,1); font-weight: bold; background-color: transparent;border-color:transparent;}
+    .dataTables_filter input,.dataTables_length select{background-color: transparent;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+        <div class="logo_img pull-left"><img src="dist/img/logo1.png" height="30"><img src="dist/img/title.png" height="20"></div>
+        <div class="pull-left">
+          <div class="logo-lg">
+            <ul class="no-margin">
+              <li class="current">
+                <em>数据运营<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+                <div class="TDsec-nav">
+                  <div class="secNav-box">
+                    <dl class="col-sm-3">
+                      <dt><i></i>运营数据</dt>
+                      <dd><a href="#"><span class="fa fa-money"></span>营业额统计</a></dd>
+                      <dd><a href="#"><span class="fa fa-user-plus"></span>用户运营</a></dd>
+                      <dd><a href="#"><span class="fa fa-cubes"></span>产品运营</a></dd>
+                      <dd><a href="#"><span class="fa fa-institution"></span>门店运营</a></dd>
+                      <dd><a href="#"><span class="fa fa-comments-o"></span>混片情况</a></dd>
+                    </dl>
+                    <dl class="col-sm-3">
+                      <dt><i></i>绩效数据</dt>
+                      <dd><a href="#"><span class="fa fa-line-chart"></span>门店GMV</a></dd>
+                      <dd><a href="#"><span class="fa fa-pie-chart"></span>国安侠GMV</a></dd>
+                      <dd><a href="#"><span class="fa fa-area-chart"></span>门店拉新</a></dd>
+                      <dd><a href="#"><span class="fa fa-bar-chart"></span>国安侠拉新</a></dd>
+                      <dd><a href="#"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd>
+                    </dl>
+                    <dl class="col-sm-3">
+                      <dt><i></i>档案数据</dt>
+                      <dd><a href="#"><span class="fa fa-file-o"></span>订单档案</a></dd>
+                      <dd><a href="#"><span class="fa fa-newspaper-o"></span>员工档案</a></dd>
+                      <dd><a href="#"><span class="fa fa-copy"></span>片区档案</a></dd>
+                      <dd><a href="#"><span class="fa fa-clipboard"></span>小区档案</a></dd>
+                    </dl>
+                    <dl class="col-sm-3">
+                      <dt><i></i>排名数据</dt>
+                      <dd><a href="#"><span class="fa fa-signal"></span>XX排名</a></dd>
+                      <dd><a href="#"><span class="fa fa-signal"></span>XX排名</a></dd>
+                    </dl>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <em>数据模型<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+                <div class="TDsec-nav">
+                  <div class="secNav-box">
+                    <dl class="col-sm-4">
+                      <dt><i></i>社区模型</dt>
+                      <dd><a href="#"><span class="fa fa-sitemap"></span>基础数据模型</a></dd>
+                    </dl>
+                    <dl class="col-sm-4">
+                      <dt><i></i>订单模型</dt>
+                      <dd><a href="#"><span class="fa fa-server"></span>公海订单</a></dd>
+                      <dd><a href="#"><span class="fa fa-warning "></span>异常订单</a></dd>
+                    </dl>
+                    <dl class="col-sm-4">
+                      <dt><i></i>用户模型</dt>
+                      <dd><a href="#"><span class="fa fa-street-view"></span>用户画像</a></dd>
+                    </dl>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <em>数据地图<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+                <div class="TDsec-nav">
+                  <div class="secNav-box">
+                    <dl class="col-sm-4">
+                      <dt><i></i>热力图</dt>
+                      <dd><a href="#"><span class="fa fa-money"></span>订单热力图</a></dd>
+                      <dd><a href="#"><span class="fa fa-user-secret"></span>用户人力图</a></dd>
+                    </dl>
+                    <dl class="col-sm-4">
+                      <dt><i></i>覆盖范围</dt>
+                      <dd><a href="#"><span class="fa fa-object-group"></span>门店覆盖范围</a></dd>
+                      <dd><a href="#"><span class="fa fa-map-o"></span>片区分布图</a></dd>
+                    </dl>
+                    <dl class="col-sm-4">
+                      <dt><i></i>动态图</dt>
+                      <dd><a href="#"><span class="fa fa-group"></span>国安侠分布图</a></dd>
+                    </dl>
+                  </div>
+                </div>
+              </li>
+
+            </ul>
+
+
+          </div>
+        </div>
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                <span class="hidden-xs">王春</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                  <p><strong>王春</strong></p>
+                  <p>店长<span>A77777</span></p>
+                  <p>呼家楼店</p>
+                </li>
+
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="#" class="btn btn-default btn-flat">个人中心</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="#" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <!-- =============================================== -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+
+      <section class="content-header">
+        <table id="example1" class="table table-striped">
+          <thead>
+          <tr class="ranking_h">
+            <th style="width:20%">排名</th>
+            <th style="width:30%">商品名称</th>
+            <th style="width:20%">门店名称</th>
+            <th style="width:10%">GMV</th>
+            <th style="width:20%">趋势</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="tr_bg1">
+            <td><span class="text_big1"></span></td>
+            <td class="text-yellow" title="呼家楼门店">呼家楼门店<em><img src="dist/img/hot-r.png"> </em></td>
+            <td title="呼家楼门店呼家楼门店">呼家楼门店呼家楼门店呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_up"><i class="fa fa-long-arrow-up"></i></td>
+          </tr>
+          <tr class="tr_bg2">
+            <td><span class="text_big2"></span></td>
+            <td class="text-yellow" title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_up"><i class="fa fa-long-arrow-up"></i><span>2</span></td>
+          </tr>
+          <tr class="tr_bg3">
+            <td><span class="text_big3"></span></td>
+            <td class="text-yellow" title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td><i class="fa-un">--</i></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>12</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>13</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>14</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>15</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>16</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          <tr>
+            <td>17</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td title="呼家楼门店">呼家楼门店</td>
+            <td>343556</td>
+            <td class="text_down"><i class="fa fa-long-arrow-down"></i><span>2</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+      </section>
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="../startbootstrap/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="../startbootstrap/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script src="dist/js/headquarters/ranking.js"></script>
+
+<script>
+  $(function () {
+    $("#example1").DataTable();
+  });
+</script>
+
+
+</body>
+</html>

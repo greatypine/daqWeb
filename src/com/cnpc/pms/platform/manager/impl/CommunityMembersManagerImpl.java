@@ -52,49 +52,77 @@ public class CommunityMembersManagerImpl extends BizBaseCommonManager implements
 		Map<String, Object>  result = new HashMap<String, Object>();
 		CommunityMembersDao communityMembersDao = (CommunityMembersDao)SpringHelper.getBean(CommunityMembersDao.class.getName());
 		List<Map<String, Object>> newWeekCountList = new ArrayList<Map<String,Object>>();
-		List<Map<String, Object>> totalWeekCountList = new ArrayList<Map<String,Object>>();
 		List dateXCounts=new ArrayList();
+		Long city_id = dynamicDto.getCityId();
+		String province_id = dynamicDto.getProvinceId();
 		try{
 			newWeekCountList = communityMembersDao.getWeekMembersCount(dynamicDto);//查询近7日每日新开社员数
-			totalWeekCountList = communityMembersDao.getWeekTotalMembersCount(dynamicDto);//查询近7日每日累计社员总数
 			dateXCounts = reDate(7);
 			String curDate = DateUtils.lastDate();
-			SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
-			String maxDateStr = curDate;    
-		    String minDateStr = "";    
-		    Calendar calc =Calendar.getInstance();      
-	         for(int i=0;i<7;i++){  
-	        	 calc.setTime(sdf.parse(maxDateStr));    
-	             calc.add(calc.DATE, -i);    
-	             Date minDate = calc.getTime();    
-	             minDateStr = sdf.format(minDate);   
-	             Map<String,Object> lst_new_map = new HashMap<String, Object>();
-	           	Map<String,Object> lst_total_map = new HashMap<String, Object>();
-	           	lst_new_map.put("crtime", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
-	           	lst_total_map.put("crtime", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
-	           	lst_new_map.put("year_date", minDateStr.substring(0,(minDateStr.indexOf("-"))));
-	           	lst_new_map.put("newcount", 0);
-	           	lst_new_map.put("totalcount", 0);
-	           	for(int j=0;j<newWeekCountList.size();j++){
-	           		Map<String,Object> lst_map_week = newWeekCountList.get(j);
-	           		String dateStr = String.valueOf(lst_map_week.get("crtime"));
-	           		if(minDateStr.contains(dateStr)){
-	           			newWeekCountList.remove(j);
-	           			String week_date = String.valueOf(lst_map_week.get("crtime"));
-	           			lst_new_map.put("crtime", week_date);
-	           			lst_new_map.put("newcount", lst_map_week.get("newcount"));
-	           		}
-	           	}
-	           	newWeekCountList.add(lst_new_map);
-	         }
+			newWeekCountList = getListByListMap(curDate,newWeekCountList);
+			//查询当查询全国时，查询北京上海天津和其他
+			if(city_id==null&&province_id==null){
+				DynamicDto bjDto = new DynamicDto();
+				bjDto.setEndDate(curDate);
+				List<Map<String,Object>> lst_data_bj = new ArrayList<Map<String,Object>>();
+				List<Map<String,Object>> lst_data_tj = new ArrayList<Map<String,Object>>();
+				List<Map<String,Object>> lst_data_sh = new ArrayList<Map<String,Object>>();
+				List<Map<String,Object>> communityMembersTCRateList = communityMembersDao.getWeekOtherMembersCount(bjDto);
+				for (Map<String, Object> map : communityMembersTCRateList) {
+					String cityno = String.valueOf(map.get("cityno"));
+					if("0010".equals(cityno)){
+						lst_data_bj.add(map);
+					}else if("0022".equals(cityno)){
+						lst_data_tj.add(map);
+					}else if("0021".equals(cityno)){
+						lst_data_sh.add(map);
+					}
+				}
+				//北京近7日新增社员数
+				lst_data_bj = getListByListMap(curDate,lst_data_bj);
+				//天津近7日新增社员数
+				lst_data_tj = getListByListMap(curDate,lst_data_tj);
+				//上海近7日新增社员数
+				lst_data_sh = getListByListMap(curDate,lst_data_sh);
+				result.put("lst_data_bj", lst_data_bj);
+				result.put("lst_data_tj", lst_data_tj);
+				result.put("lst_data_sh", lst_data_sh);
+			}
 	         result.put("week_new_data", newWeekCountList);
 	         JSONArray jsonDateX=(JSONArray)JSONArray.fromObject(dateXCounts);
 	         result.put("jsonDateX",jsonDateX);
-	         result.put("growAllCounts",totalWeekCountList);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	List<Map<String,Object>> getListByListMap(String curDate,List<Map<String,Object>> newWeekCountList) throws ParseException{
+		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+		String maxDateStr = curDate;    
+	    String minDateStr = "";    
+	    Calendar calc =Calendar.getInstance();      
+         for(int i=0;i<7;i++){  
+        	 calc.setTime(sdf.parse(maxDateStr));    
+             calc.add(calc.DATE, -i);    
+             Date minDate = calc.getTime();    
+             minDateStr = sdf.format(minDate);   
+             Map<String,Object> lst_new_map = new HashMap<String, Object>();
+           	lst_new_map.put("crtime", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
+           	lst_new_map.put("year_date", minDateStr.substring(0,(minDateStr.indexOf("-"))));
+           	lst_new_map.put("newcount", 0);
+           	for(int j=0;j<newWeekCountList.size();j++){
+           		Map<String,Object> lst_map_week = newWeekCountList.get(j);
+           		String dateStr = String.valueOf(lst_map_week.get("crtime"));
+           		if(minDateStr.contains(dateStr)){
+           			newWeekCountList.remove(j);
+           			String week_date = String.valueOf(lst_map_week.get("crtime"));
+           			lst_new_map.put("crtime", week_date);
+           			lst_new_map.put("newcount", lst_map_week.get("newcount"));
+           		}
+           	}
+           	newWeekCountList.add(lst_new_map);
+         }
+         return newWeekCountList;
 	}
 	//生成X轴坐标
 	 public List reDate(int dd) throws ParseException {
