@@ -124,7 +124,7 @@
          	<div class="box-header h4 text-light-blue">
           	<div class="pull-left "><strong>门店毛利</strong></div>
          	<div class="pull-left text-red" style="padding-left:15px;font-size:75%">数据口径：</div>
-                <div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用不包含A类营销费用。</br>3.毛利=销售收入（平台+优易）-已退货（已签收并退款）-营销费用（平台分摊的优惠券）-报损盘亏。</div>
+                <div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用不包含A类营销费用。</br>3.毛利=销售收入（平台+优易）-已退货（已签收并退款）-营销费用（平台分摊的优惠券）-报损盘亏。</br>4.优易促销产生的负毛利不计入门店毛利。</div>
           </div>       <div class="box-body">
             <form id="searchform">
             <div class="form-group col-lg-4">
@@ -167,15 +167,18 @@
                     <tbody id="tradeType_tbody">
 	                    <tr>
 	                      <th width="8%">城市</th>
-	                      <th width="10%">门店名称</th>
+	                      <th width="8%">门店名称</th>
 	                      <th width="10%">门店编号</th>
-	                      <th width="10%">销售收入<br/>（平台）</th>
-                          <th width="13%">销售收入<br/>（优易-进销存系统商品）</th>
-                          <th width="10%">已退货<br/></th>
-                          <th width="10%">营销费用<br/></th>
-                          <th width="10%">报损盘亏<br/></th>
-                          <th width="10%"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-                              <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:17px">销售收入-已退货-营销费用-报损盘亏</font>毛利</th>
+	                      <th width="8%">销售收入<br/>（平台）</th>
+                          <th width="12%">销售收入<br/>（优易-进销存系统商品）</th>
+                          <th width="8%">已退货<br/></th>
+                          <th width="8%">营销费用<br/></th>
+                          <th width="8%">报损盘亏<br/></th>
+                          <th width="8%"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                              <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:17px">销售收入-已退货-营销费用-报损盘亏</font>整体毛利</th>
+                          <th width="8%">优易补贴<br/></th>
+                          <th width="8%"><font id="columnattention2" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                              <font id="forcolumnattention2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:17px">（销售收入-已退货-营销费用-报损盘亏）×0.8</font>门店毛利</th>
 	                    </tr>
                     </tbody>
                   </table>
@@ -320,6 +323,12 @@
     });
     $("#columnattention").on("mouseout",function(event){
         $("#forcolumnattention").hide();
+    });
+    $("#columnattention2").on("mouseover",function(event){
+        $("#forcolumnattention2").show();
+    });
+    $("#columnattention2").on("mouseout",function(event){
+        $("#forcolumnattention2").hide();
     });
 
   });
@@ -530,6 +539,9 @@
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
                        var real_profit = (jData[i].total_profit-jData[i].return_profit-jData[i].order_fee-jData[i].baosun).toFixed(2);
+                       var real_subsidy =  (jData[i].gayy_subsidy -jData[i].return_gayy_subsidy).toFixed(2);
+                       var real_profit_new = (jData[i].total_profit_new-jData[i].return_profit_new-jData[i].order_fee_new-jData[i].baosun).toFixed(2);
+                       var actual_profit = (real_profit_new * 0.8).toFixed(2);
 	        		   infoStr= "<tr>"
 		                       +"<td>"+jData[i].city_name+"</td>"
 		                       +"<td>"+jData[i].store_name+"</td>"
@@ -540,6 +552,8 @@
                                +"<td>"+(jData[i].order_fee).toFixed(2)+"</td>"
                                +"<td>"+(jData[i].baosun).toFixed(2)+"</td>"
                                +"<td>"+real_profit+"</td>"
+                               +"<td>"+real_subsidy+"</td>"
+                               +"<td>"+actual_profit+"</td>"
 		                       +"</tr>";
 		                       
 		                  $("#tradeType_tbody").append(infoStr);     
