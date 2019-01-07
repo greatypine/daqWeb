@@ -540,9 +540,8 @@
 	        	   for(var i=0;i<jData.length;i++){
                        var real_profit = (jData[i].total_profit-jData[i].return_profit-jData[i].order_fee-jData[i].baosun).toFixed(2);
                        var real_subsidy =  (jData[i].gayy_subsidy -jData[i].return_gayy_subsidy).toFixed(2);
-                       var real_profit_new = (jData[i].total_profit_new-jData[i].return_profit_new-jData[i].order_fee_new-jData[i].baosun).toFixed(2);
-                       var actual_profit = (real_profit_new * 0.8).toFixed(2);
-	        		   infoStr= "<tr>"
+                       var actual_profit = ((Number(real_profit) + Number(real_subsidy)) * 0.8).toFixed(2);
+                       infoStr= "<tr>"
 		                       +"<td>"+jData[i].city_name+"</td>"
 		                       +"<td>"+jData[i].store_name+"</td>"
 		                       +"<td>"+jData[i].store_code+"</td>"
