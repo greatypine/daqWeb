@@ -7496,8 +7496,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
                 str_headers = new String[]{"城市","门店名称","门店编码","员工姓名","员工编号","销售收入","营销费用","报损","盘亏","毛利"};
                 headers_key = new String[]{"city_name", "store_name", "storeno", "employee_name", "employee_no", "income", "sumprice", "baosun", "pankui", "maoli"};
             }else{
-                str_headers = new String[]{"城市","门店名称","门店编码","员工姓名","员工编号","销售收入","片区销售收入","手动分配销售收入","人均分配销售收入","营销费用","报损","盘亏","毛利"};
-                headers_key = new String[]{"city_name","store_name","storeno","employee_name","employee_no","allcome","income","outcome","wcd_profit","sumprice","baosun","pankui","maoli"};
+                str_headers = new String[]{"城市","门店名称","门店编码","员工姓名","员工编号","销售收入","片区销售收入","手动分配销售收入","人均分配销售收入","营销费用","报损","盘亏","整体毛利","优易补贴","国安侠毛利"};
+                headers_key = new String[]{"city_name","store_name","storeno","employee_name","employee_no","allcome","income","outcome","wcd_profit","sumprice","baosun","pankui","maoli","gayysubsidy","endmaoli"};
             }
             ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠毛利",list,str_headers,headers_key);
             result = eeuo.exportFile();
