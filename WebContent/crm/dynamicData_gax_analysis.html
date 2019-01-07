@@ -137,7 +137,7 @@
                     <div class="box-header h4 text-light-blue">
                         <div class="pull-left "><strong>国安侠毛利</strong></div>
                         <div class="pull-left text-red" style="padding-left:15px;font-size:75%">数据口径：</div>
-                        <div class="pull-left text-red" style="font-size:75%">1.销售收入=片区销售收入+手动匹配营销收入+人均匹配营销收入</br>2.片区销售收入：当月所有指定国安侠的有效订单收入（去除退货）</br>3.手动匹配营销收入：当月所有手动分配的有效订单收入（去除退货）</br>4.人均匹配营销收入：当月门店内现场扫码类订单收入均值</br>5.片区营销费用：指定国安侠类订单内平台分摊使用的优惠券</br>6.手动匹配营销费用：手动匹配类订单内平台分摊使用的优惠券</br>7.毛利=片区销售收入+手动分配销售收入+人均分配销售收入-片区营销费用-手动分配营销费用-报损盘亏。</div>
+                        <div class="pull-left text-red" style="font-size:75%">1.销售收入=片区销售收入+手动匹配营销收入+人均匹配营销收入</br>2.片区销售收入：当月所有指定国安侠的有效订单收入（去除退货）</br>3.手动匹配营销收入：当月所有手动分配的有效订单收入（去除退货）</br>4.人均匹配营销收入：当月门店内现场扫码类订单收入均值</br>5.片区营销费用：指定国安侠类订单内平台分摊使用的优惠券</br>6.手动匹配营销费用：手动匹配类订单内平台分摊使用的优惠券</br>7.整体毛利=片区销售收入+手动分配销售收入+人均分配销售收入-片区营销费用-手动分配营销费用-报损盘亏。</br>8.国安侠毛利=整体毛利+补贴</div>
                     </div>
                     <div class="box-body">
                         <div class="form-group col-lg-4">
@@ -218,13 +218,16 @@
                                             <th width="8%" style="font-size: 14px;font-weight:bold;">员工编号</th>
                                             <th width="8%" style="font-size: 14px;font-weight:bold;"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
                                                 <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:17px">片区销售收入+手动分配销售收入-人均分配销售收入</font>销售收入</th>
-                                            <th width="8%" style="font-size: 14px;font-weight:bold;" id="areain">片区销售收入<br/></th>
+                                            <!--<th width="8%" style="font-size: 14px;font-weight:bold;" id="areain">片区销售收入<br/></th>
                                             <th width="8%" style="font-size: 14px;font-weight:bold;" id="handin">手动分配销售收入<br/></th>
-                                            <th width="8%" style="font-size: 14px;font-weight:bold;" id="avgin">人均分配销售收入<br/></th>
+                                            <th width="8%" style="font-size: 14px;font-weight:bold;" id="avgin">人均分配销售收入<br/></th>-->
                                             <th width="8%" style="font-size: 14px;font-weight:bold;" >营销费用<br/></th>
                                             <th width="6%" style="font-size: 14px;font-weight:bold;">报损盘亏<br/></th>
                                             <th width="10%" style="font-size: 14px;font-weight:bold;"><font id="columnattention1" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-                                                <font id="forcolumnattention1" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:17px">销售收入-营销费用-报损盘亏</font>毛利</th>
+                                                <font id="forcolumnattention1" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:17px">销售收入-营销费用-报损盘亏</font>整体毛利</th>
+                                            <th width="6%" style="font-size: 14px;font-weight:bold;">优易补贴<br/></th>
+                                            <th width="10%" style="font-size: 14px;font-weight:bold;"><font id="columnattention2" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                                                <font id="forcolumnattention2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:17px">(整体毛利+优易补贴)*0.8</font>国安侠毛利</th>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -320,7 +323,7 @@
         type:"month",
         btns: ['confirm'],
         theme: '#11214e',
-        min: '2018-10-1',
+        min: '2018-11-1',
         max:use_month,
 
     });
@@ -362,6 +365,12 @@
         });
         $("#columnattention1").on("mouseout",function(event){
             $("#forcolumnattention1").hide();
+        });
+        $("#columnattention2").on("mouseover",function(event){
+            $("#forcolumnattention2").show();
+        });
+        $("#columnattention2").on("mouseout",function(event){
+            $("#forcolumnattention2").hide();
         });
         //Date range picker
 //    $('#be_date1').daterangepicker();
@@ -609,13 +618,16 @@
                                 +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].employee_name+"</td>"
                                 +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].employee_no+"</td>"
                                 +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].allcome+"</td>"
-                                +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].income+"</td>"
-                                +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].outcome+"</td>"
-                                +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].wcd_profit+"</td>"
+                              /*  +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].income+"</td>"*/
+                               /* +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].outcome+"</td>"*/
+                                /*+"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].wcd_profit+"</td>"*/
                                 +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].sumprice+"</td>"
                                 +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].baosun+"</td>"
                                /* +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].pankui+"</td>"*/
                                 +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].maoli+"</td>"
+                                +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].gayysubsidy+"</td>"
+                                /*+"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].saleprofit+"</td>"*/
+                                +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].endmaoli+"</td>"
                                 +"</tr>";
 
                         }
