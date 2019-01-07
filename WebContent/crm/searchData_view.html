@@ -1285,7 +1285,7 @@ function getIsManager(){
       var start_date = begin_end_date[0];
       if(start_date.replace(/\s+/g,"")==cDate){//如果时间是今天则变更时间
           var date = new Date();
-          $("#auto_date").val(date.getFullYear()+"/"+(date.getMonth()+1)+"/01"+"-"+begin_end_date[1]);
+          $("#auto_date").val(date.getFullYear()+"/"+((date.getMonth()+1)<9?('0'+(date.getMonth()+1)):(date.getMonth()+1))+"/01"+"-"+begin_end_date[1]);
       }
   }
 
