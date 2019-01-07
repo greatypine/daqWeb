@@ -7681,7 +7681,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			jsonObject.put("status", 0);
 			jsonObject.put("updateTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 			jsonObject.put("username", user.getEmployeeId());
-			jsonObject.put("code", user.getCode());
+			jsonObject.put("resource", user.getCode());
 			
 	        HttpClientUtil hClientUtil = new HttpClientUtil();
 	        
