@@ -166,7 +166,7 @@
 					</ul>
 					<div class="tab-content">
 						<div class="col-sm-12 text-red no-padding" style="padding-left:15px;font-size:75%;float: right">
-							<p style="width:auto;float:right">数据口径：</br>1.营销费用不包含A类营销费用。</br>2.此页面数据为运营监控数据，不可作为绩效数据使用。</p>
+							<p style="width:auto;float:right">数据口径：</br>1.营销费用不包含A类营销费用。</br>2.优易促销产生的负毛利不计入门店毛利。</br>3.此页面数据为运营监控数据，不可作为绩效数据使用。</p>
 						</div>
 
 
@@ -232,12 +232,15 @@
 											<tbody id="tradeType_tbody_store">
 											<tr>
 												<th width="8%">城市</th>
-												<th width="10%">门店名称</th>
-												<th width="10%">门店编号</th>
-												<th width="10%" id="deptnamepayhide">事业群</th>
-												<th width="10%" id="channelnamepayhide">频道</th>
+												<th width="8%">门店名称</th>
+												<th width="8%">门店编号</th>
+												<th width="8%" id="deptnamepayhide">事业群</th>
+												<th width="8%" id="channelnamepayhide">频道</th>
 												<th width="10%"><font id="attention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-													<font id="showattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:170px">销售收入-已退货-营销费用</font>毛利</th>
+													<font id="showattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:110px">销售收入-已退货-营销费用</font>整体毛利</th>
+												<th width="8%">优易补贴</th>
+												<th width="10%"><font id="attention2" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+													<font id="showattention2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:110px">（销售收入-已退货-营销费用）×0.8</font>门店毛利</th>
 											</tr>
 											</tbody>
 										</table>
@@ -581,6 +584,12 @@
         });
         $("#attention").on("mouseout",function(event){
             $("#showattention").hide();
+        });
+        $("#attention2").on("mouseover",function(event){
+            $("#showattention2").show();
+        });
+        $("#attention2").on("mouseout",function(event){
+            $("#showattention2").hide();
         });
         //城市单位
         $("#attentioncity").on("mouseover",function(event){
@@ -1305,6 +1314,7 @@
 
                     var infoStr="";
                     for(var i=0;i<jData.length;i++){
+                        var actual_profit = ((jData[i].real_profit + jData[i].real_subsidy) * 0.8).toFixed(2);
                         infoStr= "<tr>"
                             +"<td>"+jData[i].city_name+"</td>"
                             +"<td>"+jData[i].store_name+"</td>"
@@ -1320,8 +1330,10 @@
 						}else{
                             infoStr = infoStr +"<td><a style=\"text-decoration:underline\" href=\"javascript:showprofitdetail('"+jData[i].store_name+"','"+jData[i].store_code+"','')\">"+jData[i].real_profit+"</a></td>";
 						}
-
-                        infoStr = infoStr +"</tr>";
+                        infoStr = infoStr
+							+"<td>"+jData[i].real_subsidy+"</td>"
+                            +"<td>"+actual_profit+"</td>"
+							+"</tr>";
 
                         $("#tradeType_tbody_store").append(infoStr);
                     }

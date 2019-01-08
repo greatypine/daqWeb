@@ -7582,8 +7582,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","more");
 				return result;
 			}
-			String[] str_headers = new String[]{"城市","门店名称","门店编号","毛利"};
-			String[] headers_key = new String[]{"city_name","store_name","store_code","real_profit"};
+			String[] str_headers = new String[]{"城市","门店名称","门店编号","整体毛利","优易补贴","门店毛利"};
+			String[] headers_key = new String[]{"city_name","store_name","store_code","real_profit","real_subsidy","store_profit"};
 
 			if(dynamicDto.getSearchstr().contains("store_dept") || dynamicDto.getSearchstr().contains("store_channel")){
 				Map<String,String> content = new LinkedHashMap<>();
@@ -7596,7 +7596,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getSearchstr().contains("store_channel")){
 					content.put("频道","channel_name");
 				}
-				content.put("毛利","real_profit");
+				content.put("整体毛利","real_profit");
+				content.put("优易补贴","real_subsidy");
+				content.put("门店毛利","store_profit");
 				str_headers = content.keySet().toArray(new String[0]);
 				headers_key = content.values().toArray(new String[0]);
 			}
