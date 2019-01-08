@@ -974,8 +974,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String sql_1 = "";
 		String sql_2 = "";
 		String sql = "SELECT ifnull((ss.rows1-tt.rows2),0) as rank,tt.store_name as store_name,tt.storeno as storeno,tt.product_gmv as product_gmv,tt.product_name as product_name FROM (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)='"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)='"
 				+ beginDate+"' ";
 		
 		String whereStr = "";
@@ -994,8 +994,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
 		sql=sql+ "LEFT JOIN (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
+				+ "sum(ifnull(bipo.quantity,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
 				+ "strleft (bipo.sign_time, 10) = '"+endDate+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
@@ -1024,8 +1024,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String sql_1 = "";
 		String sql_2 = "";
 		String sql = "SELECT ifnull((ss.rows1-tt.rows2),0) as rank,tt.store_name as store_name,tt.storeno as storeno,tt.product_gmv as product_gmv,tt.product_name as product_name FROM (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)>='"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)>='"
 				+ beginDate+"' and strleft (bipo.sign_time, 10)<='"+endDate+"' ";
 		
 		String whereStr = "";
@@ -1044,8 +1044,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
 		sql=sql+ "LEFT JOIN (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
+				+ "sum(ifnull(bipo.quantity,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
 				+ "strleft (bipo.sign_time, 10) >= '"+beginDate2+"' and strleft (bipo.sign_time, 10)<='"+endDate2+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
@@ -1069,8 +1069,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
 		String sql = "SELECT ifnull((ss.rows1-tt.rows2),0) as rank,tt.store_name as store_name,tt.storeno as storeno,tt.product_gmv as product_gmv,tt.product_name as product_name FROM (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)='"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)='"
 				+ beginDate+"' ";;
 		String sqlA = "";
 		String count_sql = "";
@@ -1091,8 +1091,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
 		sql=sql+ "LEFT JOIN (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
+				+ "sum(ifnull(bipo.quantity,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
 				+ "strleft (bipo.sign_time, 10) = '"+endDate+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";

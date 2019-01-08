@@ -6725,7 +6725,7 @@ var getYesterdayStoreProduct = function(pageStatusInfo){
 	            var th_td_1 = $('<th style="width:20%">排名</th>');
 	            var th_td_2 = $('<th style="width:30%">商品名称</th>');
 	            var th_td_3 = $('<th style="width:20%">门店名称</th>');
-	            var th_td_4 = $('<th style="width:10%">GMV</th>');
+	            var th_td_4 = $('<th style="width:10%">销量</th>');
 	            var th_td_5 = $('<th style="width:20%">趋势</th>');
 	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
 	            $("#"+product_num).append(th_tr);
@@ -6751,7 +6751,7 @@ var getStoreProductSevenDay = function(pageStatusInfo){
 	            var th_td_1 = $('<th style="width:20%">排名</th>');
 	            var th_td_2 = $('<th style="width:30%">商品名称</th>');
 	            var th_td_3 = $('<th style="width:20%">门店名称</th>');
-	            var th_td_4 = $('<th style="width:10%">GMV</th>');
+	            var th_td_4 = $('<th style="width:10%">销量</th>');
 	            var th_td_5 = $('<th style="width:20%">趋势</th>');
 	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
 	            $("#"+product_num).append(th_tr);
@@ -6777,7 +6777,7 @@ var getStoreProductThirtyDay = function(pageStatusInfo){
 	            var th_td_1 = $('<th style="width:20%">排名</th>');
 	            var th_td_2 = $('<th style="width:30%">商品名称</th>');
 	            var th_td_3 = $('<th style="width:20%">门店名称</th>');
-	            var th_td_4 = $('<th style="width:10%">GMV</th>');
+	            var th_td_4 = $('<th style="width:10%">销量</th>');
 	            var th_td_5 = $('<th style="width:20%">趋势</th>');
 	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
 	            $("#"+product_num).append(th_tr);
