@@ -999,11 +999,11 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				+ "strleft (bipo.sign_time, 10) = '"+endDate+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
-		count_sql = "select count(1) as count_ from ("+sql+") dd ";
+		count_sql = "select count(1) as count_ from ("+sql+") dd where dd.product_gmv>0 ";
 		List<Map<String,Object>> list_count = ImpalaUtil.executeGuoan(count_sql);
 		Integer count = Integer.parseInt(String.valueOf(list_count.get(0).get("count_")));
-		sql_1 = "select ff.* from ("+sql+") ff order by ff.product_gmv desc limit "+5+" offset 0";
-		sql_2 = "select ff.* from ("+sql+") ff order by ff.product_gmv desc limit "+5+" offset "+(count-5);
+		sql_1 = "select ff.* from ("+sql+") ff where ff.product_gmv>0 order by ff.product_gmv desc limit "+5+" offset 0";
+		sql_2 = "select ff.* from ("+sql+") ff where ff.product_gmv>0 order by ff.product_gmv desc limit "+5+" offset "+(count-5);
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql_1);
 		List<Map<String,Object>> list_ = ImpalaUtil.executeGuoan(sql_2);
 		
@@ -1049,11 +1049,11 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				+ "strleft (bipo.sign_time, 10) >= '"+beginDate2+"' and strleft (bipo.sign_time, 10)<='"+endDate2+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
-		count_sql = "select count(1) as count_ from ("+sql+") dd ";
+		count_sql = "select count(1) as count_ from ("+sql+") dd where dd.product_gmv>0 ";
 		List<Map<String,Object>> list_count = ImpalaUtil.executeGuoan(count_sql);
 		Integer count = Integer.parseInt(String.valueOf(list_count.get(0).get("count_")));
-		sql_1 = "select ff.* from ("+sql+") ff order by ff.product_gmv desc limit "+5+" offset 0";
-		sql_2 = "select ff.* from ("+sql+") ff order by ff.product_gmv desc limit "+5+" offset "+(count-5);
+		sql_1 = "select ff.* from ("+sql+") ff where ff.product_gmv>0 order by ff.product_gmv desc limit "+5+" offset 0";
+		sql_2 = "select ff.* from ("+sql+") ff where ff.product_gmv>0 order by ff.product_gmv desc limit "+5+" offset "+(count-5);
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql_1);
 		List<Map<String,Object>> list_ = ImpalaUtil.executeGuoan(sql_2);
 		
