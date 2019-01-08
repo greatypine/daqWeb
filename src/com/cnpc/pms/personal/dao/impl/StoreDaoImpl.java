@@ -2013,7 +2013,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	}
 
 	public Map<String, Object> queryProfitDeptStat(DynamicDto dynamicDto,PageInfo pageInfo){
-		String sql = "select aa.department_name,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit " ;
+		String sql = "select aa.department_name,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit," +
+				"dround(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0),2) as real_subsidy " ;
 		if(dynamicDto.getSearchstr().contains("dept_city")){
 			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
 		}
@@ -2036,9 +2037,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 		sql = sql + ",min(channel_name) as channel_name,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit,  " +
 				"ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,ifnull(dround(sum(case when dot.order_tag4 is null  " +
-				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc " +
-				"where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' " +
-				"and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.bussiness_group_id ";
+				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround(sum(dot.gayy_subsidy),2),0) as gayy_subsidy " +
+				"from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' " +
+				"and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.bussiness_group_id ";
 
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
@@ -2050,7 +2051,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",dot.channel_id ";
 		}
 
-		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,bussiness_group_id ";
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit,ifnull(dround(sum(gayy_subsidy),2),0) as return_gayy_subsidy ,bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",store_code ";
 		}
@@ -2099,7 +2100,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getChannel()!=null){
 			sql = sql + " and aa.channel_name='"+dynamicDto.getChannel()+"' ";
 		}
-		sql = sql + "order by department_name ";
+		sql = sql + "order by department_name,real_profit desc ";
 
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 
@@ -2216,7 +2217,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	}
 
 	public List<Map<String, Object>> exportProfitDeptStat(DynamicDto dynamicDto){
-		String sql = "select aa.department_name,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit " ;
+		String sql = "select aa.department_name,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit," +
+				"dround(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0),2) as real_subsidy," +
+				"dround((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0))*0.2-(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0)),2) as dept_profit " ;
 		if(dynamicDto.getSearchstr().contains("dept_city")){
 			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
 		}
@@ -2239,9 +2242,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 		sql = sql + ",min(channel_name) as channel_name,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit,  " +
 				"ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,ifnull(dround(sum(case when dot.order_tag4 is null  " +
-				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc " +
-				"where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' " +
-				"and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.bussiness_group_id ";
+				"then dot.platform_price else 0 end),2),0) as order_fee,ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround(sum(dot.gayy_subsidy),2),0) as gayy_subsidy " +
+				"from df_mass_order_total dot,t_store ts ,t_dist_citycode tdc where dot.real_store_id=ts.id and ts.cityno=tdc.cityno and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' " +
+				"and strleft(dot.sign_time,10)<='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' group by dot.bussiness_group_id ";
 
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
@@ -2253,7 +2256,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",dot.channel_id ";
 		}
 
-		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,bussiness_group_id ";
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit,ifnull(dround(sum(gayy_subsidy),2),0) as return_gayy_subsidy ,bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",store_code ";
 		}
@@ -2302,7 +2305,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getChannel()!=null){
 			sql = sql + " and aa.channel_name='"+dynamicDto.getChannel()+"' ";
 		}
-		sql = sql + "order by department_name ";
+		sql = sql + "order by department_name,real_profit desc ";
 
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 		return list;
