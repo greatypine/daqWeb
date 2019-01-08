@@ -2969,7 +2969,9 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     var max = Math.max.apply(null, data);
     var min = Math.min.apply(null, data);
     var average = (max - min)/listcount;
-    if(average<1){
+    if(0<average<=0.2){
+    	average = average*1.5;
+    }else if(0.2<average&&average<1){
     	average = average*0.35;
     }else if(average>=1&&average<=10){
     	average = average*0.18;
