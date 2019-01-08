@@ -4253,13 +4253,13 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		}
 	    		List<Map<String,Object>> areaProfitMonthCountList = (List<Map<String, Object>>) areaProfitMonthCountMap.get("maoli");
 	    		if(areaProfitMonthCountList!=null&&areaProfitMonthCountList.size()>0){
-	    			areaProfitMonthCount = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("maoli")==null?0:areaProfitMonthCountList.get(0).get("maoli")));
+	    			areaProfitMonthCount = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("endmaoli")==null?0:areaProfitMonthCountList.get(0).get("endmaoli")));
 	    		}else{
 	    			areaProfitMonthCount = 0.0;
 	    		}
 	    		List<Map<String,Object>> areaProfitLstMonthCountList = (List<Map<String, Object>>) areaProfitLastMonthCountMap.get("maoli");
 	    		if(areaProfitLstMonthCountList!=null&&areaProfitLstMonthCountList.size()>0){
-	    			areaProfitLstMonthCount = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("maoli")==null?0:areaProfitLstMonthCountList.get(0).get("maoli")));
+	    			areaProfitLstMonthCount = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("endmaoli")==null?0:areaProfitLstMonthCountList.get(0).get("endmaoli")));
 	    		}else{
 	    			areaProfitLstMonthCount = 0.0;
 	    		}
@@ -4364,8 +4364,11 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("return_profit")==null?0:areaProfitMonthCountList.get(0).get("return_profit")));
 	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("order_fee")==null?0:areaProfitMonthCountList.get(0).get("order_fee")));
 	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("baosun")==null?0:areaProfitMonthCountList.get(0).get("baosun")));
+	    			Double  gayy_subsidy = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("gayy_subsidy")==null?0:areaProfitMonthCountList.get(0).get("gayy_subsidy")));
+	    			Double  return_gayy_subsidy = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("return_gayy_subsidy")==null?0:areaProfitMonthCountList.get(0).get("return_gayy_subsidy")));
 	    			double real_profit = (total_profit-return_profit-order_fee-baosun);
-	    			storeProfitMonthCount = (double) Math.round(real_profit * 100)/100;
+	    			double real_subsidy =  (double) Math.round((gayy_subsidy -return_gayy_subsidy) * 100)/100;
+	    			storeProfitMonthCount = (double) Math.round((real_profit + real_subsidy) * 0.8* 100)/100;
 	    		}else{
 	    			storeProfitMonthCount = 0.0;
 	    		}
@@ -4376,7 +4379,10 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("order_fee")==null?0:areaProfitLstMonthCountList.get(0).get("order_fee")));
 	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("baosun")==null?0:areaProfitLstMonthCountList.get(0).get("baosun")));
 	    			double real_profit = (total_profit-return_profit-order_fee-baosun);
-	    			storeProfitLstMonthCount = (double) Math.round(real_profit * 100)/100;
+	    			Double  gayy_subsidy = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("gayy_subsidy")==null?0:areaProfitLstMonthCountList.get(0).get("gayy_subsidy")));
+	    			Double  return_gayy_subsidy = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("return_gayy_subsidy")==null?0:areaProfitLstMonthCountList.get(0).get("return_gayy_subsidy")));
+	    			double real_subsidy =  (double) Math.round((gayy_subsidy -return_gayy_subsidy) * 100)/100;
+	    			storeProfitLstMonthCount = (double) Math.round((real_profit + real_subsidy) * 0.8* 100)/100;
 	    		}else{
 	    			storeProfitLstMonthCount = 0.0;
 	    		}
