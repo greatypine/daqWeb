@@ -7623,8 +7623,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","more");
 				return result;
 			}
-			String[] str_headers = new String[]{"事业群","毛利"};
-			String[] headers_key = new String[]{"department_name","real_profit"};
+			String[] str_headers = new String[]{"事业群","整体毛利","补贴费用","事业群毛利"};
+			String[] headers_key = new String[]{"department_name","real_profit","real_subsidy","dept_profit"};
 
 			if(dynamicDto.getSearchstr().contains("dept_store") || dynamicDto.getSearchstr().contains("dept_city") || dynamicDto.getSearchstr().contains("dept_channel")){
 				Map<String,String> content = new LinkedHashMap<>();
@@ -7639,7 +7639,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getSearchstr().contains("dept_channel")){
 					content.put("频道","channel_name");
 				}
-				content.put("毛利","real_profit");
+				content.put("整体毛利","real_profit");
+				content.put("补贴费用","real_subsidy");
+				content.put("事业群毛利","dept_profit");
 				str_headers = content.keySet().toArray(new String[0]);
 				headers_key = content.values().toArray(new String[0]);
 			}

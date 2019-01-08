@@ -372,12 +372,15 @@
 											<tbody id="tradeType_tbody_dept">
 											<tr>
 												<th width="8%" id="citynamepayhide">城市</th>
-												<th width="10%" id="storenamepayhide">门店名称</th>
-												<th width="10%" id="storenopayhide">门店编号</th>
-												<th width="10%">事业群</th>
-												<th width="10%" id="channelnamepayhide2">频道</th>
+												<th width="8%" id="storenamepayhide">门店名称</th>
+												<th width="8%" id="storenopayhide">门店编号</th>
+												<th width="8%">事业群</th>
+												<th width="8%" id="channelnamepayhide2">频道</th>
 												<th width="10%"><font id="attentiondept" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-													<font id="showattentiondept" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:170px">销售收入-已退货-营销费用</font>毛利</th>
+													<font id="showattentiondept" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:170px">销售收入-已退货-营销费用</font>整体毛利</th>
+												<th width="8%">补贴费用<br/></th>
+												<th width="8%"><font id="attentiondept2" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+													<font id="showattentiondept2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:50px">（销售收入-已退货-营销费用）×0.2-补贴费用</font>事业群毛利</th>
 											</tr>
 											</tbody>
 										</table>
@@ -605,7 +608,12 @@
         $("#attentiondept").on("mouseout",function(event){
             $("#showattentiondept").hide();
         });
-
+        $("#attentiondept2").on("mouseover",function(event){
+            $("#showattentiondept2").show();
+        });
+        $("#attentiondept2").on("mouseout",function(event){
+            $("#showattentiondept2").hide();
+        });
     });
     /**-----------------------------------搜索城市------------------------------------------------------**/
     var lst_select_city=null;
@@ -1693,6 +1701,7 @@
 
                     var infoStr="";
                     for(var i=0;i<jData.length;i++){
+                        var dept_profit = (jData[i].real_profit * 0.2 - jData[i].real_subsidy).toFixed(2);
                         infoStr= "<tr>";
                         if($('#cityClick').is(':checked')){
                             infoStr= infoStr +"<td>"+jData[i].city_name+"</td>";
@@ -1706,6 +1715,8 @@
                             infoStr= infoStr +"<td>"+jData[i].channel_name+"</td>";
                         }
                         infoStr = infoStr +"<td>"+jData[i].real_profit+"</td>"
+                            +"<td>"+jData[i].real_subsidy+"</td>"
+                            +"<td>"+dept_profit+"</td>"
                             +"</tr>";
 
                         $("#tradeType_tbody_dept").append(infoStr);
