@@ -838,6 +838,8 @@ var initPageElements = function () {
             	for(var i=0;i<params.reverse().length;i++){
             		relVal += "<br/>"+params[i]['marker']+params[i]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[i]['value']),1);
             	}
+            }else if(params.length=1){
+            		relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[0]['value']),1);
             }
             return relVal;
         },
@@ -918,7 +920,7 @@ var initPageElements = function () {
         yAxis: 1,
         stack: '总量',
         label: {
-          show: false,
+          show: true,
           position: 'top',
           formatter: '{c} ',
           textStyle:{
@@ -929,7 +931,7 @@ var initPageElements = function () {
           normal: {
             color: "#ff3064",
             label: {
-              show: true,
+              show: false,
               textStyle: {
                 color: "#fff"
               },
@@ -6506,13 +6508,11 @@ function dialogRemove2(){
 }
 function initSwiper(){
   var swiper = new Swiper('.swiper-container', {
-  /*
     autoplay : {
       delay:5000,
       disableOnInteraction : false,
     },
-    */
-    autoplay:false,
+    //autoplay:false,
     pagination: {
       el: '.swiper-pagination',
       clickable: true,
@@ -6524,14 +6524,12 @@ function initSwiper(){
     watchOverflow: true,//因为仅有1个slide，swiper无效
     allowTouchMove: false
   });
-  /*
   $('.swiper-slide').mouseenter(function () {
     swiper.autoplay.stop();
   })
   $('.swiper-slide').mouseleave(function () {
     swiper.autoplay.start();
   })
-  */
 }
 //散点图
   var dataBJ = [
