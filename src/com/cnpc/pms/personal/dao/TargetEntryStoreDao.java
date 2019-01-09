@@ -22,6 +22,15 @@ public interface TargetEntryStoreDao extends IDAO{
 
 	List<Map<String, Object>> exportFile(TargetEntryStore targetEntryStore);
 
+	List<Map<String, Object>> exportFileAll(String startTime,String endTIme);
+
+	List<Map<String, Object>> exportFileAllList(String startTime,String endTIme);
+	List<Map<String, Object>> exportFileAlljwsList(String startTime,String endTIme);
+	List<Map<String, Object>> exportFileAlldwList(String startTime,String endTIme);
+	List<Map<String, Object>> exportFileAllgajcList(String startTime,String endTIme);
+	List<Map<String, Object>> exportFileAllcpzxList(String startTime,String endTIme);
+	List<Map<String, Object>> exportFileAllzfbtList(String startTime,String endTIme);
+
 	void updateTargetEntryStore(TargetEntryStore targetEntryStore);
 
 	/**

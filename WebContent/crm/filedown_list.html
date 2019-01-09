@@ -106,7 +106,7 @@
         margin-right: 100px;
     }
     .content2 .divcontent {
-        width: 1000px;
+        /*width: 1000px;*/
         height: 80px;
         background: #fff;
         margin: 10px auto;
@@ -176,8 +176,26 @@
   </header>
 
     <!--右上角下载中心-->
-    <div class="modal-content content2" id="dialog2" style="background: #f4f4f4">
-        <div class="div1" id="head_tr">
+    <div class="modal-content content2" id="dialog2" style="background: #f4f4f4;display: none">
+        <form id="reset_form">
+            <table>
+                <div class="div1" id="head_tr" style="width: 50%;float: left;padding: 10px;">
+
+
+                </div>
+                <div class="div1" id="head_tr2" style="width: 50%;float: right;padding: 10px;">
+                    <h3>
+                        系统推送
+                    </h3>
+                </div>
+            </table>
+        </form>
+
+    </div>
+    <!--右上角下载中心-->
+    <div class="modal-content content2" id="dialog3" style="background: #f4f4f4;display: none">
+        <div class="div1" id="head_tr3" style="width: 100%;">
+
 
         </div>
     </div>
@@ -216,47 +234,118 @@
                 if(dataresult != undefined && dataresult != null && dataresult.length){
                     var objtr = $("#head_tr");
                     document.getElementById("head_tr").innerHTML = "";
-//                objtr.append("<tr> <td class='downtr'>名称</td>  <td class='downtr'>状态</td> <td class='downtr'>操作</td></tr>");
                     var html = "";
+                    html = html = "<span style='font-size: 18px;font-weight: bold;'>人工导出</span>";
+                    var objtr2 = $("#head_tr2");
+                    document.getElementById("head_tr2").innerHTML = "";
+                    var html2 = "";
+                    html2 = html2 = "<span style='font-size: 18px;font-weight: bold;'>系统推送</span>";
+                    var objtr3 = $("#head_tr3");
+                    document.getElementById("head_tr3").innerHTML = "";
+                    var html3 = "";
                     for(var i=0; i<dataresult.length; i++) {
-                        if (dataresult[i].downTime != null && dataresult[i].downTime != "") {
-                            var file_downTime = formmatDate(dataresult[i].downTime);
-                        } else {
-                            file_downTime = " — ";
-                        }
-                        var file_filename = dataresult[i].filename+".csv";
-                        var file_createTime = formmatDate(dataresult[i].create_time);
-                        var file_status = dataresult[i].mark1;
-                        var file_id = dataresult[i].id;
-                        if (file_status == 0) {
-                            file_status = "正在生成文件...";
-                        } else {
-                            file_status = "已生成文件";
-                        }
-                        var file_username = dataresult[i].username;
+                        if(dataresult[i].description == "personal"){
+                            if (dataresult[i].downTime != null && dataresult[i].downTime != "") {
+                                var file_downTime = formmatDate(dataresult[i].downTime);
+                            } else {
+                                file_downTime = " — ";
+                            }
+                            var file_filename = dataresult[i].filename+".csv";
+                            var file_createTime = formmatDate(dataresult[i].create_time);
+                            var file_status = dataresult[i].mark1;
+                            var file_id = dataresult[i].id;
+                            if (file_status == 0) {
+                                file_status = "正在生成文件...";
+                            } else {
+                                file_status = "已生成文件";
+                            }
+                            var file_username = dataresult[i].username;
 
-                        var file_enfilename = dataresult[i].url;
-                        var file_times = dataresult[i].downTimes;
-                        var heml_name = dataresult[i].tableLogic;
-                        if (heml_name == "DDDA") {
-                            heml_name = "订单档案";
-                        } else if (heml_name == "SPXSDA") {
-                            heml_name = "商品销售档案"
+                            var file_enfilename = dataresult[i].url;
+                            var file_times = dataresult[i].downTimes;
+                            var heml_name = dataresult[i].tableLogic;
+                            if (heml_name == "DDDA") {
+                                heml_name = "订单档案";
+                            } else if (heml_name == "SPXSDA") {
+                                heml_name = "商品销售档案"
+                            } else if(heml_name == "system"){
+                                heml_name = "系统推送";
+                            }
+
+                            var url = dataresult[i].url;
+                            if (dataresult[i].mark1 == 0) {
+                                html = html + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:gray;' disabled='true'>" + file_filename + "</a></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd> <button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button> </dl>"
+                            } else {
+                                if(url == null || url == ""){
+                                    html = html + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + "生成文件失败" + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:gray;' disabled='true'>" + file_filename + "</a></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd> <button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button> </dl>"
+
+                                }else{
+                                    html = html + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:#1a73e8;' href='" + url + "'>" + file_filename + "</a><span ></span></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd><button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button>  </dl>"
+                                }
+
+                            }
+
+                            if (dataresult[i].mark1 == 0) {
+                                html3 = html3 + "<dl class='divcontent' style='position: relative;width: 1000px;'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:gray;' disabled='true'>" + file_filename + "</a></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd> <button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button> </dl>"
+                            } else {
+                                if(url == null || url == ""){
+                                    html3 = html3 + "<dl class='divcontent' style='position: relative;width: 1000px;'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + "生成文件失败" + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:gray;' disabled='true'>" + file_filename + "</a></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd> <button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button> </dl>"
+
+                                }else{
+                                    html3 = html3 + "<dl class='divcontent' style='position: relative;width: 1000px;'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:#1a73e8;' href='" + url + "'>" + file_filename + "</a><span ></span></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd><button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button>  </dl>"
+                                }
+
+                            }
+                        }else{
+                            document.getElementById("dialog2").style.display = 'block';
+                            if (dataresult[i].downTime != null && dataresult[i].downTime != "") {
+                                var file_downTime = formmatDate(dataresult[i].downTime);
+                            } else {
+                                file_downTime = " — ";
+                            }
+                            var file_filename = dataresult[i].filename+".csv";
+                            var file_createTime = formmatDate(dataresult[i].create_time);
+                            var file_status = dataresult[i].mark1;
+                            var file_id = dataresult[i].id;
+                            if (file_status == 0) {
+                                file_status = "正在生成文件...";
+                            } else {
+                                file_status = "已生成文件";
+                            }
+                            var file_username = dataresult[i].username;
+
+                            var file_enfilename = dataresult[i].url;
+                            var file_times = dataresult[i].downTimes;
+//                            var heml_name = dataresult[i].tableLogic;
+//                            if (heml_name == "DDDA") {
+//                                heml_name = "订单档案";
+//                            } else if (heml_name == "SPXSDA") {
+//                                heml_name = "商品销售档案"
+//                            }
+
+                            var url = dataresult[i].url;
+                            if (dataresult[i].mark1 == 0) {
+                                html2 = html2 + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + "系统推送" + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:gray;' disabled='true'>" + file_filename + "</a></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd> <button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button> </dl>"
+                            } else {
+                                if(url == null || url == ""){
+                                    html2 = html2 + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + "系统推送" + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + "生成文件失败" + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:gray;' disabled='true'>" + file_filename + "</a></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd> <button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button> </dl>"
+
+                                }else{
+                                    html2 = html2 + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + "系统推送" + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:#1a73e8;' href='" + url + "'>" + file_filename + "</a><span ></span></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd><button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button>  </dl>"
+                                }
+
+                            }
                         }
 
-                        var url = dataresult[i].url;
-                        if (dataresult[i].mark1 == 0) {
-                            html = html + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:gray;' disabled='true'>" + file_filename + "</a></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd> <button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button> </dl>"
-                        } else {
-                            html = html + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:#1a73e8;' href='" + url + "'>" + file_filename + "</a><span ></span></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd><button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button>  </dl>"
-
-                        }
 
                     }
-                    //objtr.clean();
-
+                    if(document.getElementById("dialog2").style.display == 'none'){
+                        document.getElementById("dialog3").style.display = 'block'
+                    }
 
                     objtr.append(html);
+                    objtr2.append(html2);
+                    objtr3.append(html3);
                 }
             }
         })

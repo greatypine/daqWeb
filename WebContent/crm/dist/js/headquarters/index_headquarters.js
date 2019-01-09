@@ -6091,19 +6091,30 @@ function download_table(){
                     var file_enfilename = dataresult[i].url;
                     var file_times = dataresult[i].downTimes;
                     var heml_name = dataresult[i].tableLogic;
+                    var type = dataresult[i].description;
                     if(heml_name == "DDDA"){
                         heml_name = "订单档案";
                     }else if(heml_name == "SPXSDA"){
                         heml_name = "商品销售档案"
+                    }else if(heml_name == "system"){
+                        heml_name = "系统推送";
                     }
-
+                    if(type == "personal"){
+                        type = "人工导出";
+                    }else{
+                        type = "系统推送";
+                    }
                     var url = dataresult[i].url;
                     if(dataresult[i].mark1 == 0){
-//                        html = html + "<tr><td class='downtr'>"+ file_filename +"</td><td class='downtr'> " + file_status +"</td><td class='downtr'><a class='downa' style='color:gray;' disabled='true'>下载</a></td></tr>";
-                        html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 1px;'><div class='downrightdiv'><span style='color:#1a73e8;'>"+ heml_name +"</span></div><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span style='color:#1a73e8;'>"+ file_filename +"</span><span class='xlsx'>.csv</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' style='color:gray;' disabled='true'>下载</a></div></div></dd> </dl>"
+                        html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dt class='downleft'><span>"+ type +"</span></dt><dd class='downright'><div style='padding-top: 1px;margin-left: 86px;'><div class='downrightdiv'><span>"+ heml_name +"</span></div><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span>"+ file_filename +"</span><span class='xlsx'>.csv</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' style='color:gray;' disabled='true'>下载</a></div></div></dd> </dl>"
                     }else{
-//                        html = html + "<tr><td class='downtr'>"+ file_filename +"</td><td class='downtr'> " + file_status +"</td><td class='downtr'><a class='downa' href='"+ url+"' onclick='addTimes("+file_id+","+file_times+")'>下载</a></td></tr>";
-                        html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 1px;'><div class='downrightdiv'><span style='color:#1a73e8;'>"+ heml_name +"</span></div><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span style='color:#1a73e8;'>"+ file_filename +"</span><span class='xlsx'>.csv</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' href='"+ url+"'>下载</a></div></div></dd> </dl>"
+                        if(url == null || url == ""){
+                            html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dt class='downleft'><span>"+ type +"</span></dt><dd class='downright'><div style='padding-top: 1px;margin-left: 86px;'><div class='downrightdiv'><span>"+ heml_name +"</span></div><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span>"+ file_filename +"</span><span class='xlsx'>.csv</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + "生成文件失败" +"</span><a class='downrighta' style='color:gray;' disabled='true'>下载</a></div></div></dd> </dl>"
+
+                        }else{
+                            html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dt class='downleft'><span>"+ type +"</span></dt><dd class='downright'><div style='padding-top: 1px;margin-left: 86px;'><div class='downrightdiv'><span>"+ heml_name +"</span></div><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span>"+ file_filename +"</span><span class='xlsx'>.csv</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' href='"+ url+"'>下载</a></div></div></dd> </dl>"
+
+                        }
 
                     }
 

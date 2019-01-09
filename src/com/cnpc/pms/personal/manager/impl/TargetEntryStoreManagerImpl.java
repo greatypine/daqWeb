@@ -267,6 +267,177 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> exportOrderAll(String startTime,String endTIme){
+		TargetEntryStoreDao targetEntryStoreDao = (TargetEntryStoreDao)SpringHelper.getBean(TargetEntryStoreDao.class.getName());
+		Map<String, Object> result = new HashMap<String,Object>();
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		String[] deptKey = {"国安优易","家务事","点位","国安金超","产品中心","政府补贴"};
+		List<Map<String, Object>> youyiList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> jwsList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> dwList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> gajcList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> cpzxList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> zfbtList = new ArrayList<Map<String,Object>>();
+		try {
+
+			list=targetEntryStoreDao.exportFileAll(startTime,endTIme);
+			youyiList=targetEntryStoreDao.exportFileAllList(startTime,endTIme);
+			jwsList=targetEntryStoreDao.exportFileAlljwsList(startTime,endTIme);
+			dwList=targetEntryStoreDao.exportFileAlldwList(startTime,endTIme);
+			gajcList=targetEntryStoreDao.exportFileAllgajcList(startTime,endTIme);
+			cpzxList=targetEntryStoreDao.exportFileAllcpzxList(startTime,endTIme);
+			zfbtList=targetEntryStoreDao.exportFileAllzfbtList(startTime,endTIme);
+
+			if(youyiList.get(0).get("businessGroup_name")== null){
+				Map map = youyiList.get(0);
+				map.put("businessGroup_name","国安优易");
+				map.put("maori_target",0);
+				map.put("profit_target",0);
+				map.put("user_target",0);
+				youyiList.add(map);
+			}
+			if(jwsList.get(0).get("businessGroup_name")== null){
+				Map map = jwsList.get(0);
+				map.put("businessGroup_name","家务事");
+				map.put("maori_target",0);
+				map.put("profit_target",0);
+				map.put("user_target",0);
+				jwsList.add(map);
+			}
+			if(dwList.get(0).get("businessGroup_name")== null){
+				Map map = dwList.get(0);
+				map.put("businessGroup_name","点位");
+				map.put("maori_target",0);
+				map.put("profit_target",0);
+				map.put("user_target",0);
+				dwList.add(map);
+			}
+			if(gajcList.get(0).get("businessGroup_name")== null){
+				Map map = gajcList.get(0);
+				map.put("businessGroup_name","国安金超");
+				map.put("maori_target",0);
+				map.put("profit_target",0);
+				map.put("user_target",0);
+				gajcList.add(map);
+			}
+			if(cpzxList.get(0).get("businessGroup_name")== null){
+				Map map = cpzxList.get(0);
+				map.put("businessGroup_name","产品中心");
+				map.put("maori_target",0);
+				map.put("profit_target",0);
+				map.put("user_target",0);
+				cpzxList.add(map);
+			}
+			if(zfbtList.get(0).get("businessGroup_name")== null){
+				Map map = zfbtList.get(0);
+				map.put("businessGroup_name","政府补贴");
+				map.put("maori_target",0);
+				map.put("profit_target",0);
+				map.put("user_target",0);
+				zfbtList.add(map);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		if(list!=null&&list.size()>0){//成功返回数据
+			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+			String str_web_path = PropertiesUtil.getValue("file.web.root");
+
+			XSSFWorkbook wb = new XSSFWorkbook();
+			setCellStyle_common(wb);
+			setHeaderStyle(wb);
+			XSSFSheet sheet = wb.createSheet("指标统计");
+			XSSFRow row = sheet.createRow(0);
+
+			//单元格不锁定的样式
+			XSSFCellStyle unlockstyle = wb.createCellStyle();
+			unlockstyle.setLocked(false);
+			unlockstyle.setBorderBottom(CellStyle.BORDER_THIN); // 下边框
+			unlockstyle.setBorderLeft(CellStyle.BORDER_THIN);// 左边框
+			unlockstyle.setBorderTop(CellStyle.BORDER_THIN);// 上边框
+			unlockstyle.setBorderRight(CellStyle.BORDER_THIN);// 右边框
+			unlockstyle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中
+			unlockstyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);//垂直居中
+			unlockstyle.setWrapText(true);//设置自动换行
+
+			String[] str_headers1 = {"开始月份","结束月份","","事业群名称","事业群毛利指标","事业群利润指标","事业群用户指标","事业群名称","事业群毛利指标","事业群利润指标","事业群用户指标","事业群名称","事业群毛利指标","事业群利润指标","事业群用户指标","事业群名称","事业群毛利指标","事业群利润指标","事业群用户指标","事业群名称","事业群毛利指标","事业群利润指标","事业群用户指标","事业群名称","事业群毛利指标","事业群利润指标","事业群用户指标"};
+			String[] headers_value = {startTime,endTIme,"",youyiList.get(0).get("businessGroup_name").toString(),youyiList.get(0).get("maori_target").toString(),youyiList.get(0).get("profit_target").toString(),youyiList.get(0).get("user_target").toString(),jwsList.get(0).get("businessGroup_name").toString(),jwsList.get(0).get("maori_target").toString(),jwsList.get(0).get("profit_target").toString(),jwsList.get(0).get("user_target").toString(),dwList.get(0).get("businessGroup_name").toString(),dwList.get(0).get("maori_target").toString(),dwList.get(0).get("profit_target").toString(),dwList.get(0).get("user_target").toString(),gajcList.get(0).get("businessGroup_name").toString(),gajcList.get(0).get("maori_target").toString(),gajcList.get(0).get("profit_target").toString(),gajcList.get(0).get("user_target").toString(),cpzxList.get(0).get("businessGroup_name").toString(),cpzxList.get(0).get("maori_target").toString(),cpzxList.get(0).get("profit_target").toString(),cpzxList.get(0).get("user_target").toString(),zfbtList.get(0).get("businessGroup_name").toString(),zfbtList.get(0).get("maori_target").toString(),zfbtList.get(0).get("profit_target").toString(),zfbtList.get(0).get("user_target").toString()};
+			row.setHeightInPoints(40);
+			for(int i = 0;i < str_headers1.length;i++){
+				XSSFCell cell = row.createCell(i);
+				cell.setCellStyle(getHeaderStyle());
+				cell.setCellValue(new XSSFRichTextString(str_headers1[i]));
+				sheet.setColumnWidth(i, 20 * 256);
+				cell.setCellStyle(unlockstyle);
+			}
+			row = sheet.createRow(1);
+			row.setHeightInPoints(30);
+
+			for(int cellIndex = 0;cellIndex < headers_value.length; cellIndex ++) {
+				XSSFCell cell =row.createCell(cellIndex);
+				setCellValueall(row, cellIndex, headers_value[cellIndex]);
+				cell.setCellStyle(unlockstyle);
+			}
+
+			//定义表头 以及 要填入的 字段
+			String[] str_headers = {"城市名称","门店名称","门店编号","事业群名称","门店毛利指标","门店利润指标","门店用户指标","事业群名称","门店毛利指标","门店利润指标","门店用户指标","事业群名称","门店毛利指标","门店利润指标","门店用户指标","事业群名称","门店毛利指标","门店利润指标","门店用户指标","事业群名称","门店毛利指标","门店利润指标","门店用户指标","事业群名称","门店毛利指标","门店利润指标","门店用户指标"};
+			String[] headers_key = {"city_name","store_name","store_code","youyi_businessGroup_name","youyi_maori_target","youyi_profit_target","youyi_user_target","jws_businessGroup_name","jws_maori_target","jws_profit_target","jws_user_target","dw_businessGroup_name","dw_maori_target","dw_profit_target","dw_user_target","gajc_businessGroup_name","gajc_maori_target","gajc_profit_target","gajc_user_target","cpzx_businessGroup_name","cpzx_maori_target","cpzx_profit_target","cpzx_user_target","zfbt_businessGroup_name","zfbt_maori_target","zfbt_profit_target","zfbt_user_target"};
+			row = sheet.createRow(2);
+//			setCellValueall(row, 8, "填写是请注意，门店指标总和应等于频道指标。");
+			row.setHeightInPoints(40);
+			for(int i = 0;i < str_headers.length;i++){
+				XSSFCell cell = row.createCell(i);
+				cell.setCellStyle(getHeaderStyle());
+				cell.setCellValue(new XSSFRichTextString(str_headers[i]));
+				sheet.setColumnWidth(i, 20 * 256);
+				cell.setCellStyle(unlockstyle);
+			}
+
+			for(int i = 0;i < list.size();i++){
+				row = sheet.createRow(i+3);
+				row.setHeightInPoints(30);
+				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+					XSSFCell cell =row.createCell(cellIndex);
+					String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+					setCellValueall(row, cellIndex, value);
+					cell.setCellStyle(unlockstyle);
+				}
+			}
+			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_targetEntryValueView.xlsx");
+			if(file_xls.exists()){
+				file_xls.delete();
+			}
+			FileOutputStream os = null;
+			String url = null;
+			try {
+				os = new FileOutputStream(file_xls.getAbsoluteFile());
+				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+			}catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if(os != null){
+					try {
+						os.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+			result.put("message","导出成功！");
+			result.put("status","success");
+			result.put("data", url);
+		}else{
+			result.put("message","请重新操作！");
+			result.put("status","fail");
+		}
+		return result;
+	}
+
 	/**
 	 * 导入
 	 */

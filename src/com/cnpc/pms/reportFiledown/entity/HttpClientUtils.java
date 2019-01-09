@@ -164,7 +164,10 @@ public class HttpClientUtils {
                 }
             }
             massOrderDao.updataReport(id,url);
+        }else {
+            massOrderDao.updataReport(id,"");
         }
+
     }
 
     public void getDataTableSPXSDA( MassOrderItemDto massOrderDto, String fileName, MassOrderItemDao massOrderItemDao, Long id) {
@@ -264,6 +267,8 @@ public class HttpClientUtils {
                 }
             }
             massOrderItemDao.updataReport(id,url);
+        }else {
+            massOrderItemDao.updataReport(id,"");
         }
     }
 
