@@ -46,7 +46,7 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 						"where d.id='"+province_id+"' ";
 		}
 		if("1".equals(flag)){
-			expirySql = " and date_format(dum.associator_expiry_date,'%Y-%m-%d') >= date_format(now(),'%Y-%m-%d') ";
+			expirySql = " and date_format(dum.associator_expiry_date,'%Y-%m-%d') >= date_format(now(),'%Y-%m-%d') and dum.status = 1 ";
 		}
 		sql+=expirySql+isNewSql+dateSql;
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
