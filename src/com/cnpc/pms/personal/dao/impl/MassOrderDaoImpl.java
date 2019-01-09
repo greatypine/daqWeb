@@ -114,10 +114,6 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.loan_label='5' ";
 				} else if ("集采订单".equals(names[i].trim())) {
 					sql = sql + " a.order_tag1 like '%B%'  ";
-				} else if ("开卡礼订单".equals(names[i].trim())) {
-					sql = sql + " a.order_tag4='A3'  ";
-				} else if ("社员订单".equals(names[i].trim())) {
-					sql = sql + " a.order_tag1 like '%M%'  ";
 				} else if ("积分订单".equals(names[i].trim())) {
 					sql = sql + " a.score is not null  ";
 				} else if ("过账支付".equals(names[i].trim())) {
@@ -126,6 +122,22 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.order_tag3='0'  ";
 				} else if ("A类营销费用".equals(names[i].trim())){
 					sql = sql + " a.order_tag4 is not null  ";
+				}
+				if (i == names.length - 1) {
+					sql = sql + " )";
+				} else {
+					sql = sql + " or ";
+				}
+			}
+		}
+		if (StringUtils.isNotEmpty(massOrderDto.getMemberLabels())) {
+			sql = sql + " and (";
+			String[] names = massOrderDto.getMemberLabels().split(",");
+			for (int i = 0; i < names.length; i++) {
+				if ("开卡礼订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag4='A3'  ";
+				} else if ("社员订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag1 like '%M%'  ";
 				}
 				if (i == names.length - 1) {
 					sql = sql + " )";
@@ -346,10 +358,6 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.loan_label='5' ";
 				} else if ("集采订单".equals(names[i].trim())) {
 					sql = sql + " a.order_tag1 like '%B%'  ";
-				} else if ("开卡礼订单".equals(names[i].trim())) {
-					sql = sql + " a.order_tag4='A3'  ";
-				} else if ("社员订单".equals(names[i].trim())) {
-					sql = sql + " a.order_tag1 like '%M%'  ";
 				} else if ("积分订单".equals(names[i].trim())) {
 					sql = sql + " a.score is not null  ";
 				} else if ("过账支付".equals(names[i].trim())) {
@@ -358,6 +366,22 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.order_tag3='0'  ";
 				} else if ("A类营销费用".equals(names[i].trim())){
 					sql = sql + " a.order_tag4 is not null  ";
+				}
+				if (i == names.length - 1) {
+					sql = sql + " )";
+				} else {
+					sql = sql + " or ";
+				}
+			}
+		}
+		if (StringUtils.isNotEmpty(massOrderDto.getMemberLabels())) {
+			sql = sql + " and (";
+			String[] names = massOrderDto.getMemberLabels().split(",");
+			for (int i = 0; i < names.length; i++) {
+				if ("开卡礼订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag4='A3'  ";
+				} else if ("社员订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag1 like '%M%'  ";
 				}
 				if (i == names.length - 1) {
 					sql = sql + " )";

@@ -435,6 +435,7 @@
                         <div class="sl-v-list-member">
                             <a id="tag_开卡礼订单" onclick="memberSelection('开卡礼订单')" style="cursor:pointer;">开卡礼订单</a>
                             <a id="tag_社员订单" onclick="memberSelection('社员订单')" style="cursor:pointer;">社员订单</a>
+                            <input type="text" style="display:none" class="form-control" placeholder="社员标签"  id="member_private_manual"/>
                         </div>
                     </div>
                 </div>
@@ -1057,8 +1058,8 @@ function getIsManager(){
 
               var curValue = $(this).text();
               var name = curValue.substring(0,curValue.length)+",";
-              var labelName = $("#label_private_manual").val();
-              $("#label_private_manual").val(labelName.replace(name,""));
+              var labelName = $("#member_private_manual").val();
+              $("#member_private_manual").val(labelName.replace(name,""));
 
               var selectObj = $(".breadcrumb .search-con").find('a');
 
@@ -1081,8 +1082,8 @@ function getIsManager(){
               filter.remove();
               var curValue = $(this).text();
               var name = curValue.substring(0,curValue.length)+",";
-              var labelName = $("#label_private_manual").val();
-              $("#label_private_manual").val(labelName.replace(name,""));
+              var labelName = $("#member_private_manual").val();
+              $("#member_private_manual").val(labelName.replace(name,""));
 
               var aobj = $(".breadcrumb .search-con a");
               if(aobj.length==1){
@@ -1100,6 +1101,7 @@ function getIsManager(){
       	  $("#label_private_manual").val("");
       	  $("#dept_private_manual").val("");
       	  $("#busi_private_manual").val("");
+      	  $("#member_private_manual").val("");
           $(".breadcrumb .search-con .condition").remove();
           $(".sl-v-list a").removeClass("bg-orange-active");
           $(".sl-v-list-label a").removeClass("bg-orange-active");
@@ -1459,11 +1461,11 @@ function getIsManager(){
 
     //社员标签快速选择
     function  memberSelection(labelname) {
-        var labelName = $("#label_private_manual").val();
+        var labelName = $("#member_private_manual").val();
         if(labelName.indexOf(labelname)>=0){
-            $("#label_private_manual").val($("#label_private_manual").val());
+            $("#member_private_manual").val($("#member_private_manual").val());
         }else{
-            $("#label_private_manual").val($("#label_private_manual").val()+labelname+",");
+            $("#member_private_manual").val($("#member_private_manual").val()+labelname+",");
         }
     }
 
@@ -1596,6 +1598,11 @@ function getIsManager(){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
 	    }
 
+        var memberLabels = $("#member_private_manual").val();
+        if(memberLabels!=null && memberLabels!='' && memberLabels.indexOf(',') >= 0){
+            memberLabels = memberLabels.substring(0,memberLabels.length-1);
+        }
+
 	    var ordersn = $("#ordersn_manual").val();
 	    if(ordersn!=""){
 	    	ordersn = ordersn.replace(/\s+/g,"");
@@ -1689,6 +1696,7 @@ function getIsManager(){
 	    		employee_mobile:employeeMobile,
 	    		department_names:departmentNames,
 	    		busi_names:busiNames,
+                memberLabels:memberLabels,
                 profit_price_min:profit_price_min,
                 profit_price_max:profit_price_max,
                 contract_method:contract_method,
@@ -2167,6 +2175,11 @@ function showfee(obj){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
 	    }
 
+        var memberLabels = $("#member_private_manual").val();
+        if(memberLabels!=null && memberLabels!='' && memberLabels.indexOf(',') >= 0){
+            memberLabels = memberLabels.substring(0,memberLabels.length-1);
+        }
+
 	    var ordersn = $("#ordersn_manual").val();
 	    if(ordersn!=""){
 	    	ordersn = ordersn.replace(/\s+/g,"");
@@ -2257,6 +2270,7 @@ function showfee(obj){
 	    		employee_mobile:employeeMobile,
 	    		department_names:departmentNames,
 	    		busi_names:busiNames,
+                memberLabels:memberLabels,
                 profit_price_min:profit_price_min,
                 profit_price_max:profit_price_max,
                 contract_method:contract_method,

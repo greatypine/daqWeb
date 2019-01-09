@@ -44,6 +44,7 @@ public class MassOrderDto {
 	private String addr_customer_name;
 	private String addr_customer_phone;
 	private String busi_names;
+	private String memberLabels;
 	private String profit_price_min;
 	private String profit_price_max;
 	private String contract_method;
@@ -257,6 +258,14 @@ public class MassOrderDto {
 	}
 	public void setBusi_names(String busi_names) {
 		this.busi_names = busi_names;
+	}
+
+	public String getMemberLabels() {
+		return memberLabels;
+	}
+
+	public void setMemberLabels(String memberLabels) {
+		this.memberLabels = memberLabels;
 	}
 
 	public String getProfit_price_min() {
