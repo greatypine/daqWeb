@@ -3952,7 +3952,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String selectStr2 = "";
 		String storeWhere = "";
 		if(dynamicDto.getDept()!=null&&!"".equals(dynamicDto.getDept())){
-			whereStr = whereStr+" and c.bussiness_group_id='"+dynamicDto.getDept()+"'";
+			whereStr = whereStr+" and  deptgmv.deptid='"+dynamicDto.getDept()+"'";
 		}
 
 		if(dynamicDto.getSearchstr().contains("dept_city_active")) {
@@ -3968,20 +3968,20 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			groupStr = groupStr + ",store_id,store_code ";
+			groupStr = groupStr + ",real_store_id ";
 
 //			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
 //				whereStr = whereStr+" and deptgmv.store_id='"+dynamicDto.getStoreNo()+"'";
 //			}
 
 			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
-				storeWhere = "(tor.store_id='"+dynamicDto.getStoreNo()+"' or tor.normal_store_id='"+dynamicDto.getStoreNo()+"') and ";
+				storeWhere = "tor.real_store_id='"+dynamicDto.getStoreNo()+"' and ";
 			}
 
-			onStr = onStr+" and deptgmv.store_id = deptthgmv.store_id ";
-			selectStr1=selectStr1+" ,store_id,min(store_name) as store_name,store_code";
-			selectStr2 = selectStr2+",deptgmv.store_name,deptgmv.store_code";
-            orderStr = orderStr+",deptgmv.store_name";
+			onStr = onStr+" and deptgmv.store_id = deptthgmv.store_id LEFT JOIN t_store ts on deptgmv.store_id = ts.id ";
+			selectStr1=selectStr1+" ,real_store_id AS store_id";
+			selectStr2 = selectStr2+",deptgmv.store_id,ts.name as store_name,ts.storeno as store_code";
+
 		}
 
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
@@ -4092,18 +4092,18 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			groupStr1 = groupStr1 + ",store_id,store_code ";
+			groupStr1 = groupStr1 + ",real_store_id ";
 //			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
 //				whereStr = whereStr+" and c.store_id='"+dynamicDto.getStoreNo()+"'";
 //			}
 
 			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
-				storeWhere = "(tor.store_id='"+dynamicDto.getStoreNo()+"' or tor.normal_store_id='"+dynamicDto.getStoreNo()+"') and ";
+				storeWhere = "tor.real_store_id='"+dynamicDto.getStoreNo()+"'  and ";
 			}
-			onStr = onStr+" and c.store_id = b.store_id ";
-			selectStr1=selectStr1+" ,store_id,min(store_name) as store_name,store_code";
-			selectStr2 = selectStr2+",c.store_name,c.store_code";
-            orderStr = orderStr+",c.store_name";
+			onStr = onStr+" and c.real_store_id = b.real_store_id LEFT JOIN t_store ts ON c.real_store_id = ts.id ";
+			selectStr1=selectStr1+" ,real_store_id";
+			selectStr2 = selectStr2+",c.real_store_id as store_id,ts.name as store_name,ts.storeno as store_code ";
+
 		}
 
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
