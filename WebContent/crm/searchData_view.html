@@ -1748,6 +1748,7 @@ function getIsManager(){
        			       var a="";
        			       var c="";
        			       var r="";
+       			       var suc="";
        			       if(jData[i].sign_time!=null){
        			    		var d=	new Date();
        			     		d.setTime(jData[i].sign_time);
@@ -1768,6 +1769,11 @@ function getIsManager(){
        			     		d.setTime(jData[i].appointment_start_time);
        			   		 	a=d.format('yyyy-MM-dd HH:mm:ss')
        			        }
+                       if(jData[i].success_time!=null){
+                           var d=	new Date();
+                           d.setTime(jData[i].success_time);
+                           suc=d.format('yyyy-MM-dd HH:mm:ss')
+                       }
        			    		
        			    var area_name = (jData[i].area_name==null || jData[i].area_name=='')?'无':jData[i].area_name;
        			    var customer_name = jData[i].customer_name==null?'':jData[i].customer_name;
@@ -1798,6 +1804,7 @@ function getIsManager(){
        			 	var atime="<strong>预约时间：</strong>"+a+"<br>";
  			       	var stime="<strong>签收时间：</strong>"+s+"<br>";
  			       	var rtime="<strong>退货时间：</strong>"+r+"<br>";
+                    var suctime="<strong>完成时间：</strong>"+suc+"<br>";
  			        var tcontent = ctime;
  			        if(a!=null && a!=""){
  			        	tcontent =tcontent+atime;
@@ -1806,6 +1813,9 @@ function getIsManager(){
  			       	if(r!=null && r!=""){
  			        	tcontent =tcontent +rtime;
  			       	}
+                    if(suc!=null && suc!=""){
+                        tcontent =tcontent +suctime;
+                    }
  			        tcontent =tcontent+"@timetips"+i;
 			        var tid = "timetips"+i;
 			        
