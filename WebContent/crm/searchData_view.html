@@ -1751,6 +1751,7 @@ function getIsManager(){
        			    var store_name = jData[i].store_name==null?'':jData[i].store_name;
        			    var channel_name = jData[i].channel_name==null?'':jData[i].channel_name;
        			    var department_name = jData[i].department_name==null?'':jData[i].department_name;
+                    var first_channel_name = jData[i].first_channel_name==null?'':jData[i].first_channel_name;
        			    var customer_mobile_phone = jData[i].customer_mobile_phone==null?'':jData[i].customer_mobile_phone;
        			    var customer_mobile_phone_show=customer_mobile_phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
        			    var employee_name = jData[i].employee_name==null?'':jData[i].employee_name;
@@ -1792,7 +1793,8 @@ function getIsManager(){
 			        var channel="<strong>频道：</strong>"+channel_name+"<br>";
 			        var ename="<strong>E店：</strong>"+eshop_name+"<br>";
 			        var busitype="<strong>商业模式：</strong>"+business_type+"<br>";
- 			        var econtent =dept+channel+ename+busitype+"@etips"+i;
+			        var firstchannel = "<strong>首单频道：</strong>"+first_channel_name+"<br>";
+ 			        var econtent =dept+channel+ename+busitype+firstchannel+"@etips"+i;
 			        var eid = "etips"+i;
 			        
 			        var gmv="<strong>有效金额：</strong>"+gmv_price+"<br>";
@@ -1996,7 +1998,7 @@ function getIsManager(){
 		   	  if(result!=null){
 			       var village = "<strong>小区名：</strong>"+result.village_name+"<br>";
 			       var store = "<strong>门店名：</strong>"+result.store_name+"<br>";
-                   var real_store = "<strong>真实所属门店：</strong>"+result.real_store_name+"<br>";
+                   var real_store = "<strong>真实门店：</strong>"+result.real_store_name+"<br>";
  			   	   var area = "<strong>片区名：</strong><a style=\"color:#000\" href=\"javascript:searchArea('"+result.area_name+"','"+result.area_code+"')\">"+result.area_name+"</a><br>";
  			   	   var areacode = "<strong>片区编号：</strong><a style=\"color:#000\" href=\"javascript:searchArea('"+result.area_name+"','"+result.area_code+"')\">"+result.area_code+"</a><br>";
 			       var position = "";
