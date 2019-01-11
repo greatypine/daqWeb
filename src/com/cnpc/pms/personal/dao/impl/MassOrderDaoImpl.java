@@ -135,7 +135,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sql = sql + " and a.customer_isnew_flag in (" + massOrderDto.getCustomer_isnew() + ")";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
-			sql = sql + " and LPAD(a.store_city_code,4,0) = '" + massOrderDto.getCity_name().trim() + "'";
+			sql = sql + " and LPAD(a.store_city_code,4,'0') = '" + massOrderDto.getCity_name().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getDepartment_name())) {
 			sql = sql + " and a.department_name = '" + massOrderDto.getDepartment_name().trim() + "'";
@@ -365,7 +365,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sql = sql + " and a.customer_isnew_flag in (" + massOrderDto.getCustomer_isnew() + ")";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
-			sql = sql + " and LPAD(a.store_city_code,4,0) = '" + massOrderDto.getCity_name().trim() + "'";
+			sql = sql + " and LPAD(a.store_city_code,4,'0') = '" + massOrderDto.getCity_name().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getDepartment_name())) {
 			sql = sql + " and a.department_name = '" + massOrderDto.getDepartment_name().trim() + "'";

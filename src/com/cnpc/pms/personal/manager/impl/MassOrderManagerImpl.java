@@ -62,15 +62,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
 
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
-				result = massOrderDao.queryMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
-				result = massOrderDao.queryMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = massOrderDao.queryMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = massOrderDao.queryMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
