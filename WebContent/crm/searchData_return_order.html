@@ -759,6 +759,7 @@ Date.prototype.format=function(fmt) {
        			    var store_name = jData[i].store_name==null?'':jData[i].store_name;
        			    var channel_name = jData[i].channel_name==null?'':jData[i].channel_name;
        			    var department_name = jData[i].department_name==null?'':jData[i].department_name;
+                    var first_channel_name = jData[i].first_channel_name==null?'':jData[i].first_channel_name;
        			    var customer_mobile_phone = jData[i].customer_mobile_phone==null?'':jData[i].customer_mobile_phone;
        			    var customer_mobile_phone_show=customer_mobile_phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
        			    var employee_name = jData[i].employee_name==null?'':jData[i].employee_name;
@@ -766,6 +767,7 @@ Date.prototype.format=function(fmt) {
        			    var payable_price = jData[i].payable_price;
        			    var gmv_price = jData[i].gmv_price;
        			    var returned_amount = jData[i].returned_amount;
+                    var business_type = jData[i].business_type=='pool'?'联营':'自营';
        			    
        			    var cname="<strong>下单客户姓名：</strong>"+customer_name+"<br>";
 			       	var cphone="<strong>下单客户电话：</strong>"+customer_mobile_phone+"<br>";
@@ -790,7 +792,9 @@ Date.prototype.format=function(fmt) {
  			       	var dept="<strong>事业群：</strong>"+department_name+"<br>";
 			        var channel="<strong>频道：</strong>"+channel_name+"<br>";
 			        var ename="<strong>E店：</strong>"+eshop_name+"<br>";
- 			        var econtent =dept+channel+ename+"@etips"+i;
+                    var busitype="<strong>商业模式：</strong>"+business_type+"<br>";
+                    var firstchannel = "<strong>首单频道：</strong>"+first_channel_name+"<br>";
+ 			        var econtent =dept+channel+ename+busitype+firstchannel+"@etips"+i;
 			        var eid = "etips"+i;
 			        
 			        var gmv="<strong>有效金额：</strong>"+gmv_price+"<br>";
