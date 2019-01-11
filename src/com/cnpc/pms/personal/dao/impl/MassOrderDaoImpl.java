@@ -469,7 +469,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "a.channel_name,a.department_name,a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,0) as score"
 				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(ROUND(a.order_profit, 2),0) as order_profit,IFNULL(ROUND(a.apportion_rebate,2),0) as apportion_rebate,"
 				+ "IFNULL(ROUND(a.platform_price,2),0) as apportion_coupon,IFNULL(ROUND(a.cost_price,2),0) as cost_price,IFNULL(a.contract_method,'') as contract_method,IFNULL(a.order_tag4,'') as order_tag4 "
-				+ " from df_mass_order_total a where a.return_label = '1' AND a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
+				+ " from df_mass_order_total a LEFT JOIN t_store ts ON a.real_store_id=ts.id where a.return_label = '1' AND a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
 
 		if (StringUtils.isNotEmpty(massOrderDto.getBeginDate())) {
 			sql = sql + " and strleft(a.return_time,10)>='" + massOrderDto.getBeginDate() + "' and strleft(a.return_time,10)<='" + massOrderDto.getEndDate() + "'";
@@ -478,12 +478,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sql = sql + " and a.order_sn ='" + massOrderDto.getOrder_sn().trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(massOrderDto.getStore_no())){
-			Map<String,Object> position_obj = queryPlatformidByCode(massOrderDto.getStore_no());
-			if (position_obj != null) {
-				sql = sql + " and (a.store_code ='" + massOrderDto.getStore_no().trim()+ "' or a.normal_store_id='"+(String) position_obj.get("platformid")+"')";
-			}else{
-				sql = sql + " and a.store_code ='" + massOrderDto.getStore_no().trim()+ "'";
-			}
+			sql = sql + " and ts.storeno ='" + massOrderDto.getStore_no().trim()+ "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
 			sql = sql + " and LPAD(a.store_city_code,4,'0') = '" + massOrderDto.getCity_name().trim() + "'";
@@ -531,7 +526,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.trading_price,0) as trading_price,"
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(ROUND(a.returned_amount,2),0) as returned_amount,"
 				+ "IFNULL(a.create_time,'') AS create_time,IFNULL(a.appointment_start_time,'') AS appointment_start_time,IFNULL(a.sign_time,'') as sign_time,IFNULL(a.return_time,'') as return_time,"
-				+ "a.employee_name,a.employee_phone,a.eshop_name,a.store_name,a.store_code,a.channel_name,a.department_name,a.store_city_name,"
+				+ "IFNULL(a.employee_name,'') AS employee_name,IFNULL(a.employee_phone,'') AS employee_phone,a.eshop_name,a.store_name,a.store_code,ts.name as real_store_name,ts.storeno as real_store_code,a.channel_name,a.department_name,a.store_city_name,"
 				+ "CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,CASE WHEN a.abnormal_label='1' THEN '是'  ELSE '否' END AS abnormal_label,"
 				+ "CASE WHEN a.return_label='1' THEN '是'  ELSE '否' END AS return_label,CASE WHEN a.loan_label='1' THEN '是'  ELSE '否' END AS loan_label,"
 				+ "CASE WHEN a.loan_label='3' THEN '是'  ELSE '否' END AS car_label,CASE WHEN a.loan_label='4' THEN '是'  ELSE '否' END AS quick_label,"
@@ -540,7 +535,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "CASE WHEN a.order_tag4='A3' THEN '是'  ELSE '否' END AS order_tag_k,CASE WHEN a.order_tag1 like '%S%' THEN '是'  ELSE '否' END AS order_tag_s,"
 				+ "CASE WHEN a.score is not null THEN '是' ELSE '否' END AS score,IFNULL(ROUND(a.order_profit, 2),0) as order_profit,"
 				+ "IFNULL(ROUND(a.platform_price,2),0) as apportion_coupon,IFNULL(ROUND(a.apportion_rebate,2),0) as apportion_rebate,"
-				+ "IFNULL(CASE a.contract_method WHEN  'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN  'percent' THEN '从率' END,'') as contract_method from df_mass_order_total a ";
+				+ "IFNULL(CASE a.contract_method WHEN  'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN  'percent' THEN '从率' END,'') as contract_method from df_mass_order_total a "
+				+ "LEFT JOIN t_store ts ON a.real_store_id=ts.id ";
 
 		sql = sql + " where a.return_label = '1' AND a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
 		if (StringUtils.isNotEmpty(massOrderDto.getBeginDate())) {
@@ -550,12 +546,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sql = sql + " and a.order_sn ='" + massOrderDto.getOrder_sn().trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(massOrderDto.getStore_no())){
-			Map<String,Object> position_obj = queryPlatformidByCode(massOrderDto.getStore_no());
-			if (position_obj != null) {
-				sql = sql + " and (a.store_code ='" + massOrderDto.getStore_no().trim()+ "' or a.normal_store_id='"+(String) position_obj.get("platformid")+"')";
-			}else{
-				sql = sql + " and a.store_code ='" + massOrderDto.getStore_no().trim()+ "'";
-			}
+			sql = sql + " and ts.storeno ='" + massOrderDto.getStore_no().trim()+ "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
 			sql = sql + " and LPAD(a.store_city_code,4,'0') = '" + massOrderDto.getCity_name().trim() + "'";
