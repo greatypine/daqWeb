@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>社员档案</title>
+    <title>社员价值统计</title>
     <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
@@ -58,7 +58,7 @@
         .audit_process .clearfix{ padding:10px 30px;}
         .audit_margin{margin-right: 15px;}
 
-        .box-header{margin-bottom: -35px;}
+        .box-header{margin-bottom: -15px;}
         #process_div{
             background-color:#292a2b;
             display:inline;
@@ -127,7 +127,7 @@
                 <div class="pull-left">
                     <div class="logo-lg">
                         <ul class="no-margin">
-                            <li class="current"><em>社员档案</em></li>
+                            <li class="current"><em>社员价值统计</em></li>
                         </ul>
                     </div>
                 </div>
@@ -146,13 +146,9 @@
 
             <section class="content-header">
                 <div class="box box-default">
-
                     <div class="box-header h4 text-light-blue">
-                        <div class="form-group col-lg-2 pull-right" >
-                            <button type="button" onclick="customer_member()"  class="btn btn-block btn-warning">退卡评估</button>
-                        </div>
+                        <div class="pull-left "><strong>社员价值查询</strong></div>
                     </div>
-
                     <div class="box-body">
                         <div class="clearfix search-criteria">
                             <div class="selectorLine clearfix no-border">
@@ -234,12 +230,8 @@
                             <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                                 <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
                             </div>
-
-                            <div class="col-lg-2 pull-right" style="padding-top: 25px;" id="exportnormal">
-                                <button type="button" style="display:block" id="export_auto_publicOrder_button" onclick="export_auto_human('normal')" class="btn btn-block btn-warning">导出</button>
-                            </div>
-                            <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
-                                <button type="button" id="export_manual_massOrder_button" onclick="export_auto_human('all')" class="btn btn-block btn-warning">完整数据导出</button>
+                            <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+                                <button type="button" id="export_auto_publicOrder_button" onclick="export_auto_human('normal')" class="btn btn-block btn-warning">导出</button>
                             </div>
                             <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                                 <button type="button" onclick="search_auto_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
@@ -254,11 +246,15 @@
                                 <tbody id="manual_tbody">
                                 <tr id="auto_title">
                                     <th width="10%">社员手机号</th>
-                                    <th width="10%">注册国安社区时间</th>
                                     <th width="10%">社员开卡时间</th>
                                     <th width="10%">邀请码</th>
                                     <th width="10%">城市</th>
-                                    <th width="10%">社员开卡门店</th>
+                                    <th width="10%">开卡门店</th>
+                                    <th width="10%">开卡礼</th>
+                                    <th width="10%">累计粮票</th>
+                                    <th width="10%">剩余粮票</th>
+                                    <th width="10%">月券</th>
+                                    <th width="10%">剩余价值</th>
                                 </tr>
 
                                 </tbody>
@@ -640,12 +636,12 @@
         pageInfo.recordsPerPage = manualPageRecordes;
         $("#totalRecord_cannot").html("0");
 
-        doManager('communeMember','queryMemberDataList',[memberDataDto,pageInfo],function(data){
+        doManager('communeMember','queryRemainMemberList',[memberDataDto,pageInfo],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
                     $("#manual_tbody").find("tr:gt(0)").remove();
-                    var jData = result.data;
+                    var jData = result.member;
                     if(jData==null||jData.length==0){
                         crm_alert(5,"系统查无此条件的数据");
                         $("#page_manual").createPage({
@@ -676,17 +672,11 @@
 
                     var infoStr="";
                     for(var i=0;i<jData.length;i++){
-                        var regist="";
                         var opencard="";
-                        if(jData[i].regist_time!=null){
-                            var d=	new Date();
-                            d.setTime(jData[i].regist_time);
-                            regist=d.format('yyyy-MM-dd HH:mm:ss')
-                        }
                         if(jData[i].opencard_time!=null){
                             var d=	new Date();
                             d.setTime(jData[i].opencard_time);
-                            opencard=d.format('yyyy-MM-dd HH:mm:ss')
+                            opencard=jData[i].opencard_time;//d.format('yyyy-MM-dd HH:mm:ss')
                         }
 
                         var mobilephone = jData[i].mobilephone;
@@ -694,25 +684,34 @@
                         var csource="<strong>用户来源：</strong>"+jData[i].customer_source;
                         var phonecontent =cphone+csource+"@phonetips"+i;
                         var phoneid = "phonetips"+i;
-                        var city_name = jData[i].city_name;
+                        var city_name = jData[i].cityname;
                         var store_name = jData[i].store_name;
                         var store_no = jData[i].store_no;
+                        var opengift = jData[i].opengift;
+                        var sum_rebate = jData[i].sum_rebate;
+                        var remain_rebate = jData[i].remain_rebate;
+                        var mon_conpon = jData[i].mon_conpon;
+                        var remain = jData[i].remain;
 
                         infoStr= "<tr>";
                         infoStr= infoStr
                             +"<td><a style=\"text-decoration:underline\" href=\"javascript:showuserprofile('"+jData[i].customer_id+"','"+mobilephone+"','"+city_name+"','"+store_name+"','"+store_no+"','"+ocdate+"')\" onmouseover=\"showphone('"+phonecontent+"');\" id=\""+phoneid+"\">"+mobilephone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')+"</a></td>"
-                            +"<td>"+regist+"</td>"
                             +"<td>"+opencard+"</a></td>";
                         if(target==0 || target==1){
                             infoStr= infoStr
-                                +"<td><a href=\"javascript:showemployee('"+jData[i].inviteCode+"')\">"+jData[i].inviteCode+"</a></td>";
+                                +"<td><a href=\"javascript:showemployee('"+jData[i].invitecode+"')\">"+jData[i].invitecode+"</a></td>";
                         }else{
                             infoStr= infoStr
                                 +"<td>"+jData[i].inviteCode+"</td>";
                         }
                         infoStr= infoStr
                             +"<td>"+city_name+"</td>"
-                            +"<td>"+store_name+"</td>";
+                            +"<td>"+store_name+"</td>"
+                            +"<td>"+opengift+"</td>"
+                            +"<td>"+sum_rebate+"</td>"
+                            +"<td>"+remain_rebate+"</td>"
+                            +"<td>"+mon_conpon+"</td>"
+                            +"<td>"+remain+"</td>";
 
                         infoStr= infoStr
                             +"</tr>";
@@ -844,18 +843,23 @@
             open_card_time_end:opencard_end_time
         }
 
-        doManager('communeMember','exportMemeData',[memberDataDto],function(data){
+        doManager('communeMember','exportRemainMember',[memberDataDto],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
                     window.location.href=result.data;
-                }else if(result.status=='more'){
+                }else if(result.status=="more"){
                     crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                }
+                else if(result.status=="null"){
+                    crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
                     $("#process_div").hide();
                     $("#process_div_pic").hide();
                     return;
                 }else{
-                    crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+                    crm_alert(5,"请稍后重新请求！");
                     $("#process_div").hide();
                     $("#process_div_pic").hide();
                     return;
@@ -868,15 +872,7 @@
             $("#process_div_pic").hide();
         });
     }
-    function customer_member(){
-        if(target==0){
-            url = "memberRemainData_list.html?t="+encode64('0')+"&so=&s=&sn=&c=&e="+encode64(currentUser.id)+"&r="+encode64(role)+"&cn=";
-        }else if(target==1){
-            url = "memberRemainData_list.html?t="+encode64(1)+"&so=&s=&sn=&c=cn="+encode64(cityname)+"&e="+encode64(currentUser.id)+"&r="+encode64(role)+"&#ff";
-        }
-        var URL="memberRemainData_list.html?"+"t="+encode64(target);
-        window.open(URL,"big_member");
-    }
+
 
 </script>
 </body>

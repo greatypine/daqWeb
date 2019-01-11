@@ -397,4 +397,13 @@ public interface CommuneMemberDao extends IDAO {
 	 */
 	public List<Map<String, Object>> exportMemeData(MemberDataDto memberDataDto);
 
+
+    /**
+     * 查询社员剩余价值
+     * @author wuxinxin
+     */
+
+    public Map<String, Object> queryRemainMemberList(MemberDataDto memberDataDto, PageInfo pageInfo);
+
+
 }
