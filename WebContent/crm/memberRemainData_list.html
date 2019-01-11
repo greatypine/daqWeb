@@ -253,8 +253,9 @@
                                     <th width="10%">开卡礼</th>
                                     <th width="10%">累计粮票</th>
                                     <th width="10%">剩余粮票</th>
-                                    <th width="10%">月券</th>
-                                    <th width="10%">剩余价值</th>
+                                    <th width="10%">节省金额</th>
+                                    <th width="10%"><font id="columnattention2" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                                        <font id="forcolumnattention2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;margin-left: -110px;">199-149(已领开卡礼)-已用粮票-节省金额</font>剩余价值</th>
                                 </tr>
 
                                 </tbody>
@@ -692,6 +693,7 @@
                         var remain_rebate = jData[i].remain_rebate;
                         var mon_conpon = jData[i].mon_conpon;
                         var remain = jData[i].remain;
+                        var sum_retrench_money = jData[i].sum_retrench_money;
 
                         infoStr= "<tr>";
                         infoStr= infoStr
@@ -710,7 +712,7 @@
                             +"<td>"+opengift+"</td>"
                             +"<td>"+sum_rebate+"</td>"
                             +"<td>"+remain_rebate+"</td>"
-                            +"<td>"+mon_conpon+"</td>"
+                            +"<td>"+sum_retrench_money+"</td>"
                             +"<td>"+remain+"</td>";
 
                         infoStr= infoStr
@@ -872,7 +874,12 @@
             $("#process_div_pic").hide();
         });
     }
-
+    $("#columnattention2").on("mouseover",function(event){
+        $("#forcolumnattention2").show();
+    });
+    $("#columnattention2").on("mouseout",function(event){
+        $("#forcolumnattention2").hide();
+    });
 
 </script>
 </body>

@@ -1739,7 +1739,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 
         String sql="select dum.customer_id,CASE dum.customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' WHEN 'citic' THEN '中信用户联盟' WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动'ELSE '无' END AS customer_source," +
                 "dum.mobilephone,dum.regist_time,dum.opencard_time,IFNULL(dum.inviteCode,'') as invitecode,ifnull(tmi.sum_rebate,0) as sum_rebate,ifnull(tmi.remain_rebate,0) as remain_rebate," +
-                " (dround(months_between(now(),dum.opencard_time),0)*25) as mon_conpon,(case dmot.order_tag4 when 'A3' then '已领' else '未领' end) as opengift,round((199-((case dmot.order_tag4 when 'A3' then 149 else 0 end))-ifnull(tmi.sum_rebate,0)+ifnull(tmi.remain_rebate,0)-dround(months_between(now(),dum.opencard_time),0)*25),2) as remain, " +
+                " (dround(months_between(now(),dum.opencard_time),0)*25) as mon_conpon,(case dmot.order_tag4 when 'A3' then '已领' else '未领' end) as opengift,round((199-((case dmot.order_tag4 when 'A3' then 149 else 0 end))-ifnull(tmi.sum_rebate,0)+ifnull(tmi.remain_rebate,0)-ifnull(tmi.sum_retrench_money,0)),2) as remain,ifnull(tmi.sum_retrench_money,0) as sum_retrench_money, " +
                 " dum.regist_cityno,dum.regist_storeid,tdc.cityname,ts.name as store_name,ts.storeno as store_no from daqweb.df_user_member dum" +
                 " left join daqweb.t_dist_citycode tdc on tdc.cityno =LPAD(dum.regist_cityno, 4, '0')" +
                 " left join daqweb.t_store ts on dum.regist_storeid=ts.platformid"+

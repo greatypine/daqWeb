@@ -2775,8 +2775,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
                 return result;
             }
             //定义表头 以及 要填入的 字段
-            String[] str_headers = {"社员手机号","邀请码","社员开卡时间","城市","开卡门店","开卡礼","累计粮票","剩余粮票","月券","剩余价值"};
-            String[] headers_key = {"mobilephone","invitecode","opencard_time","cityname","store_name","opengift","sum_rebate","remain_rebate","mon_conpon","remain"};
+            String[] str_headers = {"社员手机号","邀请码","社员开卡时间","城市","开卡门店","开卡礼","累计粮票","剩余粮票","节省金额","剩余价值"};
+            String[] headers_key = {"mobilephone","invitecode","opencard_time","cityname","store_name","opengift","sum_rebate","remain_rebate","sum_retrench_money","remain"};
             ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠毛利",list,str_headers,headers_key);
             result = eeuo.exportFile();
         }else{
