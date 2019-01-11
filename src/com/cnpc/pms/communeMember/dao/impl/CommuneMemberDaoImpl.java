@@ -1752,7 +1752,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
             sql = sql + " AND dum.regist_storeid='"+memberDataDto.getStoreNo()+"' ";
         }
         if(StringUtils.isNotEmpty(memberDataDto.getCityName())){
-            sql = sql + " AND LPAD(dum.regist_cityno,4,0) = '" + memberDataDto.getCityName().trim() + "'";
+            sql = sql + " AND LPAD(dum.regist_cityno,4,'0') = '" + memberDataDto.getCityName().trim() + "'";
         }
         if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
             sql = sql + " AND dum.invitecode='"+memberDataDto.getInviteCode()+"'";
