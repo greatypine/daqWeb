@@ -6230,7 +6230,18 @@ function  clearFirstCache(){
 	localStorage.clear();
 }
 
-
+//社员剩余价值统计
+function goToMemRemain(){
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "memberRemainData_list.html?t="+encode64('0')+"&so=&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+    }else if(target==1){
+        url = "memberRemainData_list.html?t="+encode64(1)+"&so=&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+    }
+    window.open(url,"memberRemainData_list");
+}
 
 
 //221GMV统计

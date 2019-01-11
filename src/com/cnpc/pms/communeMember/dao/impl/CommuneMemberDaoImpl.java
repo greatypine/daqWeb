@@ -4,6 +4,7 @@ import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.communeMember.dao.CommuneMemberDao;
 import com.cnpc.pms.platform.entity.MemberDataDto;
+import com.cnpc.pms.utils.ImpalaUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
@@ -1732,7 +1733,78 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		return list;
 	}
 
-	public Map<String, Object> queryCitynameByNo(String cityno){
+    @Override
+    public Map<String, Object> queryRemainMemberList(MemberDataDto memberDataDto, PageInfo pageInfo) {
+
+
+        String sql="select dum.customer_id,CASE dum.customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' WHEN 'citic' THEN '中信用户联盟' WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动'ELSE '无' END AS customer_source," +
+                "dum.mobilephone,dum.regist_time,dum.opencard_time,IFNULL(dum.inviteCode,'') as invitecode,ifnull(tmi.sum_rebate,0) as sum_rebate,ifnull(tmi.remain_rebate,0) as remain_rebate," +
+                " (dround(months_between(now(),dum.opencard_time),0)*25) as mon_conpon,(case dmot.order_tag4 when 'A3' then '已领' else '未领' end) as opengift,round((199-((case dmot.order_tag4 when 'A3' then 149 else 0 end))-ifnull(tmi.sum_rebate,0)+ifnull(tmi.remain_rebate,0)-dround(months_between(now(),dum.opencard_time),0)*25),2) as remain, " +
+                " dum.regist_cityno,dum.regist_storeid,tdc.cityname,ts.name as store_name,ts.storeno as store_no from daqweb.df_user_member dum" +
+                " left join daqweb.t_dist_citycode tdc on tdc.cityno =LPAD(dum.regist_cityno, 4, '0')" +
+                " left join daqweb.t_store ts on dum.regist_storeid=ts.platformid"+
+                " LEFT join gemini.t_mebmer_info tmi on (dum.customer_id = tmi.customer_id)" +
+                " left join daqweb.df_mass_order_total dmot on (dmot.customer_id=dum.customer_id and dmot.order_tag4='A3')" +
+                " where dum.member_type in ('yearCard','yearCard-19','associator_start_2') and dum.associator_expiry_date>now()  and dum.status = 1";
+
+
+        if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
+            sql = sql + " AND dum.regist_storeid='"+memberDataDto.getStoreNo()+"' ";
+        }
+        if(StringUtils.isNotEmpty(memberDataDto.getCityName())){
+            sql = sql + " AND LPAD(dum.regist_cityno,4,0) = '" + memberDataDto.getCityName().trim() + "'";
+        }
+        if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
+            sql = sql + " AND dum.invitecode='"+memberDataDto.getInviteCode()+"'";
+        }
+        if(StringUtils.isNotEmpty(memberDataDto.getMobilePhone())){
+            sql = sql + " AND dum.mobilephone='"+memberDataDto.getMobilePhone()+"'";
+        }
+        if(StringUtils.isNotEmpty(memberDataDto.getOpen_card_time_begin())){
+            sql = sql + " AND (dum.opencard_time between '" + memberDataDto.getOpen_card_time_begin() + " 00:00:00' and '"
+                    + memberDataDto.getOpen_card_time_end() + " 23:59:59')";
+        }
+
+        sql = sql + " ORDER BY dum.opencard_time desc ";
+
+        String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+        Map<String, Object> map_result = new HashMap<String, Object>();
+        if(pageInfo!=null){
+            int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+            int recordsPerPage = pageInfo.getRecordsPerPage();
+            sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+            List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
+            String total = "0";
+            List<Map<String,Object>> resultCount = ImpalaUtil.executeGuoan(sql_count);
+            if(resultCount !=null && resultCount.size()>0 ){
+                total = String.valueOf(resultCount.get(0).get("total"));
+            }
+
+            pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+
+            Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+            map_result.put("pageinfo", pageInfo);
+            map_result.put("member", list);
+            map_result.put("total_pages", total_pages);
+
+        }else{
+            List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+            map_result.put("member", list);
+        }
+        return map_result;
+
+
+
+
+
+
+
+
+
+    }
+
+    public Map<String, Object> queryCitynameByNo(String cityno){
 		String sql = "select cityname from t_dist_citycode where 1=1 ";
 		if(StringUtils.isNotEmpty(cityno)){
 			sql = sql + " AND CAST(cityno as SIGNED) =CAST('"+cityno+"' as SIGNED) ";
