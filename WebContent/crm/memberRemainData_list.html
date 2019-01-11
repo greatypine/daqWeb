@@ -831,8 +831,8 @@
         if(ocdate!=""){
             opencard_begin_end_date = ocdate.split("-");
         }
-        var opencard_begin_time = opencard_begin_end_date[0].trim();
-        var opencard_end_time = opencard_begin_end_date[1].trim();
+        var opencard_begin_time = opencard_begin_end_date[0].trim().replace(/\//g, '-');
+        var opencard_end_time = opencard_begin_end_date[1].trim().replace(/\//g, '-');
 
         var memberDataDto=null;
         memberDataDto = {
