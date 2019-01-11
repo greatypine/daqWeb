@@ -1669,8 +1669,8 @@ function getIsManager(){
 	    }
 	    var massOrderDto=null;
 	    massOrderDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+                beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+                endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				order_sn:ordersn,
 				store_no:number_str,
 				order_labels:orderLabels,
@@ -1744,37 +1744,6 @@ function getIsManager(){
 	        	  
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
-       			       var s="";
-       			       var a="";
-       			       var c="";
-       			       var r="";
-       			       var suc="";
-       			       if(jData[i].sign_time!=null){
-       			    		var d=	new Date();
-       			     		d.setTime(jData[i].sign_time);
-       			   		 	s=d.format('yyyy-MM-dd HH:mm:ss')
-       			       }
-       			    	if(jData[i].create_time!=null){
-	   			    		var d=	new Date();
-	   			     		d.setTime(jData[i].create_time);
-	   			   		 	c=d.format('yyyy-MM-dd HH:mm:ss')
-   			       		}
-       			    	if(jData[i].return_time!=null){
-       			    		var d=	new Date();
-       			     		d.setTime(jData[i].return_time);
-       			   		 	r=d.format('yyyy-MM-dd HH:mm:ss')
-       			        }
-       			    	if(jData[i].appointment_start_time!=null){
-       			    		var d=	new Date();
-       			     		d.setTime(jData[i].appointment_start_time);
-       			   		 	a=d.format('yyyy-MM-dd HH:mm:ss')
-       			        }
-                       if(jData[i].success_time!=null){
-                           var d=	new Date();
-                           d.setTime(jData[i].success_time);
-                           suc=d.format('yyyy-MM-dd HH:mm:ss')
-                       }
-       			    		
        			    var area_name = (jData[i].area_name==null || jData[i].area_name=='')?'无':jData[i].area_name;
        			    var customer_name = jData[i].customer_name==null?'':jData[i].customer_name;
        			    var addr_name = jData[i].addr_name==null?'':jData[i].addr_name;
@@ -1800,20 +1769,20 @@ function getIsManager(){
 			        
 			        var areaid = "areatips"+i;
 			        
-       			    var ctime="<strong>下单时间：</strong>"+c+"<br>";
-       			 	var atime="<strong>预约时间：</strong>"+a+"<br>";
- 			       	var stime="<strong>签收时间：</strong>"+s+"<br>";
- 			       	var rtime="<strong>退货时间：</strong>"+r+"<br>";
-                    var suctime="<strong>完成时间：</strong>"+suc+"<br>";
+                    var ctime="<strong>下单时间：</strong>"+jData[i].create_time+"<br>";
+                    var atime="<strong>预约时间：</strong>"+jData[i].appointment_start_time+"<br>";
+                    var stime="<strong>签收时间：</strong>"+jData[i].sign_time+"<br>";
+                    var rtime="<strong>退货时间：</strong>"+jData[i].return_time+"<br>";
+                    var suctime="<strong>完成时间：</strong>"+jData[i].success_time+"<br>";
  			        var tcontent = ctime;
- 			        if(a!=null && a!=""){
- 			        	tcontent =tcontent+atime;
- 			        }
- 			        tcontent =tcontent+stime;
- 			       	if(r!=null && r!=""){
- 			        	tcontent =tcontent +rtime;
- 			       	}
-                    if(suc!=null && suc!=""){
+                    if(jData[i].appointment_start_time!=null && jData[i].appointment_start_time!=""){
+                        tcontent =tcontent+atime;
+                    }
+                    tcontent =tcontent+stime;
+                    if(jData[i].return_time!=null && jData[i].return_time!=""){
+                        tcontent =tcontent +rtime;
+                    }
+                    if(jData[i].success_time!=null && jData[i].success_time!=""){
                         tcontent =tcontent +suctime;
                     }
  			        tcontent =tcontent+"@timetips"+i;
@@ -1851,7 +1820,7 @@ function getIsManager(){
  			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
  			   	        +"<td><a href=\"javascript:;\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+gmv_price+"</a></td>"
                 	   	+"<td><a href=\"javascript:;\" onmouseover=\"showarea('"+jData[i].area_code+"','"+jData[i].order_sn+"','"+areaid+"');\" id=\""+areaid+"\">"+area_name+"</a></td>"
-                	   	+"<td><a href=\"javascript:;\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+s+"</a></td>"
+                	   	+"<td><a href=\"javascript:;\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+jData[i].sign_time+"</a></td>"
  			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
  			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>";
 
@@ -2027,6 +1996,7 @@ function getIsManager(){
 		   	  if(result!=null){
 			       var village = "<strong>小区名：</strong>"+result.village_name+"<br>";
 			       var store = "<strong>门店名：</strong>"+result.store_name+"<br>";
+                   var real_store = "<strong>真实所属门店：</strong>"+result.real_store_name+"<br>";
  			   	   var area = "<strong>片区名：</strong><a style=\"color:#000\" href=\"javascript:searchArea('"+result.area_name+"','"+result.area_code+"')\">"+result.area_name+"</a><br>";
  			   	   var areacode = "<strong>片区编号：</strong><a style=\"color:#000\" href=\"javascript:searchArea('"+result.area_name+"','"+result.area_code+"')\">"+result.area_code+"</a><br>";
 			       var position = "";
@@ -2038,7 +2008,7 @@ function getIsManager(){
 			    	   villagemap = "<strong>地理位置：</strong>无<br>";
 			       }
 			      
-			   	   var areacontent = store+village+area+areacode+villagemap;
+			   	   var areacontent = store+real_store+village+area+areacode+villagemap;
 				   	  
 			  	   layer.tips(areacontent, '#'+areaid, {
 			 		   tips: [4, '#0FA6D8'], //还可配置颜色
@@ -2253,8 +2223,8 @@ function showfee(obj){
 	    }
 	    var massOrderDto=null;
 	    massOrderDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+                beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+                endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				order_sn:ordersn,
 				store_no:number_str,
 				order_labels:orderLabels,
