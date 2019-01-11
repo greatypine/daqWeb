@@ -3951,6 +3951,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String selectStr1 = ",min(department_name) as deptname";
 		String selectStr2 = "";
 		String storeWhere = "";
+		String leftStore ="";
 		if(dynamicDto.getDept()!=null&&!"".equals(dynamicDto.getDept())){
 			whereStr = whereStr+" and  deptgmv.deptid='"+dynamicDto.getDept()+"'";
 		}
@@ -3978,7 +3979,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				storeWhere = "tor.real_store_id='"+dynamicDto.getStoreNo()+"' and ";
 			}
 
-			onStr = onStr+" and deptgmv.store_id = deptthgmv.store_id LEFT JOIN t_store ts on deptgmv.store_id = ts.id ";
+			leftStore = " LEFT JOIN t_store ts on deptgmv.store_id = ts.id ";
+			onStr = onStr+" and deptgmv.store_id = deptthgmv.store_id  ";
 			selectStr1=selectStr1+" ,real_store_id AS store_id";
 			selectStr2 = selectStr2+",deptgmv.store_id,ts.name as store_name,ts.storeno as store_code";
 
@@ -4032,7 +4034,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" AND tor.return_time >= '"+dynamicDto.getBeginDate()+"' "+
 				" AND tor.return_time < from_unixtime(unix_timestamp(days_add(from_unixtime(unix_timestamp('"+dynamicDto.getEndDate()+"'), 'yyyy-MM-dd') , 1)), 'yyyy-MM-dd')" +
 					groupStr+
-				") deptthgmv"+onStr+ whereStr;
+				") deptthgmv"+onStr+leftStore+ whereStr;
 
 
         Map<String, Object> map_result = new HashMap<String, Object>();
@@ -4075,6 +4077,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String selectStr1 = ",min(department_name) as department_name";
 		String selectStr2 = "";
 		String storeWhere = "";
+		String leftStore ="";
 		if(dynamicDto.getDept()!=null&&!"".equals(dynamicDto.getDept())){
 			whereStr = whereStr+" and c.bussiness_group_id='"+dynamicDto.getDept()+"'";
 		}
@@ -4100,7 +4103,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
 				storeWhere = "tor.real_store_id='"+dynamicDto.getStoreNo()+"'  and ";
 			}
-			onStr = onStr+" and c.real_store_id = b.real_store_id LEFT JOIN t_store ts ON c.real_store_id = ts.id ";
+			leftStore = " LEFT JOIN t_store ts ON c.real_store_id = ts.id ";
+			onStr = onStr+" and c.real_store_id = b.real_store_id  ";
 			selectStr1=selectStr1+" ,real_store_id";
 			selectStr2 = selectStr2+",c.real_store_id as store_id,ts.name as store_name,ts.storeno as store_code ";
 
@@ -4151,7 +4155,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" and tor.sign_time < from_unixtime(unix_timestamp(days_add(from_unixtime(unix_timestamp('"+dynamicDto.getEndDate()+"'), 'yyyy-MM-dd') , 1)), 'yyyy-MM-dd')" +
 				" and (tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA')" +
 				" and (tor.store_white !='QA' and tor.store_status = 0)" +
-				  groupStr1+",customer_id) a "+groupStr1+") b "+onStr+ whereStr;
+				  groupStr1+",customer_id) a "+groupStr1+") b "+onStr+leftStore+ whereStr;
 
 
         Map<String, Object> map_result = new HashMap<String, Object>();
