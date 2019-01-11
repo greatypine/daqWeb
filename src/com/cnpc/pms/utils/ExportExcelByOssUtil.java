@@ -169,10 +169,14 @@ public class ExportExcelByOssUtil {
                 }
 
                 if(isNum){
-                    HSSFDataFormat df = wb.createDataFormat(); // 此处设置数据格式
-                    HSSFCellStyle contextstyle =wb.createCellStyle();
-                    contextstyle.setDataFormat(df.getBuiltinFormat("#,##0.00"));//保留两位小数点
-                    setCellNumberValue(row,contextstyle, cellIndex, data.get(i).get(headers_key[cellIndex]));
+                    if(headers_key[cellIndex].equals("mobilephone")||headers_key[cellIndex].equals("invitecode")||headers_key[cellIndex].equals("opencard_time")){
+                        setCellValue(row, cellIndex, data.get(i).get(headers_key[cellIndex]));
+                    }else{
+                        HSSFDataFormat df = wb.createDataFormat(); // 此处设置数据格式
+                        HSSFCellStyle contextstyle =wb.createCellStyle();
+                        contextstyle.setDataFormat(df.getBuiltinFormat("#,##0.00"));//保留两位小数点
+                        setCellNumberValue(row,contextstyle, cellIndex, data.get(i).get(headers_key[cellIndex]));
+                    }
                 }else{
                     setCellValue(row, cellIndex, data.get(i).get(headers_key[cellIndex]));
                 }
