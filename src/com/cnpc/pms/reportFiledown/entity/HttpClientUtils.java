@@ -7,6 +7,8 @@ import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
+import com.cnpc.pms.platform.dao.OrderAmountDao;
+import com.cnpc.pms.platform.entity.OrderAmountDto;
 import com.cnpc.pms.utils.DateUtils;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
@@ -155,7 +157,106 @@ public class HttpClientUtils {
             massOrderDao.updataReport(id,url);
         }
     }
+  //订单金额结算导出
+    public void getAmountOrderTable( OrderAmountDto orderAmountDto, String fileName, OrderAmountDao orderAmountDao,Long id) {
+        Map<String, Object> result = new HashMap<String,Object>();
+        String url = null;
+        List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+    		try {
+    /*			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
+    			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+    			if(StringUtils.isNotEmpty(orderAmountDto.getBeginDate()) && DateUtils.compareDate(orderAmountDto.getBeginDate(), format.format(new Date()))==0){
+    				list = orderAmountDao.exportOrder(orderAmountDto, "df_mass_order_daily");
+    			}else if(StringUtils.isNotEmpty(orderAmountDto.getBeginDate()) && DateUtils.compareDate(orderAmountDto.getBeginDate(),preMonthFirst)>=0){
+    				list = orderAmountDao.exportOrder(orderAmountDto,"df_mass_order_monthly");
+    			}else{*/
+    				list = orderAmountDao.exportOrder(orderAmountDto, "df_mass_order_total");
+    		/*	}*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(list!=null&&list.size()>0){//成功返回数据
+            //定义表头 以及 要填入的 字段
 
+            String[] str_headers = {"订单号","结算类型","成功时间","片区编号","小区编号","片区A国安侠编号","用户电话","用户ID","有效金额","交易金额","应付金额","下单时间","预约时间","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称",
+                    "门店编号","事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单","是否开卡礼订单","是否试用礼订单",
+                    "是否积分订单","是否221商品类订单","是否221服务类订单","是否221团购订单","是否社员订单","是否过账工资","是否无精确成本","是否A类营销费用","订单来源","销售收入","结算方式","平台优惠券金额","粮票"};
+            String[] headers_key = {"order_sn","linetype","success_time","area_code","village_code","info_employee_a_no","customer_mobile_phone","customer_id","gmv_price","trading_price","payable_price","create_time","appointment_start_time","sign_time","return_time",
+                    "employee_name","employee_phone","eshop_name","store_name","store_code","department_name","channel_name","store_city_name","pubseas_label","abnormal_label","return_label","loan_label","quick_label","gift_label",
+                    "customer_isnew_flag","order_tag_b","order_tag_k","order_tag_s","score","order_tag_product","order_tag_service","order_tag_groupon","order_tag_member","pay_label","no_cost_label","a_fee_label",
+                    "order_source","order_profit","contract_method","apportion_coupon","apportion_rebate"};
+            String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+            String str_web_path = PropertiesUtil.getValue("file.web.root");
+            File file_xls = new File(str_file_dir_path + fileName+".csv");
+            if(file_xls.exists()){
+                file_xls.delete();
+            }
+            FileOutputStream os = null;
+            try {
+                file_xls.createNewFile();
+                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
+
+                for(String title : str_headers){
+                    out.write(title);
+                    out.write(",");
+                }
+                out.write("\r\n");
+                for(int i = 0;i < list.size();i++){
+                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
+                        String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+                        if(cellIndex==4 && "normal".equals(orderAmountDto.getHidden_flag())){
+                            if(com.cnpc.pms.base.file.comm.utils.StringUtils.isNotEmpty(value) && value.length() > 7 ){
+                                value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+                            }
+                        }
+                        if(value.contains(",")){
+                            //如果还有双引号，先将双引号转义，避免两边加了双引号后转义错误
+                            if(value.contains("\"")){
+                                value=value.replace("\"", "\"\"");
+                            }
+                            //将逗号转义
+                            value="\""+value+"\"";
+
+                        }
+                        if( value.contains("\n")){
+
+                            value=value.replace("\n", " ");
+                            //将逗号转义
+                            value="\""+value+"\"";
+                        }
+                        if(cellIndex == 0 || cellIndex == 2 || cellIndex == 5 ||cellIndex == 9||cellIndex == 10||cellIndex == 11||cellIndex == 12){
+                            out.write(value+'\t');
+                        }else{
+                            out.write(value);
+                        }
+                        out.write(",");
+                        continue;
+                    }
+
+                    //写完一行换行
+                    out.write("\r\n");
+
+                }
+                out.close();
+
+                OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+//                url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+                url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
+
+            }catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if(os != null){
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            orderAmountDao.updataReport(id,url);
+        }
+    }
     public void getDataTableSPXSDA( MassOrderItemDto massOrderDto, String fileName, MassOrderItemDao massOrderItemDao, Long id) {
         String url = null;
         List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
