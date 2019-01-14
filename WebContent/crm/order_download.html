@@ -1515,9 +1515,10 @@ function showfee(obj){
 		          	   var result= JSON.parse(data.data);
 			           if(result.status=='success'){
                            $("#reportName").val("");
+                           crm_alert(0,"文件生成任务添加成功，请到下载中心查看。");
 //			        	   window.location.href=result.data;
 			           }else if(result.status=='more'){
-			        	   crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
+			        	   crm_alert(0,"单次导出不能超过3万条记录，请调整搜索条件，确认结果条数后再试。");
 			        	   $("#process_div").hide();
 		        	       $("#process_div_pic").hide();
 			        	   return;
@@ -1534,7 +1535,7 @@ function showfee(obj){
 		         $("#process_div").hide();
 		    	 $("#process_div_pic").hide();
 		     });
-      crm_alert(0,"文件生成任务添加成功，请到下载中心查看。");
+     
 	  }
 
 //下载列表

@@ -51,13 +51,11 @@ public class OrderAmountDaoImpl extends DAORootHibernate implements OrderAmountD
 				"IFNULL(a.platform_price,0) as apportion_coupon,IFNULL(a.cost_price,0) as cost_price,\r\n" + 
 				"IFNULL(CASE a.contract_method WHEN 'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN 'percent' THEN '从率' END,'') as contract_method  "
 				+"from daqWeb."+tableName+" a where 1=1 ";
-		String sqlCount="select * from (select a.order_sn as order_sn,a.insert_time as insert_time from daqWeb."+tableName+" a where 1=1 ";	
 		String whereSql="";
 		String whereDffSql="";
 		
 		if (StringUtils.isNotEmpty(orderAmountDto.getEshop_name())) {
 			sql = sql + " and a.eshop_name = '" + orderAmountDto.getEshop_name().trim() + "'";
-			sqlCount= sqlCount + " and a.eshop_name = '" + orderAmountDto.getEshop_name().trim() + "'";
 			whereSql=" and df.eshop_name = '" + orderAmountDto.getEshop_name().trim() + "'";
 			whereDffSql=" and dff.eshop_name = '" + orderAmountDto.getEshop_name().trim() + "'";
 		}
@@ -65,8 +63,6 @@ public class OrderAmountDaoImpl extends DAORootHibernate implements OrderAmountD
 			String beginDate = orderAmountDto.getBeginDate().replace("/", "-");
 			String endDate = orderAmountDto.getEndDate().replace("/", "-");
 			sql = sql + " and (a.success_time between '" + beginDate + " 00:00:00' and '"
-					+ endDate + " 23:59:59')";
-			sqlCount = sqlCount + " and (a.success_time between '" + beginDate + " 00:00:00' and '"
 					+ endDate + " 23:59:59')";
 			whereSql = whereSql + " and (df.success_time between '" + beginDate + " 00:00:00' and '"
 					+ endDate + " 23:59:59')";
@@ -77,44 +73,37 @@ public class OrderAmountDaoImpl extends DAORootHibernate implements OrderAmountD
 			Map<String,Object> position_obj = queryPlatformidByCode(orderAmountDto.getStore_no());
 			if (position_obj != null) {
 				sql = sql + " and (a.store_code ='" + orderAmountDto.getStore_no().trim()+ "' or a.normal_store_id='"+(String) position_obj.get("platformid")+"')";
-				sqlCount = sqlCount + " and (a.store_code ='" + orderAmountDto.getStore_no().trim()+ "' or a.normal_store_id='"+(String) position_obj.get("platformid")+"')";
 				whereSql = whereSql + " and (df.store_code ='" + orderAmountDto.getStore_no().trim()+ "' or df.normal_store_id='"+(String) position_obj.get("platformid")+"')";
 				whereDffSql = whereDffSql + " and (dff.store_code ='" + orderAmountDto.getStore_no().trim()+ "' or dff.normal_store_id='"+(String) position_obj.get("platformid")+"')";
 			}else{
 				sql = sql + " and a.store_code ='" + orderAmountDto.getStore_no().trim()+ "'";
-				sqlCount = sqlCount + " and a.store_code ='" + orderAmountDto.getStore_no().trim()+ "'";
 				whereSql = whereSql + " and df.store_code ='" + orderAmountDto.getStore_no().trim()+ "'";
 				whereDffSql = whereDffSql + " and dff.store_code ='" + orderAmountDto.getStore_no().trim()+ "'";
 			}
 		}
 		if (StringUtils.isNotEmpty(orderAmountDto.getEshop_id())) {
 			sql = sql + " and a.eshop_id ='" + orderAmountDto.getEshop_id().trim() + "'";
-			sqlCount = sqlCount + " and a.eshop_id ='" + orderAmountDto.getEshop_id().trim() + "'";
 			whereSql = whereSql + " and df.eshop_id ='" + orderAmountDto.getEshop_id().trim() + "'";
 			whereDffSql = whereDffSql + " and dff.eshop_id ='" + orderAmountDto.getEshop_id().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(orderAmountDto.getCity_name())) {
 			sql = sql + " and lpad(a.store_city_code,4,'0') = '" + orderAmountDto.getCity_name() + "'";
-			sqlCount = sqlCount + " and lpad(a.store_city_code,4,'0') = '" + orderAmountDto.getCity_name() + "'";
 			whereSql = whereSql + " and lpad(df.store_city_code,4,'0') = '" + orderAmountDto.getCity_name() + "'";
 			whereDffSql = whereDffSql + " and lpad(dff.store_city_code,4,'0') = '" + orderAmountDto.getCity_name() + "'";
 		}
 		if (StringUtils.isNotEmpty(orderAmountDto.getDepartment_name())) {
 			sql = sql + " and a.department_name = '" + orderAmountDto.getDepartment_name().trim() + "'";
-			sqlCount = sqlCount + " and a.department_name = '" + orderAmountDto.getDepartment_name().trim() + "'";
 			whereSql = whereSql + " and df.department_name = '" + orderAmountDto.getDepartment_name().trim() + "'";
 			whereDffSql = whereDffSql + " and dff.department_name = '" + orderAmountDto.getDepartment_name().trim() + "'";
 			
 		}
 		if (StringUtils.isNotEmpty(orderAmountDto.getChannel_name())) {
 			sql = sql + " and a.channel_name = '" + orderAmountDto.getChannel_name().trim() + "'";
-			sqlCount = sqlCount + " and a.channel_name = '" + orderAmountDto.getChannel_name().trim() + "'";
 			whereSql = whereSql + " and df.channel_name = '" + orderAmountDto.getChannel_name().trim() + "'";
 			whereDffSql = whereDffSql + " and dff.channel_name = '" + orderAmountDto.getChannel_name().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(orderAmountDto.getOrder_sn())) {
 			sql = sql + " and a.order_sn ='" + orderAmountDto.getOrder_sn().trim() + "'";
-			sqlCount = sqlCount + " and a.order_sn ='" + orderAmountDto.getOrder_sn().trim() + "'";
 			whereSql = whereSql + " and df.order_sn ='" + orderAmountDto.getOrder_sn().trim() + "'";
 			whereDffSql = whereDffSql + " and dff.order_sn ='" + orderAmountDto.getOrder_sn().trim() + "'";
 			
@@ -124,21 +113,11 @@ public class OrderAmountDaoImpl extends DAORootHibernate implements OrderAmountD
 		+"			on der.order_sn=df.order_sn where 1=1"+whereSql
 		+"			) ord on sett.order_id=ord.id where order_sn is not null) ";
 		
-
-		sqlCount = sqlCount + lineSql+") tab where tab.insert_time in (select max(insert_time) from daqweb.df_mass_order_total dff where 1=1 "+whereDffSql+" group by order_sn)";
-		
-		String sql_count = "SELECT COUNT(1) as total FROM (" + sqlCount + ") T";
-		List<Map<String,Object>> executeGuoan = ImpalaUtil.executeGuoan(sql_count);
-		System.out.println(sql_count);
-		String total="";
-		if (executeGuoan!=null&&executeGuoan.size()>0) {
-			 total = executeGuoan.get(0).get("total").toString();
-		}
-		pageInfo.setTotalRecords(Integer.valueOf(total));
+		int total2 = getTotal(orderAmountDto);
+		pageInfo.setTotalRecords(Integer.valueOf(total2));
 
 		int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
 		int recordsPerPage = pageInfo.getRecordsPerPage();
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		sql = sql + lineSql+" order by a.success_time desc "+"limit "+ recordsPerPage+" offset "+ startData+") tab where tab.insert_time in (select max(insert_time) from daqweb.df_mass_order_total dff where 1=1 "+whereDffSql+" group by order_sn)";	
 		try {
 			List<Map<String,Object>> lst_data = ImpalaUtil.executeGuoan(sql);
@@ -299,6 +278,100 @@ try {
 				new Object[] {url, id }, new Type[] { Hibernate.STRING,Hibernate.LONG })
 			.executeUpdate();
 		session.close();
+	}
+	@Override
+	public int getTotal(OrderAmountDto orderAmountDto) {
+		// TODO Auto-generated method stub
+		String lineSql="";
+		String lineFalg="";
+		String lineBool=""; 
+		if ("underline".equals(orderAmountDto.getLineType())) {//线下
+			
+			lineFalg="线下";
+			lineBool=" not in ";
+		}else {//线上
+			lineFalg="线上";
+			lineBool=" in ";
+		}
+		String sqlCount="select * from (select a.order_sn as order_sn,a.insert_time as insert_time from daqWeb.df_mass_order_total a where 1=1 ";	
+		String whereSql="";
+		String whereDffSql="";
+		
+		if (StringUtils.isNotEmpty(orderAmountDto.getEshop_name())) {
+			sqlCount= sqlCount + " and a.eshop_name = '" + orderAmountDto.getEshop_name().trim() + "'";
+			whereSql=" and df.eshop_name = '" + orderAmountDto.getEshop_name().trim() + "'";
+			whereDffSql=" and dff.eshop_name = '" + orderAmountDto.getEshop_name().trim() + "'";
+		}
+		if (StringUtils.isNotEmpty(orderAmountDto.getBeginDate())) {
+			String beginDate = orderAmountDto.getBeginDate().replace("/", "-");
+			String endDate = orderAmountDto.getEndDate().replace("/", "-");
+			sqlCount = sqlCount + " and (a.success_time between '" + beginDate + " 00:00:00' and '"
+					+ endDate + " 23:59:59')";
+			whereSql = whereSql + " and (df.success_time between '" + beginDate + " 00:00:00' and '"
+					+ endDate + " 23:59:59')";
+			whereDffSql = whereDffSql + " and (dff.success_time between '" + beginDate + " 00:00:00' and '"
+					+ endDate + " 23:59:59')";
+		}
+		if(StringUtils.isNotEmpty(orderAmountDto.getStore_no())){
+			Map<String,Object> position_obj = queryPlatformidByCode(orderAmountDto.getStore_no());
+			if (position_obj != null) {
+				sqlCount = sqlCount + " and (a.store_code ='" + orderAmountDto.getStore_no().trim()+ "' or a.normal_store_id='"+(String) position_obj.get("platformid")+"')";
+				whereSql = whereSql + " and (df.store_code ='" + orderAmountDto.getStore_no().trim()+ "' or df.normal_store_id='"+(String) position_obj.get("platformid")+"')";
+				whereDffSql = whereDffSql + " and (dff.store_code ='" + orderAmountDto.getStore_no().trim()+ "' or dff.normal_store_id='"+(String) position_obj.get("platformid")+"')";
+			}else{
+				sqlCount = sqlCount + " and a.store_code ='" + orderAmountDto.getStore_no().trim()+ "'";
+				whereSql = whereSql + " and df.store_code ='" + orderAmountDto.getStore_no().trim()+ "'";
+				whereDffSql = whereDffSql + " and dff.store_code ='" + orderAmountDto.getStore_no().trim()+ "'";
+			}
+		}
+		if (StringUtils.isNotEmpty(orderAmountDto.getEshop_id())) {
+			sqlCount = sqlCount + " and a.eshop_id ='" + orderAmountDto.getEshop_id().trim() + "'";
+			whereSql = whereSql + " and df.eshop_id ='" + orderAmountDto.getEshop_id().trim() + "'";
+			whereDffSql = whereDffSql + " and dff.eshop_id ='" + orderAmountDto.getEshop_id().trim() + "'";
+		}
+		if (StringUtils.isNotEmpty(orderAmountDto.getCity_name())) {
+			sqlCount = sqlCount + " and lpad(a.store_city_code,4,'0') = '" + orderAmountDto.getCity_name() + "'";
+			whereSql = whereSql + " and lpad(df.store_city_code,4,'0') = '" + orderAmountDto.getCity_name() + "'";
+			whereDffSql = whereDffSql + " and lpad(dff.store_city_code,4,'0') = '" + orderAmountDto.getCity_name() + "'";
+		}
+		if (StringUtils.isNotEmpty(orderAmountDto.getDepartment_name())) {
+			sqlCount = sqlCount + " and a.department_name = '" + orderAmountDto.getDepartment_name().trim() + "'";
+			whereSql = whereSql + " and df.department_name = '" + orderAmountDto.getDepartment_name().trim() + "'";
+			whereDffSql = whereDffSql + " and dff.department_name = '" + orderAmountDto.getDepartment_name().trim() + "'";
+			
+		}
+		if (StringUtils.isNotEmpty(orderAmountDto.getChannel_name())) {
+			sqlCount = sqlCount + " and a.channel_name = '" + orderAmountDto.getChannel_name().trim() + "'";
+			whereSql = whereSql + " and df.channel_name = '" + orderAmountDto.getChannel_name().trim() + "'";
+			whereDffSql = whereDffSql + " and dff.channel_name = '" + orderAmountDto.getChannel_name().trim() + "'";
+		}
+		if (StringUtils.isNotEmpty(orderAmountDto.getOrder_sn())) {
+			sqlCount = sqlCount + " and a.order_sn ='" + orderAmountDto.getOrder_sn().trim() + "'";
+			whereSql = whereSql + " and df.order_sn ='" + orderAmountDto.getOrder_sn().trim() + "'";
+			whereDffSql = whereDffSql + " and dff.order_sn ='" + orderAmountDto.getOrder_sn().trim() + "'";
+			
+		}
+		lineSql=" and a.order_sn"+lineBool+"(select ord.order_sn as order_sn from gemini.t_settlement_item sett \r\n" + 
+		" left join (select der.id as id,der.order_sn as order_sn from gemini.t_order der left join daqweb.df_mass_order_total df\r\n" 
+		+"			on der.order_sn=df.order_sn where 1=1"+whereSql
+		+"			) ord on sett.order_id=ord.id where order_sn is not null) ";
+		
+
+		sqlCount = sqlCount + lineSql+") tab where tab.insert_time in (select max(insert_time) from daqweb.df_mass_order_total dff where 1=1 "+whereDffSql+" group by order_sn)";
+		
+		String sql_count = "SELECT COUNT(1) as total FROM (" + sqlCount + ") T";
+		List<Map<String,Object>> executeGuoan = ImpalaUtil.executeGuoan(sql_count);
+		System.out.println(sql_count);
+		String total="";
+		int total2=0;
+		if (executeGuoan!=null&&executeGuoan.size()>0) {
+			 total = executeGuoan.get(0).get("total").toString();
+			 total2=Integer.valueOf(total);
+		}
+	
+		
+		
+		return total2;
 	}
 
 }

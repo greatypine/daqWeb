@@ -31,30 +31,34 @@ import com.cnpc.pms.utils.ImpalaUtil;
 public class OrderAmountManagerImpl extends BizBaseCommonManager implements OrderAmountManager{
   	public Map<String, Object> exportOrder(OrderAmountDto orderAmountDto, TReportFiledown tReportFiledown) {
   		OrderAmountDao orderAmountDao = (OrderAmountDao)SpringHelper.getBean(OrderAmountDao.class.getName());
-		Map<String, Object> result = new HashMap<String,Object>();
-		HttpClientUtils httpClientUtils = new HttpClientUtils();
-		UserSession userSession = SessionManager.getUserSession();
-		Map sessionData = userSession.getSessionData();
-		String username = (String) sessionData.get("userCode");
-		tReportFiledown.setCreate_time(new Date());
-		tReportFiledown.setUsername(username);
-		tReportFiledown.setDownTimes(0);
-		tReportFiledown.setTableLogic("DDJEJS");
-		String fileName =  tReportFiledown.getFilename();
-		fileName = httpClientUtils.getPingYin(fileName);
-		tReportFiledown.setFilename(fileName);
-		tReportFiledown.setUrl("/" + fileName);
-		tReportFiledown.setMark1("0");
-		saveObject(tReportFiledown);
-
-		String starts = "DDJEJS";
-		//ExportRunableDDDA s1 = new ExportRunableDDDA(starts, fileName, null, massOrderDto, false,tReportFiledown,massOrderDao);
-		ExportRunableDDJEJS s1=new ExportRunableDDJEJS(starts, fileName, null, orderAmountDto, false,tReportFiledown,orderAmountDao);
-		Thread t1 = new Thread(s1);
-		t1.start();
-		result.put("message","导出成功！");
-		result.put("status","success");
-		return result;
+  		int total = orderAmountDao.getTotal(orderAmountDto);
+  		Map<String, Object> result = new HashMap<String,Object>();
+  		if (total>0&&total<=30000) {
+  			HttpClientUtils httpClientUtils = new HttpClientUtils();
+  			UserSession userSession = SessionManager.getUserSession();
+  			Map sessionData = userSession.getSessionData();
+  			String username = (String) sessionData.get("userCode");
+  			tReportFiledown.setCreate_time(new Date());
+  			tReportFiledown.setUsername(username);
+  			tReportFiledown.setDownTimes(0);
+  			tReportFiledown.setTableLogic("DDJEJS");
+  			String fileName =  tReportFiledown.getFilename();
+  			fileName = httpClientUtils.getPingYin(fileName);
+  			tReportFiledown.setFilename(fileName);
+  			tReportFiledown.setUrl("/" + fileName);
+  			tReportFiledown.setMark1("0");
+  			saveObject(tReportFiledown);
+  			String starts = "DDJEJS";
+  			ExportRunableDDJEJS s1=new ExportRunableDDJEJS(starts, fileName, null, orderAmountDto, false,tReportFiledown,orderAmountDao);
+  			Thread t1 = new Thread(s1);
+  			t1.start();
+  			result.put("message","导出成功！");
+  			result.put("status","success");	
+		}else if (total>30000) {
+			result.put("message","导出失败！");
+  			result.put("status","more");		
+		}
+  		return result;
   	}
 
 	@Override

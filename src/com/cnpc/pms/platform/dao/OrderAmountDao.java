@@ -26,4 +26,6 @@ public interface OrderAmountDao {
 		Map<String, Object> queryOrderAmount(OrderAmountDto orderAmountDto, PageInfo pageInfo,String tableName);
 		
 		void updataReport(Long id , String url);
+		
+		int getTotal(OrderAmountDto orderAmountDto);
 }
