@@ -201,7 +201,7 @@
                               <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:50px">销售收入-已退货-营销费用</font>整体毛利</th>
                           <th width="8%">补贴费用<br/></th>
                           <th width="8%"><font id="columnattention2" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-                              <font id="forcolumnattention2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:50px">（销售收入-已退货-营销费用）×0.2-补贴费用</font>事业群毛利</th>
+                              <font id="forcolumnattention2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:50px">整体毛利×0.2-补贴费用*0.8</font>事业群毛利</th>
 	                    </tr>
                     </tbody>
                   </table>
@@ -683,7 +683,7 @@
                            }
                        var real_profit = (jData[i].total_profit -jData[i].return_profit- jData[i].order_fee).toFixed(2);
                        var real_subsidy =  (jData[i].gayy_subsidy -jData[i].return_gayy_subsidy).toFixed(2);
-                       var dept_profit = (real_profit * 0.2 - real_subsidy).toFixed(2);
+                       var dept_profit = (real_profit * 0.2 - real_subsidy * 0.8).toFixed(2);
                            infoStr = infoStr+"<td>"+jData[i].platform_profit+"</td>"
                            +"<td>"+jData[i].ims_profit+"</td>"
                            +"<td>"+jData[i].return_profit+"</td>"

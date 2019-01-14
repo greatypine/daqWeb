@@ -1787,7 +1787,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				",dround(ifnull(aa.order_fee,0),2) as order_fee,dround(ifnull(dd.return_profit,0),2) as return_profit" +
 				",dround(ifnull(aa.total_profit,0),2) as total_profit,dround(ifnull(aa.platform_fee,0),2) as platform_fee,dround(ifnull(aa.ims_fee,0),2) as ims_fee " +
 				",dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit,dround(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0),2) as real_subsidy " +
-				",dround((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0))* 0.2 - (ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0)),2) as dept_profit ";
+				",dround((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0))* 0.2 - (ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0))*0.8,2) as dept_profit ";
 		if(dynamicDto.getSearchstr().contains("dept_city_active")){
 			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
 		}
@@ -2219,7 +2219,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public List<Map<String, Object>> exportProfitDeptStat(DynamicDto dynamicDto){
 		String sql = "select aa.department_name,dround(ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0),2) as real_profit," +
 				"dround(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0),2) as real_subsidy," +
-				"dround((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0))*0.2-(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0)),2) as dept_profit " ;
+				"dround((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0))*0.2-(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0))*0.8,2) as dept_profit " ;
 		if(dynamicDto.getSearchstr().contains("dept_city")){
 			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
 		}
