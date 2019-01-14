@@ -224,7 +224,7 @@ public class HttpClientUtils {
                             //将逗号转义
                             value="\""+value+"\"";
                         }
-                        if(cellIndex == 0 || cellIndex == 4 || cellIndex == 7 ||cellIndex == 11||cellIndex == 12||cellIndex == 13||cellIndex == 14){
+                        if(cellIndex == 0 ||cellIndex == 2 || cellIndex == 4 || cellIndex == 7 ||cellIndex == 11||cellIndex == 12||cellIndex == 13||cellIndex == 14){
                             out.write(value+'\t');
                         }else{
                             out.write(value);
