@@ -204,7 +204,7 @@ public class HttpClientUtils {
                 for(int i = 0;i < list.size();i++){
                     for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
                         String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-                        if(cellIndex==4 && "normal".equals(orderAmountDto.getHidden_flag())){
+                        if(cellIndex==6 && "normal".equals(orderAmountDto.getHidden_flag())){
                             if(com.cnpc.pms.base.file.comm.utils.StringUtils.isNotEmpty(value) && value.length() > 7 ){
                                 value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
                             }
@@ -224,7 +224,7 @@ public class HttpClientUtils {
                             //将逗号转义
                             value="\""+value+"\"";
                         }
-                        if(cellIndex == 0 || cellIndex == 2 || cellIndex == 5 ||cellIndex == 9||cellIndex == 10||cellIndex == 11||cellIndex == 12){
+                        if(cellIndex == 0 || cellIndex == 4 || cellIndex == 7 ||cellIndex == 11||cellIndex == 12||cellIndex == 13||cellIndex == 14){
                             out.write(value+'\t');
                         }else{
                             out.write(value);
