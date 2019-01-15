@@ -990,6 +990,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		if(provinceNO!=null&&provinceNO.size()>0){
 			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
+		whereStr+=" and bipo.store_name not like '%企业购%'";
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
@@ -1040,6 +1041,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		if(provinceNO!=null&&provinceNO.size()>0){
 			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
+		whereStr+=" and bipo.store_name not like '%企业购%'";
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
@@ -1087,6 +1089,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		if(provinceNO!=null&&provinceNO.size()>0){
 			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
+		whereStr+=" and bipo.store_name not like '%企业购%'";
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
@@ -1129,9 +1132,72 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		return map_result;
 	}
 	@Override
-	public Map<String, Object> getStoreProductIntervalDay(DynamicDto dd,DynamicDto dd1, List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO, PageInfo pageInfo) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, Object> getStoreProductIntervalDay(DynamicDto dynamicDto,DynamicDto dynamicDto2, List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO, PageInfo pageInfo) {
+		String whereStr = "";
+		String beginDate = dynamicDto.getBeginDate();
+		String endDate = dynamicDto.getEndDate();
+		String beginDate2 = dynamicDto2.getBeginDate();
+		String endDate2 = dynamicDto2.getEndDate();
+		String sql = "SELECT ifnull((ss.rows1-tt.rows2),0) as rank,tt.store_name as store_name,tt.storeno as storeno,tt.product_gmv as product_gmv,tt.product_name as product_name FROM (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)>='"
+				+ beginDate+"' and  strleft (bipo.sign_time, 10)<='"+endDate+"' ";
+		String sqlA = "";
+		String count_sql = "";
+		String searchStr = "";
+		String productName = dynamicDto.getSearchstr();
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			whereStr +=  " and bipo.store_city_code='"+cityNo+"' ";
+			
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		whereStr+=" and bipo.store_name not like '%企业购%'";
+		sql = sql+whereStr;
+		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
+		//前天门店商品销售
+		sql=sql+ "LEFT JOIN (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
+				+ "strleft (bipo.sign_time, 10) >= '"+beginDate2+"' and strleft (bipo.sign_time, 10) <= '"+endDate2+"' ";
+		sql = sql+whereStr;		
+		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
+		if(StringUtils.isNotEmpty(productName)){
+			searchStr = " where ff.product_name like '%"+productName+"%'";
+		}
+		count_sql = "select count(1) as count_ from ("+sql+") ff "+searchStr;
+        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
+        Integer count_ = 0;
+        try{
+        	lst_data_count=ImpalaUtil.executeGuoan(count_sql);
+        	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
+        	if(pageInfo.getCurrentPage()==1){
+        		sqlA = "select ff.* from ("+sql+") ff "+searchStr+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
+        	}else{
+        		sqlA = "select ff.* from ("+sql+") ff "+searchStr+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage()+1);
+        	}
+        	lst_data=ImpalaUtil.executeGuoan(sqlA);
+            lst_result = lst_data;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		if(pageInfo!=null){
+			Integer total_pages = (count_ - 1) / pageInfo.getRecordsPerPage() + 1;
+			pageInfo.setTotalRecords(count_);
+			pageInfo.setRecordsPerPage(pageInfo.getRecordsPerPage());
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}
+		map_result.put("data", lst_data);
+		return map_result;
 	}
 	@Override
 	public Map<String, Object> getStoreYesterdayMember(DynamicDto dynamicDto,List<Map<String, Object>> cityNO, PageInfo pageInfo) {
