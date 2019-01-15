@@ -40,7 +40,7 @@ public class OrderAmountDaoImpl extends DAORootHibernate implements OrderAmountD
 			lineFalg="线上";
 			lineBool=" in ";
 		}
-		String sql = "select * from (select '"+lineFalg+"' as linetype, a.success_time as success_time, CONCAT(a.id,'') as id, \r\n" + 
+		String sql = "select * from (select '"+lineFalg+"' as linetype, a.success_time as success_time,IFNULL(ROUND(a.sale_profit, 2),0) as sale_profit, CONCAT(a.id,'') as id, \r\n" + 
 				"a.order_sn,a.eshop_name,a.insert_time as insert_time," + 
 				"a.create_time,a.sign_time,a.return_time,\r\n" + 
 				"a.appointment_start_time,IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,\r\n" + 

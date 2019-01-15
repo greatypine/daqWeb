@@ -473,7 +473,7 @@
                   <td width="10%" style="font-weight:bold;" id="time_sort">签收时间 </td>
                   <td width="10%" style="font-weight:bold;">业务信息</td>
                   <td width="9%" style="font-weight:bold;" id="profit_sort">
-                      <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">订单销售收入</font>销售收入（元）</td>
+                      <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">订单销售收入</font>销售毛利（元）</td>
                   <td width="9%" style="font-weight:bold;">营销费用</td>
                 </tr>
                 </tbody>
@@ -1248,7 +1248,7 @@ function getIsManager(){
                        } else if(jData[i].contract_method=='price' && jData[i].cost_price==0){
                            infoStr = infoStr + "<a href=\"javascript:;\">成本为0无利润</a>";
                        } else {
-                           infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a>";
+                           infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].sale_profit+"</a>";
                        }
                     infoStr = infoStr
                         +"<td><a href=\"javascript:;\" onmouseover=\"showfee('"+feecontent+"');\" id=\""+feeid+"\">"+jData[i].apportion_coupon+"</a></td>";
@@ -1366,11 +1366,10 @@ function showprofit(rebate,coupon,cost,contract_id,profitid){
 	  var cost_org = cost;
     var method = "";
 	  if(contract_id != '' && contract_id != null){
-        doManager('orderAmountManager','queryContractById',[contract_id],function(data){
+        doManager('massOrderManager','queryContractById',[contract_id],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result!=null){
-
                     var method_org = "从价";
                     if(result.method=='volume'){
                         method_org = "从量";
