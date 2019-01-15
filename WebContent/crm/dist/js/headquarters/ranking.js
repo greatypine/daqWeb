@@ -7,6 +7,7 @@ $(document).ready(function () {
 	$("#search_size_page").change(function(){
 		var current_page = $("#current").val();
 		var product_name = $("#search_store").val();
+		$("#selectChange").val(true);
 		selectProductInfoList(current_page,product_name);
 	});
 	$("#search_store").bind('keyup', function(event) {
@@ -72,8 +73,12 @@ var selectProductInfoList =function(cur_page,product_name){
  }
 var autoPageRecordes_=$("#search_size_page").val();
 var keyup = $("#keyup").val();
+var selectChange = $("#selectChange").val();
 pageInfo.currentPage = cur_page;
 if(keyup=="true"){
+	pageInfo.currentPage = 1;
+}
+if(selectChange=="true"){
 	pageInfo.currentPage = 1;
 }
 pageInfo.recordsPerPage = autoPageRecordes_;
