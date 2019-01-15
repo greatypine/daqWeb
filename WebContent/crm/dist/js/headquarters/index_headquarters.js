@@ -834,13 +834,9 @@ var initPageElements = function () {
       formatter:function(params)//数据格式
             {
             var relVal = params[0].name;
+            params = params.slice(0,params.length-1).reverse();
             if(params.length>1){
-            	if(params.length==2){
-            		params = params.slice(0,1);
-            	}else{
-            		params    = params.slice(0,3);
-            	}
-            	for(var i=0;i<params.reverse().length;i++){
+            	for(var i=0;i<params.length;i++){
             		relVal += "<br/>"+params[i]['marker']+params[i]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[i]['value']),1);
             	}
             }else if(params.length=1){
@@ -1051,6 +1047,46 @@ var initPageElements = function () {
 	  }
 	  window.open(url,"user_member_view");
     });
+    turnoverCustomerOrderChart.on('legendselectchanged', function (params) { 
+		    var select_name = params.name;
+		    var data1 = [];
+		    var data2 = [];
+		    var data3 = [];
+		    var data4 = [];
+		    var selected = {};
+		    var enable_series = turnoverCustomerOrderOption.series;
+		     $.each(eval(enable_series), function (idx, val) {
+		     	if((params.selected['上海']==true)&&val['name']=='上海'){
+		     		data1=val['data'];
+		     	}else if((params.selected['北京']==true)&&val['name']=='北京'){
+		     		data2=val['data'];
+		     	}else if((params.selected['天津']==true)&&val['name']=='天津'){
+		     		data3=val['data'];
+		     	}
+		     	if((params.selected['上海']==false)&&val['name']=='上海'){
+		     		selected['上海'] = false;    //设置默认选中legend
+		     	}else if((params.selected['天津']==false)&&val['name']=='天津'){
+		     		selected['天津'] = false;
+		     	}else if((params.selected['北京']==false)&&val['name']=='北京'){
+		     		selected['北京'] = false;
+		     	} 
+		     });
+		     turnoverCustomerOrderOption.legend.selected = selected;
+		        var json = {data1,data2,data3}; //json中有任意多个数组
+			    //保存结果的数组
+			    //遍历json
+			    for(var key in json){
+			        //遍历数组的每一项
+			        $.each(json[key],function(index,value){
+			            if( isBlank(data4[index]) ){
+			                data4[index] = 0 ;
+			            }
+			            data4[index] += value ;
+			        })
+			    }
+		    turnoverCustomerOrderOption.series[3].data = data4;
+		    turnoverCustomerOrderChart.setOption(turnoverCustomerOrderOption,true);
+	});
     cityUserOption = {
 	 title:[
     		{x: '10%', y: '3%',textStyle:{color:"#efefef",fontSize:"16"}},
@@ -5580,6 +5616,17 @@ function reportFiledown(){
 	  }
       window.open(url,"dynamicData_express_send");
   }
+  function goToOrderFileDownload(){
+	  var role = curr_user.usergroup.code;
+	  var url = "";
+	  var target=pageStatusInfo.targets;
+	  if(target==0){
+	        url = "order_download.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+	  }else if(target==1){
+	        url = "order_download.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+	  }
+	window.open(url,"order_download");
+}
   
   function goToAbnormalOrderResult(){
 	  //t:职务 s:门店ID c:城市ID
@@ -6299,7 +6346,18 @@ function  clearFirstCache(){
 	localStorage.clear();
 }
 
-
+//社员剩余价值统计
+function goToMemRemain(){
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "memberRemainData_list.html?t="+encode64('0')+"&so=&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+    }else if(target==1){
+        url = "memberRemainData_list.html?t="+encode64(1)+"&so=&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+    }
+    window.open(url,"memberRemainData_list");
+}
 
 
 //221GMV统计

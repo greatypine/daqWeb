@@ -10,13 +10,11 @@ $(document).ready(function () {
 		$("#selectChange").val(true);
 		selectProductInfoList(current_page,product_name);
 	});
-	$("#search_store").bind('keyup', function(event) {
-        if (event.keyCode == "13") {
-        	var current_page = $("#current").val();
-            var product_name = $("#search_store").val();
-            $("#keyup").val(true);
-			selectProductInfoList(current_page,product_name);
-        }
+	$("#search_store_a").bind('click', function(event) {
+    	var current_page = $("#current").val();
+        var product_name = $("#search_store").val();
+        $("#keyup").val(true);
+		selectProductInfoList(current_page,product_name);
     });
 	selectProductInfoList("1","");
 });
@@ -81,6 +79,8 @@ if(keyup=="true"){
 if(selectChange=="true"){
 	pageInfo.currentPage = 1;
 }
+$("#selectChange").val("false");
+var keyup = $("#keyup").val("false");
 pageInfo.recordsPerPage = autoPageRecordes_;
 doManager("massOrderItemManager",method, [reqestParameter,pageInfo],
     function (data, textStatus, XMLHttpRequest) {
@@ -117,7 +117,7 @@ doManager("massOrderItemManager",method, [reqestParameter,pageInfo],
                      var arr = [];
                      no = no + 1;
                      if(i < result.lst_data.data.length){
-                         arr[0] = (current-1)*autoPageRecordes+(i+1);
+                         arr[0] = (current-1)*size+(i+1);
                          arr[1] = result.lst_data.data[i].product_name;
                          arr[2] = result.lst_data.data[i].store_name;
                          arr[3] = result.lst_data.data[i].product_gmv;
@@ -142,9 +142,6 @@ doManager("massOrderItemManager",method, [reqestParameter,pageInfo],
                      bDestroy: true,
                      iDisplayStart: 0,
                      iDisplayLength:iDisplayLength,
-                     language: {
-                         sInfo: "当前显示第 "+((current - 1) * size+1)+" 到第 "+(size*(current-1) + iDisplayLength)+" 条 一共 "+total+" 条"
-                     },
                      columns: [
                       { title: "排名" },
  					  { title: "商品名称" },
@@ -157,7 +154,7 @@ doManager("massOrderItemManager",method, [reqestParameter,pageInfo],
 				       "sLengthMenu" : "_MENU_",  
 				       "sZeroRecords" : "无记录",  
 				       "sEmptyTable" : "表中无数据存在！",  
-				       "sInfo" : "当前显示 _START_ 到 _END_ 条，共 _MAX_  条记录",  
+				       "sInfo" : "当前显示 "+((current - 1) * size+1)+" 到 "+(size*(current-1) + iDisplayLength)+" 条，共 "+total+"  条记录",  
 				       "sInfoEmpty" : "没有数据",  
 				       "sInfoFiltered" : "数据表中共为 _TOTAL_ 条记录",  
 				       "sSearch" : " ",  
@@ -171,7 +168,7 @@ doManager("massOrderItemManager",method, [reqestParameter,pageInfo],
                  	}
 				);
                  //分页
-                 pagination(cur_page,pages);
+                 pagination(pageInfo.currentPage,pages);
 				updateTableStyle(result,current);
 		}
     }, false);
@@ -180,6 +177,7 @@ doManager("massOrderItemManager",method, [reqestParameter,pageInfo],
 
 //分页
 function pagination(current,pages) {
+	var product_name = $("#search_store").val();
             //分页初始化部分
    //当前页大于1 上一页 按钮可用
             if((parseInt(current)) > 1){
@@ -193,26 +191,30 @@ function pagination(current,pages) {
                 if(current<5){
                     $(".paginate_button")[(current)].className="paginate_button active";
                 }else if(current>=5&&current<=(pages-4)){
-                    $(".paginate_button")[1].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current)-2)+"' tabindex='0'>"+(parseInt(current)-2)+"</a>";
-                    $(".paginate_button")[2].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current)-1)+"' tabindex='0'>"+(parseInt(current)-1)+"</a>";
+                    $(".paginate_button")[1].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='1' tabindex='0'>1</a>";
+                    $(".paginate_button")[2].innerHTML="<a href='#' aria-controls='example1' tabindex='0'>...</a>";
+                    $(".paginate_button").eq(2).addClass("disabled");
                     $(".paginate_button")[3].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current))+"' tabindex='0'>"+(parseInt(current))+"</a>";
                     $(".paginate_button")[4].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current)+1)+"' tabindex='0'>"+(parseInt(current)+1)+"</a>";
                     $(".paginate_button")[5].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current)+2)+"' tabindex='0'>"+(parseInt(current)+2)+"</a>";
 					$(".paginate_button")[3].className="paginate_button active";
                 }else if(current>(pages-4)){
-                    $(".paginate_button")[1].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(pages)-5)+"' tabindex='0'>"+(parseInt(pages)-5)+"</a>";
-                    $(".paginate_button")[2].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(pages)-4)+"' tabindex='0'>"+(parseInt(pages)-4)+"</a>";
-                    $(".paginate_button")[3].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(pages-3))+"' tabindex='0'>"+(parseInt(pages)-3)+"</a>";
-                    $(".paginate_button")[4].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(pages)-2)+"' tabindex='0'>"+(parseInt(pages)-2)+"</a>";
-                    $(".paginate_button")[5].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(pages)-1)+"' tabindex='0'>"+(parseInt(pages)-1)+"</a>";
-                    if(current==(pages-4)){
-                        $(".paginate_button")[2].className="paginate_button active";
-                    }else if(current==(pages-3)){
+                    $(".paginate_button")[1].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+1+"' tabindex='0'>"+1+"</a>";
+                    $(".paginate_button")[2].innerHTML="<a href='#' aria-controls='example1' tabindex='0'>...</a>";
+                    $(".paginate_button").eq(2).addClass("disabled");
+                    $(".paginate_button")[3].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(pages-4))+"' tabindex='0'>"+(parseInt(pages)-4)+"</a>";
+                    $(".paginate_button")[4].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(pages)-3)+"' tabindex='0'>"+(parseInt(pages)-3)+"</a>";
+                    $(".paginate_button")[5].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(pages)-2)+"' tabindex='0'>"+(parseInt(pages)-2)+"</a>";
+                    $(".paginate_button")[6].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(pages)-1)+"' tabindex='0'>"+(parseInt(pages)-1)+"</a>";
+					$(".paginate_button").eq(6).removeClass("disabled");
+					if(current==(pages-4)){
                         $(".paginate_button")[3].className="paginate_button active";
-                    }else if(current==(pages-2)){
+                    }else if(current==(pages-3)){
                         $(".paginate_button")[4].className="paginate_button active";
-                    }else if(current==(pages-1)){
+                    }else if(current==(pages-2)){
                         $(".paginate_button")[5].className="paginate_button active";
+                    }else if(current==(pages-1)){
+                        $(".paginate_button")[6].className="paginate_button active";
                     }else if(current==pages){
                         $(".paginate_button")[7].className="paginate_button active";
 						$("#example1_next").addClass("disabled");
@@ -226,11 +228,12 @@ function pagination(current,pages) {
                 if(current<5){
                     $(".paginate_button")[current].className="paginate_button active";
                 }else{
-                    $(".paginate_button")[2].outerHTML="<span class=\"ellipsis\" onselectstart=\"return false\">…</span>";
-                    $(".paginate_button")[2].outerHTML="<a class='paginate_button' onselectstart=\"return false\" aria-controls='userHead' data-dt-idx='4' tabindex='0'>4</a>";
-                    $(".paginate_button")[3].outerHTML="<a class='paginate_button' onselectstart=\"return false\" aria-controls='userHead' data-dt-idx='5' tabindex='0'>5</a>";
-                    $(".paginate_button")[4].outerHTML="<a class='paginate_button' onselectstart=\"return false\" aria-controls='userHead' data-dt-idx='6' tabindex='0'>6</a>";
-                    $(".ellipsis")[1].outerHTML = "<a class='paginate_button' onselectstart=\"return false\" aria-controls='userHead' data-dt-idx='7' tabindex='0'>7</a>";
+                    $(".paginate_button")[1].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current)-5)+"' tabindex='0'>"+(parseInt(current)-5)+"</a>";
+                    $(".paginate_button")[2].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current)-4)+"' tabindex='0'>"+(parseInt(current)-4)+"</a>";
+                    $(".paginate_button").eq(2).addClass("disabled");
+                    $(".paginate_button")[3].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current)-3)+"' tabindex='0'>"+(parseInt(current)-3)+"</a>";
+                    $(".paginate_button")[4].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current)-2)+"' tabindex='0'>"+(parseInt(current)-2)+"</a>";
+                    $(".paginate_button")[5].innerHTML="<a href='#' aria-controls='example1' data-dt-idx='"+(parseInt(current)-1)+"' tabindex='0'>"+(parseInt(current)-1)+"</a>";
                     if(current==5){
                         $(".paginate_button")[3].className="paginate_button active";
                     }else if(current==6){
@@ -254,14 +257,14 @@ function pagination(current,pages) {
                     }else{
                       $("#example1_previous").addClass("disabled");
                     }
-					searchProductInfoList(parseInt(current)-1);
+					searchProductInfoList(parseInt(current)-1,product_name);
                 }else if(jumpPage=="下一页"){
                     if((parseInt(current)+1) < pages){
 					  $("#example1_next").removeClass("disabled");
                     }else{
                       $("#example1_next").addClass("disabled");
                     }
-					searchProductInfoList(parseInt(current)+1);
+					searchProductInfoList((parseInt(current)+1),product_name);
                 }else {
 					if((parseInt(jumpPage)+1) < pages){
 					  $("#example1_next").removeClass("disabled");
@@ -274,13 +277,13 @@ function pagination(current,pages) {
                       $("#example1_previous").addClass("disabled");
                     }
                     //获取要跳转到的页码
-                    searchProductInfoList(jumpPage);
+                    searchProductInfoList(jumpPage,product_name);
                 }
             });
       }
       //触发搜索按钮
       function searchProductInfoList(current){
-          var productName = $("#product_name").val();
+          var productName = $("#search_store").val();
           selectProductInfoList(current,productName);
       }
 	var updateTableStyle = function(result,current){
@@ -294,7 +297,8 @@ function pagination(current,pages) {
 				$("#product_table tr:first td:first").html('<span class="text_big1"></span>');
 				$("#product_table tr:first td").eq(1).addClass('text-yellow');
 				$("#product_table tr:first td").eq(1).attr("title",val['product_name']);
-				$("#product_table tr:first td").eq(1).html(val['product_name']+'<em><img src="dist/img/hot-r.png"></em>');
+				//$("#product_table tr:first td").eq(1).html(val['product_name']+'<em><img src="dist/img/hot-r.png"></em>');
+				$("#product_table tr:first td").eq(1).html(val['product_name']);
 				$("#product_table tr:first td").eq(2).val(val['store_name']);
 				$("#product_table tr:first td").eq(2).attr("title",val['store_name']);
 				$("#product_table tr:first td").eq(3).val(val['product_gmv']);
