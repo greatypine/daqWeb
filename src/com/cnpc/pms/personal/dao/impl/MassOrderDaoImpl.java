@@ -284,7 +284,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source, "
 				+ "CASE WHEN a.order_tag4 is not null THEN '是'  ELSE '否' END AS a_fee_label,"
 				+ "IFNULL(a.business_type,'') as business_type,IFNULL(dround(a.platform_price,2),0) as apportion_coupon,IFNULL(dround(a.apportion_rebate,2),0) as apportion_rebate,IFNULL(dround(a.order_profit, 2),0) as order_profit,"
-				+ "IFNULL(dround(a.sale_profit, 2),0) as sale_profit,"
+				+ "IFNULL(dround(a.sale_profit, 2),0) as sale_profit,IFNULL(dround(a.first_channel_profit, 2),0) as first_channel_profit,IFNULL(dround(a.this_channel_profit, 2),0) as this_channel_profit,"
 				+ "IFNULL(CASE a.contract_method WHEN  'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN  'percent' THEN '从率' END,'') as contract_method "
 				+ "from daqweb.df_mass_order_total a LEFT JOIN t_store ts ON a.real_store_id=ts.id LEFT JOIN gemini.t_department_channel tdc ON a.first_order_channel=tdc.id ";
 
