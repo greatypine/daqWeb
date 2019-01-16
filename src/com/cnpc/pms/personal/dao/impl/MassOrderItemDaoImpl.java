@@ -1090,6 +1090,10 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
 		whereStr+=" and bipo.store_name not like '%企业购%'";
+		if(StringUtils.isNotEmpty(productName)){
+			searchStr = " where ff.product_name like '%"+productName+"%'";
+			whereStr+=" and bipo.eshop_pro_name like '%"+productName+"%'";
+		}
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
@@ -1099,10 +1103,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				+ "strleft (bipo.sign_time, 10) = '"+endDate+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
-		if(StringUtils.isNotEmpty(productName)){
-			searchStr = " where ff.product_name like '%"+productName+"%'";
-		}
-		count_sql = "select count(1) as count_ from ("+sql+") ff "+searchStr;
+		count_sql = "select count(1) as count_ from ("+sql+") ff ";
         List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
@@ -1111,9 +1112,9 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
         	lst_data_count=ImpalaUtil.executeGuoan(count_sql);
         	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
         	if(pageInfo.getCurrentPage()==1){
-        		sqlA = "select ff.* from ("+sql+") ff "+searchStr+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
+        		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
         	}else{
-        		sqlA = "select ff.* from ("+sql+") ff "+searchStr+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage()+1);
+        		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
         	}
         	lst_data=ImpalaUtil.executeGuoan(sqlA);
             lst_result = lst_data;
@@ -1158,6 +1159,10 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
 		whereStr+=" and bipo.store_name not like '%企业购%'";
+		if(StringUtils.isNotEmpty(productName)){
+			searchStr = " where ff.product_name like '%"+productName+"%'";
+			whereStr+=" and bipo.eshop_pro_name like '%"+productName+"%'";
+		}
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
@@ -1167,10 +1172,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				+ "strleft (bipo.sign_time, 10) >= '"+beginDate2+"' and strleft (bipo.sign_time, 10) <= '"+endDate2+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
-		if(StringUtils.isNotEmpty(productName)){
-			searchStr = " where ff.product_name like '%"+productName+"%'";
-		}
-		count_sql = "select count(1) as count_ from ("+sql+") ff "+searchStr;
+		count_sql = "select count(1) as count_ from ("+sql+") ff ";
         List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
@@ -1179,9 +1181,9 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
         	lst_data_count=ImpalaUtil.executeGuoan(count_sql);
         	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
         	if(pageInfo.getCurrentPage()==1){
-        		sqlA = "select ff.* from ("+sql+") ff "+searchStr+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
+        		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
         	}else{
-        		sqlA = "select ff.* from ("+sql+") ff "+searchStr+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage()+1);
+        		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
         	}
         	lst_data=ImpalaUtil.executeGuoan(sqlA);
             lst_result = lst_data;
