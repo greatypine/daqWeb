@@ -7145,7 +7145,12 @@ function createTableProductData(resultJson,product_num){
 	            	if(idx==0){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td><span class="text_big1"></span></td>');
-	            		var th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}else{
+	            		th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
@@ -7161,7 +7166,12 @@ function createTableProductData(resultJson,product_num){
 	            	}else if(idx==1){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td><span class="text_big2"></span></td>');
-	            		var th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}else{
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
@@ -7177,7 +7187,12 @@ function createTableProductData(resultJson,product_num){
 	            	}else if(idx==2){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td><span class="text_big3"></span></td>');
-	            		var th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}else{
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
@@ -7193,7 +7208,12 @@ function createTableProductData(resultJson,product_num){
 	            	}else if(idx>2&&idx<=4){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td>'+(idx+1)+'</td>');
-	            		var th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}else{
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
@@ -7215,7 +7235,12 @@ function createTableProductData(resultJson,product_num){
 	            	}else if(idx>4){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td>'+(count-idx)+'</td>');
-	            		var th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'</td>');
+	            		}else{
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
