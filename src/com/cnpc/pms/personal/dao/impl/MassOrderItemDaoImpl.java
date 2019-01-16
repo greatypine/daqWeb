@@ -1203,6 +1203,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
         try{
         	lst_data_count=ImpalaUtil.executeGuoan(count_sql);
         	lst_data_quantity=ImpalaUtil.executeGuoan(total_quantity_sql);
+        	lst_data_product_quantity=ImpalaUtil.executeGuoan(product_quantity_sql);
         	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
         	count_total_quantity = Integer.parseInt(lst_data_quantity.get(0).get("total_quantity").toString());
         	count_product_quantity = Integer.parseInt(lst_data_product_quantity.get(0).get("product_quantity").toString());
