@@ -1053,6 +1053,7 @@ var initPageElements = function () {
 		    var data2 = [];
 		    var data3 = [];
 		    var data4 = [];
+		    var data5 = [];
 		    var selected = {};
 		    var enable_series = turnoverCustomerOrderOption.series;
 		     $.each(eval(enable_series), function (idx, val) {
@@ -1062,6 +1063,8 @@ var initPageElements = function () {
 		     		data2=val['data'];
 		     	}else if((params.selected['天津']==true)&&val['name']=='天津'){
 		     		data3=val['data'];
+		     	}else if((params.selected[select_name]==true)&&val['name']==select_name){
+		     		data5=val['data'];
 		     	}
 		     	if((params.selected['上海']==false)&&val['name']=='上海'){
 		     		selected['上海'] = false;    //设置默认选中legend
@@ -1069,10 +1072,12 @@ var initPageElements = function () {
 		     		selected['天津'] = false;
 		     	}else if((params.selected['北京']==false)&&val['name']=='北京'){
 		     		selected['北京'] = false;
-		     	} 
+		     	}else if(params.selected[select_name]==false){
+		     		selected[select_name] = false;
+		     	}
 		     });
 		     turnoverCustomerOrderOption.legend.selected = selected;
-		        var json = {data1,data2,data3}; //json中有任意多个数组
+		        var json = {data1,data2,data3,data5}; //json中有任意多个数组
 			    //保存结果的数组
 			    //遍历json
 			    for(var key in json){
@@ -4078,6 +4083,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	turnoverCustomerOrderOption.xAxis.data = data.reverse();
 	turnoverCustomerOrderOption.xAxis.extdata = data3.reverse();
 	if(pageStatusInfo.provinceId==""&&pageStatusInfo.cityId==""){
+		var selected = {};
 		if(data4.length>0){
 	    	turnoverCustomerOrderOption.series[2].data = data4.reverse();
 	    	turnoverCustomerOrderOption.series[2].name = "北京";
@@ -4087,6 +4093,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	    	textStyle.color = "#fff";
 	    	dataLegend.textStyle = textStyle;
 	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
+	    	selected['北京']=true;
 	    }
 	    if(data5.length>0){
 		    turnoverCustomerOrderOption.series[1].data = data5.reverse();
@@ -4097,6 +4104,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	    	textStyle.color = "#fff";
 	    	dataLegend.textStyle = textStyle;
 	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
+	    	selected['天津']=true;
 	    }
 	    if(data6.length>0){
 		    turnoverCustomerOrderOption.series[0].data = data6.reverse();
@@ -4107,6 +4115,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	    	textStyle.color = "#fff";
 	    	dataLegend.textStyle = textStyle;
 	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
+	    	selected['上海']=true;
 	    }
 	    if(data7.length>0){
 	    	turnoverCustomerOrderOption.series[3].data = data7.reverse();
@@ -4116,14 +4125,18 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	    	dataLegend.textStyle = textStyle;
 	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
 	    }
+	    turnoverCustomerOrderOption.legend.selected = selected;
 	}else{
+		var selected = {};
 		var dataLegend = new Object();
 	    if(pageStatusInfo.cityName!=""){
 			dataLegend.name = pageStatusInfo.cityName;
 			turnoverCustomerOrderOption.series[2].name = pageStatusInfo.cityName;
+			selected[pageStatusInfo.cityName]=true;
 	    }else if(pageStatusInfo.cityName==""&&pageStatusInfo.provinceName!=""){
 			dataLegend.name = pageStatusInfo.provinceName;
 			turnoverCustomerOrderOption.series[2].name = pageStatusInfo.provinceName;
+			selected[pageStatusInfo.provinceName]=true;
 	    }
 	    data7 = data1;
 	    if(data7.length>0){
@@ -4131,12 +4144,13 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	    	var textStyle = new Object();
 	    	textStyle.color = "#fff";
 	    	dataLegend.textStyle = textStyle;
-	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
 	    }
 		var textStyle = new Object();
 		textStyle.color = "#fff";
 		dataLegend.textStyle = textStyle;
+		turnoverCustomerOrderOption.legend.data=[];
 		turnoverCustomerOrderOption.legend.data.push(dataLegend);
+		turnoverCustomerOrderOption.legend.selected = selected;
 		turnoverCustomerOrderOption.series[2].data = [];
 		turnoverCustomerOrderOption.series[2].data = data1.reverse();
 		turnoverCustomerOrderOption.series[0].data = [];
