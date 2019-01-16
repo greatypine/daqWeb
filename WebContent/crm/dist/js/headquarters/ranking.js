@@ -288,6 +288,12 @@ function pagination(current,pages) {
       }
 	var updateTableStyle = function(result,current){
 		var example1 = $("#example1");
+		var product_size = result.lst_data.lst_data_product_quantity;
+		var total_quantity = result.lst_data.lst_data_quantity;
+		var avg_quantity;
+		if(product_size!=0){
+			avg_quantity = total_quantity/product_size;
+		}
 		$.each(eval(result.lst_data.data), function (idx, val) {
 	 	    var index = (current-1)*autoPageRecordes+(idx+1);
 	 	    var tr;
@@ -297,8 +303,11 @@ function pagination(current,pages) {
 				$("#product_table tr:first td:first").html('<span class="text_big1"></span>');
 				$("#product_table tr:first td").eq(1).addClass('text-yellow');
 				$("#product_table tr:first td").eq(1).attr("title",val['product_name']);
-				//$("#product_table tr:first td").eq(1).html(val['product_name']+'<em><img src="dist/img/hot-r.png"></em>');
-				$("#product_table tr:first td").eq(1).html(val['product_name']);
+				if(val['product_gmv']>avg_quantity){
+				$("#product_table tr:first td").eq(1).html(val['product_name']+'<em><img src="dist/img/hot-r.png"></em>');
+				}else{
+					$("#product_table tr:first td").eq(1).html(val['product_name']);
+				}
 				$("#product_table tr:first td").eq(2).val(val['store_name']);
 				$("#product_table tr:first td").eq(2).attr("title",val['store_name']);
 				$("#product_table tr:first td").eq(3).val(val['product_gmv']);
@@ -316,7 +325,11 @@ function pagination(current,pages) {
 				$("#product_table tr:eq(1) td").eq(0).html('<span class="text_big2"></span>');
 				$("#product_table tr:eq(1) td").eq(1).addClass('text-yellow');
 				$("#product_table tr:eq(1) td").eq(1).attr("title",val['product_name']);
-				$("product_table tr:eq(1) td").eq(1).html(val['product_name']+'<em><img src="dist/img/hot-r.png"></em>');
+				if(val['product_gmv']>avg_quantity){
+					$("#product_table tr:eq(1) td").eq(1).html(val['product_name']+'<em><img src="dist/img/hot-r.png"></em>');
+				}else{
+					$("#product_table tr:eq(1) td").eq(1).html(val['product_name']);
+				}
 				$("#product_table tr:eq(1) td").eq(2).val(val['store_name']);
 				$("#product_table tr:eq(1) td").eq(2).attr("title",val['store_name']);
 				$("#product_table tr:eq(1) td").eq(3).val(val['product_gmv']);
@@ -334,7 +347,11 @@ function pagination(current,pages) {
 				$("#product_table tr:eq(2) td").eq(0).html('<span class="text_big3"></span>');
 				$("#product_table tr:eq(2) td").eq(1).addClass('text-yellow');
 				$("#product_table tr:eq(2) td").eq(1).attr("title",val['product_name']);
-				$("product_table tr:eq(2) td").eq(1).html(val['product_name']+'<em><img src="dist/img/hot-r.png"></em>');
+				if(val['product_gmv']>avg_quantity){
+					$("#product_table tr:eq(2) td").eq(1).html(val['product_name']+'<em><img src="dist/img/hot-r.png"></em>');
+				}else{
+					$("#product_table tr:eq(2) td").eq(1).html(val['product_name']);
+				}
 				$("#product_table tr:eq(2) td").eq(2).val(val['store_name']);
 				$("#product_table tr:eq(2) td").eq(2).attr("title",val['store_name']);
 				$("#product_table tr:eq(2) td").eq(3).val(val['product_gmv']);
@@ -347,6 +364,11 @@ function pagination(current,pages) {
 					$("#product_table tr:eq(2) td").eq(4).html('<i class="fa fa-long-arrow-down">'+Math.abs(val['rank'])+'</i>');
 				}
 	 	 	}else{
+	 	 		if(val['product_gmv']>avg_quantity){
+	 	 			$('#product_table tr:eq('+idx+') td').eq(1).html(val['product_name']+'<em><img src="dist/img/hot-r.png"></em>');
+	 	 		}else{
+	 	 			$('#product_table tr:eq('+idx+') td').eq(1).html(val['product_name']);
+	 	 		}
 	 	 		$('#product_table tr:eq('+idx+') td').eq(1).attr("title",val['product_name']);
 				$('#product_table tr:eq('+idx+') td').eq(2).attr("title",val['store_name']);
 	 	 		if(val['rank']>=0){
