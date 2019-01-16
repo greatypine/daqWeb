@@ -4128,7 +4128,6 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	    data7 = data1;
 	    if(data7.length>0){
 	    	turnoverCustomerOrderOption.series[3].data = data7.reverse();
-		    var dataLegend = new Object();
 	    	var textStyle = new Object();
 	    	textStyle.color = "#fff";
 	    	dataLegend.textStyle = textStyle;
