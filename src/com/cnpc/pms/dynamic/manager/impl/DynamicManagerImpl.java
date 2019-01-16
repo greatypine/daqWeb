@@ -7412,14 +7412,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 					content.put("频道","channel_name");
 					deptList.add(param9);
 				}
-				content.put("销售收入（平台）","platform_profit");
-				content.put("销售收入（优易）","ims_profit");
-				content.put("销售收入（合计）","total_profit");
-				content.put("营销费用（平台）","platform_fee");
-				content.put("营销费用（优易）","ims_fee");
-				content.put("销售收入（已退货）","return_profit");
-				content.put("补贴费用","real_subsidy");
+				content.put("销售毛利","sale_profit");
+				content.put("已退货销售毛利","return_sale_profit");
 				content.put("整体毛利","real_profit");
+				content.put("补贴费用","real_subsidy");
 				content.put("事业群毛利","dept_profit");
 
 				str_headers = content.keySet().toArray(new String[0]);
@@ -7433,7 +7429,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				deptList.add(param11);
 				deptList.add(param12);
 				List<List<MergedRegionParam>> deptMergeList = new ArrayList<>();
-				deptMergeList.add(deptList);
+//				deptMergeList.add(deptList);
 				targetMergeList = deptMergeList;
 			}
 
