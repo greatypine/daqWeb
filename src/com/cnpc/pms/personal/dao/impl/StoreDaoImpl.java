@@ -1571,8 +1571,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public Map<String, Object> queryDeptTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo){
 		String sql = "select aa.department_name,dround(ifnull(aa.ims_profit,0),2) as ims_profit,dround(ifnull(aa.platform_profit,0),2) as platform_profit" +
 				",dround(ifnull(aa.order_fee,0),2) as order_fee,dround(ifnull(dd.return_profit,0),2) as return_profit,dround(ifnull(aa.total_profit,0),2) as total_profit "+
-				",dround(ifnull(aa.gayy_subsidy,0),2) as gayy_subsidy,dround(ifnull(dd.return_gayy_subsidy,0),2) as return_gayy_subsidy,dround(ifnull(cc.sale_profit,0),2) as sale_profit" +
-				",dround(ifnull(bb.return_sale_profit,0),2) as return_sale_profit ";
+				",dround(ifnull(aa.gayy_subsidy,0),2) as gayy_subsidy,dround(ifnull(dd.return_gayy_subsidy,0),2) as return_gayy_subsidy,dround(ifnull(cc.sale_profit,0)+ifnull(ee.first_sale_profit,0),2) as sale_profit" +
+				",dround(ifnull(bb.return_sale_profit,0)+ifnull(ff.return_first_sale_profit,0),2) as return_sale_profit  ";
 		if(dynamicDto.getSearchstr().contains("dept_city_active")){
 			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
 		}
@@ -1645,20 +1645,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		}
 		sql = sql +	" )  ";
 
-		//交叉毛利
+		//本单交叉毛利
 		sql = sql + "left join (" +
-				"select bussiness_group_id,max(department_name) as department_name";
-		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + ",store_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + ",store_city_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + ",channel_id ";
-		}
-		sql = sql + ",dround(sum(sale_profit),2) as sale_profit from " +
-				"(select dot.bussiness_group_id,min(department_name) as department_name";
+				"select dot.bussiness_group_id,min(department_name) as department_name";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
 		}
@@ -1681,7 +1670,21 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + "union all " +
+
+		sql = sql + ") cc on (aa.bussiness_group_id=cc.bussiness_group_id ";
+		if(dynamicDto.getSearchstr().contains("dept_store_active")){
+			sql = sql + "and aa.store_code=cc.store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city_active")){
+			sql = sql + "and aa.store_city_code=cc.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+			sql = sql + "and aa.channel_id=cc.channel_id ";
+		}
+		sql = sql + " ) ";
+
+		//首单交叉毛利
+		sql = sql + "left join (" +
 				"select dept.parent_id as bussiness_group_id,max(dept2.name) as department_name ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
@@ -1692,7 +1695,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as sale_profit " +
+		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as first_sale_profit " +
 				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2 " +
 				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
@@ -1705,30 +1708,20 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + ") t1 group by bussiness_group_id ";
+		sql = sql + ") ee on (aa.bussiness_group_id=ee.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + ",store_code ";
+			sql = sql + "and aa.store_code=ee.store_code ";
 		}
 		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + ",store_city_code ";
+			sql = sql + "and aa.store_city_code=ee.store_city_code ";
 		}
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + ",channel_id ";
-		}
-		sql = sql + ") cc on (aa.bussiness_group_id=cc.bussiness_group_id ";
-		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + "and aa.store_code=cc.store_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + "and aa.store_city_code=cc.store_city_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + "and aa.channel_id=cc.channel_id ";
+			sql = sql + "and aa.channel_id=ee.channel_id ";
 		}
 		sql = sql + " ) ";
-		//退款交叉毛利
+		//本单交叉毛利-退款
 		sql = sql + "left join (" +
-				"select bussiness_group_id,max(department_name) as department_name";
+				"select dot.bussiness_group_id,min(department_name) as department_name";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
 		}
@@ -1738,18 +1731,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + ",dround(sum(sale_profit),2) as return_sale_profit from " +
-				"(select dot.bussiness_group_id,min(department_name) as department_name";
-		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + ",store_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + ",store_city_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + ",channel_id ";
-		}
-		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as sale_profit " +
+		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as return_sale_profit " +
 				"from df_mass_order_total dot,gemini.t_department_channel dept " +
 				"where dot.first_order_channel=dept.id and strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
@@ -1762,7 +1744,20 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + "union all " +
+
+		sql = sql + " ) bb on  (aa.bussiness_group_id=bb.bussiness_group_id ";
+		if(dynamicDto.getSearchstr().contains("dept_store_active")){
+			sql = sql + "and aa.store_code=bb.store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city_active")){
+			sql = sql + "and aa.store_city_code=bb.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+			sql = sql + "and aa.channel_id=bb.channel_id ";
+		}
+		sql = sql +")";
+		//首单交叉毛利-退款
+		sql = sql +"left join (" +
 				"select dept.parent_id as bussiness_group_id,max(dept2.name) as department_name";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
@@ -1773,7 +1768,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as sale_profit " +
+		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as return_first_sale_profit " +
 				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2 " +
 				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"'  and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
@@ -1786,27 +1781,17 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + " ) t1 group by bussiness_group_id";
+		sql = sql + ") ff on (aa.bussiness_group_id=ff.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + ",store_code ";
+			sql = sql + "and aa.store_code=ff.store_code ";
 		}
 		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + ",store_city_code ";
+			sql = sql + "and aa.store_city_code=ff.store_city_code ";
 		}
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + ",channel_id ";
+			sql = sql + "and aa.channel_id=ff.channel_id ";
 		}
-		sql = sql + ") bb on  (aa.bussiness_group_id=bb.bussiness_group_id ";
-		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + "and aa.store_code=bb.store_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + "and aa.store_city_code=bb.store_city_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + "and aa.channel_id=bb.channel_id ";
-		}
-		sql = sql +")";
+		sql = sql + " ) ";
 
 		sql = sql + " where 1=1 ";
 
@@ -1952,8 +1937,10 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		String sql = "select aa.department_name,dround(ifnull(aa.ims_profit,0),2) as ims_profit,dround(ifnull(aa.platform_profit,0),2) as platform_profit" +
 				",dround(ifnull(aa.order_fee,0),2) as order_fee,dround(ifnull(dd.return_profit,0),2) as return_profit" +
 				",dround(ifnull(aa.total_profit,0),2) as total_profit,dround(ifnull(aa.platform_fee,0),2) as platform_fee,dround(ifnull(aa.ims_fee,0),2) as ims_fee " +
-				",dround(ifnull(cc.sale_profit,0)-ifnull(bb.return_sale_profit,0),2) as real_profit,dround(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0),2) as real_subsidy " +
-				",dround((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit,0))* 0.2 - (ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0))*0.8,2) as dept_profit ";
+				",dround(ifnull(cc.sale_profit,0)+ifnull(ee.first_sale_profit,0)-ifnull(bb.return_sale_profit,0)-ifnull(ff.return_first_sale_profit,0),2) as real_profit" +
+				",dround(ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0),2) as real_subsidy,dround(ifnull(cc.sale_profit,0)+ifnull(ee.first_sale_profit,0),2) as sale_profit " +
+				",dround(ifnull(bb.return_sale_profit,0)+ifnull(ff.return_first_sale_profit,0),2) as return_sale_profit " +
+				",dround((ifnull(cc.sale_profit,0)+ifnull(ee.first_sale_profit,0)-ifnull(bb.return_sale_profit,0)-ifnull(ff.return_first_sale_profit,0))* 0.2 - (ifnull(aa.gayy_subsidy,0)-ifnull(dd.return_gayy_subsidy,0))*0.8,2) as dept_profit ";
 		if(dynamicDto.getSearchstr().contains("dept_city_active")){
 			sql = sql + ",aa.city_id,aa.store_city_code,aa.city_name ";
 		}
@@ -2030,20 +2017,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		}
 		sql = sql +	" ) ";
 
-		//交叉毛利
+		//本单交叉毛利
 		sql = sql + "left join (" +
-				"select bussiness_group_id,max(department_name) as department_name";
-		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + ",store_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + ",store_city_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + ",channel_id ";
-		}
-		sql = sql + ",dround(sum(sale_profit),2) as sale_profit from " +
-				"(select dot.bussiness_group_id,min(department_name) as department_name";
+				"select dot.bussiness_group_id,min(department_name) as department_name";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
 		}
@@ -2066,7 +2042,21 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + "union all " +
+
+		sql = sql + ") cc on (aa.bussiness_group_id=cc.bussiness_group_id ";
+		if(dynamicDto.getSearchstr().contains("dept_store_active")){
+			sql = sql + "and aa.store_code=cc.store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city_active")){
+			sql = sql + "and aa.store_city_code=cc.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+			sql = sql + "and aa.channel_id=cc.channel_id ";
+		}
+		sql = sql + " ) ";
+
+		//首单交叉毛利
+		sql = sql + "left join (" +
 				"select dept.parent_id as bussiness_group_id,max(dept2.name) as department_name ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
@@ -2077,7 +2067,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as sale_profit " +
+		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as first_sale_profit " +
 				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2 " +
 				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
@@ -2090,30 +2080,20 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + ") t1 group by bussiness_group_id ";
+		sql = sql + ") ee on (aa.bussiness_group_id=ee.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + ",store_code ";
+			sql = sql + "and aa.store_code=ee.store_code ";
 		}
 		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + ",store_city_code ";
+			sql = sql + "and aa.store_city_code=ee.store_city_code ";
 		}
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + ",channel_id ";
-		}
-		sql = sql + ") cc on (aa.bussiness_group_id=cc.bussiness_group_id ";
-		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + "and aa.store_code=cc.store_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + "and aa.store_city_code=cc.store_city_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + "and aa.channel_id=cc.channel_id ";
+			sql = sql + "and aa.channel_id=ee.channel_id ";
 		}
 		sql = sql + " ) ";
-		//退款交叉毛利
+		//本单交叉毛利-退款
 		sql = sql + "left join (" +
-				"select bussiness_group_id,max(department_name) as department_name";
+				"select dot.bussiness_group_id,min(department_name) as department_name";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
 		}
@@ -2123,18 +2103,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + ",dround(sum(sale_profit),2) as return_sale_profit from " +
-				"(select dot.bussiness_group_id,min(department_name) as department_name";
-		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + ",store_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + ",store_city_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + ",channel_id ";
-		}
-		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as sale_profit " +
+		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as return_sale_profit " +
 				"from df_mass_order_total dot,gemini.t_department_channel dept " +
 				"where dot.first_order_channel=dept.id and strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
@@ -2147,7 +2116,20 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + "union all " +
+
+		sql = sql + " ) bb on  (aa.bussiness_group_id=bb.bussiness_group_id ";
+		if(dynamicDto.getSearchstr().contains("dept_store_active")){
+			sql = sql + "and aa.store_code=bb.store_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_city_active")){
+			sql = sql + "and aa.store_city_code=bb.store_city_code ";
+		}
+		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+			sql = sql + "and aa.channel_id=bb.channel_id ";
+		}
+		sql = sql +")";
+		//首单交叉毛利-退款
+		sql = sql +"left join (" +
 				"select dept.parent_id as bussiness_group_id,max(dept2.name) as department_name";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",store_code ";
@@ -2158,7 +2140,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as sale_profit " +
+		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as return_first_sale_profit " +
 				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2 " +
 				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"'  and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
@@ -2171,27 +2153,17 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 			sql = sql + ",channel_id ";
 		}
-		sql = sql + " ) t1 group by bussiness_group_id";
+		sql = sql + ") ff on (aa.bussiness_group_id=ff.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + ",store_code ";
+			sql = sql + "and aa.store_code=ff.store_code ";
 		}
 		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + ",store_city_code ";
+			sql = sql + "and aa.store_city_code=ff.store_city_code ";
 		}
 		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + ",channel_id ";
+			sql = sql + "and aa.channel_id=ff.channel_id ";
 		}
-		sql = sql + ") bb on  (aa.bussiness_group_id=bb.bussiness_group_id ";
-		if(dynamicDto.getSearchstr().contains("dept_store_active")){
-			sql = sql + "and aa.store_code=bb.store_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_city_active")){
-			sql = sql + "and aa.store_city_code=bb.store_city_code ";
-		}
-		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
-			sql = sql + "and aa.channel_id=bb.channel_id ";
-		}
-		sql = sql +")";
+		sql = sql + " ) ";
 
 		sql = sql + " where 1=1 ";
 
