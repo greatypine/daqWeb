@@ -1658,8 +1658,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,t_store ts " +
-				"where dot.first_order_channel=dept.id and dot.real_store_id=ts.id and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join t_store ts on dot.real_store_id=ts.id " +
+				"where strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",dot.real_store_id ";
@@ -1696,8 +1696,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as first_sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2,t_store ts " +
-				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and dot.real_store_id=ts.id and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join gemini.t_department_channel dept2 on dept.parent_id=dept2.id " +
+				"left join t_store ts on dot.real_store_id=ts.id where strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",dot.real_store_id ";
@@ -1732,8 +1732,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as return_sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,t_store ts " +
-				"where dot.first_order_channel=dept.id and dot.real_store_id=ts.id and strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join t_store ts on dot.real_store_id=ts.id " +
+				"where strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",dot.real_store_id ";
@@ -1769,8 +1769,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as return_first_sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2,t_store ts " +
-				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and dot.real_store_id=ts.id and strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"'  and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join gemini.t_department_channel dept2 on dept.parent_id=dept2.id " +
+				"left join t_store ts on dot.real_store_id=ts.id where strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"'  and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",dot.real_store_id ";
@@ -2030,8 +2030,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,t_store ts " +
-				"where dot.first_order_channel=dept.id and dot.real_store_id=ts.id and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join t_store ts on dot.real_store_id=ts.id where strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",dot.real_store_id ";
@@ -2068,8 +2067,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as first_sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2,t_store ts " +
-				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and dot.real_store_id=ts.id and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join gemini.t_department_channel dept2 on dept.parent_id=dept2.id " +
+				"left join t_store ts on dot.real_store_id=ts.id where  strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",dot.real_store_id ";
@@ -2104,8 +2103,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as return_sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,t_store ts " +
-				"where dot.first_order_channel=dept.id and dot.real_store_id=ts.id and strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join t_store ts on dot.real_store_id=ts.id where strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",dot.real_store_id ";
@@ -2141,8 +2139,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as return_first_sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2,t_store ts " +
-				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and dot.real_store_id=ts.id and strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"'  and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join gemini.t_department_channel dept2 on dept.parent_id=dept2.id " +
+				"left join t_store ts on dot.real_store_id=ts.id where  strleft(dot.return_time,7)='"+dynamicDto.getBeginDate()+"'  and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			sql = sql + ",dot.real_store_id ";
@@ -2414,8 +2412,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,t_store ts " +
-				"where dot.first_order_channel=dept.id and dot.real_store_id=ts.id and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join t_store ts on dot.real_store_id=ts.id " +
+				"where strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
@@ -2438,8 +2436,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2,t_store ts " +
-				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and dot.real_store_id=ts.id and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join gemini.t_department_channel dept2 on dept.parent_id=dept2.id " +
+				"left join t_store ts on dot.real_store_id=ts.id where  strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
@@ -2495,8 +2493,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,t_store ts " +
-				"where dot.first_order_channel=dept.id and dot.real_store_id=ts.id and strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join t_store ts on dot.real_store_id=ts.id " +
+				"where strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
@@ -2519,8 +2517,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2,t_store ts " +
-				"where dot.first_order_channel=dept.id and dot.real_store_id=ts.id and dept.parent_id=dept2.id and strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join gemini.t_department_channel dept2 on dept.parent_id=dept2.id " +
+				"left join t_store ts on dot.real_store_id=ts.id where  strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
@@ -2784,8 +2782,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,t_store ts " +
-				"where dot.first_order_channel=dept.id and dot.real_store_id=ts.id and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join t_store ts on dot.real_store_id=ts.id " +
+				"where strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
@@ -2808,8 +2806,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2,t_store ts " +
-				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and dot.real_store_id=ts.id and strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join gemini.t_department_channel dept2 on dept.parent_id=dept2.id " +
+				"left join t_store ts on dot.real_store_id=ts.id where  strleft(dot.sign_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.sign_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
@@ -2865,8 +2863,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then dot.sale_profit else dot.this_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,t_store ts " +
-				"where dot.first_order_channel=dept.id and dot.real_store_id=ts.id and strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join t_store ts on dot.real_store_id=ts.id " +
+				"where strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%' " +
 				"group by dot.bussiness_group_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
@@ -2889,8 +2887,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + ",channel_id ";
 		}
 		sql = sql + ",ifnull(dround(sum(case when (dept.parent_id='8ac28b935fed0bc8015fed4c76f60018' ) then 0 else dot.first_channel_profit end),2),0) as sale_profit " +
-				"from df_mass_order_total dot,gemini.t_department_channel dept,gemini.t_department_channel dept2,t_store ts " +
-				"where dot.first_order_channel=dept.id and dept.parent_id=dept2.id and dot.real_store_id=ts.id and strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
+				"from df_mass_order_total dot left join gemini.t_department_channel dept on dot.first_order_channel=dept.id left join gemini.t_department_channel dept2 on dept.parent_id=dept2.id " +
+				"left join t_store ts on dot.real_store_id=ts.id where  strleft(dot.return_time,10)>='"+dynamicDto.getBeginDate()+"' and strleft(dot.return_time,10) <='"+dynamicDto.getEndDate()+"' and dot.department_name not like '%测试%' and dot.department_name not like '%运营管理中心%'  " +
 				"group by dept.parent_id ";
 		if(dynamicDto.getSearchstr().contains("dept_store")){
 			sql = sql + ",dot.real_store_id ";
