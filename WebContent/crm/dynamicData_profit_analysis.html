@@ -166,7 +166,17 @@
 					</ul>
 					<div class="tab-content">
 						<div class="col-sm-12 text-red no-padding" style="padding-left:15px;font-size:75%;float: right">
-							<p style="width:auto;float:right">数据口径：</br>1.营销费用不包含A类营销费用。</br>2.优易促销产生的负毛利不计入门店毛利。</br>3.此页面数据为运营监控数据，不可作为绩效数据使用。</p>
+							<div style="width:auto;float:right" style="font-size:75%;position: relative;">数据口径：</br>1.营销费用不包含A类营销费用。</br>2.优易促销产生的负毛利不计入门店毛利。</br>3.业务单位毛利均基于 <a style="border-bottom:1px dashed #0000ff;" onmouseover="showrule();" onmouseout="hiderule()">交叉销售规则</a> 计算。</br>4.此页面数据为运营监控数据，不可作为绩效数据使用。
+                                <div class="moveHide" style="position: absolute;display: none;z-index:100;background:#D3D3D3;">
+                                    内部交叉业务规则</br>
+                                    第一条 各业务在核算利润时均需按照《国安社区绩效考核核算规则》进行，内部交叉业务计价涉及频道为 金融、家务事、养老餐、及产品管理中心相应频道。优易各频道不在交叉业务计价范围内。</br>
+                                    第二条 交叉业务计价原则</br>
+                                    1.原则：同一用户同一门店购买行为</br>
+                                    按照首单原则给客户进行标签定义，即客户首次购买产品时打上所对应频道标签，确定客户归属频道，客户后期同一门店购买其他频道产品时，所产生毛利额的20%计入客户标签归属频道。</br>
+                                    举例：</br>
+                                    用户在国安社区A门店首单购买养老餐产品，即客户归属为A门店养老餐产品用户，并打上A门店养老餐标签。此客户再次在B门店购买教育产品，即客户归属为B门店教育产品客户，如此客户再次在A门店购买旅游产品时，旅游产品所产生的毛利20%计入养老餐业务绩效；如此用户再次在B门店购买家务事产品，家务事产品所产生的毛利20%计入教育业务绩效。
+                                </div>
+                            </div>
 						</div>
 
 
@@ -819,6 +829,14 @@
         var temp_store = document.getElementById("store_name_tradetype3").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
         $("#store_id_tradetype3").val(storeIdMap[temp_store]);
     });
+
+    //交叉毛利规则信息显示
+    function showrule(){
+        $(".moveHide").show();
+    }
+    function hiderule() {
+        $(".moveHide").hide();
+    }
 
     function initalldept(){
         doManager("chartStatManager","queryAllDept",null,
