@@ -4082,6 +4082,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     }
 	turnoverCustomerOrderOption.xAxis.data = data.reverse();
 	turnoverCustomerOrderOption.xAxis.extdata = data3.reverse();
+	turnoverCustomerOrderOption.legend.data = [];
 	if(pageStatusInfo.provinceId==""&&pageStatusInfo.cityId==""){
 		var selected = {};
 		if(data4.length>0){
