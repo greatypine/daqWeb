@@ -1819,25 +1819,25 @@ function getIsManager(){
 	        		infoStr= "<tr>";
        			    infoStr= infoStr
                     	+"<td><a style=\"text-decoration:underline\" onmouseover=\"showordersource('"+sourcecontent+"');\" id=\""+sourceid+"\" href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
- 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
- 			   	        +"<td><a href=\"javascript:;\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+gmv_price+"</a></td>"
-                	   	+"<td><a href=\"javascript:;\" onmouseover=\"showarea('"+jData[i].area_code+"','"+jData[i].order_sn+"','"+areaid+"');\" id=\""+areaid+"\">"+area_name+"</a></td>"
-                	   	+"<td><a href=\"javascript:;\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+jData[i].sign_time+"</a></td>"
- 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
- 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>";
+ 			   	   	    +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
+ 			   	        +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+gmv_price+"</a></td>"
+                	   	+"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showarea('"+jData[i].area_code+"','"+jData[i].order_sn+"','"+areaid+"');\" id=\""+areaid+"\">"+area_name+"</a></td>"
+                	   	+"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+jData[i].sign_time+"</a></td>"
+ 			   	   	    +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
+ 			   	   	    +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>";
 
        			    infoStr = infoStr
                         +"<td>";
                        var curDate = new Date(new Date(new Date().toLocaleDateString()).getTime());
                        if(jData[i].sign_time>=curDate){
-                           infoStr = infoStr + "<a href=\"javascript:;\">暂未计算</a>";
+                           infoStr = infoStr + "<a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\">暂未计算</a>";
                        } else if(jData[i].contract_method=='price' && jData[i].cost_price==0){
-                           infoStr = infoStr + "<a href=\"javascript:;\">成本为0无利润</a>";
+                           infoStr = infoStr + "<a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\">成本为0无利润</a>";
                        } else {
-                           infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].sale_profit+"</a>";
+                           infoStr = infoStr + "<a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].sale_profit+"</a>";
                        }
                     infoStr = infoStr
-                        +"<td><a href=\"javascript:;\" onmouseover=\"showfee('"+feecontent+"');\" id=\""+feeid+"\">"+jData[i].apportion_coupon+"</a></td>";
+                        +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showfee('"+feecontent+"');\" id=\""+feeid+"\">"+jData[i].apportion_coupon+"</a></td>";
        			    infoStr = infoStr
                            +"</td><td>";
 	        		   if(jData[i].pubseas_label=='1'){
