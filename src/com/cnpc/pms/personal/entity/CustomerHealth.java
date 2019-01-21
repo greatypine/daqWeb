@@ -95,6 +95,117 @@ public class CustomerHealth extends DataEntity{
 	//如何控制血糖（多选)
 	@Column(length = 255, name = "diabetes_control")
 	private String diabetes_control;
+	
+	//身高(CM)
+	@Column(length = 255, name = "height")
+	private Float height;
+	
+	//体重(KG)
+	@Column(length = 255, name = "weight")
+	private Float weight;
+	
+	//身体状况评估
+	@Column(length = 255, name = "health_degree")
+	private String health_degree;
+	
+	//糖尿病类型
+	@Column(length = 255, name = "diabetes_type")
+	private String diabetes_type;
+	
+	//餐前血糖值是多少
+	@Column(length = 255, name = "blood_glucose_before_meal")
+	private Float blood_glucose_before_meal;
+	
+	//餐后血糖值是多少
+	@Column(length = 255, name = "blood_glucose_after_meal")
+	private Float blood_glucose_after_meal;
+	
+	//最近测量血糖距离现在时长
+	@Column(length = 255, name = "last_time_measuring_blood_sugar")
+	private String last_time_measuring_blood_sugar;
+	
+	//就医采取的付费方式
+	@Column(length = 255, name = "treatment_pay_type")
+	private String treatment_pay_type;
+	
+	//使用的降糖药品
+	@Column(length = 255, name = "antidiabetic")
+	private String antidiabetic;
+
+	
+	public Float getHeight() {
+		return height;
+	}
+
+	public void setHeight(Float height) {
+		this.height = height;
+	}
+
+	public Float getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Float weight) {
+		this.weight = weight;
+	}
+
+	public Float getBlood_glucose_before_meal() {
+		return blood_glucose_before_meal;
+	}
+
+	public void setBlood_glucose_before_meal(Float blood_glucose_before_meal) {
+		this.blood_glucose_before_meal = blood_glucose_before_meal;
+	}
+
+	public Float getBlood_glucose_after_meal() {
+		return blood_glucose_after_meal;
+	}
+
+	public void setBlood_glucose_after_meal(Float blood_glucose_after_meal) {
+		this.blood_glucose_after_meal = blood_glucose_after_meal;
+	}
+
+	public String getHealth_degree() {
+		return health_degree;
+	}
+
+	public void setHealth_degree(String health_degree) {
+		this.health_degree = health_degree;
+	}
+
+	public String getDiabetes_type() {
+		return diabetes_type;
+	}
+
+	public void setDiabetes_type(String diabetes_type) {
+		this.diabetes_type = diabetes_type;
+	}
+
+	
+
+	public String getLast_time_measuring_blood_sugar() {
+		return last_time_measuring_blood_sugar;
+	}
+
+	public void setLast_time_measuring_blood_sugar(String last_time_measuring_blood_sugar) {
+		this.last_time_measuring_blood_sugar = last_time_measuring_blood_sugar;
+	}
+
+	public String getTreatment_pay_type() {
+		return treatment_pay_type;
+	}
+
+	public void setTreatment_pay_type(String treatment_pay_type) {
+		this.treatment_pay_type = treatment_pay_type;
+	}
+
+	public String getAntidiabetic() {
+		return antidiabetic;
+	}
+
+	public void setAntidiabetic(String antidiabetic) {
+		this.antidiabetic = antidiabetic;
+	}
 
 	public String getStore_no() {
 		return store_no;

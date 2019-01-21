@@ -1728,6 +1728,16 @@ public class CustomerManagerImpl extends BizBaseCommonManager implements Custome
                 	 customerHealth.setIs_vision_damage(save_customer.getCustomerHealth().getIs_vision_damage());
                 	 customerHealth.setDiabetes_health_study(save_customer.getCustomerHealth().getDiabetes_health_study());
                 	 customerHealth.setDiabetes_control(save_customer.getCustomerHealth().getDiabetes_control());
+                	 
+                	 customerHealth.setHeight(save_customer.getCustomerHealth().getHeight());
+                	 customerHealth.setWeight(save_customer.getCustomerHealth().getWeight());
+                	 customerHealth.setHealth_degree(save_customer.getCustomerHealth().getHealth_degree());
+                	 customerHealth.setDiabetes_type(save_customer.getCustomerHealth().getDiabetes_type());
+                	 customerHealth.setBlood_glucose_before_meal(save_customer.getCustomerHealth().getBlood_glucose_before_meal());
+                	 customerHealth.setBlood_glucose_after_meal(save_customer.getCustomerHealth().getBlood_glucose_after_meal());
+                	 customerHealth.setLast_time_measuring_blood_sugar(save_customer.getCustomerHealth().getLast_time_measuring_blood_sugar());
+                	 customerHealth.setTreatment_pay_type(save_customer.getCustomerHealth().getTreatment_pay_type());
+                	 customerHealth.setAntidiabetic(save_customer.getCustomerHealth().getAntidiabetic());
                 	 preObject(customerHealth);
                 	 customerHealthManager.saveObject(customerHealth);
                  }
@@ -1760,6 +1770,19 @@ public class CustomerManagerImpl extends BizBaseCommonManager implements Custome
                 	 customerHealth1.setIs_vision_damage(save_customer.getCustomerHealth().getIs_vision_damage());
                 	 customerHealth1.setDiabetes_health_study(save_customer.getCustomerHealth().getDiabetes_health_study());
                 	 customerHealth1.setDiabetes_control(save_customer.getCustomerHealth().getDiabetes_control());
+                	 
+                	 customerHealth1.setHeight(save_customer.getCustomerHealth().getHeight());
+                	 customerHealth1.setWeight(save_customer.getCustomerHealth().getWeight());
+                	 customerHealth1.setHealth_degree(save_customer.getCustomerHealth().getHealth_degree());
+                	 customerHealth1.setDiabetes_type(save_customer.getCustomerHealth().getDiabetes_type());
+                	 customerHealth1.setBlood_glucose_before_meal(save_customer.getCustomerHealth().getBlood_glucose_before_meal());
+                	 customerHealth1.setBlood_glucose_after_meal(save_customer.getCustomerHealth().getBlood_glucose_after_meal());
+                	 customerHealth1.setLast_time_measuring_blood_sugar(save_customer.getCustomerHealth().getLast_time_measuring_blood_sugar());
+                	 customerHealth1.setTreatment_pay_type(save_customer.getCustomerHealth().getTreatment_pay_type());
+                	 customerHealth1.setAntidiabetic(save_customer.getCustomerHealth().getAntidiabetic());
+                	 
+                	 
+                	 
             		 preObject(customerHealth1);
                 	 customerHealthManager.saveObject(customerHealth1);
         			 

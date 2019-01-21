@@ -36,7 +36,6 @@ import com.cnpc.pms.personal.entity.ExternalHumanresources;
 import com.cnpc.pms.personal.manager.DistCityCodeManager;
 import com.cnpc.pms.personal.manager.ExternalHumanresourcesManager;
 import com.cnpc.pms.shortMessage.manager.ShortMessageManager;
-import com.sun.org.apache.bcel.internal.generic.ReturnInstruction;
 
 @SuppressWarnings("all")
 public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager implements ExternalHumanresourcesManager {
