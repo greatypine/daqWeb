@@ -849,13 +849,14 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			List<Map<String, Object>> provinceNO) {
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
-		String sql = "SELECT aa.*,ifnull(ss.gmv_price, 0) AS gmv_price,ifnull(dd.return_profit, 0) AS return_profit FROM( SELECT tab3.*,tdc.id as cityId FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
+		String sql = "SELECT aa.*,ifnull(ss.gmv_price, 0) AS gmv_price,ifnull(dd.return_profit, 0) AS return_profit,ifnull(dd.return_gayy_subsidy, 0) AS return_gayy_subsidy "
+				+ " FROM( SELECT tab3.*,tdc.id as cityId FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
 				+ "ts. NAME AS store_name, ts.storeno AS store_code,tcs.customer_count AS customer_count  FROM ( SELECT store_id, min(store_province_code) AS store_province_code, "
-				+ "order_sign_date AS order_sign_date, sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit FROM "
+				+ "order_sign_date AS order_sign_date, sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit,sum(gayy_subsidy) AS gayy_subsidy FROM "
 				+ "( SELECT dot.real_store_id AS store_id, min(dot.store_province_code) AS store_province_code, min(strleft (dot.sign_time, 10)) "
 				+ "AS order_sign_date, ifnull( dround ( sum( CASE WHEN dot.eshop_joint_ims = 'no' THEN dot.order_profit ELSE 0 END), 2 ), 0 ) AS platform_profit, ifnull( dround ( sum( CASE WHEN "
 				+ "dot.eshop_joint_ims = 'yes' THEN dot.order_profit ELSE 0 END ), 2 ), 0 ) AS ims_profit, ifnull( dround ( sum( CASE WHEN dot.order_tag4 IS NULL THEN dot.platform_price ELSE 0 END ), 2 ), 0 ) "
-				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <='"+endDate+"' "
+				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <='"+endDate+"' "
 				+ "GROUP BY dot.real_store_id,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') ) tab1 GROUP BY store_id,order_sign_date ) tab2 LEFT JOIN daqWeb.t_store ts ON tab2.store_id = ts.id "
 				+ "left join( SELECT IFNULL( count(DISTINCT(customer_id)), 0) AS customer_count, store_name, strleft (sign_time, 10) AS tcs_sign_time FROM daqweb.df_mass_order_monthly GROUP BY strleft (sign_time, 10), store_name ) tcs on tcs.tcs_sign_time = tab2.order_sign_date and ts.name=tcs.store_name ) tab3 LEFT JOIN daqWeb.t_dist_citycode "
 				+ "tdc ON tab3.store_city_code = tdc.cityno";
@@ -871,7 +872,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sql= sql+whereStr+ ") aa ";
 		//以日为单位不减报损和盘亏
 		//退款
-		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit, real_store_id AS store_id, min(strleft (return_time, 10)) "
+		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy, real_store_id AS store_id, min(strleft (return_time, 10)) "
 		+ "as order_return_date FROM daqWeb.df_mass_order_monthly WHERE strleft (return_time, 10) >= '"+beginDate+"' AND strleft (return_time, 10) <='"+endDate+"' GROUP BY real_store_id,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') ) "
 		+ "dd ON aa.store_id = dd.store_id and aa.order_sign_date = dd.order_return_date ";
 		//查询GMV去除仓店
