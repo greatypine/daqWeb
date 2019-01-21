@@ -267,8 +267,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.customer_id,'') as customer_id,IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,"
 				+ "IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(a.create_time,'') AS create_time,IFNULL(a.sign_time,'') AS sign_time,IFNULL(a.return_time,'') AS return_time,IFNULL(a.success_time,'') AS success_time,"
 				+ "IFNULL(a.appointment_start_time,'') AS appointment_start_time,IFNULL(a.employee_name,'') AS employee_name,IFNULL(a.employee_phone,'') AS employee_phone,"
-				+ "a.eshop_name,a.store_name,a.store_code,ts.name as real_store_name,ts.storeno as real_store_code,a.channel_name,a.department_name,IFNULL(tdc.name,'') as first_channel_name,a.store_city_name,"
-				+ "CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,"
+				+ "a.eshop_name,a.store_name,a.store_code,ts.name as real_store_name,ts.storeno as real_store_code,a.channel_name,a.department_name,IFNULL(tdc.name,'') as first_channel_name,IFNULL(tdc2.name,'') as first_dept_name,"
+				+ "a.store_city_name,CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,"
 				+ "CASE WHEN a.abnormal_label='1' THEN '是'  ELSE '否' END AS abnormal_label,CASE WHEN a.return_label='1' THEN '是'  ELSE '否' END AS return_label,"
 				+ "CASE WHEN a.loan_label='1' THEN '是'  ELSE '否' END AS loan_label,CASE WHEN a.loan_label='3' THEN '是'  ELSE '否' END AS car_label,"
 				+ "CASE WHEN a.loan_label='4' THEN '是'  ELSE '否' END AS quick_label,CASE WHEN a.loan_label='5' THEN '是'  ELSE '否' END AS gift_label,"
@@ -286,7 +286,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "IFNULL(a.business_type,'') as business_type,IFNULL(dround(a.platform_price,2),0) as apportion_coupon,IFNULL(dround(a.apportion_rebate,2),0) as apportion_rebate,IFNULL(dround(a.order_profit, 2),0) as order_profit,"
 				+ "IFNULL(dround(a.sale_profit, 2),0) as sale_profit,IFNULL(dround(a.first_channel_profit, 2),0) as first_channel_profit,IFNULL(dround(a.this_channel_profit, 2),0) as this_channel_profit,"
 				+ "IFNULL(CASE a.contract_method WHEN  'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN  'percent' THEN '从率' END,'') as contract_method "
-				+ "from daqweb.df_mass_order_total a LEFT JOIN t_store ts ON a.real_store_id=ts.id LEFT JOIN gemini.t_department_channel tdc ON a.first_order_channel=tdc.id ";
+				+ "from daqweb.df_mass_order_total a LEFT JOIN t_store ts ON a.real_store_id=ts.id LEFT JOIN gemini.t_department_channel tdc ON a.first_order_channel=tdc.id LEFT JOIN gemini.t_department_channel tdc2 ON tdc.parent_id=tdc2.id ";
 
 		if(StringUtils.isNotEmpty(massOrderDto.getBusi_names())){
 			sql = sql + " JOIN df_activity_scope das ON a.store_code=das.store_no ";
