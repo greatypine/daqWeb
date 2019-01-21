@@ -833,11 +833,14 @@ var initPageElements = function () {
       trigger: 'axis',
       formatter:function(params)//数据格式
             {
-            var relVal = params[0].name+"<br/>";
+            var relVal = params[0].name;
+            params = params.slice(0,params.length-1).reverse();
             if(params.length>1){
-            	for(var i=0;i<params.reverse().length;i++){
+            	for(var i=0;i<params.length;i++){
             		relVal += "<br/>"+params[i]['marker']+params[i]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[i]['value']),1);
             	}
+            }else if(params.length=1){
+            		relVal += "<br/>"+params[0]['marker']+params[0]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[0]['value']),1);
             }
             return relVal;
         },
@@ -912,24 +915,23 @@ var initPageElements = function () {
     ],
     series: [
       {
-        name:'北京',
-        cursor:'pointer',
+        name:'上海',
         type: 'bar',
         yAxis: 1,
         stack: '总量',
         label: {
-          show: false,
+          show: true,
           position: 'top',
           formatter: '{c} ',
           textStyle:{
-            color:"#ff3064"
+            color:"#DF7B2D"
           }
         },
         itemStyle: {
           normal: {
-            color: "#ff3064",
+            color: "#DF7B2D",
             label: {
-              show: true,
+              show: false,
               textStyle: {
                 color: "#fff"
               },
@@ -969,7 +971,36 @@ var initPageElements = function () {
         },
       },
 	  {
-        name:'上海',
+        name:'北京',
+        cursor: 'default',
+        cursor:'pointer',
+        type: 'bar',
+        yAxis: 1,
+        stack: '总量',
+        label: {
+          show: true,
+          position: 'top',
+          formatter: '{c} ',
+          textStyle:{
+            color:"#ff3064"
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: "#ff3064",
+            label: {
+              show: false,
+              textStyle: {
+                color: "#fff"
+              },
+              position: "center",
+
+            }
+          }
+        },
+      },
+      {
+        name:'总数',
         cursor: 'default',
         type: 'bar',
         yAxis: 1,
@@ -979,18 +1010,18 @@ var initPageElements = function () {
           position: 'top',
           formatter: '{c} ',
           textStyle:{
-            color:"#DF7B2D"
+            color:"transparent"
           }
         },
         itemStyle: {
           normal: {
-            color: "#DF7B2D",
+            color: "transparent",
             label: {
-              show: false,
+              show: true,
               textStyle: {
-                color: "#DF7B2D"
+                color: "#fff"
               },
-              position: "top",
+              position: "insideBottom",
 
             }
           }
@@ -1016,6 +1047,51 @@ var initPageElements = function () {
 	  }
 	  window.open(url,"user_member_view");
     });
+    turnoverCustomerOrderChart.on('legendselectchanged', function (params) { 
+		    var select_name = params.name;
+		    var data1 = [];
+		    var data2 = [];
+		    var data3 = [];
+		    var data4 = [];
+		    var data5 = [];
+		    var selected = {};
+		    var enable_series = turnoverCustomerOrderOption.series;
+		     $.each(eval(enable_series), function (idx, val) {
+		     	if((params.selected['上海']==true)&&val['name']=='上海'){
+		     		data1=val['data'];
+		     	}else if((params.selected['北京']==true)&&val['name']=='北京'){
+		     		data2=val['data'];
+		     	}else if((params.selected['天津']==true)&&val['name']=='天津'){
+		     		data3=val['data'];
+		     	}else if((params.selected[select_name]==true)&&val['name']==select_name){
+		     		data5=val['data'];
+		     	}
+		     	if((params.selected['上海']==false)&&val['name']=='上海'){
+		     		selected['上海'] = false;    //设置默认选中legend
+		     	}else if((params.selected['天津']==false)&&val['name']=='天津'){
+		     		selected['天津'] = false;
+		     	}else if((params.selected['北京']==false)&&val['name']=='北京'){
+		     		selected['北京'] = false;
+		     	}else if(params.selected[select_name]==false){
+		     		selected[select_name] = false;
+		     	}
+		     });
+		     turnoverCustomerOrderOption.legend.selected = selected;
+		        var json = {data1,data2,data3,data5}; //json中有任意多个数组
+			    //保存结果的数组
+			    //遍历json
+			    for(var key in json){
+			        //遍历数组的每一项
+			        $.each(json[key],function(index,value){
+			            if( isBlank(data4[index]) ){
+			                data4[index] = 0 ;
+			            }
+			            data4[index] += value ;
+			        })
+			    }
+		    turnoverCustomerOrderOption.series[3].data = data4;
+		    turnoverCustomerOrderChart.setOption(turnoverCustomerOrderOption,true);
+	});
     cityUserOption = {
 	 title:[
     		{x: '10%', y: '3%',textStyle:{color:"#efefef",fontSize:"16"}},
@@ -2911,7 +2987,7 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     });
     $.each(eval(titleTH), function (idxi, ele) {
     	$.each(eval(profitStoreRange['lst_data']), function (idx, element) {
-    		var real_profit = (element.total_profit - element.return_profit - element.order_fee).toFixed(2);
+    		var real_profit = ((element.total_profit - element.return_profit - element.order_fee + element.gayy_subsidy - element.return_gayy_subsidy)*0.8).toFixed(2);
 	    	var temp = [];
 			temp.push(element.gmv_price.toFixed(2));
 	    	temp.push(real_profit);
@@ -2967,7 +3043,9 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     var max = Math.max.apply(null, data);
     var min = Math.min.apply(null, data);
     var average = (max - min)/listcount;
-    if(average<1){
+    if(0<average<=0.2){
+    	average = average*1.5;
+    }else if(0.2<average&&average<1){
     	average = average*0.35;
     }else if(average>=1&&average<=10){
     	average = average*0.18;
@@ -2977,50 +3055,50 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     	average = average*0.05;
     }
 	cityProfitRangeOption.series[0].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[1].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[2].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[3].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[4].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[5].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[6].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
@@ -3111,22 +3189,22 @@ var showTwoTwoOneRankGmv = function (twoTwoOneRankDataGmv) {
     var data3 = [];
     var data4 = [];
     $.each(eval(twoTwoOneRankDataGmv['lst_data']), function (idx, val) {
-    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	var real_profit = ((val['total_profit'] - val['return_profit'] - val['order_fee'] + val['gayy_subsidy'] - val['return_gayy_subsidy'])*0.8).toFixed(2);
     	data.push(val['week_date']);
     	data1.push(real_profit);
     });
     $.each(eval(twoTwoOneRankDataGmv['lst_data_bj']), function (idx, val) {
-    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	var real_profit = ((val['total_profit'] - val['return_profit'] - val['order_fee'] + val['gayy_subsidy'] - val['return_gayy_subsidy'])*0.8).toFixed(2);
     	data.push(val['week_date']);
     	data2.push(real_profit);
     });
     $.each(eval(twoTwoOneRankDataGmv['lst_data_tj']), function (idx, val) {
-    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	var real_profit = ((val['total_profit'] - val['return_profit'] - val['order_fee'] + val['gayy_subsidy'] - val['return_gayy_subsidy'])*0.8).toFixed(2);
     	//data.push(val['week_date']);
     	data3.push(real_profit);
     });
     $.each(eval(twoTwoOneRankDataGmv['lst_data_sh']), function (idx, val) {
-    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	var real_profit = ((val['total_profit'] - val['return_profit'] - val['order_fee'] + val['gayy_subsidy'] - val['return_gayy_subsidy'])*0.8).toFixed(2);
     	//data.push(val['week_date']);
     	data4.push(real_profit);
     });
@@ -3975,6 +4053,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     var data4 = [];
     var data5 = [];
     var data6 = [];
+    var data7 = [];
     $.each(eval(turnoverCustomer['week_new_data']), function (idx, val) {
     	data.push(val['crtime']);
     	data1.push(val['newcount']);
@@ -3989,18 +4068,33 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     $.each(eval(turnoverCustomer['lst_data_sh']), function (idx, val) {
     	data6.push(val['newcount']);
     });
+    var json = {data4,data5,data6}; //json中有任意多个数组
+    //保存结果的数组
+    //遍历json
+    for(var key in json){
+        //遍历数组的每一项
+        $.each(json[key],function(index,value){
+            if( isBlank(data7[index]) ){
+                data7[index] = 0 ;
+            }
+            data7[index] += value ;
+        })
+    }
 	turnoverCustomerOrderOption.xAxis.data = data.reverse();
 	turnoverCustomerOrderOption.xAxis.extdata = data3.reverse();
+	turnoverCustomerOrderOption.legend.data = [];
 	if(pageStatusInfo.provinceId==""&&pageStatusInfo.cityId==""){
-		if(data6.length>0){
-		    turnoverCustomerOrderOption.series[2].data = data6.reverse();
-		    turnoverCustomerOrderOption.series[2].name = "上海";
-		    var dataLegend = new Object();
-	    	dataLegend.name = "上海";
+		var selected = {};
+		if(data4.length>0){
+	    	turnoverCustomerOrderOption.series[2].data = data4.reverse();
+	    	turnoverCustomerOrderOption.series[2].name = "北京";
+	    	var dataLegend = new Object();
+	    	dataLegend.name = "北京";
 	    	var textStyle = new Object();
 	    	textStyle.color = "#fff";
 	    	dataLegend.textStyle = textStyle;
 	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
+	    	selected['北京']=true;
 	    }
 	    if(data5.length>0){
 		    turnoverCustomerOrderOption.series[1].data = data5.reverse();
@@ -4011,36 +4105,59 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	    	textStyle.color = "#fff";
 	    	dataLegend.textStyle = textStyle;
 	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
+	    	selected['天津']=true;
 	    }
-		if(data4.length>0){
-	    	turnoverCustomerOrderOption.series[0].data = data4.reverse();
-	    	turnoverCustomerOrderOption.series[0].name = "北京";
-	    	var dataLegend = new Object();
-	    	dataLegend.name = "北京";
+	    if(data6.length>0){
+		    turnoverCustomerOrderOption.series[0].data = data6.reverse();
+		    turnoverCustomerOrderOption.series[0].name = "上海";
+		    var dataLegend = new Object();
+	    	dataLegend.name = "上海";
+	    	var textStyle = new Object();
+	    	textStyle.color = "#fff";
+	    	dataLegend.textStyle = textStyle;
+	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
+	    	selected['上海']=true;
+	    }
+	    if(data7.length>0){
+	    	turnoverCustomerOrderOption.series[3].data = data7.reverse();
+		    var dataLegend = new Object();
 	    	var textStyle = new Object();
 	    	textStyle.color = "#fff";
 	    	dataLegend.textStyle = textStyle;
 	    	turnoverCustomerOrderOption.legend.data.push(dataLegend);
 	    }
+	    turnoverCustomerOrderOption.legend.selected = selected;
 	}else{
+		var selected = {};
 		var dataLegend = new Object();
 	    if(pageStatusInfo.cityName!=""){
 			dataLegend.name = pageStatusInfo.cityName;
-			turnoverCustomerOrderOption.series[0].name = pageStatusInfo.cityName;
+			turnoverCustomerOrderOption.series[2].name = pageStatusInfo.cityName;
+			selected[pageStatusInfo.cityName]=true;
 	    }else if(pageStatusInfo.cityName==""&&pageStatusInfo.provinceName!=""){
 			dataLegend.name = pageStatusInfo.provinceName;
-			turnoverCustomerOrderOption.series[0].name = pageStatusInfo.provinceName;
+			turnoverCustomerOrderOption.series[2].name = pageStatusInfo.provinceName;
+			selected[pageStatusInfo.provinceName]=true;
+	    }
+	    data7 = data1;
+	    if(data7.length>0){
+	    	turnoverCustomerOrderOption.series[3].data = data7.reverse();
+	    	var textStyle = new Object();
+	    	textStyle.color = "#fff";
+	    	dataLegend.textStyle = textStyle;
 	    }
 		var textStyle = new Object();
 		textStyle.color = "#fff";
 		dataLegend.textStyle = textStyle;
+		turnoverCustomerOrderOption.legend.data=[];
 		turnoverCustomerOrderOption.legend.data.push(dataLegend);
+		turnoverCustomerOrderOption.legend.selected = selected;
+		turnoverCustomerOrderOption.series[2].data = [];
+		turnoverCustomerOrderOption.series[2].data = data1.reverse();
 		turnoverCustomerOrderOption.series[0].data = [];
-		turnoverCustomerOrderOption.series[0].data = data1.reverse();
+		turnoverCustomerOrderOption.series[0].name = [];
 		turnoverCustomerOrderOption.series[1].data = [];
 		turnoverCustomerOrderOption.series[1].name = [];
-		turnoverCustomerOrderOption.series[2].data = [];
-		turnoverCustomerOrderOption.series[2].name = [];
 	
 	}
 	//turnoverCustomerOrderOption.series[0].data = data1.reverse();
@@ -4048,6 +4165,12 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	//customerNewChartOption.title.text="社员7日走势";
   	turnoverCustomerOrderChart.setOption(turnoverCustomerOrderOption,true);
 }
+  //判断值是否存在函数
+ function isBlank(val){
+        if(val == null || val == ""){
+            return true;
+        }
+ }
 // 获取城市用户量分布数据
 var getCityUser = function (pageStatusInfo) {
     var cacheKey = CACHE_HEADER_CITYUSER_RANK + pageStatusInfo.getCacheKey();
@@ -5507,6 +5630,17 @@ function reportFiledown(){
 	  }
       window.open(url,"dynamicData_express_send");
   }
+  function goToOrderFileDownload(){
+	  var role = curr_user.usergroup.code;
+	  var url = "";
+	  var target=pageStatusInfo.targets;
+	  if(target==0){
+	        url = "order_download.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+	  }else if(target==1){
+	        url = "order_download.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+	  }
+	window.open(url,"order_download");
+}
   
   function goToAbnormalOrderResult(){
 	  //t:职务 s:门店ID c:城市ID
@@ -6226,7 +6360,18 @@ function  clearFirstCache(){
 	localStorage.clear();
 }
 
-
+//社员剩余价值统计
+function goToMemRemain(){
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "memberRemainData_list.html?t="+encode64('0')+"&so=&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+    }else if(target==1){
+        url = "memberRemainData_list.html?t="+encode64(1)+"&so=&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+    }
+    window.open(url,"memberRemainData_list");
+}
 
 
 //221GMV统计
@@ -6506,13 +6651,11 @@ function dialogRemove2(){
 }
 function initSwiper(){
   var swiper = new Swiper('.swiper-container', {
-  /*
     autoplay : {
       delay:5000,
       disableOnInteraction : false,
     },
-    */
-    autoplay:false,
+    //autoplay:false,
     pagination: {
       el: '.swiper-pagination',
       clickable: true,
@@ -6524,14 +6667,12 @@ function initSwiper(){
     watchOverflow: true,//因为仅有1个slide，swiper无效
     allowTouchMove: false
   });
-  /*
   $('.swiper-slide').mouseenter(function () {
     swiper.autoplay.stop();
   })
   $('.swiper-slide').mouseleave(function () {
     swiper.autoplay.start();
   })
-  */
 }
 //散点图
   var dataBJ = [
@@ -6727,7 +6868,7 @@ var getYesterdayStoreProduct = function(pageStatusInfo){
 	            var th_td_1 = $('<th style="width:20%">排名</th>');
 	            var th_td_2 = $('<th style="width:30%">商品名称</th>');
 	            var th_td_3 = $('<th style="width:20%">门店名称</th>');
-	            var th_td_4 = $('<th style="width:10%">GMV</th>');
+	            var th_td_4 = $('<th style="width:10%">销量</th>');
 	            var th_td_5 = $('<th style="width:20%">趋势</th>');
 	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
 	            $("#"+product_num).append(th_tr);
@@ -6753,7 +6894,7 @@ var getStoreProductSevenDay = function(pageStatusInfo){
 	            var th_td_1 = $('<th style="width:20%">排名</th>');
 	            var th_td_2 = $('<th style="width:30%">商品名称</th>');
 	            var th_td_3 = $('<th style="width:20%">门店名称</th>');
-	            var th_td_4 = $('<th style="width:10%">GMV</th>');
+	            var th_td_4 = $('<th style="width:10%">销量</th>');
 	            var th_td_5 = $('<th style="width:20%">趋势</th>');
 	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
 	            $("#"+product_num).append(th_tr);
@@ -6779,7 +6920,7 @@ var getStoreProductThirtyDay = function(pageStatusInfo){
 	            var th_td_1 = $('<th style="width:20%">排名</th>');
 	            var th_td_2 = $('<th style="width:30%">商品名称</th>');
 	            var th_td_3 = $('<th style="width:20%">门店名称</th>');
-	            var th_td_4 = $('<th style="width:10%">GMV</th>');
+	            var th_td_4 = $('<th style="width:10%">销量</th>');
 	            var th_td_5 = $('<th style="width:20%">趋势</th>');
 	            th_tr.append(th_td_1).append(th_td_2).append(th_td_3).append(th_td_4).append(th_td_5);
 	            $("#"+product_num).append(th_tr);
@@ -7018,7 +7159,12 @@ function createTableProductData(resultJson,product_num){
 	            	if(idx==0){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td><span class="text_big1"></span></td>');
-	            		var th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}else{
+	            		th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
@@ -7034,7 +7180,12 @@ function createTableProductData(resultJson,product_num){
 	            	}else if(idx==1){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td><span class="text_big2"></span></td>');
-	            		var th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}else{
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
@@ -7050,7 +7201,12 @@ function createTableProductData(resultJson,product_num){
 	            	}else if(idx==2){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td><span class="text_big3"></span></td>');
-	            		var th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}else{
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
@@ -7066,7 +7222,12 @@ function createTableProductData(resultJson,product_num){
 	            	}else if(idx>2&&idx<=4){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td>'+(idx+1)+'</td>');
-	            		var th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}else{
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
@@ -7088,7 +7249,12 @@ function createTableProductData(resultJson,product_num){
 	            	}else if(idx>4){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td>'+(count-idx)+'</td>');
-	            		var th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		var th_td_2;
+	            		if(val['product_name'].length>10){
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'</td>');
+	            		}else{
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'</td>');
+	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
 	            		var th_td_5;
@@ -7107,15 +7273,15 @@ function createTableProductData(resultJson,product_num){
 	            var th_td_more = "";
 	            var product_url = "";
 	            if(product_num=='product_1'){//30
-	            	product_url = "ranking.html?type="+encode64('yesterday')+"&cs="+encode64(pageStatusInfo.cityId)+"&ps="+encode64(pageStatusInfo.provinceId);
-	            }else if(product_num=='product_3'){//昨天
 	            	product_url = "ranking.html?type="+encode64('thirty')+"&cs="+encode64(pageStatusInfo.cityId)+"&ps="+encode64(pageStatusInfo.provinceId);
+	            }else if(product_num=='product_3'){//昨天
+	            	product_url = "ranking.html?type="+encode64('yesterday')+"&cs="+encode64(pageStatusInfo.cityId)+"&ps="+encode64(pageStatusInfo.provinceId);
 	            }else if(product_num=='product_2'){//7
 	            	product_url = "ranking.html?type="+encode64('seven')+"&cs="+encode64(pageStatusInfo.cityId)+"&ps="+encode64(pageStatusInfo.provinceId);
 	            }
-    			//var th_td_more = $('<td colspan="5"><a href="'+product_url+'">查看更多</a></td>');
+    			var th_td_more = $('<td colspan="5"><a href="#" onclick="openProductUrl(\''+product_url+'\')">查看更多</a></td>');
     			//var th_td_more = $('<td colspan="5"><a href="#">查看更多</a></td>');
-    			var th_td_more = $('<td colspan="5"></td>');
+    			//var th_td_more = $('<td colspan="5"></td>');
     			th_tr_more.append(th_td_more);
     			$("#"+product_num).append(th_tr_more);
 
@@ -7124,5 +7290,8 @@ function openProfitUrl(url){
 	window.open(url,"dynamicData_profit_analysis");
 }
 function openMemberUrl(url){
+	window.open(url,"user_member_view");
+}
+function openProductUrl(url){
 	window.open(url,"user_member_view");
 }

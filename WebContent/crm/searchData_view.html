@@ -435,6 +435,7 @@
                         <div class="sl-v-list-member">
                             <a id="tag_开卡礼订单" onclick="memberSelection('开卡礼订单')" style="cursor:pointer;">开卡礼订单</a>
                             <a id="tag_社员订单" onclick="memberSelection('社员订单')" style="cursor:pointer;">社员订单</a>
+                            <input type="text" style="display:none" class="form-control" placeholder="社员标签"  id="member_private_manual"/>
                         </div>
                     </div>
                 </div>
@@ -1057,8 +1058,8 @@ function getIsManager(){
 
               var curValue = $(this).text();
               var name = curValue.substring(0,curValue.length)+",";
-              var labelName = $("#label_private_manual").val();
-              $("#label_private_manual").val(labelName.replace(name,""));
+              var labelName = $("#member_private_manual").val();
+              $("#member_private_manual").val(labelName.replace(name,""));
 
               var selectObj = $(".breadcrumb .search-con").find('a');
 
@@ -1081,8 +1082,8 @@ function getIsManager(){
               filter.remove();
               var curValue = $(this).text();
               var name = curValue.substring(0,curValue.length)+",";
-              var labelName = $("#label_private_manual").val();
-              $("#label_private_manual").val(labelName.replace(name,""));
+              var labelName = $("#member_private_manual").val();
+              $("#member_private_manual").val(labelName.replace(name,""));
 
               var aobj = $(".breadcrumb .search-con a");
               if(aobj.length==1){
@@ -1100,6 +1101,7 @@ function getIsManager(){
       	  $("#label_private_manual").val("");
       	  $("#dept_private_manual").val("");
       	  $("#busi_private_manual").val("");
+      	  $("#member_private_manual").val("");
           $(".breadcrumb .search-con .condition").remove();
           $(".sl-v-list a").removeClass("bg-orange-active");
           $(".sl-v-list-label a").removeClass("bg-orange-active");
@@ -1459,11 +1461,11 @@ function getIsManager(){
 
     //社员标签快速选择
     function  memberSelection(labelname) {
-        var labelName = $("#label_private_manual").val();
+        var labelName = $("#member_private_manual").val();
         if(labelName.indexOf(labelname)>=0){
-            $("#label_private_manual").val($("#label_private_manual").val());
+            $("#member_private_manual").val($("#member_private_manual").val());
         }else{
-            $("#label_private_manual").val($("#label_private_manual").val()+labelname+",");
+            $("#member_private_manual").val($("#member_private_manual").val()+labelname+",");
         }
     }
 
@@ -1596,6 +1598,11 @@ function getIsManager(){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
 	    }
 
+        var memberLabels = $("#member_private_manual").val();
+        if(memberLabels!=null && memberLabels!='' && memberLabels.indexOf(',') >= 0){
+            memberLabels = memberLabels.substring(0,memberLabels.length-1);
+        }
+
 	    var ordersn = $("#ordersn_manual").val();
 	    if(ordersn!=""){
 	    	ordersn = ordersn.replace(/\s+/g,"");
@@ -1662,8 +1669,8 @@ function getIsManager(){
 	    }
 	    var massOrderDto=null;
 	    massOrderDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+                beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+                endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				order_sn:ordersn,
 				store_no:number_str,
 				order_labels:orderLabels,
@@ -1689,6 +1696,7 @@ function getIsManager(){
 	    		employee_mobile:employeeMobile,
 	    		department_names:departmentNames,
 	    		busi_names:busiNames,
+                memberLabels:memberLabels,
                 profit_price_min:profit_price_min,
                 profit_price_max:profit_price_max,
                 contract_method:contract_method,
@@ -1736,31 +1744,6 @@ function getIsManager(){
 	        	  
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
-       			       var s="";
-       			       var a="";
-       			       var c="";
-       			       var r="";
-       			       if(jData[i].sign_time!=null){
-       			    		var d=	new Date();
-       			     		d.setTime(jData[i].sign_time);
-       			   		 	s=d.format('yyyy-MM-dd HH:mm:ss')
-       			       }
-       			    	if(jData[i].create_time!=null){
-	   			    		var d=	new Date();
-	   			     		d.setTime(jData[i].create_time);
-	   			   		 	c=d.format('yyyy-MM-dd HH:mm:ss')
-   			       		}
-       			    	if(jData[i].return_time!=null){
-       			    		var d=	new Date();
-       			     		d.setTime(jData[i].return_time);
-       			   		 	r=d.format('yyyy-MM-dd HH:mm:ss')
-       			        }
-       			    	if(jData[i].appointment_start_time!=null){
-       			    		var d=	new Date();
-       			     		d.setTime(jData[i].appointment_start_time);
-       			   		 	a=d.format('yyyy-MM-dd HH:mm:ss')
-       			        }
-       			    		
        			    var area_name = (jData[i].area_name==null || jData[i].area_name=='')?'无':jData[i].area_name;
        			    var customer_name = jData[i].customer_name==null?'':jData[i].customer_name;
        			    var addr_name = jData[i].addr_name==null?'':jData[i].addr_name;
@@ -1768,6 +1751,7 @@ function getIsManager(){
        			    var store_name = jData[i].store_name==null?'':jData[i].store_name;
        			    var channel_name = jData[i].channel_name==null?'':jData[i].channel_name;
        			    var department_name = jData[i].department_name==null?'':jData[i].department_name;
+                    var first_channel_name = jData[i].first_channel_name==null?'':jData[i].first_channel_name;
        			    var customer_mobile_phone = jData[i].customer_mobile_phone==null?'':jData[i].customer_mobile_phone;
        			    var customer_mobile_phone_show=customer_mobile_phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
        			    var employee_name = jData[i].employee_name==null?'':jData[i].employee_name;
@@ -1786,18 +1770,22 @@ function getIsManager(){
 			        
 			        var areaid = "areatips"+i;
 			        
-       			    var ctime="<strong>下单时间：</strong>"+c+"<br>";
-       			 	var atime="<strong>预约时间：</strong>"+a+"<br>";
- 			       	var stime="<strong>签收时间：</strong>"+s+"<br>";
- 			       	var rtime="<strong>退货时间：</strong>"+r+"<br>";
+                    var ctime="<strong>下单时间：</strong>"+jData[i].create_time+"<br>";
+                    var atime="<strong>预约时间：</strong>"+jData[i].appointment_start_time+"<br>";
+                    var stime="<strong>签收时间：</strong>"+jData[i].sign_time+"<br>";
+                    var rtime="<strong>退货时间：</strong>"+jData[i].return_time+"<br>";
+                    var suctime="<strong>完成时间：</strong>"+jData[i].success_time+"<br>";
  			        var tcontent = ctime;
- 			        if(a!=null && a!=""){
- 			        	tcontent =tcontent+atime;
- 			        }
- 			        tcontent =tcontent+stime;
- 			       	if(r!=null && r!=""){
- 			        	tcontent =tcontent +rtime;
- 			       	}
+                    if(jData[i].appointment_start_time!=null && jData[i].appointment_start_time!=""){
+                        tcontent =tcontent+atime;
+                    }
+                    tcontent =tcontent+stime;
+                    if(jData[i].return_time!=null && jData[i].return_time!=""){
+                        tcontent =tcontent +rtime;
+                    }
+                    if(jData[i].success_time!=null && jData[i].success_time!=""){
+                        tcontent =tcontent +suctime;
+                    }
  			        tcontent =tcontent+"@timetips"+i;
 			        var tid = "timetips"+i;
 			        
@@ -1805,7 +1793,8 @@ function getIsManager(){
 			        var channel="<strong>频道：</strong>"+channel_name+"<br>";
 			        var ename="<strong>E店：</strong>"+eshop_name+"<br>";
 			        var busitype="<strong>商业模式：</strong>"+business_type+"<br>";
- 			        var econtent =dept+channel+ename+busitype+"@etips"+i;
+			        var firstchannel = "<strong>首单频道：</strong>"+first_channel_name+"<br>";
+ 			        var econtent =dept+channel+ename+busitype+firstchannel+"@etips"+i;
 			        var eid = "etips"+i;
 			        
 			        var gmv="<strong>有效金额：</strong>"+gmv_price+"<br>";
@@ -1830,25 +1819,25 @@ function getIsManager(){
 	        		infoStr= "<tr>";
        			    infoStr= infoStr
                     	+"<td><a style=\"text-decoration:underline\" onmouseover=\"showordersource('"+sourcecontent+"');\" id=\""+sourceid+"\" href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
- 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
- 			   	        +"<td><a href=\"javascript:;\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+gmv_price+"</a></td>"
-                	   	+"<td><a href=\"javascript:;\" onmouseover=\"showarea('"+jData[i].area_code+"','"+jData[i].order_sn+"','"+areaid+"');\" id=\""+areaid+"\">"+area_name+"</a></td>"
-                	   	+"<td><a href=\"javascript:;\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+s+"</a></td>"
- 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
- 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>";
+ 			   	   	    +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
+ 			   	        +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+gmv_price+"</a></td>"
+                	   	+"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showarea('"+jData[i].area_code+"','"+jData[i].order_sn+"','"+areaid+"');\" id=\""+areaid+"\">"+area_name+"</a></td>"
+                	   	+"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+jData[i].sign_time+"</a></td>"
+ 			   	   	    +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
+ 			   	   	    +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>";
 
        			    infoStr = infoStr
                         +"<td>";
                        var curDate = new Date(new Date(new Date().toLocaleDateString()).getTime());
                        if(jData[i].sign_time>=curDate){
-                           infoStr = infoStr + "<a href=\"javascript:;\">暂未计算</a>";
+                           infoStr = infoStr + "<a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\">暂未计算</a>";
                        } else if(jData[i].contract_method=='price' && jData[i].cost_price==0){
-                           infoStr = infoStr + "<a href=\"javascript:;\">成本为0无利润</a>";
+                           infoStr = infoStr + "<a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\">成本为0无利润</a>";
                        } else {
-                           infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].sale_profit+"</a>";
+                           infoStr = infoStr + "<a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].sale_profit+"</a>";
                        }
                     infoStr = infoStr
-                        +"<td><a href=\"javascript:;\" onmouseover=\"showfee('"+feecontent+"');\" id=\""+feeid+"\">"+jData[i].apportion_coupon+"</a></td>";
+                        +"<td><a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\" onmouseover=\"showfee('"+feecontent+"');\" id=\""+feeid+"\">"+jData[i].apportion_coupon+"</a></td>";
        			    infoStr = infoStr
                            +"</td><td>";
 	        		   if(jData[i].pubseas_label=='1'){
@@ -2009,6 +1998,7 @@ function getIsManager(){
 		   	  if(result!=null){
 			       var village = "<strong>小区名：</strong>"+result.village_name+"<br>";
 			       var store = "<strong>门店名：</strong>"+result.store_name+"<br>";
+                   var real_store = "<strong>真实门店：</strong>"+result.real_store_name+"<br>";
  			   	   var area = "<strong>片区名：</strong><a style=\"color:#000\" href=\"javascript:searchArea('"+result.area_name+"','"+result.area_code+"')\">"+result.area_name+"</a><br>";
  			   	   var areacode = "<strong>片区编号：</strong><a style=\"color:#000\" href=\"javascript:searchArea('"+result.area_name+"','"+result.area_code+"')\">"+result.area_code+"</a><br>";
 			       var position = "";
@@ -2020,7 +2010,7 @@ function getIsManager(){
 			    	   villagemap = "<strong>地理位置：</strong>无<br>";
 			       }
 			      
-			   	   var areacontent = store+village+area+areacode+villagemap;
+			   	   var areacontent = store+real_store+village+area+areacode+villagemap;
 				   	  
 			  	   layer.tips(areacontent, '#'+areaid, {
 			 		   tips: [4, '#0FA6D8'], //还可配置颜色
@@ -2167,6 +2157,11 @@ function showfee(obj){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
 	    }
 
+        var memberLabels = $("#member_private_manual").val();
+        if(memberLabels!=null && memberLabels!='' && memberLabels.indexOf(',') >= 0){
+            memberLabels = memberLabels.substring(0,memberLabels.length-1);
+        }
+
 	    var ordersn = $("#ordersn_manual").val();
 	    if(ordersn!=""){
 	    	ordersn = ordersn.replace(/\s+/g,"");
@@ -2230,8 +2225,8 @@ function showfee(obj){
 	    }
 	    var massOrderDto=null;
 	    massOrderDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+                beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+                endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				order_sn:ordersn,
 				store_no:number_str,
 				order_labels:orderLabels,
@@ -2257,6 +2252,7 @@ function showfee(obj){
 	    		employee_mobile:employeeMobile,
 	    		department_names:departmentNames,
 	    		busi_names:busiNames,
+                memberLabels:memberLabels,
                 profit_price_min:profit_price_min,
                 profit_price_max:profit_price_max,
                 contract_method:contract_method,

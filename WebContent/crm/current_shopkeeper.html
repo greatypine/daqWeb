@@ -181,6 +181,8 @@
                                             <dd><a href="javascript:goToUserMember()"><span class="fa fa-rocket"></span>合作社社员统计</a>
                                             <dd style="position:relative"><a href="javascript:goToProfitStat()"><span class="fa fa-gg"></span>毛利统计（运营）</a>
                                                 <img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>
+                                            <dd style="position:relative"><a href="javascript:goToMemRemain()"><span class="fa fa-gg"></span>社员价值统计</a>
+                                                <img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>
                                         </dl>
                                         <dl class="pull-left">
                                             <dt style="text-align:center"><i></i>绩效数据</dt>
@@ -3128,7 +3130,12 @@
     function js_alert_temporary(){
         crm_alert(0,"由于近期将频繁清洗订单收入数据，订单档案功能临时关闭至11月2日。");
     }
-
+    //社员剩余价值统计
+    function goToMemRemain(){
+        var url = "";
+            url = "memberRemainData_list.html?t="+encode64('0')+"&so=&s=&sn=&c=&e=&r=&cn=";
+        window.open(url,"memberRemainData_list");
+    }
     //数据查找-片区数据
     //   function searchArea(){
     // 	  var url = "dynamicData_areaInfo.html?t="+encode64('2')+"&s=&sn="+encode64(currentStore.name)+"&c=&cn=&e="+encode64(EMPLOYEE_ID);

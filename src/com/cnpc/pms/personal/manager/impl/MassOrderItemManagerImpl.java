@@ -400,6 +400,8 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
            	 lst_map.put("order_fee", 0);
            	 lst_map.put("total_profit", 0);
            	 lst_map.put("return_profit", 0);
+           	 lst_map.put("return_gayy_subsidy", 0);
+           	 lst_map.put("gayy_subsidy", 0);
 			 for(int j=0;j<lst_data.size();j++){
     			Map<String,Object> lst_map_week = lst_data.get(j);
     			String dateStr = String.valueOf(lst_map_week.get("week_date"));
@@ -412,6 +414,8 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
     				lst_map.put("order_fee", lst_map_week.get("order_fee"));
     				lst_map.put("total_profit", lst_map_week.get("total_profit"));
     				lst_map.put("return_profit", lst_map_week.get("return_profit"));
+    				lst_map.put("return_gayy_subsidy", lst_map_week.get("return_gayy_subsidy"));
+    				lst_map.put("gayy_subsidy", lst_map_week.get("gayy_subsidy"));
     				
     			}
 			}
@@ -750,8 +754,7 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 			dd.setEndDate(endDate);
 			//昨日门店毛利
 			Map<String, Object> customerOrderRate = massOrderItemDao.getProductYesteryRank(dd,cityNO,provinceNO,pageInfo);
-			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
-			result.put("lst_data", lst_data);
+			result.put("lst_data", customerOrderRate);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -783,8 +786,7 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 			dd1.setBeginDate(endDate2);
 			dd1.setEndDate(endDate);
 			Map<String, Object> customerOrderRate = massOrderItemDao.getStoreProductIntervalDay(dd,dd1,cityNO,provinceNO,pageInfo);
-			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
-			result.put("lst_data", lst_data);
+			result.put("lst_data", customerOrderRate);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -816,8 +818,7 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 			dd1.setEndDate(endDate);
 			//昨日门店毛利
 			Map<String, Object> customerOrderRate = massOrderItemDao.getStoreProductIntervalDay(dd,dd1,cityNO,provinceNO,pageInfo);
-			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
-			result.put("lst_data", lst_data);
+			result.put("lst_data", customerOrderRate);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

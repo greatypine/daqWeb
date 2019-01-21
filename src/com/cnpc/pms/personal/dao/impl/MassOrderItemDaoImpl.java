@@ -580,14 +580,14 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
 		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,min(aa.store_city_code) AS store_city_code,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
-				+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,min(from_unixtime(unix_timestamp(aa.sign_time),'MM-dd')) AS week_date "
+				+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,sum(ifnull(aa.gayy_subsidy, 0)) AS gayy_subsidy,sum(ifnull(dd.return_gayy_subsidy, 0)) AS return_gayy_subsidy,min(from_unixtime(unix_timestamp(aa.sign_time),'MM-dd')) AS week_date "
 				+ " from (select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') as sign_time,"
 				+ "min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
 				+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
 				+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
-				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
 				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' "
 				+ "AND strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <= '"+endDate+"'";
 		String whereStr = " where 1=1 ";
@@ -597,7 +597,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		
 		//以日为单位不减报损和盘亏
 		//退款
-		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') AS return_time2,"
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') AS return_time2,"
 				+ "store_city_code from df_mass_order_total where strleft (return_time, 10) >= '"+beginDate+"' and strleft (return_time, 10) <= '"+endDate+"'  group by store_city_code,"
 				+ "from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd')) dd on aa.store_city_code=dd.store_city_code and aa.sign_time = dd.return_time2 ";
 		
@@ -615,14 +615,15 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
 		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
-		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,min(from_unixtime(unix_timestamp(aa.sign_time),'MM-dd')) AS week_date "
+		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,sum(ifnull(dd.return_gayy_subsidy, 0)) AS return_gayy_subsidy,"
+		+ "sum(ifnull(aa.gayy_subsidy, 0)) AS gayy_subsidy,min(from_unixtime(unix_timestamp(aa.sign_time),'MM-dd')) AS week_date "
 		+ " from (select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') as sign_time,"
 		+ "min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
 		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
 		+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
-		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
 		+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' "
 		+ "AND strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <= '"+endDate+"'";
 		String whereStr = " where 1=1 ";
@@ -641,7 +642,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 
 		//以日为单位不减报损和盘亏
 		//退款
-		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') AS return_time2,"
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') AS return_time2,"
 				+ "store_city_code from df_mass_order_total where strleft (return_time, 10) >= '"+beginDate+"' and strleft (return_time, 10) <= '"+endDate+"'  group by store_city_code,"
 				+ "from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd')) dd on aa.store_city_code=dd.store_city_code and aa.sign_time = dd.return_time2 ";
 
@@ -849,13 +850,14 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			List<Map<String, Object>> provinceNO) {
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
-		String sql = "SELECT aa.*,ifnull(ss.gmv_price, 0) AS gmv_price,ifnull(dd.return_profit, 0) AS return_profit FROM( SELECT tab3.*,tdc.id as cityId FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
+		String sql = "SELECT aa.*,ifnull(ss.gmv_price, 0) AS gmv_price,ifnull(dd.return_profit, 0) AS return_profit,ifnull(dd.return_gayy_subsidy, 0) AS return_gayy_subsidy "
+				+ " FROM( SELECT tab3.*,tdc.id as cityId FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
 				+ "ts. NAME AS store_name, ts.storeno AS store_code,tcs.customer_count AS customer_count  FROM ( SELECT store_id, min(store_province_code) AS store_province_code, "
-				+ "order_sign_date AS order_sign_date, sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit FROM "
+				+ "order_sign_date AS order_sign_date, sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit,sum(gayy_subsidy) AS gayy_subsidy FROM "
 				+ "( SELECT dot.real_store_id AS store_id, min(dot.store_province_code) AS store_province_code, min(strleft (dot.sign_time, 10)) "
 				+ "AS order_sign_date, ifnull( dround ( sum( CASE WHEN dot.eshop_joint_ims = 'no' THEN dot.order_profit ELSE 0 END), 2 ), 0 ) AS platform_profit, ifnull( dround ( sum( CASE WHEN "
 				+ "dot.eshop_joint_ims = 'yes' THEN dot.order_profit ELSE 0 END ), 2 ), 0 ) AS ims_profit, ifnull( dround ( sum( CASE WHEN dot.order_tag4 IS NULL THEN dot.platform_price ELSE 0 END ), 2 ), 0 ) "
-				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <='"+endDate+"' "
+				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <='"+endDate+"' "
 				+ "GROUP BY dot.real_store_id,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') ) tab1 GROUP BY store_id,order_sign_date ) tab2 LEFT JOIN daqWeb.t_store ts ON tab2.store_id = ts.id "
 				+ "left join( SELECT IFNULL( count(DISTINCT(customer_id)), 0) AS customer_count, store_name, strleft (sign_time, 10) AS tcs_sign_time FROM daqweb.df_mass_order_monthly GROUP BY strleft (sign_time, 10), store_name ) tcs on tcs.tcs_sign_time = tab2.order_sign_date and ts.name=tcs.store_name ) tab3 LEFT JOIN daqWeb.t_dist_citycode "
 				+ "tdc ON tab3.store_city_code = tdc.cityno";
@@ -871,7 +873,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sql= sql+whereStr+ ") aa ";
 		//以日为单位不减报损和盘亏
 		//退款
-		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit, real_store_id AS store_id, min(strleft (return_time, 10)) "
+		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy, real_store_id AS store_id, min(strleft (return_time, 10)) "
 		+ "as order_return_date FROM daqWeb.df_mass_order_monthly WHERE strleft (return_time, 10) >= '"+beginDate+"' AND strleft (return_time, 10) <='"+endDate+"' GROUP BY real_store_id,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') ) "
 		+ "dd ON aa.store_id = dd.store_id and aa.order_sign_date = dd.order_return_date ";
 		//查询GMV去除仓店
@@ -891,13 +893,13 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			List<Map<String, Object>> provinceNO) {
 		String beginDate = dynamicDto.getBeginDate();
 		String sql = "SELECT tt.* from (SELECT aa.city_name as city_name,aa.store_city_code as store_city_code,aa.store_name as store_name,aa.store_code as store_code,"
-				+ "ROUND((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit, 0)),2) as maoli  FROM( SELECT tab3.*,tdc.id as cityId FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
+				+ "ROUND(((ROUND((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit, 0)),2)+dround (ifnull(aa.gayy_subsidy, 0) - ifnull(dd.return_gayy_subsidy, 0),2))*0.8),2) as maoli  FROM( SELECT tab3.*,tdc.id as cityId FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
 				+ "ts. NAME AS store_name, ts.storeno AS store_code FROM ( SELECT store_id, min(store_province_code) AS store_province_code, "
-				+ "order_sign_date AS order_sign_date, sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit FROM "
+				+ "order_sign_date AS order_sign_date, sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit,sum(gayy_subsidy) AS gayy_subsidy FROM "
 				+ "( SELECT dot.real_store_id AS store_id, min(dot.store_province_code) AS store_province_code, min(strleft (dot.sign_time, 10)) "
 				+ "AS order_sign_date, ifnull( dround ( sum( CASE WHEN dot.eshop_joint_ims = 'no' THEN dot.order_profit ELSE 0 END), 2 ), 0 ) AS platform_profit, ifnull( dround ( sum( CASE WHEN "
 				+ "dot.eshop_joint_ims = 'yes' THEN dot.order_profit ELSE 0 END ), 2 ), 0 ) AS ims_profit, ifnull( dround ( sum( CASE WHEN dot.order_tag4 IS NULL THEN dot.platform_price ELSE 0 END ), 2 ), 0 ) "
-				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) = '"+beginDate+"' "
+				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) = '"+beginDate+"' "
 				+ "GROUP BY dot.real_store_id,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') ) tab1 GROUP BY store_id,order_sign_date ) tab2 LEFT JOIN daqWeb.t_store ts ON tab2.store_id = ts.id "
 				+ " ) tab3 LEFT JOIN daqWeb.t_dist_citycode "
 				+ "tdc ON tab3.store_city_code = tdc.cityno";
@@ -913,7 +915,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sql= sql+whereStr+ ") aa ";
 		//以日为单位不减报损和盘亏
 		//退款
-		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit, real_store_id AS store_id, min(strleft (return_time, 10)) "
+		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy, real_store_id AS store_id, min(strleft (return_time, 10)) "
 				+ "as order_return_date FROM daqWeb.df_mass_order_monthly WHERE strleft (return_time, 10) = '"+beginDate+"' GROUP BY real_store_id,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') ) "
 				+ "dd ON aa.store_id = dd.store_id and aa.order_sign_date = dd.order_return_date ";
 		
@@ -932,13 +934,14 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
 		String sql = "SELECT tt.* from (SELECT aa.city_name as city_name,aa.store_city_code as store_city_code,aa.store_name as store_name,aa.store_code as store_code,"
-				+ "ROUND((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit, 0)),2) as maoli  FROM( SELECT tab3.*,tdc.id as cityId FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
+				+ "ROUND(((ROUND((ifnull(aa.total_profit,0)-ifnull(aa.order_fee,0)-ifnull(dd.return_profit, 0)),2)+dround (ifnull(aa.gayy_subsidy, 0) - ifnull(dd.return_gayy_subsidy, 0),2))*0.8),2) as maoli  "
+				+ "FROM( SELECT tab3.*,tdc.id as cityId FROM ( SELECT tab2.*, ts.city_name AS city_name, ts.cityno AS store_city_code, "
 				+ "ts. NAME AS store_name, ts.storeno AS store_code FROM ( SELECT store_id, min(store_province_code) AS store_province_code, "
-				+ " sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit FROM "
+				+ " sum(platform_profit) AS platform_profit, sum(ims_profit) AS ims_profit, sum(order_fee) AS order_fee, sum(total_profit) AS total_profit,sum(gayy_subsidy) AS gayy_subsidy FROM "
 				+ "( SELECT dot.real_store_id AS store_id, min(dot.store_province_code) AS store_province_code, "
 				+ " ifnull( dround ( sum( CASE WHEN dot.eshop_joint_ims = 'no' THEN dot.order_profit ELSE 0 END), 2 ), 0 ) AS platform_profit, ifnull( dround ( sum( CASE WHEN "
 				+ "dot.eshop_joint_ims = 'yes' THEN dot.order_profit ELSE 0 END ), 2 ), 0 ) AS ims_profit, ifnull( dround ( sum( CASE WHEN dot.order_tag4 IS NULL THEN dot.platform_price ELSE 0 END ), 2 ), 0 ) "
-				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) >= '"+beginDate+"' and strleft (dot.sign_time, 10)<='"+endDate
+				+ "AS order_fee, ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy FROM daqWeb.df_mass_order_monthly dot WHERE strleft (dot.sign_time, 10) >= '"+beginDate+"' and strleft (dot.sign_time, 10)<='"+endDate
 				+ "' GROUP BY dot.real_store_id ) tab1 GROUP BY store_id ) tab2 LEFT JOIN daqWeb.t_store ts ON tab2.store_id = ts.id "
 				+ " ) tab3 LEFT JOIN daqWeb.t_dist_citycode "
 				+ "tdc ON tab3.store_city_code = tdc.cityno";
@@ -954,7 +957,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sql= sql+whereStr+ ") aa ";
 		//以日为单位不减报损和盘亏
 		//退款
-		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit, real_store_id AS store_id FROM daqWeb.df_mass_order_monthly WHERE strleft (return_time, 10) >= '"+beginDate+"' and strleft (return_time, 10)<='"+endDate+"' GROUP BY real_store_id "
+		sql = sql+ "LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy, real_store_id AS store_id FROM daqWeb.df_mass_order_monthly WHERE strleft (return_time, 10) >= '"+beginDate+"' and strleft (return_time, 10)<='"+endDate+"' GROUP BY real_store_id "
 		+ " ) dd ON aa.store_id = dd.store_id ";
 		
 		sql = sql+" ) tt order by tt.maoli desc ";
@@ -974,8 +977,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String sql_1 = "";
 		String sql_2 = "";
 		String sql = "SELECT ifnull((ss.rows1-tt.rows2),0) as rank,tt.store_name as store_name,tt.storeno as storeno,tt.product_gmv as product_gmv,tt.product_name as product_name FROM (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)='"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)='"
 				+ beginDate+"' ";
 		
 		String whereStr = "";
@@ -990,20 +993,21 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		if(provinceNO!=null&&provinceNO.size()>0){
 			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
+		whereStr+=" and bipo.store_name not like '%企业购%'";
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
 		sql=sql+ "LEFT JOIN (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
+				+ "sum(ifnull(bipo.quantity,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
 				+ "strleft (bipo.sign_time, 10) = '"+endDate+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
-		count_sql = "select count(1) as count_ from ("+sql+") dd ";
+		count_sql = "select count(1) as count_ from ("+sql+") dd where dd.product_gmv>0 ";
 		List<Map<String,Object>> list_count = ImpalaUtil.executeGuoan(count_sql);
 		Integer count = Integer.parseInt(String.valueOf(list_count.get(0).get("count_")));
-		sql_1 = "select ff.* from ("+sql+") ff order by ff.product_gmv desc limit "+5+" offset 0";
-		sql_2 = "select ff.* from ("+sql+") ff order by ff.product_gmv desc limit "+5+" offset "+(count-5);
+		sql_1 = "select ff.* from ("+sql+") ff where ff.product_gmv>0 order by ff.product_gmv desc limit "+5+" offset 0";
+		sql_2 = "select ff.* from ("+sql+") ff where ff.product_gmv>0 order by ff.product_gmv desc limit "+5+" offset "+(count-5);
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql_1);
 		List<Map<String,Object>> list_ = ImpalaUtil.executeGuoan(sql_2);
 		
@@ -1024,8 +1028,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String sql_1 = "";
 		String sql_2 = "";
 		String sql = "SELECT ifnull((ss.rows1-tt.rows2),0) as rank,tt.store_name as store_name,tt.storeno as storeno,tt.product_gmv as product_gmv,tt.product_name as product_name FROM (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)>='"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)>='"
 				+ beginDate+"' and strleft (bipo.sign_time, 10)<='"+endDate+"' ";
 		
 		String whereStr = "";
@@ -1040,20 +1044,21 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		if(provinceNO!=null&&provinceNO.size()>0){
 			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
+		whereStr+=" and bipo.store_name not like '%企业购%'";
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
 		sql=sql+ "LEFT JOIN (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
+				+ "sum(ifnull(bipo.quantity,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
 				+ "strleft (bipo.sign_time, 10) >= '"+beginDate2+"' and strleft (bipo.sign_time, 10)<='"+endDate2+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
-		count_sql = "select count(1) as count_ from ("+sql+") dd ";
+		count_sql = "select count(1) as count_ from ("+sql+") dd where dd.product_gmv>0 ";
 		List<Map<String,Object>> list_count = ImpalaUtil.executeGuoan(count_sql);
 		Integer count = Integer.parseInt(String.valueOf(list_count.get(0).get("count_")));
-		sql_1 = "select ff.* from ("+sql+") ff order by ff.product_gmv desc limit "+5+" offset 0";
-		sql_2 = "select ff.* from ("+sql+") ff order by ff.product_gmv desc limit "+5+" offset "+(count-5);
+		sql_1 = "select ff.* from ("+sql+") ff where ff.product_gmv>0 order by ff.product_gmv desc limit "+5+" offset 0";
+		sql_2 = "select ff.* from ("+sql+") ff where ff.product_gmv>0 order by ff.product_gmv desc limit "+5+" offset "+(count-5);
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql_1);
 		List<Map<String,Object>> list_ = ImpalaUtil.executeGuoan(sql_2);
 		
@@ -1069,11 +1074,13 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
 		String sql = "SELECT ifnull((ss.rows1-tt.rows2),0) as rank,tt.store_name as store_name,tt.storeno as storeno,tt.product_gmv as product_gmv,tt.product_name as product_name FROM (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)='"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)='"
 				+ beginDate+"' ";;
 		String sqlA = "";
 		String count_sql = "";
+		String total_quantity_sql = "";
+		String product_quantity_sql = "";
 		String searchStr = "";
 		String productName = dynamicDto.getSearchstr();
 		if(cityNO!=null&&cityNO.size()>0){
@@ -1087,30 +1094,43 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		if(provinceNO!=null&&provinceNO.size()>0){
 			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
+		whereStr+=" and bipo.store_name not like '%企业购%'";
+		if(StringUtils.isNotEmpty(productName)){
+			searchStr = " where ff.product_name like '%"+productName+"%'";
+			whereStr+=" and bipo.eshop_pro_name like '%"+productName+"%'";
+		}
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
 		//前天门店商品销售
 		sql=sql+ "LEFT JOIN (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
-				+ "sum(ifnull(bipo.trading_price,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
-				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.trading_price,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
+				+ "sum(ifnull(bipo.quantity,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
 				+ "strleft (bipo.sign_time, 10) = '"+endDate+"' ";
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
-		if(StringUtils.isNotEmpty(productName)){
-			searchStr = " where ff.product_name like '%"+productName+"%'";
-		}
-		count_sql = "select count(1) as count_ from ("+sql+") ff "+searchStr;
+		count_sql = "select count(1) as count_ from ("+sql+") ff ";
+		total_quantity_sql = "select sum(gg.product_gmv) as total_quantity from ("+sql+") gg ";
+		product_quantity_sql = "select count(1) as product_quantity from (SELECT min(DISTINCT(ss.product_name)) AS product_quantitys from ("+sql+") ss group by ss.product_name ) ft ";
+		
         List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data_quantity = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data_product_quantity = new ArrayList<Map<String,Object>>();
         Integer count_ = 0;
+        Integer count_total_quantity = 0;
+        Integer count_product_quantity = 0;
         try{
         	lst_data_count=ImpalaUtil.executeGuoan(count_sql);
+        	lst_data_quantity=ImpalaUtil.executeGuoan(total_quantity_sql);
+        	lst_data_product_quantity=ImpalaUtil.executeGuoan(product_quantity_sql);
         	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
+        	count_total_quantity = Integer.parseInt(lst_data_quantity.get(0).get("total_quantity").toString());
+        	count_product_quantity = Integer.parseInt(lst_data_product_quantity.get(0).get("product_quantity").toString());
         	if(pageInfo.getCurrentPage()==1){
-        		sqlA = "select ff.* from ("+sql+") ff "+searchStr+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
+        		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
         	}else{
-        		sqlA = "select ff.* from ("+sql+") ff "+searchStr+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage()+1);
+        		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
         	}
         	lst_data=ImpalaUtil.executeGuoan(sqlA);
             lst_result = lst_data;
@@ -1126,12 +1146,92 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			map_result.put("total_pages", total_pages);
 		}
 		map_result.put("data", lst_data);
+		map_result.put("lst_data_quantity", count_total_quantity);
+		map_result.put("lst_data_product_quantity", count_product_quantity);
 		return map_result;
 	}
 	@Override
-	public Map<String, Object> getStoreProductIntervalDay(DynamicDto dd,DynamicDto dd1, List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO, PageInfo pageInfo) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, Object> getStoreProductIntervalDay(DynamicDto dynamicDto,DynamicDto dynamicDto2, List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO, PageInfo pageInfo) {
+		String whereStr = "";
+		String beginDate = dynamicDto.getBeginDate();
+		String endDate = dynamicDto.getEndDate();
+		String beginDate2 = dynamicDto2.getBeginDate();
+		String endDate2 = dynamicDto2.getEndDate();
+		String sql = "SELECT ifnull((ss.rows1-tt.rows2),0) as rank,tt.store_name as store_name,tt.storeno as storeno,tt.product_gmv as product_gmv,tt.product_name as product_name FROM (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_gmv,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows2 FROM gabase.b_item_pro_total bipo WHERE strleft (bipo.sign_time, 10)>='"
+				+ beginDate+"' and  strleft (bipo.sign_time, 10)<='"+endDate+"' ";
+		String sqlA = "";
+		String count_sql = "";
+		String total_quantity_sql = "";
+		String product_quantity_sql = "";
+		String searchStr = "";
+		String productName = dynamicDto.getSearchstr();
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			whereStr +=  " and bipo.store_city_code='"+cityNo+"' ";
+			
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			whereStr += " and bipo.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		whereStr+=" and bipo.store_name not like '%企业购%'";
+		if(StringUtils.isNotEmpty(productName)){
+			searchStr = " where ff.product_name like '%"+productName+"%'";
+			whereStr+=" and bipo.eshop_pro_name like '%"+productName+"%'";
+		}
+		sql = sql+whereStr;
+		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
+		//前天门店商品销售
+		sql=sql+ "LEFT JOIN (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
+				+ "sum(ifnull(bipo.quantity,0)) AS product_count,min(bipo.eshop_pro_name) AS product_name,min(bipo.eshop_pro_id) AS product_id,"
+				+ "row_number() OVER(ORDER BY sum(ifnull(bipo.quantity,0)) desc) AS rows1 FROM gabase.b_item_pro_total bipo WHERE "
+				+ "strleft (bipo.sign_time, 10) >= '"+beginDate2+"' and strleft (bipo.sign_time, 10) <= '"+endDate2+"' ";
+		sql = sql+whereStr;		
+		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
+		count_sql = "select count(1) as count_ from ("+sql+") ff ";
+		total_quantity_sql = "select sum(gg.product_gmv) as total_quantity from ("+sql+") gg ";
+		product_quantity_sql = "select count(1) as product_quantity from (SELECT min(DISTINCT(ss.product_name)) AS product_quantitys from ("+sql+") ss group by ss.product_name ) ft ";
+        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data_quantity = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data_product_quantity = new ArrayList<Map<String,Object>>();
+        Integer count_ = 0;
+        Integer count_total_quantity = 0;
+        Integer count_product_quantity = 0;
+        try{
+        	lst_data_count=ImpalaUtil.executeGuoan(count_sql);
+        	lst_data_quantity=ImpalaUtil.executeGuoan(total_quantity_sql);
+        	lst_data_product_quantity=ImpalaUtil.executeGuoan(product_quantity_sql);
+        	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
+        	count_total_quantity = Integer.parseInt(lst_data_quantity.get(0).get("total_quantity").toString());
+        	count_product_quantity = Integer.parseInt(lst_data_product_quantity.get(0).get("product_quantity").toString());
+        	if(pageInfo.getCurrentPage()==1){
+        		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
+        	}else{
+        		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
+        	}
+        	lst_data=ImpalaUtil.executeGuoan(sqlA);
+            lst_result = lst_data;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		if(pageInfo!=null){
+			Integer total_pages = (count_ - 1) / pageInfo.getRecordsPerPage() + 1;
+			pageInfo.setTotalRecords(count_);
+			pageInfo.setRecordsPerPage(pageInfo.getRecordsPerPage());
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}
+		map_result.put("data", lst_data);
+		map_result.put("lst_data_quantity", count_total_quantity);
+		map_result.put("lst_data_product_quantity", count_product_quantity);
+		return map_result;
 	}
 	@Override
 	public Map<String, Object> getStoreYesterdayMember(DynamicDto dynamicDto,List<Map<String, Object>> cityNO, PageInfo pageInfo) {

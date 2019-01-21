@@ -109,7 +109,12 @@
     .swiper-slide table{width: 100%;color: #fff;border-collapse:collapse; border-spacing:0; table-layout: fixed;}
     .swiper-slide table td{height: 40px; line-height: 40px;background: linear-gradient(top, rgba(250,246,245,0.1), rgba(247,247,247,0.1)); background: -webkit-linear-gradient(top, rgba(250,246,245,0.1), rgba(247,247,247,0.1)); background:-moz-linear-gradient(top, rgba(250,246,245,0.1), rgba(247,247,247,0.1)); white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden; position: relative;}
     .swiper-slide table th{padding-top: 18px; color: #fff;height: 40px; line-height: 40px;}
-    .ranking_h{background: url("../../img/ranking-h.png") no-repeat; background-size: 100% 100%;}
+    /*.ranking_h{background: url("dist/img/ranking-h.png") no-repeat; background-size: 100% 100%;}*/
+    table tr th{padding-top: 18px; color: #fff;height: 60px; line-height: 60px;background: url("../../img/ranking-h.png") no-repeat;}
+    table tr th:nth-child(1){background-position: left;}
+    table tr th:nth-child(2),table tr th:nth-child(3),table tr th:nth-child(4){background-position: center;}
+    table tr th:nth-child(5){background-position: right;}
+
     /*.swiper-slide table tr:nth-child(2) td{background: linear-gradient(top, rgba(255,212,209,0.1), rgba(251,219,222,0.1)); background: -webkit-linear-gradient(top, rgba(255,212,209,0.1), rgba(251,219,222,0.1)); background: -moz-linear-gradient(top, rgba(255,212,209,0.1), rgba(251,219,222,0.1));}
     .swiper-slide table tr:nth-child(3) td{background: linear-gradient(top, rgba(254,230,230,0.1), rgba(251,229,231,0.1)); background: -webkit-linear-gradient(top, rgba(254,230,230,0.1), rgba(251,229,231,0.1)); background: -moz-linear-gradient(top, rgba(254,230,230,0.1), rgba(251,229,231,0.1));}
     .swiper-slide table tr:nth-child(4) td{background: linear-gradient(top, rgba(255,239,239,0.1), rgba(254,244,243,0.1)); background: -webkit-linear-gradient(top, rgba(255,239,239,0.1), rgba(254,244,243,0.1)); background: -moz-linear-gradient(top, rgba(255,239,239,0.1), rgba(254,244,243,0.1));}*/

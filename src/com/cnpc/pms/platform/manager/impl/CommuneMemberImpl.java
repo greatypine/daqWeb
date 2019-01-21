@@ -6,13 +6,17 @@ import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.communeMember.dao.CommuneMemberDao;
+import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
+import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.platform.dao.PlatformStoreDao;
 import com.cnpc.pms.platform.entity.MemberDataDto;
 import com.cnpc.pms.platform.manager.CommuneMember;
+import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import net.sf.json.JSONArray;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -2737,7 +2741,52 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		return result;
 	}
 
-	private XSSFCellStyle getHeaderStyle(){
+    @Override
+    public Map<String, Object> queryRemainMemberList(MemberDataDto memberDataDto, PageInfo pageInfo) {
+        Map<String, Object> result = new HashedMap();
+        StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
+        CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+        try {
+        result= commDao.queryRemainMemberList(memberDataDto, pageInfo);
+        result.put("status","success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status","fail");
+            return result;
+
+        }
+            return result;
+    }
+
+    @Override
+    public Map<String, Object> exportRemainMember(MemberDataDto memberDataDto) {
+        Map<String,Object> result  = new HashMap<String,Object>();
+        Map<String,Object> map  = this.queryRemainMemberList(memberDataDto, null);
+        if("success".equals(map.get("status"))){//成功返回数据
+            List<Map<String, Object>> list  = (List<Map<String, Object>>)map.get("member");
+            if(list.size()>50000){
+                result.put("message","导出条目过多，请重新筛选条件导出！");
+                result.put("status","more");
+                return result;
+            }
+            if(list==null||list.size()==0){
+                result.put("message","没有符合条件的数据！");
+                result.put("status","null");
+                return result;
+            }
+            //定义表头 以及 要填入的 字段
+            String[] str_headers = {"社员手机号","邀请码","社员开卡时间","城市","开卡门店","开卡礼","累计粮票","剩余粮票","节省金额","剩余价值"};
+            String[] headers_key = {"mobilephone","invitecode","opencard_time","cityname","store_name","opengift","sum_rebate","remain_rebate","sum_retrench_money","remain"};
+            ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("社员价值",list,str_headers,headers_key);
+            result = eeuo.exportFile();
+        }else{
+            result.put("message","请重新操作！");
+            result.put("status","fail");
+        }
+        return result;
+    }
+
+    private XSSFCellStyle getHeaderStyle(){
 		return style_header;
 	}
 
