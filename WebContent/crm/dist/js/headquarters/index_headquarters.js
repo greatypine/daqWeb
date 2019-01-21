@@ -2987,7 +2987,7 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     });
     $.each(eval(titleTH), function (idxi, ele) {
     	$.each(eval(profitStoreRange['lst_data']), function (idx, element) {
-    		var real_profit = (element.total_profit - element.return_profit - element.order_fee).toFixed(2);
+    		var real_profit = ((element.total_profit - element.return_profit - element.order_fee + element.gayy_subsidy - element.return_gayy_subsidy)*0.8).toFixed(2);
 	    	var temp = [];
 			temp.push(element.gmv_price.toFixed(2));
 	    	temp.push(real_profit);
