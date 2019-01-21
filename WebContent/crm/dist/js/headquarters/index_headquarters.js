@@ -3055,50 +3055,50 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     	average = average*0.05;
     }
 	cityProfitRangeOption.series[0].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[1].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[2].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[3].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[4].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[5].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
 	};
 	cityProfitRangeOption.series[6].symbolSize = function(val){
-		if(val[2]<50){
-			return val[2]*average*6;
+		if(val[2]<=60){
+			return val[2]*average*1.5;
 		}else{
 			return val[2]*average;
 		}
