@@ -3189,22 +3189,22 @@ var showTwoTwoOneRankGmv = function (twoTwoOneRankDataGmv) {
     var data3 = [];
     var data4 = [];
     $.each(eval(twoTwoOneRankDataGmv['lst_data']), function (idx, val) {
-    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	var real_profit = ((val['total_profit'] - val['return_profit'] - val['order_fee'] + val['gayy_subsidy'] - val['return_gayy_subsidy'])*0.8).toFixed(2);
     	data.push(val['week_date']);
     	data1.push(real_profit);
     });
     $.each(eval(twoTwoOneRankDataGmv['lst_data_bj']), function (idx, val) {
-    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	var real_profit = ((val['total_profit'] - val['return_profit'] - val['order_fee'] + val['gayy_subsidy'] - val['return_gayy_subsidy'])*0.8).toFixed(2);
     	data.push(val['week_date']);
     	data2.push(real_profit);
     });
     $.each(eval(twoTwoOneRankDataGmv['lst_data_tj']), function (idx, val) {
-    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	var real_profit = ((val['total_profit'] - val['return_profit'] - val['order_fee'] + val['gayy_subsidy'] - val['return_gayy_subsidy'])*0.8).toFixed(2);
     	//data.push(val['week_date']);
     	data3.push(real_profit);
     });
     $.each(eval(twoTwoOneRankDataGmv['lst_data_sh']), function (idx, val) {
-    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
+    	var real_profit = ((val['total_profit'] - val['return_profit'] - val['order_fee'] + val['gayy_subsidy'] - val['return_gayy_subsidy'])*0.8).toFixed(2);
     	//data.push(val['week_date']);
     	data4.push(real_profit);
     });
