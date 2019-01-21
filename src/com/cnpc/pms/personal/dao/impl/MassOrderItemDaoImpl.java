@@ -580,14 +580,14 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
 		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,min(aa.store_city_code) AS store_city_code,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
-				+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,min(from_unixtime(unix_timestamp(aa.sign_time),'MM-dd')) AS week_date "
+				+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,sum(ifnull(aa.gayy_subsidy, 0)) AS gayy_subsidy,sum(ifnull(dd.return_gayy_subsidy, 0)) AS return_gayy_subsidy,min(from_unixtime(unix_timestamp(aa.sign_time),'MM-dd')) AS week_date "
 				+ " from (select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') as sign_time,"
 				+ "min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
 				+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
 				+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
-				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
 				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' "
 				+ "AND strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <= '"+endDate+"'";
 		String whereStr = " where 1=1 ";
@@ -597,7 +597,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		
 		//以日为单位不减报损和盘亏
 		//退款
-		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') AS return_time2,"
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') AS return_time2,"
 				+ "store_city_code from df_mass_order_total where strleft (return_time, 10) >= '"+beginDate+"' and strleft (return_time, 10) <= '"+endDate+"'  group by store_city_code,"
 				+ "from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd')) dd on aa.store_city_code=dd.store_city_code and aa.sign_time = dd.return_time2 ";
 		
@@ -615,14 +615,15 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
 		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
-		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,min(from_unixtime(unix_timestamp(aa.sign_time),'MM-dd')) AS week_date "
+		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,sum(ifnull(dd.return_gayy_subsidy, 0)) AS return_gayy_subsidy,"
+		+ "sum(ifnull(aa.gayy_subsidy, 0)) AS gayy_subsidy,min(from_unixtime(unix_timestamp(aa.sign_time),'MM-dd')) AS week_date "
 		+ " from (select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') as sign_time,"
 		+ "min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
 		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
 		+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
-		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
 		+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' "
 		+ "AND strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <= '"+endDate+"'";
 		String whereStr = " where 1=1 ";
@@ -641,7 +642,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 
 		//以日为单位不减报损和盘亏
 		//退款
-		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') AS return_time2,"
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') AS return_time2,"
 				+ "store_city_code from df_mass_order_total where strleft (return_time, 10) >= '"+beginDate+"' and strleft (return_time, 10) <= '"+endDate+"'  group by store_city_code,"
 				+ "from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd')) dd on aa.store_city_code=dd.store_city_code and aa.sign_time = dd.return_time2 ";
 
