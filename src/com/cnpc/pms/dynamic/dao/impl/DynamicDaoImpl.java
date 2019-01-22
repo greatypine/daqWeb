@@ -4128,7 +4128,10 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" c.bussiness_group_id as deptid," +
 				" c.department_name as deptname," +
 				" c.cusnum," +
-				" b.cusnum_ten " +
+				" b.cusnum_ten, " +
+				" b.cusnum_thirty_nine, " +
+				" b.cusnum_three_hundred, " +
+				" (b.cusnum_thirty_nine+b.cusnum_three_hundred*8) as cusnum_base " +
 				 selectStr2+
 				" FROM " +
 				" (select " +
@@ -4144,7 +4147,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" LEFT JOIN " +
 				" (select " +
 				" bussiness_group_id," +
-				"sum(case when a.monetary > 10 then 1 else 0 end) as cusnum_ten" +
+				" sum(case when a.monetary > 10 then 1 else 0 end) as cusnum_ten," +
+				" sum(case when (a.monetary >= 39 and a.monetary < 300) then 1 else 0 end) as cusnum_thirty_nine,"+
+				" sum(case when a.monetary >= 300 then 1 else 0 end) as cusnum_three_hundred,"+
 				  selectStr1+
 				"  from (select " +
 				" bussiness_group_id," +

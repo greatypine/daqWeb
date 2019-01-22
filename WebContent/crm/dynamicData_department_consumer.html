@@ -232,6 +232,9 @@
                             <th width="10%" id="channel_column">频道</th>
 	                        <th width="12%">消费用户</th>
 	                        <th width="12%">消费用户超10元</th>
+                            <th width="14%">消费用户满39元</th>
+                            <th width="14%">消费用户满300元</th>
+                            <th width="12%">基础消费用户</th>
 	                    </tr>
                     </tbody>
                   </table>
@@ -673,8 +676,13 @@ laydate.render({//月份控件
                        if($('#channelClick').is(':checked')){
                            infoStr = infoStr +"<td>"+jData[i].channel_name+"</td>";
                        }
+                       var consumer_ten = jData[i].cusnum_ten;
+                       var consumer_thirty_nine = jData[i].cusnum_thirty_nine;
+                       var consumer_three_hundred = jData[i].cusnum_three_hundred;
+                       var consumer_base = jData[i].cusnum_base;
 
-                       infoStr = infoStr +"<td>"+jData[i].cusnum+"</td><td>"+jData[i].cusnum_ten+"</td></tr>"
+
+                       infoStr = infoStr +"<td>"+jData[i].cusnum+"</td><td>"+consumer_ten+"</td><td>"+consumer_thirty_nine+"</td><td>"+jData[i].consumer_three_hundred+"</td><td>"+consumer_base+"</td></tr>"
 
 
                        $("#tradeType_tbody").append(infoStr);

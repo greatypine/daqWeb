@@ -6046,11 +6046,17 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			headers.add("事业群");
 			headers.add("消费用户");
 			headers.add("消费用户超10元");
+			headers.add("消费用户满39元");
+			headers.add("消费用户满300元");
+			headers.add("基础消费用户");
 
 			List<String> headers_key = new ArrayList<String>();
 			headers_key.add("deptname");
             headers_key.add("cusnum");
             headers_key.add("cusnum_ten");
+			headers_key.add("cusnum_thirty_nine");
+			headers_key.add("cusnum_three_hundred");
+			headers_key.add("cusnum_base");
 
             int index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
 			if(dd.getSearchstr().contains("dept_city_active")) {
