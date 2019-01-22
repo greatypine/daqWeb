@@ -40,7 +40,7 @@ public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntry
 				}
 				StringBuilder sb_sql = new StringBuilder();
 				sb_sql.append(find_sql);
-				sb_sql.append(where +sb_where.toString()+ " order by te.id desc");
+				sb_sql.append(where +sb_where.toString()+ " order by te.id");
 				// SQL查询对象
 				SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession()
 						.createSQLQuery(sb_sql.toString());

@@ -6559,6 +6559,8 @@ function download_table(){
                         heml_name = "商品销售档案"
                     }else if(heml_name == "system"){
                         heml_name = "系统推送";
+                    }else if (heml_name == "DDJEJS") {
+                        heml_name = "订单金额结算"
                     }
                     if(type == "personal"){
                         type = "人工导出";
