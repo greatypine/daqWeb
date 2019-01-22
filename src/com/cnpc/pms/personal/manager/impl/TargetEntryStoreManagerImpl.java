@@ -463,12 +463,12 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 			int ret = sheet_data.getPhysicalNumberOfRows();
 			TargetEntryStoreDao targetEntryStoreDao = (TargetEntryStoreDao) SpringHelper.getBean(TargetEntryStoreDao.class.getName());
 			TargetEntryDao targetEntryDao = (TargetEntryDao) SpringHelper.getBean(TargetEntryDao.class.getName());
-			Double maori_target_list = 0.0;
-			Double profit_target_list = 0.0;
-			Double user_target_list  = 0.0;
-			Double maori_target = 0.0;
-			Double profit_target = 0.0;
-			Double user_target = 0.0;
+			BigDecimal maori_target_list =  new BigDecimal("0.00");
+			BigDecimal profit_target_list = new BigDecimal("0.00");
+			BigDecimal user_target_list  = new BigDecimal("0.00");
+			BigDecimal maori_target = new BigDecimal("0.00");
+			BigDecimal profit_target = new BigDecimal("0.00");
+			BigDecimal user_target = new BigDecimal("0.00");
 			String frame_time = "";
 			String channel_name = "";
 			String dept_name = "";
@@ -479,6 +479,9 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 					if(nRowIndex == 1){
 						for(int nCellIndex = 0;nCellIndex < nCellSize ;nCellIndex ++) {
 							String str_value = getCellValue(row_human.getCell(nCellIndex));
+							if(str_value.equals("0") || str_value.equals("0.00")){
+								continue;
+							}
 							if(nCellIndex == 3){
 								if(isNumeric(str_value)){
 									if(str_value.contains(".")){
@@ -488,7 +491,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 											return rcvmsg;
 										}
 									}
-									maori_target_list = Double.valueOf(str_value);
+									maori_target_list = new BigDecimal(str_value);
 								}else{
 									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
 									return rcvmsg;
@@ -504,7 +507,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 											return rcvmsg;
 										}
 									}
-									profit_target_list = Double.valueOf(str_value);
+									profit_target_list = new BigDecimal(str_value);
 								}else{
 									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
 									return rcvmsg;
@@ -519,7 +522,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 									}
 								}
 								if(isNumeric(str_value)){
-									user_target_list = Double.valueOf(str_value);
+									user_target_list = new BigDecimal(str_value);
 								}else{
 									rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
 									return rcvmsg;
@@ -539,6 +542,9 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 					if(nRowIndex > 2){
 						for(int nCellIndex = 0;nCellIndex < nCellSize ;nCellIndex ++) {
 							String str_value = getCellValue(row_human.getCell(nCellIndex));
+							if(str_value.equals("0") || str_value.equals("0.00")){
+								continue;
+							}
 							if(str_value != null && str_value != "" && str_value != "0"){
 								if(nCellIndex == 3){
 									if(isNumeric(str_value)){
@@ -549,7 +555,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 												return rcvmsg;
 											}
 										}
-										maori_target =  maori_target + Double.valueOf(str_value);
+										maori_target =  maori_target.add(new BigDecimal(str_value));
 									}else{
 										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
 										return rcvmsg;
@@ -565,7 +571,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 												return rcvmsg;
 											}
 										}
-										profit_target = profit_target + Double.valueOf(str_value);
+										profit_target = profit_target.add(new BigDecimal(str_value));
 									}else{
 										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
 										return rcvmsg;
@@ -581,7 +587,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 												return rcvmsg;
 											}
 										}
-										user_target =  user_target + Double.valueOf(str_value);
+										user_target =  user_target.add(new BigDecimal(str_value));
 									}else{
 										rcvmsg = "导入文件指标类型不正确！导入失败！行号：" + (nRowIndex + 1);
 										return rcvmsg;
