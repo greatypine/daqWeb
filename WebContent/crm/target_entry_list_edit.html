@@ -12,6 +12,8 @@
 <link href="../scripts/css/auto.css" rel="stylesheet">
 <script type="text/javascript" src="../scripts/bidLib.js"></script>
 <script src="dist/js/headquarters/conversion_utils.js"></script>
+	<script type="text/javascript" src="../crm/laydate/laydate.js"></script>
+	<script type="text/javascript" src="../scripts/auto.js"></script>
 </head>
 <script type="text/javascript">
 
@@ -79,10 +81,25 @@
                     code = jsonData.data.usergroup;
                     if (code.code != "ZBMBZLRJSZ") {
                         document.getElementById("file").disabled=true;
+                        document.getElementById("fileNum").style.display='none';
                     }
                 }
             }
         })
+        var min= new Date();
+        var max=min.getFullYear() + "-" + (min.getMonth() + 1);
+
+        laydate.render({
+            elem: '#startTime'
+            ,type: 'month'//最大日期
+//        ,max: max,
+            ,min:max
+        });
+        laydate.render({
+            elem: '#endTime'
+            ,type: 'month'//最大日期
+            ,min:max
+        });
 
 	});
 
@@ -221,6 +238,40 @@
         });
     }
 
+    function downloadAll() {
+        var startTime = $("#startTime").val();
+        var endTime = $("#endTime").val();
+        if(startTime == null||startTime == ""){
+            alert("开始月份不能为空");
+            return false;
+        }
+        if(endTime == null||endTime == ""){
+            alert("结束月份不能为空");
+            return false;
+        }
+
+        doManager('targetEntryStoreManager','exportOrderAll',[startTime,endTime],function(data){
+            if(data.result){
+                var result= JSON.parse(data.data);
+                if(result.status=='success'){
+//                    $("#reportName").val("");
+                    $("#startTime").val("");
+                    $("#endTime").val("");
+                    window.location.href=result.data;
+                }else if(result.status=='more'){
+                    return;
+                }else{
+                    return;
+                }
+
+            }else{
+                crm_alert(5,"请稍后重新请求！");
+            }
+            $("#process_div").hide();
+            $("#process_div_pic").hide();
+        });
+    }
+
     //自定义一个上传Excel的方法
     function uploadExcel() {
         var fileDiv = document.getElementById("showFile");
@@ -282,6 +333,37 @@
         showPanel.style.display = "none";
     });
 
+
+    function showFileNum(){
+//    var rootPath = "https://cdn.guoanshuju.com/upload_folder/siteselection/";
+//    $("#showcard").attr("src",rootPath+file_name);
+        var imgdiv = $("#showdiv");
+        imgdiv.dialog({
+            bgiframe : true,
+            title : "指标录入",
+            width : 750,
+            height: 350,
+            buttons : {
+                "确定" : function() {
+                    var flag = downloadAll();
+                    if(flag != false){
+                        $(this).dialog("close");
+                    }
+
+                },
+                "取消" : function() {
+                    $(this).dialog("close");
+                }
+            },
+            modal : false
+        });
+        $("#startTime").blur();
+        $("#endTime").blur();
+
+        var button = document.getElementsByClassName("ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
+        button[0].style.width = "100px";
+        button[1].style.width = "100px";
+    }
 </script>
 </head>
 <style type="text/css">
@@ -333,6 +415,7 @@
 			<span style="position: absolute;left: 270px;color: #eee826;margin-right: 30%">3、请确认导入数据的月份、事业群与页面相同。</span>
 		</div>
 		<span class="but" style="position: relative;top: -35px;">
+			<button name="file" style="height: 38px;display: block;float: left;margin-right: 5px;" class="btn btn-outline btn-default" id="fileNum" onclick="showFileNum()">指标统计</button>
 			<button name="file" style="height: 38px" class="btn btn-outline btn-default" id="file" onclick="showFile()">导入数据</button>
 			<button name="download" style="height: 38px" class="btn btn-outline btn-default" onclick="download();">导出数据</button>
             </span>
@@ -384,7 +467,33 @@
 	</div>
 </div>
 
+	<div id="showdiv" class="panel panel-primary" style="display: none;">
+		<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
 
+			<div class="panel-body" id="temp1">
+				<form action="" method="post" class="pmsForm">
+					<table width="100%">
+						<tr>
+							<td width="35%">
+								<p class="read">开始月份：</p>
+								<p class="read"><input id="startTime" name="startTime"
+													   type="text" class="form-control demo-input" style="width: 70%; display: inline;"
+													   readonly />
+								</p>
+							</td>
+							<td width="35%">
+								<p class="read">结束月份：</p>
+								<p class="read"><input id="endTime" name="endTime"
+													   type="text" class="form-control demo-input" style="width: 70%; display: inline;"
+													   readonly />
+								</p>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
 
 	<div id="centerQueryGridContainer" class="panel panel-primary" queryid="queryTargetEntryStoreList" operators="$pmspage.opArr"
 			 titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"

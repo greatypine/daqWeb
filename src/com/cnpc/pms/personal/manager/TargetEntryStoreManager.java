@@ -22,6 +22,8 @@ public interface TargetEntryStoreManager extends IManager {
 
 	public Map<String, Object> exportOrder(TargetEntryStore targetEntryStore);
 
+	public Map<String, Object> exportOrderAll(String startTime,String endTime);
+
 	public String saveTargetEntryStore(List<File> lst_import_excel) throws Exception;
 
 

@@ -113,6 +113,7 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		tReportFiledown.setFilename(fileName);
 		tReportFiledown.setUrl("/" + fileName);
 		tReportFiledown.setMark1("0");
+		tReportFiledown.setDescription("personal");
 		saveObject(tReportFiledown);
 
 		ExportRunableSPXSDA s1 = new ExportRunableSPXSDA(fileName, null, massOrderDto, false,tReportFiledown,massOrderItemDao);

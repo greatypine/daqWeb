@@ -155,6 +155,8 @@ public class HttpClientUtils {
                 }
             }
             massOrderDao.updataReport(id,url);
+        }else{
+            massOrderDao.updataReport(id,"");
         }
     }
   //订单金额结算导出
@@ -255,7 +257,10 @@ public class HttpClientUtils {
                 }
             }
             orderAmountDao.updataReport(id,url);
+        }else {
+            orderAmountDao.updataReport(id,"");
         }
+
     }
     public void getDataTableSPXSDA( MassOrderItemDto massOrderDto, String fileName, MassOrderItemDao massOrderItemDao, Long id) {
         String url = null;
@@ -354,6 +359,8 @@ public class HttpClientUtils {
                 }
             }
             massOrderItemDao.updataReport(id,url);
+        }else {
+            massOrderItemDao.updataReport(id,"");
         }
     }
 

@@ -90,6 +90,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
 		tReportFiledown.setFilename(fileName);
 		tReportFiledown.setUrl("/" + fileName);
 		tReportFiledown.setMark1("0");
+		tReportFiledown.setDescription("personal");
 		saveObject(tReportFiledown);
 
 		String starts = "DDDA";

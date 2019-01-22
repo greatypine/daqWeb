@@ -142,6 +142,193 @@ public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements Target
 		return list;
 	}
 
+	public List<Map<String, Object>> exportFileAll(String startTime,String endTIme){
+		String sql =  " select t1.city_name,t1.store_name,t1.store_code,";
+		sql = sql + " 	IFNULL(t2.youyi_businessGroup_name,'国安优易') as youyi_businessGroup_name,";
+		sql = sql + " 	IFNULL(t2.youyi_maori_target,0.00) as youyi_maori_target,";
+		sql = sql + " 	IFNULL(t2.youyi_profit_target,0.00) as youyi_profit_target,";
+		sql = sql + " 	IFNULL(t2.youyi_user_target,0.00) as youyi_user_target,";
+		sql = sql + " 	IFNULL(t3.jws_businessGroup_name,'家务事') as jws_businessGroup_name,";
+		sql = sql + " 	IFNULL(t3.jws_maori_target,0.00) as jws_maori_target,";
+		sql = sql + " 	IFNULL(t3.jws_profit_target,0.00) as jws_profit_target,";
+		sql = sql + " 	IFNULL(t3.jws_user_target,0.00) as jws_user_target, ";
+		sql = sql + " 	IFNULL(t4.dw_businessGroup_name,'点位') as dw_businessGroup_name,";
+		sql = sql + " 	IFNULL(t4.dw_maori_target,0.00) as dw_maori_target,";
+		sql = sql + " 	IFNULL(t4.dw_profit_target,0.00) as dw_profit_target,";
+		sql = sql + " 	IFNULL(t4.dw_user_target,0.00) as dw_user_target,";
+		sql = sql + " 	IFNULL(t5.gajc_businessGroup_name,'国安金超') as gajc_businessGroup_name,";
+		sql = sql + " 	IFNULL(t5.gajc_maori_target,0.00) as gajc_maori_target,";
+		sql = sql + " 	IFNULL(t5.gajc_profit_target,0.00) as gajc_profit_target,";
+		sql = sql + " 	IFNULL(t5.gajc_user_target,0.00) as gajc_user_target,";
+		sql = sql + " 	IFNULL(t6.cpzx_businessGroup_name,'产品中心') as cpzx_businessGroup_name,";
+		sql = sql + " 	IFNULL(t6.cpzx_maori_target,0.00) as cpzx_maori_target,";
+		sql = sql + " 	IFNULL(t6.cpzx_profit_target,0.00) as cpzx_profit_target,";
+		sql = sql + " 	IFNULL(t6.cpzx_user_target,0.00) as cpzx_user_target,";
+		sql = sql + " 	IFNULL(t7.zfbt_businessGroup_name,'政府补贴') as zfbt_businessGroup_name,";
+		sql = sql + " 	IFNULL(t7.zfbt_maori_target,0.00) as zfbt_maori_target,";
+		sql = sql + " 	IFNULL(t7.zfbt_profit_target,0.00) as zfbt_profit_target,";
+		sql = sql + " 	IFNULL(t7.zfbt_user_target,0.00) as zfbt_user_target";
+		sql = sql + " from (SELECT";
+		sql = sql + " 	tes.businessGroup_name,";
+		sql = sql + " 	tes.store_code,";
+		sql = sql + " 	tes.city_name,";
+		sql = sql + " 	tes.store_name,";
+		sql = sql + " 	sum(tes.maori_target),";
+		sql = sql + " 	sum(tes.profit_target),";
+		sql = sql + " 	sum(tes.user_target)";
+		sql = sql + " FROM";
+		sql = sql + " 	df_target_entry_store tes";
+		sql = sql + " WHERE";
+		sql = sql + " 	tes.frame_time >= '"+startTime+"'";
+		sql = sql + " AND tes.frame_time <= '"+endTIme+"'";
+		sql = sql + " and tes.businessGroup_name = '国安优易'";
+		sql = sql + " GROUP BY tes.store_code";
+		sql = sql + " ORDER BY tes.store_code) t1 ";
+		sql = sql + " LEFT JOIN (SELECT";
+		sql = sql + " 	tes.businessGroup_name as youyi_businessGroup_name,";
+		sql = sql + " 	tes.store_code,";
+		sql = sql + " 	tes.city_name,";
+		sql = sql + " 	tes.store_name,";
+		sql = sql + " 	sum(tes.maori_target) as youyi_maori_target,";
+		sql = sql + " 	sum(tes.profit_target) as youyi_profit_target,";
+		sql = sql + " 	sum(tes.user_target) as youyi_user_target";
+		sql = sql + " FROM";
+		sql = sql + " 	df_target_entry_store tes";
+		sql = sql + " WHERE";
+		sql = sql + " 	tes.frame_time >= '"+startTime+"'";
+		sql = sql + " AND tes.frame_time <= '"+endTIme+"'";
+		sql = sql + " and tes.businessGroup_name = '国安优易'";
+		sql = sql + " GROUP BY tes.store_code";
+		sql = sql + " ORDER BY tes.store_code) t2 on (t1.store_code=t2.store_code)";
+		sql = sql + " LEFT JOIN (SELECT";
+		sql = sql + " 	tes.businessGroup_name as jws_businessGroup_name,";
+		sql = sql + " 	tes.store_code,";
+		sql = sql + " 	sum(tes.maori_target) as jws_maori_target,";
+		sql = sql + " 	sum(tes.profit_target) as jws_profit_target,";
+		sql = sql + " 	sum(tes.user_target) as jws_user_target";
+		sql = sql + " FROM";
+		sql = sql + " 	df_target_entry_store tes";
+		sql = sql + " WHERE";
+		sql = sql + " 	tes.frame_time >= '"+startTime+"'";
+		sql = sql + " AND tes.frame_time <= '"+endTIme+"'";
+		sql = sql + " and tes.businessGroup_name = '家务事'";
+		sql = sql + " GROUP BY tes.store_code";
+		sql = sql + " ORDER BY tes.store_code) t3 on (t1.store_code=t3.store_code)";
+		sql = sql + " LEFT JOIN (SELECT";
+		sql = sql + " 	tes.businessGroup_name as dw_businessGroup_name,";
+		sql = sql + " 	tes.store_code,";
+		sql = sql + " 	sum(tes.maori_target) as dw_maori_target,";
+		sql = sql + " 	sum(tes.profit_target) as dw_profit_target,";
+		sql = sql + " 	sum(tes.user_target) as dw_user_target";
+		sql = sql + " FROM";
+		sql = sql + " 	df_target_entry_store tes";
+		sql = sql + " WHERE";
+		sql = sql + " 	tes.frame_time >= '"+startTime+"'";
+		sql = sql + " AND tes.frame_time <= '"+endTIme+"'";
+		sql = sql + " and tes.businessGroup_name = '点位'";
+		sql = sql + " GROUP BY tes.store_code";
+		sql = sql + " ORDER BY tes.store_code) t4 on (t1.store_code=t4.store_code)";
+		sql = sql + " LEFT JOIN (SELECT";
+		sql = sql + " 	tes.businessGroup_name as gajc_businessGroup_name,";
+		sql = sql + " 	tes.store_code,";
+		sql = sql + " 	sum(tes.maori_target) as gajc_maori_target,";
+		sql = sql + " 	sum(tes.profit_target) as gajc_profit_target,";
+		sql = sql + " 	sum(tes.user_target) as gajc_user_target";
+		sql = sql + " FROM";
+		sql = sql + " 	df_target_entry_store tes";
+		sql = sql + " WHERE";
+		sql = sql + " 	tes.frame_time >= '"+startTime+"'";
+		sql = sql + " AND tes.frame_time <= '"+endTIme+"'";
+		sql = sql + " and tes.businessGroup_name = '国安金超'";
+		sql = sql + " GROUP BY tes.store_code";
+		sql = sql + " ORDER BY tes.store_code) t5 on (t1.store_code=t5.store_code)";
+		sql = sql + " LEFT JOIN (SELECT";
+		sql = sql + " 	tes.businessGroup_name as cpzx_businessGroup_name,";
+		sql = sql + " 	tes.store_code,";
+		sql = sql + " 	sum(tes.maori_target) as cpzx_maori_target,";
+		sql = sql + " 	sum(tes.profit_target) as cpzx_profit_target,";
+		sql = sql + " 	sum(tes.user_target) as cpzx_user_target";
+		sql = sql + " FROM";
+		sql = sql + " 	df_target_entry_store tes";
+		sql = sql + " WHERE";
+		sql = sql + " 	tes.frame_time >= '"+startTime+"'";
+		sql = sql + " AND tes.frame_time <= '"+endTIme+"'";
+		sql = sql + " and tes.businessGroup_name = '产品中心'";
+		sql = sql + " GROUP BY tes.store_code";
+		sql = sql + " ORDER BY tes.store_code) t6 on (t1.store_code=t6.store_code)";
+		sql = sql + " LEFT JOIN (SELECT";
+		sql = sql + " 	tes.businessGroup_name as zfbt_businessGroup_name,";
+		sql = sql + " 	tes.store_code,";
+		sql = sql + " 	sum(tes.maori_target) as zfbt_maori_target,";
+		sql = sql + " 	sum(tes.profit_target) as zfbt_profit_target,";
+		sql = sql + " 	sum(tes.user_target) as zfbt_user_target";
+		sql = sql + " FROM";
+		sql = sql + " 	df_target_entry_store tes";
+		sql = sql + " WHERE";
+		sql = sql + " 	tes.frame_time >= '"+startTime+"'";
+		sql = sql + " AND tes.frame_time <= '"+endTIme+"'";
+		sql = sql + " and tes.businessGroup_name = '政府补贴'";
+		sql = sql + " GROUP BY tes.store_code";
+		sql = sql + " ORDER BY tes.store_code) t7 on (t1.store_code=t7.store_code)";
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+
+
+	public List<Map<String, Object>> exportFileAllList(String startTime,String endTIme){
+		String sql = " SELECT te.businessGroup_name,sum(te.maori_target) as maori_target,sum(te.profit_target) as profit_target,sum(te.user_target) as user_target FROM df_target_entry te WHERE te.frame_time >= '"+startTime+"' AND te.frame_time <= '"+endTIme+"' and te.businessGroup_name='国安优易' ";
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+
+
+	public List<Map<String, Object>> exportFileAlljwsList(String startTime,String endTIme){
+		String sql = " SELECT te.businessGroup_name,sum(te.maori_target) as maori_target,sum(te.profit_target) as profit_target,sum(te.user_target) as user_target FROM df_target_entry te WHERE te.frame_time >= '"+startTime+"' AND te.frame_time <= '"+endTIme+"' and te.businessGroup_name='家务事' ";
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+	public List<Map<String, Object>> exportFileAlldwList(String startTime,String endTIme){
+		String sql = " SELECT te.businessGroup_name,sum(te.maori_target) as maori_target,sum(te.profit_target) as profit_target,sum(te.user_target) as user_target FROM df_target_entry te WHERE te.frame_time >= '"+startTime+"' AND te.frame_time <= '"+endTIme+"' and te.businessGroup_name='点位' ";
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+	public List<Map<String, Object>> exportFileAllgajcList(String startTime,String endTIme){
+		String sql = " SELECT te.businessGroup_name,sum(te.maori_target) as maori_target,sum(te.profit_target) as profit_target,sum(te.user_target) as user_target FROM df_target_entry te WHERE te.frame_time >= '"+startTime+"' AND te.frame_time <= '"+endTIme+"' and te.businessGroup_name='国安金超' ";
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+	public List<Map<String, Object>> exportFileAllcpzxList(String startTime,String endTIme){
+		String sql = " SELECT te.businessGroup_name,sum(te.maori_target) as maori_target,sum(te.profit_target) as profit_target,sum(te.user_target) as user_target FROM df_target_entry te WHERE te.frame_time >= '"+startTime+"' AND te.frame_time <= '"+endTIme+"' and te.businessGroup_name='产品中心' ";
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+	public List<Map<String, Object>> exportFileAllzfbtList(String startTime,String endTIme){
+		String sql = " SELECT te.businessGroup_name,sum(te.maori_target) as maori_target,sum(te.profit_target) as profit_target,sum(te.user_target) as user_target FROM df_target_entry te WHERE te.frame_time >= '"+startTime+"' AND te.frame_time <= '"+endTIme+"' and te.businessGroup_name='政府补贴' ";
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+
 	@Override
 	public Map<String, Object> getTaskQuantityExist(String cityname) {
 		String sql ="SELECT count(*) as task_quantity_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week' ";
