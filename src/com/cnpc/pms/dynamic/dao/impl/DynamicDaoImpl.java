@@ -1973,7 +1973,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 //				   " and tor.store_name NOT LIKE '%测试%' and tor.store_white!='QA' AND tor.store_status =0 group by store_id ";
 		
 		
-		String sql="select  tor.storeno,tor.storename,tor.cityname ,new_cusnum_ten,cusnum,cusnum_ten"+
+		String sql="select  tor.storeno,tor.storename,tor.cityname ,new_cusnum_ten,cusnum,cusnum_ten,cusnum_thirty_nine,cusnum_three_hundred,(ifnull(cusnum_thirty_nine,0)+ifnull(cusnum_three_hundred,0)*7) as cusnum_base"+
 				   " from ds_pes_customer_store_month tor  "+
 				   " where tor.year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
 				   " and tor.storeno in ("+dynamicDto.getStoreNo()+")";
@@ -2010,14 +2010,14 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public Map<String, Object> employeeOfAreaNewaddcus(DynamicDto dynamicDto, PageInfo pageInfo) {
 		String sql="";
 		if("pre".equals(dynamicDto.getSearchstr())){//上个月
-			sql="select ifnull(a.new_cusnum_ten,0) as new_cusnum_ten,ifnull(a.cusnum,0) as cusnum,ifnull(a.cusnum_ten,0) as cusnum_ten,ts.city_name as cityname,ts.name as storename,ts.storeno, th.name,th.employee_no as employeeno  from (select employeeno,new_cusnum_ten ,cusnum ,cusnum_ten "+
+			sql="select ifnull(a.new_cusnum_ten,0) as new_cusnum_ten,ifnull(a.cusnum,0) as cusnum,ifnull(a.cusnum_ten,0) as cusnum_ten,ifnull(a.cusnum_thirty_nine,0) as cusnum_thirty_nine,ifnull(a.cusnum_three_hundred,0) as cusnum_three_hundred,(ifnull(a.cusnum_thirty_nine,0)+ifnull(a.cusnum_three_hundred,0)*7) as cusnum_base, ts.city_name as cityname,ts.name as storename,ts.storeno, th.name,th.employee_no as employeeno  from (select employeeno,new_cusnum_ten ,cusnum ,cusnum_ten,cusnum_thirty_nine,cusnum_three_hundred "+
 					" from ds_pes_customer_employee_month tor "+
 					" where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
 					//" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
 					" ) a right join (select username as name,employeeno as employee_no,storeid as store_id from ds_topdata where   year ="+dynamicDto.getYear()+" and month ="+dynamicDto.getMonth()+" and zw ='国安侠' and (humanstatus =1 or (humanstatus=2 and YEAR(DATE(leavedate)) =YEAR(DATE_ADD(NOW(),INTERVAL -1 MONTH)) and MONTH(DATE(leavedate))=MONTH(DATE_ADD(NOW(),INTERVAL -1 MONTH)))) and storeid IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
 		}else if("cur".equals(dynamicDto.getSearchstr())){//当前月
 			 
-			sql="select ifnull(a.new_cusnum_ten,0) as new_cusnum_ten,ifnull(a.cusnum,0) as cusnum,ifnull(a.cusnum_ten,0)  as cusnum_ten,ts.city_name as cityname,ts.name as storename,ts.storeno, th.name,th.employee_no as employeeno  from (select employeeno,new_cusnum_ten ,cusnum,cusnum_ten "+
+			sql="select ifnull(a.new_cusnum_ten,0) as new_cusnum_ten,ifnull(a.cusnum,0) as cusnum,ifnull(a.cusnum_ten,0)  as cusnum_ten,ifnull(a.cusnum_thirty_nine,0) as cusnum_thirty_nine,ifnull(a.cusnum_three_hundred,0) as cusnum_three_hundred,(ifnull(a.cusnum_thirty_nine,0)+ifnull(a.cusnum_three_hundred,0)*7) as cusnum_base,ts.city_name as cityname,ts.name as storename,ts.storeno, th.name,th.employee_no as employeeno  from (select employeeno,new_cusnum_ten ,cusnum,cusnum_ten,cusnum_thirty_nine,cusnum_three_hundred "+
 					" from ds_pes_customer_employee_month tor "+
 					" where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
 					//" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
@@ -4131,7 +4131,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" b.cusnum_ten, " +
 				" b.cusnum_thirty_nine, " +
 				" b.cusnum_three_hundred, " +
-				" (b.cusnum_thirty_nine+b.cusnum_three_hundred*8) as cusnum_base " +
+				" (b.cusnum_thirty_nine+b.cusnum_three_hundred*7) as cusnum_base " +
 				 selectStr2+
 				" FROM " +
 				" (select " +
@@ -4148,8 +4148,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" (select " +
 				" bussiness_group_id," +
 				" sum(case when a.monetary > 10 then 1 else 0 end) as cusnum_ten," +
-				" sum(case when (a.monetary >= 39 and a.monetary < 300) then 1 else 0 end) as cusnum_thirty_nine,"+
-				" sum(case when a.monetary >= 300 then 1 else 0 end) as cusnum_three_hundred,"+
+				" sum(case when a.monetary >= 39 then 1 else 0 end) as cusnum_thirty_nine,"+
+				" sum(case when a.monetary >= 300 then 1 else 0 end) as cusnum_three_hundred "+
 				  selectStr1+
 				"  from (select " +
 				" bussiness_group_id," +
