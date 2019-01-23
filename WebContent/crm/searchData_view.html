@@ -1829,7 +1829,7 @@ function getIsManager(){
        			    infoStr = infoStr
                         +"<td>";
                        var curDate = new Date(new Date(new Date().toLocaleDateString()).getTime());
-                       if(jData[i].sign_time>=curDate){
+                       if(new Date(jData[i].sign_time)>=curDate){
                            infoStr = infoStr + "<a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\">暂未计算</a>";
                        } else if(jData[i].contract_method=='price' && jData[i].cost_price==0){
                            infoStr = infoStr + "<a href=\"javascript:;\" style=\"border-bottom:1px dashed #0000ff;cursor:default;\">成本为0无利润</a>";
