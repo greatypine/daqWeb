@@ -653,17 +653,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 		
 		
-		//查询取消订单数
-		List<Map<String, Object>> eshopQuitMemList = commDao.getEshopQuitCount(dd);
-		List memQuitCounts = new ArrayList();//取消成交量
-		if (eshopQuitMemList!=null&&!eshopQuitMemList.isEmpty()) {
-			for (int i = 0; i < eshopQuitMemList.size(); i++) {
-				memQuitCounts.add(Integer.parseInt(eshopQuitMemList.get(i).get("memcount").toString()));
-			}
-		}
-		JSONArray jsonQuitCounts = (JSONArray) JSONArray.fromObject(memQuitCounts);
-		result.put("jsonQuitCounts", jsonQuitCounts);
-		
+
 		//按城市查询累计成交额、订单量
 		List cityShopCounts = new ArrayList();
 		List cityShopNames = new ArrayList();
@@ -1179,6 +1169,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 			}
 			
 		}*/
+
 		JSONArray jsonDayMemCounts = (JSONArray) JSONArray.fromObject(memCounts);
 		JSONArray jsonDayMemSums = (JSONArray) JSONArray.fromObject(memSums);
 		JSONArray jsonDayNoMemCounts = (JSONArray) JSONArray.fromObject(noMemCounts);
@@ -2236,6 +2227,9 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		 * 
 		 * }
 		 */
+
+
+
 		
 		List dateMemCounts = new ArrayList();
  		try {
@@ -2244,6 +2238,22 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
  		} catch (ParseException e) {
  			e.printStackTrace();
  		}
+
+        //查询取消订单数
+        List<Map<String, Object>> eshopQuitMemList = commDao.getEshopQuitCount(dd);
+        List memQuitCounts = new ArrayList();//取消成交量
+        if (eshopQuitMemList!=null&&!eshopQuitMemList.isEmpty()) {
+            for (int i = 0; i < eshopQuitMemList.size(); i++) {
+                memQuitCounts.add(Integer.parseInt(eshopQuitMemList.get(i).get("memcount").toString()));
+            }
+        }
+
+        JSONArray jsonQuitCounts = (JSONArray) JSONArray.fromObject(memQuitCounts);
+        result.put("jsonQuitCounts", jsonQuitCounts);
+
+
+
+
 		JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
 		result.put("jsonDateMem", jsonDateMem);
 		JSONArray jsonDayMemCounts = (JSONArray) JSONArray.fromObject(memCounts);
