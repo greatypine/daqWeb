@@ -603,7 +603,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 
 			}
 			if(ret != 0){
-				if(maori_target_list.toString().equals(maori_target.toString()) && profit_target_list.toString().equals(profit_target.toString()) && user_target_list.toString().equals(user_target.toString())){
+				if(maori_target_list.stripTrailingZeros().toString().equals(maori_target.stripTrailingZeros().toString()) && profit_target_list.stripTrailingZeros().toString().equals(profit_target.stripTrailingZeros().toString()) && user_target_list.stripTrailingZeros().toString().equals(user_target.stripTrailingZeros().toString())){
 					for(int nRowIndex = 0;nRowIndex < sheet_data.getPhysicalNumberOfRows();nRowIndex++) {
 						Row row_human = sheet_data.getRow(nRowIndex);
 
