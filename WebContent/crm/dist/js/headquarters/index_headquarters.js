@@ -4139,7 +4139,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 			turnoverCustomerOrderOption.series[2].name = pageStatusInfo.provinceName;
 			selected[pageStatusInfo.provinceName]=true;
 	    }
-	    data7 = data1;
+        data7 = [].concat(data1);
 	    if(data7.length>0){
 	    	turnoverCustomerOrderOption.series[3].data = data7.reverse();
 	    	var textStyle = new Object();
