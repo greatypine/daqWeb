@@ -1973,7 +1973,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 //				   " and tor.store_name NOT LIKE '%测试%' and tor.store_white!='QA' AND tor.store_status =0 group by store_id ";
 		
 		
-		String sql="select  tor.storeno,tor.storename,tor.cityname ,new_cusnum_ten,cusnum,cusnum_ten,cusnum_thirty_nine,cusnum_three_hundred,(ifnull(cusnum_thirty_nine,0)+ifnull(cusnum_three_hundred,0)*7) as cusnum_base"+
+		String sql="select  tor.storeno,tor.storename,tor.cityname ,new_cusnum_ten,cusnum,cusnum_ten,ifnull(cusnum_thirty_nine,0) as cusnum_thirty_nine,ifnull(cusnum_three_hundred,0) as cusnum_three_hundred,(ifnull(cusnum_thirty_nine,0)+ifnull(cusnum_three_hundred,0)*7) as cusnum_base"+
 				   " from ds_pes_customer_store_month tor  "+
 				   " where tor.year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
 				   " and tor.storeno in ("+dynamicDto.getStoreNo()+")";
