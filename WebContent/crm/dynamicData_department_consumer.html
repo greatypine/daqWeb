@@ -234,7 +234,8 @@
 	                        <th width="12%">消费用户超10元</th>
                             <th width="14%">消费用户满39元</th>
                             <th width="14%">消费用户满300元</th>
-                            <th width="12%">基础消费用户</th>
+                            <th width="12%"><font id="columnattention2" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                                <font id="forcolumnattention2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:-5px">消费用户满39元+消费用户满300元*7</font>基础消费用户</th>
 	                    </tr>
                     </tbody>
                   </table>
@@ -380,6 +381,13 @@ laydate.render({//月份控件
         $("#storeName_column").hide();
     
   });
+
+$("#columnattention2").on("mouseover",function(event){
+    $("#forcolumnattention2").show();
+});
+$("#columnattention2").on("mouseout",function(event){
+    $("#forcolumnattention2").hide();
+});
   /**-----------------------------------搜索城市------------------------------------------------------**/
   var lst_select_city=null;
   var cityNameArray=new Array();

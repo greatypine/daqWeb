@@ -76,6 +76,7 @@
 		}
 		    /*搜索框*/
     .form-control{height: 30px; line-height: 30px; border-radius: 6px; padding: 3px 8px;}
+
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -88,7 +89,7 @@
 
  <header class="main-header">
     <nav class="navbar navbar-static-top">
-      <div class="container">
+      <div class="container" >
 					<div class="logo_img pull-left">
 						<img src="dist/img/logo.png" height="30">
 						<img src="dist/img/title.png" height="20">
@@ -134,7 +135,7 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <div class="container">
+    <div class="container" style="width: 1270px">
       <!-- Main content -->
 
       <section class="content-header">
@@ -210,8 +211,12 @@
 	                      <th width="10%">门店编号</th>
 	                      <th width="11%">拉新用户超10元</th> 
 	                      <th width="10%">消费用户</th>
-	                      <th width="10%">消费用户超10元</th>  
-	                    </tr>
+	                      <th width="10%">消费用户超10元</th>
+                          <th width="10%">消费用户满39元</th>
+                          <th width="10%">消费用户超300元</th>
+                          <th width="10%"><font id="columnattention2" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                              <font id="forcolumnattention2" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:-40px">消费用户满39元+消费用户满300元*7</font>基础消费用户</th>
+                        </tr>
                     </tbody>
                   </table>
                 </div>
@@ -311,6 +316,13 @@
 	$('#be_date2').daterangepicker(); */
 	
   });
+
+    $("#columnattention2").on("mouseover",function(event){
+        $("#forcolumnattention2").show();
+    });
+    $("#columnattention2").on("mouseout",function(event){
+        $("#forcolumnattention2").hide();
+    });
 
 	
 	 /**-----------------------------------搜索城市------------------------------------------------------**/
@@ -531,6 +543,7 @@
 	        	  
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
+
 	        		   infoStr= "<tr>"
 		                       +"<td>"+jData[i].cityname+"</td>"
 		                       +"<td>"+jData[i].storename+"</td>"
@@ -538,6 +551,9 @@
 		                       +"<td>"+jData[i].new_cusnum_ten+"</td>"
 		                       +"<td>"+jData[i].cusnum+"</td>"
 		                       +"<td>"+jData[i].cusnum_ten+"</td>"
+                               +"<td>"+jData[i].cusnum_thirty_nine+"</td>"
+                               +"<td>"+jData[i].cusnum_three_hundred+"</td>"
+                               +"<td>"+jData[i].cusnum_base+"</td>"
 		                       +"</tr>";
 		                    
 		                  $("#ff_tbody").append(infoStr);     
