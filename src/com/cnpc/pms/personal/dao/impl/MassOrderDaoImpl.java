@@ -46,8 +46,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map<String, Object> queryMassOrder(MassOrderDto massOrderDto, PageInfo pageInfo, String timeFlag) {
 		String sql = "select a.id, a.order_sn,IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,a.eshop_name,a.employee_name,"
-				+ "a.pubseas_label,a.abnormal_label,a.return_label,a.loan_label,IFNULL(a.create_time,'') as create_time,IFNULL(a.sign_time,'') as sign_time,IFNULL(a.return_time,'') as return_time,"
-				+ "IFNULL(a.success_time,'') as success_time,IFNULL(a.appointment_start_time,'') as appointment_start_time,a.employee_no,IFNULL(a.trading_price,0) as trading_price,"
+				+ "a.pubseas_label,a.abnormal_label,a.return_label,a.loan_label,IFNULL(strleft(a.create_time,19),'') as create_time,IFNULL(strleft(a.sign_time,19),'') as sign_time,IFNULL(strleft(a.return_time,19),'') as return_time,"
+				+ "IFNULL(strleft(a.success_time,19),'') as success_time,IFNULL(strleft(a.appointment_start_time,19),'') as appointment_start_time,a.employee_no,IFNULL(a.trading_price,0) as trading_price,"
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,a.customer_name,IFNULL(a.addr_name,'') as addr_name,"
 				+ "IFNULL(a.addr_mobilephone,'') as addr_mobilephone,IFNULL(a.addr_address,'') as addr_address,a.channel_name,a.department_name,tdc.name as first_channel_name,"
 				+ "a.customer_isnew_flag,IFNULL(a.area_code,'') AS area_code,IFNULL(ta.`name`,'') AS area_name,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,0) as score,"
@@ -265,8 +265,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	public List<Map<String, Object>> exportOrder(MassOrderDto massOrderDto, String timeFlag) {
 		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,IFNULL(a.info_employee_a_no,'') AS info_employee_a_no,"
 				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.customer_id,'') as customer_id,IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,"
-				+ "IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(a.create_time,'') AS create_time,IFNULL(a.sign_time,'') AS sign_time,IFNULL(a.return_time,'') AS return_time,IFNULL(a.success_time,'') AS success_time,"
-				+ "IFNULL(a.appointment_start_time,'') AS appointment_start_time,IFNULL(a.employee_name,'') AS employee_name,IFNULL(a.employee_phone,'') AS employee_phone,"
+				+ "IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(strleft(a.create_time,19),'') AS create_time,IFNULL(strleft(a.sign_time,19),'') AS sign_time,IFNULL(strleft(a.return_time,19),'') AS return_time,IFNULL(strleft(a.success_time,19),'') AS success_time,"
+				+ "IFNULL(strleft(a.appointment_start_time,19),'') AS appointment_start_time,IFNULL(a.employee_name,'') AS employee_name,IFNULL(a.employee_phone,'') AS employee_phone,"
 				+ "a.eshop_name,a.store_name,a.store_code,ts.name as real_store_name,ts.storeno as real_store_code,a.channel_name,a.department_name,IFNULL(tdc.name,'') as first_channel_name,IFNULL(tdc2.name,'') as first_dept_name,"
 				+ "a.store_city_name,CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,"
 				+ "CASE WHEN a.abnormal_label='1' THEN '是'  ELSE '否' END AS abnormal_label,CASE WHEN a.return_label='1' THEN '是'  ELSE '否' END AS return_label,"
@@ -463,7 +463,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map<String, Object> queryReturnMassOrder(MassOrderDto massOrderDto, PageInfo pageInfo) {
 		String sql = "select a.id, a.order_sn,IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,a.eshop_name,a.employee_name,"
-				+ "a.pubseas_label,a.abnormal_label,a.return_label,a.loan_label,a.create_time,a.sign_time,a.return_time,a.appointment_start_time,a.employee_no,IFNULL(a.trading_price,0) as trading_price,"
+				+ "a.pubseas_label,a.abnormal_label,a.return_label,a.loan_label,IFNULL(strleft(a.create_time,19),'') as create_time,IFNULL(strleft(a.sign_time,19),'') as sign_time,IFNULL(strleft(a.return_time,19),'') as return_time,"
+				+ "IFNULL(strleft(a.appointment_start_time,19),'') as appointment_start_time,a.employee_no,IFNULL(a.trading_price,0) as trading_price,"
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(ROUND(a.returned_amount,2),0) as returned_amount,a.customer_name,"
 				+ "IFNULL(a.addr_name,'') as addr_name,IFNULL(a.addr_mobilephone,'') as addr_mobilephone,IFNULL(a.addr_address,'') as addr_address,"
 				+ "a.channel_name,a.department_name,tdc.name as first_channel_name,a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,0) as score"
@@ -525,7 +526,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,a.info_employee_a_no,"
 				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.trading_price,0) as trading_price,"
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(ROUND(a.returned_amount,2),0) as returned_amount,"
-				+ "IFNULL(a.create_time,'') AS create_time,IFNULL(a.appointment_start_time,'') AS appointment_start_time,IFNULL(a.sign_time,'') as sign_time,IFNULL(a.return_time,'') as return_time,"
+				+ "IFNULL(strleft(a.create_time,19),'') AS create_time,IFNULL(strleft(a.appointment_start_time,19),'') AS appointment_start_time,IFNULL(strleft(a.sign_time,19),'') as sign_time,IFNULL(strleft(a.return_time,19),'') as return_time,"
 				+ "IFNULL(a.employee_name,'') AS employee_name,IFNULL(a.employee_phone,'') AS employee_phone,a.eshop_name,a.store_name,a.store_code,ts.name as real_store_name,ts.storeno as real_store_code,"
 				+ "a.channel_name,a.department_name,IFNULL(tdc.name,'') AS first_channel_name,a.store_city_name,"
 				+ "CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,CASE WHEN a.abnormal_label='1' THEN '是'  ELSE '否' END AS abnormal_label,"
