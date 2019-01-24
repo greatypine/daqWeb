@@ -7693,8 +7693,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	        
 	        String web = PropertiesUtil.getValue("sso.user.saveorupdate");
 	        String SSO_SYNC_USER=web+"/systemuser/saveOrUpdate";
-	        result = hClientUtil.getRemoteDataProxy(SSO_SYNC_USER, jsonObject);
-	        
+//	        result = hClientUtil.getRemoteDataProxy(SSO_SYNC_USER, jsonObject);
+	        result="未同步";
 	        //插入同步记录 
 	        SsoUserDataLogManager ssoUserDataLogManager = (SsoUserDataLogManager) SpringHelper.getBean("ssoUserDataLogManager");
 	        SsoUserDataLog ssoUserDataLog = new SsoUserDataLog();
@@ -7723,8 +7723,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
         
         String web = PropertiesUtil.getValue("sso.user.saveorupdate");
         String SSO_SYNC_USER=web+"/store/saveOrUpdate";
-        result = hClientUtil.getRemoteDataProxy(SSO_SYNC_USER, jsonObject);
-        
+//        result = hClientUtil.getRemoteDataProxy(SSO_SYNC_USER, jsonObject);
+        result="未同步";
         //插入同步记录 
         SsoUserDataLogManager ssoUserDataLogManager = (SsoUserDataLogManager) SpringHelper.getBean("ssoUserDataLogManager");
         SsoUserDataLog ssoUserDataLog = new SsoUserDataLog();
