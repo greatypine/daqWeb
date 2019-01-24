@@ -1795,7 +1795,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				return result;
 			}
 
-			String[] str_headers = {"城市","门店名称","门店编号","拉新用户超10元","消费用户","消费用户超10元","消费用户满39元","消费用户满300元","基础消费用户"};
+			String[] str_headers = {"城市","门店名称","门店编号","拉新用户超10元","消费用户","消费用户超10元","消费用户满39元","消费用户满300元","有效用户数核算"};
 			String[] headers_key = {"cityname","storename","storeno","new_cusnum_ten","cusnum","cusnum_ten","cusnum_thirty_nine","cusnum_three_hundred","cusnum_base"};
 			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("门店用户",list,str_headers,headers_key);
 			result = eeuo.exportFile();
@@ -3484,7 +3484,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String[] str_headers = {"城市","门店名称","门店编号","员工姓名","员工编号","拉新用户超10元","消费用户","消费用户超10元","消费用户满39元","消费用户满300元","基础消费用户"};
+			String[] str_headers = {"城市","门店名称","门店编号","员工姓名","员工编号","拉新用户超10元","消费用户","消费用户超10元","消费用户满39元","消费用户满300元","有效用户数核算"};
 			String[] headers_key = {"cityname","storename","storeno","name","employeeno","new_cusnum_ten","cusnum","cusnum_ten","cusnum_thirty_nine","cusnum_three_hundred","cusnum_base"};
 			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠用户",list,str_headers,headers_key);
 			result = eeuo.exportFile();
@@ -6048,7 +6048,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			headers.add("消费用户超10元");
 			headers.add("消费用户满39元");
 			headers.add("消费用户满300元");
-			headers.add("基础消费用户");
+			headers.add("有效用户数核算");
 
 			List<String> headers_key = new ArrayList<String>();
 			headers_key.add("deptname");
