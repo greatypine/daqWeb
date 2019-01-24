@@ -9,14 +9,14 @@ import com.cnpc.pms.reportFiledown.entity.TReportFiledown;
 import java.util.Map;
 
 /**
- * @Function：订单金额结算
+ * @Function：订单结算
  * @author：liugongting
  *
  * @version V1.0
  */
 public interface OrderAmountManager extends IManager {
 	/**
-	 * 导出订单金额结算信息
+	 * 导出订单结算信息
 	 * 
 	 * @param object
 	 * @return
@@ -24,7 +24,7 @@ public interface OrderAmountManager extends IManager {
 	Map<String, Object> exportOrder(OrderAmountDto orderAmountDto, TReportFiledown tReportFiledown);
 
 	/**
-	 * 查询订单金额结算信息
+	 * 查询订单结算信息
 	 * 
 	 * @param object
 	 * @return

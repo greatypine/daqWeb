@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public interface OrderAmountDao {
 		/**
-		 * 导出订单金额结算信息
+		 * 导出订单结算信息
 		 * 
 		 * @param object
 		 * @return
@@ -18,7 +18,7 @@ public interface OrderAmountDao {
 	 	List<Map<String, Object>> exportOrder(OrderAmountDto orderAmountDto, String tableName);
 
 		/**
-		 * 查询订单金额结算信息
+		 * 查询订单结算信息
 		 * 
 		 * @param object
 		 * @return

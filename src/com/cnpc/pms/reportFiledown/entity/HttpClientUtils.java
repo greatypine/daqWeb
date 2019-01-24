@@ -159,7 +159,7 @@ public class HttpClientUtils {
             massOrderDao.updataReport(id,"");
         }
     }
-  //订单金额结算导出
+  //订单结算导出
     public void getAmountOrderTable( OrderAmountDto orderAmountDto, String fileName, OrderAmountDao orderAmountDao,Long id) {
         Map<String, Object> result = new HashMap<String,Object>();
         String url = null;
