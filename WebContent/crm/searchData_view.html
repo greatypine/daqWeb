@@ -1647,9 +1647,9 @@ function getIsManager(){
 	    var busiNames = $("#busi_private_manual").val();
 	    if(busiNames!=null && busiNames!='' && busiNames.indexOf(',') >= 0){
 	    	busiNames = busiNames.substring(0,busiNames.length-1);
-	    	busiNames = busiNames.replace("商品类","1");
-	    	busiNames = busiNames.replace("服务类","2");
-	    	busiNames = busiNames.replace("团购","3");
+	    	busiNames = busiNames.replace("商品类","'1'");
+	    	busiNames = busiNames.replace("服务类","'2'");
+	    	busiNames = busiNames.replace("团购","'3'");
 	    }
         var profit_price_min = $("#min_money_auto").val();
         var profit_price_max= $("#max_money_auto").val();
@@ -2206,9 +2206,9 @@ function showfee(obj){
 	    var busiNames = $("#busi_private_manual").val();
 	    if(busiNames!=null && busiNames!='' && busiNames.indexOf(',') >= 0){
 	    	busiNames = busiNames.substring(0,busiNames.length-1);
-	    	busiNames = busiNames.replace("商品类","1");
-	    	busiNames = busiNames.replace("服务类","2");
-	    	busiNames = busiNames.replace("团购","3");
+	    	busiNames = busiNames.replace("商品类","'1'");
+	    	busiNames = busiNames.replace("服务类","'2'");
+	    	busiNames = busiNames.replace("团购","'3'");
 	    }
         var profit_price_min = $("#min_money_auto").val();
         var profit_price_max= $("#max_money_auto").val();
