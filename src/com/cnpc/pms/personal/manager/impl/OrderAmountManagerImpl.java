@@ -47,6 +47,7 @@ public class OrderAmountManagerImpl extends BizBaseCommonManager implements Orde
   			tReportFiledown.setFilename(fileName);
   			tReportFiledown.setUrl("/" + fileName);
   			tReportFiledown.setMark1("0");
+  			tReportFiledown.setDescription("personal");
   			saveObject(tReportFiledown);
   			String starts = "DDJEJS";
   			ExportRunableDDJEJS s1=new ExportRunableDDJEJS(starts, fileName, null, orderAmountDto, false,tReportFiledown,orderAmountDao);
