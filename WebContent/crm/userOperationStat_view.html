@@ -972,10 +972,7 @@
             minDate:new Date('2018/01/01'),
             maxDate:new Date()
         });
-        $('#auto_date_regist').daterangepicker({
-            minDate:new Date('2018/01/01'),
-            maxDate:new Date()
-        });
+
 
         jeDate({
             dateCell:"#auto_date_start",//zIndex:2000
@@ -1035,16 +1032,24 @@
 
         var firstDate = new Date();
         var curDate = new Date();
+        var preDate = new Date();
         var bdate = firstDate.format('yyyy/MM/dd');
         var cDate = curDate.format('yyyy/MM/dd');
+        preDate.setTime(curDate.getTime()-24*60*60*1000);
+        var pdate = preDate.format('yyyy/MM/dd');
         $("#auto_date_more").val(bdate+" - "+cDate);
         $("#auto_date_areamore").val(bdate+" - "+cDate);
         $("#auto_date_daynewcus").val(bdate+" - "+cDate);
         $("#auto_date_daypay").val(bdate+" - "+cDate);
-        $("#auto_date_regist").val(bdate+" - "+cDate);
-        $("#query_data_info").text("（截止到"+cDate+"）");
+        $("#auto_date_regist").val(pdate+" - "+pdate);
+        $("#query_data_info").text("（截止到"+pdate+"）");
         $("#query_newdata_info").text("（截止到"+cDate+"）");
         $("#query_paydata_info").text("（截止到"+cDate+"）");
+
+        $('#auto_date_regist').daterangepicker({
+            minDate:new Date('2018/01/01'),
+            maxDate:new Date(pdate)
+        });
 
         var regex_yw = new RegExp("^(YW|yw)\w*");//业务（事业部）
         if(target==0){//总部
@@ -3965,8 +3970,11 @@
             var a = document.getElementById("citySelectRegist");
             a.options[0].selected = true;
         }
-        $('#auto_date_regist').data('daterangepicker').setStartDate(new Date());
-        $('#auto_date_regist').data('daterangepicker').setEndDate(new Date());
+        var preDate = new Date();
+        preDate.setTime(new Date().getTime()-24*60*60*1000);
+        var pdate = preDate.format('yyyy/MM/dd');
+        $('#auto_date_regist').data('daterangepicker').setStartDate(pdate);
+        $('#auto_date_regist').data('daterangepicker').setEndDate(pdate);
     }
 
     var autoPageRecordes=10;
