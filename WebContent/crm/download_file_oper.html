@@ -352,6 +352,7 @@
     var now_month =cur_date.getMonth();
     var max_year = cur_date.getFullYear();
     var now_date =cur_date.getDate();
+    var date28 =cur_date.getDate();
     var max_month = "";
     if(now_month==0){
         max_year =cur_date.getFullYear()-1;
@@ -385,7 +386,10 @@
     }else{
         max_date = max_year+"-"+now_month +"-"+(now_date-1);
     }
-
+    if(date28>27){
+        max_month = cur_date.getFullYear()+"-"+now_month +"-"+(cur_date.getDate());
+        year_month = cur_date.getFullYear()+"-"+now_month;
+    }
 
     laydate.render({//月份控件
         elem:'#report_month',
