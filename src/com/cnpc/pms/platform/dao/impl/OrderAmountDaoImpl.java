@@ -32,8 +32,9 @@ public class OrderAmountDaoImpl extends DAORootHibernate implements OrderAmountD
 		String lineSql="";
 		String lineFalg="";
 		String lineBool=""; 
+		String refundFlag="";
 		if ("underline".equals(orderAmountDto.getLineType())) {//线下
-			
+			refundFlag=" and a.group_id not in (select order_group_id as group_id from gemini.t_order_refund t WHERE refund_status='refunded' and t.order_group_id is not null) ";
 			lineFalg="线下";
 			lineBool=" not in ";
 		}else {//线上
@@ -50,7 +51,7 @@ public class OrderAmountDaoImpl extends DAORootHibernate implements OrderAmountD
 				+"IFNULL(a.order_profit,0) as order_profit,IFNULL(a.apportion_rebate,0) as apportion_rebate,\r\n" + 
 				"IFNULL(a.platform_price,0) as apportion_coupon,IFNULL(a.cost_price,0) as cost_price,\r\n" + 
 				"IFNULL(CASE a.contract_method WHEN 'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN 'percent' THEN '从率' END,'') as contract_method  "
-				+"from daqWeb."+tableName+" a where 1=1 ";
+				+"from daqWeb."+tableName+" a where 1=1 " + refundFlag;
 		String whereSql="";
 		String whereDffSql="";
 		
@@ -137,12 +138,12 @@ public class OrderAmountDaoImpl extends DAORootHibernate implements OrderAmountD
 	public List<Map<String, Object>> exportOrder(OrderAmountDto orderAmountDto, String tableName) {
 		// TODO Auto-generated method stub      
 
-		
+		String refundFlag="";
 		String lineSql="";
 		String lineFalg="";
 		String lineBool=""; 
 		if ("underline".equals(orderAmountDto.getLineType())) {//线下
-			
+			refundFlag=" and a.group_id not in (select order_group_id as group_id from gemini.t_order_refund t WHERE refund_status='refunded' and t.order_group_id is not null) ";
 			lineFalg="线下";
 			lineBool=" not in ";
 		}else {//线上
@@ -177,7 +178,7 @@ public class OrderAmountDaoImpl extends DAORootHibernate implements OrderAmountD
 				"CASE WHEN a.order_tag3='2' THEN '是'  ELSE '否' END AS pay_label," + 
 				"CASE a.order_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' " + 
 				"WHEN 'pad' THEN '智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source "
-				+"from daqWeb."+tableName+" a where 1=1 ";
+				+"from daqWeb."+tableName+" a where 1=1 " + refundFlag;
 		String whereSql="";
 		String whereDffSql="";
 		
@@ -285,15 +286,16 @@ try {
 		String lineSql="";
 		String lineFalg="";
 		String lineBool=""; 
+		String refundFlag="";
 		if ("underline".equals(orderAmountDto.getLineType())) {//线下
-			
+			refundFlag=" and a.group_id not in (select order_group_id as group_id from gemini.t_order_refund t WHERE refund_status='refunded' and t.order_group_id is not null) ";
 			lineFalg="线下";
 			lineBool=" not in ";
 		}else {//线上
 			lineFalg="线上";
 			lineBool=" in ";
 		}
-		String sqlCount="select * from (select a.order_sn as order_sn,a.insert_time as insert_time from daqWeb.df_mass_order_total a where 1=1 ";	
+		String sqlCount="select * from (select a.order_sn as order_sn,a.insert_time as insert_time from daqWeb.df_mass_order_total a where 1=1 "+refundFlag;	
 		String whereSql="";
 		String whereDffSql="";
 		
@@ -368,9 +370,6 @@ try {
 			 total = executeGuoan.get(0).get("total").toString();
 			 total2=Integer.valueOf(total);
 		}
-	
-		
-		
 		return total2;
 	}
 
