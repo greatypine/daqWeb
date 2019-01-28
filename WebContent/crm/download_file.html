@@ -407,7 +407,7 @@
         if(now_month==0){
             max_year =cur_date.getFullYear()-1;
             max_month = "12";
-            now_month = now_month+1;
+            now_month ="0"+(now_month+1);
         }else{
             max_month = now_month;
             now_month = now_month+1;
