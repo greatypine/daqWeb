@@ -141,6 +141,8 @@ var showPageContent = function (pageStatusInfo) {
     getOpenCardUser(pageStatusInfo);
     //查询当月毛利
     showsumofcurmonthprofit(pageStatusInfo);
+    //查询去年毛利(从2018年10月开始统计)
+    showsumoflastYearprofit(pageStatusInfo);
     //查询昨日毛利
     showsumofYesterdayprofit(pageStatusInfo);
     getDailyData();
@@ -1884,7 +1886,10 @@ var getHistoryData = function (pageStatusInfo) {
 		                            if (data.result) {
 		                            	var resultJson= JSON.parse(data.data);
 		                            	historyDataFromServer['year_gmv_sum'] = resultJson.year_gmv_sum[0].year_sum_gmv;
-		                            	historyDataFromServer['year_sum_order'] = resultJson.year_gmv_sum[0].year_sum_order;
+		                            	//historyDataFromServer['year_sum_order'] = resultJson.year_gmv_sum[0].year_sum_order;
+		                            	historyDataFromServer['year_last_gmv_sum'] = resultJson.year_last_gmv_sum[0].year_sum_gmv;
+		                            	historyDataFromServer['year_last_year_customer_count'] = resultJson.year_last_year_customer_count[0].customer_count;
+		                            	historyDataFromServer['year_last_year_order_count'] = resultJson.year_last_year_order_count.year_order_count;
 		                         	}
 		                         }
 		                         ,false);
@@ -1907,14 +1912,20 @@ var showHistoryData = function (historyData) {
     //$("#tradesumoflastmonthOrderHid").html(parseInt(historyData.last_order_count==null?'0':historyData.last_order_count));
     $("#tradesumofyearHid").html(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum));
     */
-    $("#tradesumOrderofyearHid").html(parseInt(historyData.year_sum_order==null?'0':historyData.year_sum_order));
+    //$("#tradesumOrderofyearHid").html(parseInt(historyData.year_sum_order==null?'0':historyData.year_sum_order));
     $("#tradesumofhistoryCustmomerHid").html(parseInt(historyData.history_customer_count));
     $("#tradesumofhistoryOrderHid").html(parseInt(historyData.history_order_count==null?'0':historyData.history_order_count));
     $("#tradesumofmonthOrderHid").html(parseInt(historyData.month_order_count==null?'0':historyData.month_order_count));
     $("#tradesumofmonthCustmomerHid").html(parseInt(historyData.customer_count));
     $("#tradesumofcurmonths").html(changeMoney(parseInt(historyData.curMonthTurnover)));
+    //右上角当月营业额
+    $("#tradesumofmonth").html(changeMoney(parseInt(historyData.curMonthTurnover)));
     $("#tradesumofCurYears").html(changeMoney(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum)));
-    $("#tradesumofhistorys").html(changeMoney(parseInt(historyData.historyTurnover)+(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum))));
+    $("#tradesumofLastYears").html(changeMoney(parseInt(historyData.year_last_gmv_sum==null?'0':historyData.year_last_gmv_sum)));
+    $("#tradesumoflastYearCustmomer").html(historyData.year_last_year_customer_count==null?'0':historyData.year_last_year_customer_count);
+    $("#tradesumOrderofLastyear").html(historyData.year_last_year_order_count==null?'0':historyData.year_last_year_order_count);
+    $("#tradesumofhistorys").html(changeMoney(parseInt(historyData.historyTurnover)));
+    $("#tradesumofhistoryright").html(changeMoney(parseInt(historyData.historyTurnover)));
 };
 // 获取历史数据
 var getOpenCardUser = function (pageStatusInfo) {
@@ -1954,8 +1965,10 @@ var getOpenCardUser = function (pageStatusInfo) {
 var showOpenCardUser = function (openCardData) {
 	$("#openCardUserMonthcountHid").html(openCardData['newMemberCount']);
 	$("#openCardUserHistorycountHid").html(openCardData['historyCount']);
+	$("#openCardUserLastYearcountHid").html(openCardData['yearCount']);
 	$("#openCardUserMonthcount").html(openCardData['newMemberCount']);
 	$("#openCardUserHistorycount").html(openCardData['historyCount']);
+	$("#openCardUserLastYearcount").html(openCardData['yearCount']);
 };
 var getLastMonthOrderCustomerCount = function(pageStatusInfo){
 	var cacheKey = CACHE_HEADER_CUSTOMER_COUNT_DATA + pageStatusInfo.getCacheKey();
@@ -3043,10 +3056,10 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     var max = Math.max.apply(null, data);
     var min = Math.min.apply(null, data);
     var average = (max - min)/listcount;
-    if(0<average<=0.2){
+    if(average>0&&average<=0.2){
     	average = average*1.5;
     }else if(0.2<average&&average<1){
-    	average = average*0.35;
+    	average = average*0.55;
     }else if(average>=1&&average<=10){
     	average = average*0.18;
     }else if(average>10&&average<=100){
@@ -4139,7 +4152,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 			turnoverCustomerOrderOption.series[2].name = pageStatusInfo.provinceName;
 			selected[pageStatusInfo.provinceName]=true;
 	    }
-	    data7 = data1;
+	    data7 = [].concat(data1);
 	    if(data7.length>0){
 	    	turnoverCustomerOrderOption.series[3].data = data7.reverse();
 	    	var textStyle = new Object();
@@ -4297,7 +4310,7 @@ var getDailyData = function(){
   					var tradesumoflastmonthOrder = $("#tradesumoflastmonthOrderHid").text();//上月今天订单量
   					var openCardUserMonthcountHid = $("#openCardUserMonthcountHid").text();
 					var openCardUserHistorycountHid = $("#openCardUserHistorycountHid").text();
-					var tradesumOrderofyearHid_ = $("#tradesumOrderofyearHid").text();//当年成交订单量
+					//var tradesumOrderofyearHid_ = $("#tradesumOrderofyearHid").text();//当年成交订单量
   					//var tradesumofyear = $("#tradesumofyearHid").text();//上月订单
   					//$("#tradesumofcurmonths").html(changeMoney(parseInt(tradesumofcurmonth)+parseInt(totalprice)));
   					//$("#tradesumofhistorys").html(changeMoney(parseInt(tradesumofhistory)+parseInt(totalprice)));
@@ -4305,7 +4318,7 @@ var getDailyData = function(){
   					$("#tradesumofhistoryCustmomer").html(parseInt(tradesumofcustomerHistory)+parseInt(daily_user_count));
   					//$("#tradesumofhistoryCustmomer").html(parseInt(1630694));
   					$("#tradesumofmonthOrder").html(parseInt(tradesumofmonthOrder)+parseInt(daily_order_count));
-  					$("#tradesumofhistoryOrder").html(parseInt(tradesumofhistoryOrder)+parseInt(tradesumOrderofyearHid_)+parseInt(daily_order_count));
+  					$("#tradesumofhistoryOrder").html(parseInt(tradesumofhistoryOrder)+parseInt(daily_order_count));
   					//$("#openCardUserMonthcount").html(openCardUserMonthcountHid);
   					//$("#openCardUserHistorycount").html(openCardUserHistorycountHid);
   					var order_count_rate;
@@ -6049,6 +6062,7 @@ var initClick = function(){
         window.open(url);
     });
     $("#gmv_rank_more").on('click',function(){
+    	/*
     	var role = curr_user.usergroup.code;
 	   var url = "";
 	   var target=pageStatusInfo.targets;
@@ -6058,6 +6072,8 @@ var initClick = function(){
 	  	 url = "index_K.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
 	   }
 	   window.open(url,"index_K");
+	   */
+	   goToProfitStat();
     });
     $("#net_more").on('click',function(){
         var url = "index_city_net.html";
@@ -6281,13 +6297,15 @@ function showMoreSummaryStatistics(){
 	    $("#info_head_dl").hide();
 	  });
 	  $(".info_bottom").mouseover(function(){
-	    $(this).css('width','50%');
+	    $(this).css('width','65%');
 	    $(this).find(".info_bottom_left").show();
 	    $(this).find(".info_bottom_dl").removeClass("col-sm-6").addClass("col-sm-3");
+	    $(this).find(".info_bottom_dl").addClass("info_bottom_dl2");
 	  });
 	  $(".info_bottom").mouseleave(function(){
 	    $(this).css('width','25%');
 	    $(this).find(".info_bottom_right").removeClass("col-sm-3").addClass("col-sm-6");
+	    $(this).find(".info_bottom_right").removeClass("info_bottom_dl2");
 	    $(this).find(".info_bottom_left").hide();
 	  });
 }
@@ -6460,6 +6478,12 @@ function showTooltip5(){
 function hideTooltip5(){
 	$("#attention5").hide();
 }
+function showTooltip6(){
+	$("#attention6").show();
+}
+function hideTooltip6(){
+	$("#attention6").hide();
+}
 function getScreenWidth(){
 /*
   var screenWidth = screen.width;
@@ -6485,7 +6509,7 @@ function showsumofcurmonthprofit(pageStatusInfo){
 	        if (data.result) {
 	            var resultJson = JSON.parse(data.data);
 	            var jData = JSON.parse(resultJson.gmv)[0];
-	            var real_profit = (jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun).toFixed(2);
+	            var real_profit = ((jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun+jData.gayy_subsidy - jData.return_gayy_subsidy)*0.8).toFixed(2);
 	            
 	            order_month_profit = real_profit;
 	            order_month_profit = order_month_profit+"";
@@ -6495,6 +6519,30 @@ function showsumofcurmonthprofit(pageStatusInfo){
 		$("#tradesumofcurmonthsprofit").html(changeMoneyByDigit(order_month_profit,2));
     });
     return order_month_profit;
+}
+function showsumoflastYearprofit(pageStatusInfo){
+	var order_year_profit;
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "queryYearprofit",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            var jData = JSON.parse(resultJson.gmv)[0];
+	            var real_profit = ((jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun+jData.gayy_subsidy - jData.return_gayy_subsidy)*0.8).toFixed(2);
+	            
+	            order_year_profit = real_profit;
+	            order_year_profit = order_year_profit+"";
+	        }else{
+	        	order_year_profit = "0";
+	        }
+		$("#tradesumofLastYearsprofit").html(changeMoneyByDigit(order_year_profit,2));
+    });
+    return order_year_profit;
 }
 function showsumofYesterdayprofit(pageStatusInfo){
 	var order_yesterday_profit;
@@ -6511,7 +6559,7 @@ function showsumofYesterdayprofit(pageStatusInfo){
 	            var jData = JSON.parse(resultJson.gmv)[0];
 	            var real_profit;
 	            if(typeof(jData.total_profit)!="undefined"){
-		            real_profit = (jData.total_profit - jData.return_profit - jData.order_fee).toFixed(2);
+		            real_profit = ((jData.total_profit - jData.return_profit - jData.order_fee+jData.gayy_subsidy - jData.return_gayy_subsidy)*0.8).toFixed(2);
 		            
 		            order_yesterday_profit = real_profit;
 		            order_yesterday_profit = order_yesterday_profit+"";

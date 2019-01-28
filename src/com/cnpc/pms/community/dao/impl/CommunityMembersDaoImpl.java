@@ -9,6 +9,7 @@ import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
+import com.cnpc.pms.base.file.comm.utils.DateUtil;
 import com.cnpc.pms.community.dao.CommunityMembersDao;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 
@@ -68,7 +69,53 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 		}
 		return lst_result;
 	}
-
+	@Override
+	public List<Map<String, Object>> getNewMembersLastYearCount(DynamicDto dd) {
+		//查询新用户注册社员sql
+				String sql = "select count(*) as newCount from  df_user_member dum where 1=1 ";
+				String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+				String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+				String dateSql = "";
+				String isNewSql = "";
+				String expirySql = "";
+				String lastYearLastDay = DateUtil.findYearLastDay(-1);
+				dateSql = " and date_format(dum.opencard_time,'%Y')='"+dd.getYear()+"' ";
+				String zx = "no";
+				if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+					sql = "select count(*) as newCount from  df_user_member dum LEFT JOIN (select province_id,cityno,city_name from t_store t WHERE t.province_id IS NOT NULL GROUP BY cityno) ts ON LPAD(dum.regist_cityno,4,'0') = " +
+						"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name " +
+							"where ts.province_id='"+province_id+"' ";
+				}
+				if(city_id!=null&&city_id!=""){
+					sql = "select count(*) as newCount from  df_user_member dum LEFT JOIN (select province_id,cityno,city_name from t_store t WHERE t.province_id IS NOT NULL GROUP BY cityno) ts ON LPAD(dum.regist_cityno,4,'0') = " +
+						"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name " +
+							"where d.id='"+city_id+"' ";
+				}else if("yes".equals(zx)){
+					sql = "select count(*) as newCount from  df_user_member dum LEFT JOIN (select province_id,cityno,city_name from t_store t WHERE t.province_id IS NOT NULL GROUP BY cityno) ts ON LPAD(dum.regist_cityno,4,'0') = " +
+							"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name " +
+								"where d.id='"+province_id+"' ";
+				}
+				expirySql = " and date_format(dum.associator_expiry_date,'%Y-%m-%d') >= '"+lastYearLastDay+"' and dum.status = 1 ";
+				sql+=expirySql+isNewSql+dateSql;
+				List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+				try{
+					Query query = this.getHibernateTemplate().getSessionFactory()
+							.getCurrentSession().createSQLQuery(sql);
+					List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+					
+			        if(lst_data != null){
+			        	  for(Object obj : lst_data){
+			                  Map<String,Object> map_data = (Map<String,Object>)obj;
+			                  Map<String,Object> map_content = (Map<String,Object>)obj;
+			                  map_content.put("newCount",map_data.get("newCount"));
+			                  lst_result.add(map_content);
+			              }
+			        }
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				return lst_result;
+	}
 	@Override
 	public List<Map<String, Object>> getWeekMembersCount(DynamicDto dd) {
 		String sql = "SELECT count(*) AS newcount,DATE_FORMAT(dum.opencard_time,'%m-%d') AS crtime FROM df_user_member dum " +

@@ -60,6 +60,12 @@ public interface MassOrderItemManager extends IManager {
 	 */
 	public Map<String, Object> queryMonthprofit(DynamicDto dd);
 	/**
+	 * 查询去年毛利
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryYearprofit(DynamicDto dd);
+	/**
 	 * 查询昨日毛利
 	 * @param dd
 	 * @return

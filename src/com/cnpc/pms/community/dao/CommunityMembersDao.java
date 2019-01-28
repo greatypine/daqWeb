@@ -70,4 +70,10 @@ public interface CommunityMembersDao extends IDAO {
 	 * @return
 	 */
 	public List<Map<String, Object>> queryTwoTwoOneStoreCount(DynamicDto dynamicDto);
+	/**
+	 * 查询去年新开社员总量
+	 * @param dynamicDto
+	 * @return
+	 */
+	public List<Map<String, Object>> getNewMembersLastYearCount(DynamicDto dynamicDto);
 }

@@ -29,11 +29,17 @@ public class CommunityMembersManagerImpl extends BizBaseCommonManager implements
 		dynamicDto.setYear(calendar.get(Calendar.YEAR));
 		dynamicDto.setMonth(calendar.get(Calendar.MONTH)+1);
 		Map<String,Object> result = new HashMap<String,Object>();
+		DynamicDto dd2 = new DynamicDto();
+		dd2.setCityId(dynamicDto.getCityId());
+		dd2.setProvinceId(dynamicDto.getProvinceId());
+		dd2.setYear(Integer.parseInt(com.cnpc.pms.base.file.comm.utils.DateUtil.findYearByIndex(-1)));
 		CommunityMembersDao communityMembersDao = (CommunityMembersDao)SpringHelper.getBean(CommunityMembersDao.class.getName());
 		List<Map<String, Object>> newCmCountList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> lastYearCountList = new ArrayList<Map<String,Object>>();
 		List<Map<String, Object>> historyCountList = new ArrayList<Map<String,Object>>();
 		newCmCountList =communityMembersDao.getNewMembersCount(dynamicDto,"0");//查询新开社员总量
 		historyCountList =communityMembersDao.getNewMembersCount(dynamicDto,"1");//查询历史新开社员总量
+		lastYearCountList =communityMembersDao.getNewMembersLastYearCount(dd2);//查询去年新开社员总量
 		if(newCmCountList!=null&&newCmCountList.size()>0){
 			result.put("newMemberCount", newCmCountList.get(0).get("newCount"));
 		}else {
@@ -43,6 +49,11 @@ public class CommunityMembersManagerImpl extends BizBaseCommonManager implements
 			result.put("historyCount", historyCountList.get(0).get("newCount"));
 		}else {
 			result.put("historyCount", "0");
+		}
+		if(lastYearCountList!=null&&lastYearCountList.size()>0){
+			result.put("yearCount", lastYearCountList.get(0).get("newCount"));
+		}else {
+			result.put("yearCount", "0");
 		}
 		return result;
 	}

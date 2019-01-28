@@ -478,15 +478,15 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	@Override
 	public Map<String, Object> queryMonthprofit(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
 		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
-		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,"
-		+ "sum(ifnull(dbaosun.count_money, 0)) AS baosun from ( "
-		+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
-		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
-		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
-		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
-		+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
-		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
-		+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' ";
+				+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,"
+				+ "sum(ifnull(dbaosun.count_money, 0)) AS baosun,sum(ifnull(aa.gayy_subsidy, 0)) AS gayy_subsidy,sum(ifnull(dd.return_gayy_subsidy, 0)) AS return_gayy_subsidy from ( "
+				+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
+				+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
+				+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
+				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' and dc.name not like '%运营管理中心%' ";
 		String beginDate = dynamicDto.getBeginDate().substring(0, dynamicDto.getBeginDate().lastIndexOf("-"));
 		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
 			sql = sql + "and strleft(dot.sign_time,7)='"+beginDate+"' ";
@@ -510,14 +510,64 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			}
 		}
 		sql = sql + "group by dot.store_city_code order by dot.store_city_code";
-
+		
 		//报损
 		sql = sql + ") aa left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(baosun.count_money),2),0) as count_money,ts.city_code,"
 				+ "baosun.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info baosun "
 				+ "join gemini.t_store ts  on baosun.store_code=ts.code where baosun.count_type='0' and baosun.count_month='"+beginDate+"' "
 				+ "group by ts.city_code,baosun.create_date ) aa having num=1) dbaosun on aa.store_city_code=dbaosun.city_code ";
 		//退款
-		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total where strleft(return_time,7)='"+beginDate+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
+		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy,store_city_code from df_mass_order_total where strleft(return_time,7)='"+beginDate+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
+		
+		
+		
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+		
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("gmv", list);
+		return map_result;
+	}
+	@Override
+	public Map<String, Object> queryYearprofit(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
+		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
+		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,"
+		+ "sum(ifnull(dbaosun.count_money, 0)) AS baosun,sum(ifnull(aa.gayy_subsidy, 0)) AS gayy_subsidy,sum(ifnull(dd.return_gayy_subsidy, 0)) AS return_gayy_subsidy from ( "
+		+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
+		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
+		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
+		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
+		+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
+		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+		+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' and dc.name not like '%运营管理中心%' ";
+		int year = dynamicDto.getYear();
+	    sql = sql + "and strleft(dot.sign_time,4)='"+year+"' and  strleft(dot.sign_time,7) >= '2018-10' ";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			sql = sql + " and dot.store_city_code='"+cityNo+"' ";
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			sql = sql + " and dot.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			Map<String,Object> position_obj = queryPlatformidByCode(dynamicDto.getStoreNo());
+			if (position_obj != null) {
+				sql = sql + " and (dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "' or dot.normal_store_id='"+(String) position_obj.get("platformid")+"')";
+			}else{
+				sql = sql + " and dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "'";
+			}
+		}
+		sql = sql + "group by dot.store_city_code order by dot.store_city_code";
+
+		//报损
+		sql = sql + ") aa left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(baosun.count_money),2),0) as count_money,ts.city_code,"
+				+ "baosun.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info baosun "
+				+ "join gemini.t_store ts  on baosun.store_code=ts.code where baosun.count_type='0' and strleft(baosun.count_month,4)='"+year+"' and strleft(baosun.count_month,7) >= '2018-10' "
+				+ "group by ts.city_code,baosun.create_date ) aa having num=1) dbaosun on aa.store_city_code=dbaosun.city_code ";
+		//退款
+		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy,store_city_code from df_mass_order_total where strleft(return_time,4)='"+year+"' and  strleft(return_time,7) >= '2018-10'  group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
 
 
 
@@ -530,14 +580,14 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	@Override
 	public Map<String, Object> queryYesterdayprofit(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
 		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
-		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit"
+		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,sum(ifnull(aa.gayy_subsidy, 0)) AS gayy_subsidy,sum(ifnull(dd.return_gayy_subsidy, 0)) AS return_gayy_subsidy "
 		+ " from (select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
 		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
 		+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
-		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
-		+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' ";
+		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,ifnull(dround (sum(dot.gayy_subsidy), 2),0) AS gayy_subsidy from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+		+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' and dc.name not like '%运营管理中心%' ";
 		String beginDate = dynamicDto.getBeginDate();
 		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
 			sql = sql + "and strleft(dot.sign_time,10)='"+beginDate+"' ";
@@ -564,7 +614,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 
 		//以日为单位不减报损和盘亏
 		//退款
-		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total where strleft(return_time,10)='"+beginDate+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,ifnull(dround (sum(gayy_subsidy), 2),0) AS return_gayy_subsidy,store_city_code from df_mass_order_total where strleft(return_time,10)='"+beginDate+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
 
 
 
@@ -1336,5 +1386,98 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		map_result.put("member", list);
 		return map_result;
+	}
+	@Override
+	public List<Map<String, Object>> queryLastYearCustomerCount(DynamicDto dd) {
+		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+		String provinceStr = "";
+		String cityStr = "";
+		String zx = "no";
+		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+			provinceStr+=" AND ds_cus.province_id='"+province_id+"' ";
+		}
+		if(city_id!=null&&city_id!=""){
+			cityStr+=" and ds_cus.city_id='"+city_id+"' ";
+		}else if("yes".equals(zx)){
+			cityStr+=" and ds_cus.city_id='"+province_id+"' ";
+		}
+		String yearStr = String.valueOf(dd.getYear());
+		String sql = "SELECT SUM(ds_cus.pay_count) AS  customer_count FROM  ds_cusum_month_city ds_cus " +
+				"LEFT JOIN t_dist_citycode d ON d.id = ds_cus.city_id WHERE 1 = 1 AND " +
+				"left(ds_cus.order_ym,4)='"+yearStr+"'"+ cityStr+provinceStr;
+		
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<?> lst_data = query
+					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if(lst_data != null){
+				for(Object obj : lst_data){
+					Map<String,Object> map_data = (Map<String,Object>)obj;
+					Map<String,Object> map_content = (Map<String,Object>)obj;
+					if(map_data.get("customer_count")==null){
+						map_content.put("customer_count",0);
+					}else{
+						map_content.put("customer_count",map_data.get("customer_count"));
+					}
+					lst_result.add(map_content);
+				}
+			}
+		}catch (Exception e){
+            e.printStackTrace();
+        }
+		return lst_result;
+	}
+	@Override
+	public Map<String, Object> queryYearOrderCount(DynamicDto dynamicDto) {
+		String province_id = dynamicDto.getProvinceId()==null?"":String.valueOf(dynamicDto.getProvinceId());
+		String city_id = dynamicDto.getCityId()==null?"":String.valueOf(dynamicDto.getCityId());
+		String provinceStr = "";
+		String cityStr = "";
+		String zx = "no";
+		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+			provinceStr+=" AND ts.province_id='"+province_id+"' ";
+		}
+		if(city_id!=null&&city_id!=""){
+			cityStr+=" and d.id='"+city_id+"' ";
+		}else if("yes".equals(zx)){
+			cityStr+=" and d.id='"+province_id+"' ";
+		}
+		String sql ="select ifnull(sum(order_amount),0) as order_amount,ifnull(sum(order_count),0) as order_count from ds_ope_gmv_store_month dst "+
+				"left join t_store ts on (dst.storeno = ts.storeno) left join t_dist_citycode d on d.cityname=ts.city_name "+
+				" where dst.store_name not like '%测试%' and year ="+dynamicDto.getYear()+" "+
+				  provinceStr + cityStr ;
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		Map<String, Object> resuMap = new HashMap<String,Object>();
+		resuMap.put("year_order_count",Double.valueOf(String.valueOf(lst_data.get(0).get("order_count"))));
+		return resuMap;
+	}
+	@Override
+	public Map<String, Object> queryOrderAmountAfter(DynamicDto dynamicDto) {
+		String province_id = dynamicDto.getProvinceId()==null?"":String.valueOf(dynamicDto.getProvinceId());
+		String city_id = dynamicDto.getCityId()==null?"":String.valueOf(dynamicDto.getCityId());
+		String provinceStr = "";
+		String cityStr = "";
+		String zx = "no";
+		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+			provinceStr+=" AND ts.province_id='"+province_id+"' ";
+		}
+		if(city_id!=null&&city_id!=""){
+			cityStr+=" and d.id='"+city_id+"' ";
+		}else if("yes".equals(zx)){
+			cityStr+=" and d.id='"+province_id+"' ";
+		}
+		String sql ="select ifnull(sum(order_amount),0) as order_amount,ifnull(sum(order_count),0) as order_count from ds_ope_gmv_store_month dst "+
+				"left join t_store ts on (dst.storeno = ts.storeno) left join t_dist_citycode d on d.cityname=ts.city_name "+
+				" where dst.store_name not like '%测试%' "+
+				  provinceStr + cityStr ;
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		Map<String, Object> resuMap = new HashMap<String,Object>();
+		resuMap.put("order_count",Integer.parseInt(String.valueOf(lst_data.get(0).get("order_count"))));
+		resuMap.put("order_amount",Double.valueOf(String.valueOf(lst_data.get(0).get("order_amount"))));
+		return resuMap;
 	}
 }
