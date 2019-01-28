@@ -86,6 +86,7 @@
     .info_bottom i{font-size: 30px;}
     .info_bottom .col-sm-6{margin-bottom: 20px;}
     .info_bottom_dl{min-height:90px;}
+    .info_bottom_dl2{min-height:90px;width: 20%}
     
     .swiper-container{height: 650px; width: 90%; margin: 0 auto;}
     .swiper-button-next, .swiper-button-prev{z-index: 10000; opacity: 0.1;outline:none;}
@@ -149,6 +150,7 @@
     
     .gaugetb1{color: #efefef;}
     .gaugetb5{color: #00ffe6}
+    .gaugetb6{color: #00c0ef}
     .gaugetb1 p{font-size: 26px; font-weight: bold;}
     .gaugetb1 .col-sm-4:nth-child(1){color: #ff002f;}
     .gaugetb1 .col-sm-4:nth-child(2){color: #ff6600;}

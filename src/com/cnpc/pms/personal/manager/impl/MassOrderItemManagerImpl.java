@@ -234,6 +234,33 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		return result;
 	}
 	@Override
+	public Map<String, Object> queryYearprofit(DynamicDto dd) {
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		String year = com.cnpc.pms.base.file.comm.utils.DateUtil.findYearByIndex(-1);
+		dd.setYear(Integer.parseInt(year));
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		if(city_id!=null){
+			cityNO = storeDao.getCityNOOfCityById(city_id);
+		}
+		if(province_id!=null&&province_id!=""){
+			provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+		}
+		Map<String,Object> dailyprofitMap = null;
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			dailyprofitMap = massOrderItemDao.queryYearprofit(dd,cityNO,provinceNO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String gmv = this.getMonthprofitData(dd,dd.getMonth(),dailyprofitMap);
+		result.put("gmv", gmv);
+		return result;
+	}
+	@Override
 	public Map<String, Object> queryYesterdayprofit(DynamicDto dd) {
 		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
 		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
@@ -274,6 +301,8 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 			jo.put("baosun", orderProfitList.get(0).get("baosun"));
 			jo.put("pankui", orderProfitList.get(0).get("pankui"));
 			jo.put("platform_profit", orderProfitList.get(0).get("platform_profit"));
+			jo.put("gayy_subsidy", orderProfitList.get(0).get("gayy_subsidy"));
+			jo.put("return_gayy_subsidy", orderProfitList.get(0).get("return_gayy_subsidy"));
 		}else{
 			jo.put("ims_profit", 0);
 			jo.put("return_profit", 0);
@@ -282,6 +311,8 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 			jo.put("baosun", 0);
 			jo.put("pankui", 0);
 			jo.put("platform_profit", 0);
+			jo.put("gayy_subsidy", 0);
+			jo.put("return_gayy_subsidy", 0);
 		}
 		json.put(jo);
 		return json.toString();
@@ -296,12 +327,16 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 			jo.put("order_fee", orderProfitList.get(0).get("order_fee"));
 			jo.put("total_profit", orderProfitList.get(0).get("total_profit"));
 			jo.put("platform_profit", orderProfitList.get(0).get("platform_profit"));
+			jo.put("gayy_subsidy", orderProfitList.get(0).get("gayy_subsidy"));
+			jo.put("return_gayy_subsidy", orderProfitList.get(0).get("return_gayy_subsidy"));
 		}else{
 			jo.put("ims_profit", 0);
 			jo.put("return_profit", 0);
 			jo.put("order_fee", 0);
 			jo.put("total_profit", 0);
 			jo.put("platform_profit", 0);
+			jo.put("gayy_subsidy", 0);
+			jo.put("return_gayy_subsidy", 0);
 		}
 		json.put(jo);
 		return json.toString();

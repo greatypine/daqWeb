@@ -26,6 +26,7 @@ import com.cnpc.pms.employeeMoreInfo.entity.EmployeeMoreInfo;
 import com.cnpc.pms.employeeMoreInfo.manager.EmployeeMoreInfoManager;
 import com.cnpc.pms.inter.dao.InterDao;
 import com.cnpc.pms.personal.dao.ExpressDao;
+import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.entity.DsAbnormalOrder;
 import com.cnpc.pms.personal.entity.Humanresources;
@@ -4687,13 +4688,19 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	public Map<String, Object> queryTradeSumOfHistory(DynamicDto dd) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
 		Calendar a=Calendar.getInstance();
 		int month = a.get(Calendar.MONTH)+1;
 		String beginDate = a.get(Calendar.YEAR)+"-"+(month<10?("0"+month):month)+"-"+(a.get(Calendar.DATE)<10?("0"+a.get(Calendar.DATE)):a.get(Calendar.DATE));   
 		String endDate = a.get(Calendar.YEAR)+"-"+(month<10?("0"+month):month)+"-"+(a.get(Calendar.DATE)<10?("0"+a.get(Calendar.DATE)):a.get(Calendar.DATE));
 		dd.setBeginDate(beginDate);
 		dd.setEndDate(endDate);
+		int totalOrderCount = 0;
+		double totalAmount = 0;
+		//2018年以前的营业额和订单量
 		result = dynamicDao.queryTradeSumOfHistory(dd);
+		//查询2018年以后的营业额和订单量
+		Map<String, Object> amountAndOrder = massOrderItemDao.queryOrderAmountAfter(dd);
 		//查询历史用户量
 		List<Map<String, Object>> customerHistoryCountList = new ArrayList<Map<String,Object>>();
 		if(dd.getCityId()==null&&dd.getProvinceId()==null){//总部
@@ -4703,7 +4710,21 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		}
 		if (result.isEmpty()) {
 			result.put("history_order_amount", "0");
+			totalOrderCount+=0;
+			totalAmount+=0;
+		}else{
+			totalOrderCount+=Integer.parseInt(String.valueOf(result.get("history_order_count")));
+			totalAmount+=Double.valueOf(String.valueOf(result.get("history_order_amount")));
 		}
+		if(amountAndOrder.isEmpty()){
+			totalOrderCount+=0;
+			totalAmount+=0;
+		}else{
+			totalOrderCount+=Integer.parseInt(String.valueOf(amountAndOrder.get("order_count")));
+			totalAmount+=Double.valueOf(String.valueOf(amountAndOrder.get("order_amount")));
+		}
+		result.put("history_order_amount", totalAmount);
+		result.put("history_order_count", totalOrderCount);
 		if(customerHistoryCountList!=null&&customerHistoryCountList.size()>0){
 			result.put("history_customer_count", customerHistoryCountList.get(0).get("history_customer_count"));
 		}else{
@@ -5451,11 +5472,24 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	public Map<String, Object> getSumOfCurYear(DynamicDto dd) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
 		String city_id = String.valueOf(dd.getCityId());
 		String province_id = String.valueOf(dd.getProvinceId());
+		DynamicDto dd2 = new DynamicDto();
+		dd2.setCityId(dd.getCityId());
+		dd2.setProvinceId(dd.getProvinceId());
+		dd2.setYear(Integer.parseInt(com.cnpc.pms.base.file.comm.utils.DateUtil.findYearByIndex(-1)));
 		//查询某年营业额
 		List<Map<String, Object>> sumYearGMVList = dynamicDao.queryYearSumGMV(dd,city_id,province_id,"0");
+		//去年营业额
+		List<Map<String, Object>> sumLastYearGMVList = dynamicDao.queryYearSumGMV(dd2,city_id,province_id,"0");
+		//去年用户量
+		List<Map<String, Object>> customerMonthCountList = massOrderItemDao.queryLastYearCustomerCount(dd2);
+		Map<String, Object> orderLastYearCountList = massOrderItemDao.queryYearOrderCount(dd2);
 		result.put("year_gmv_sum", sumYearGMVList);
+		result.put("year_last_gmv_sum", sumLastYearGMVList);
+		result.put("year_last_year_customer_count", customerMonthCountList);
+		result.put("year_last_year_order_count", orderLastYearCountList);
 		return result;
 	}
 	/** 

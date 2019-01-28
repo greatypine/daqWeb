@@ -62,16 +62,45 @@ public final class DateUtil {
 	 * 得到当前日期 格式为：2009-08-01
 	 */
 	public static String curDate() {
-
+		
 		// 分别根据日历时间提取当前年月日组合成字符串
 		Calendar localTime = Calendar.getInstance();
-
+		
 		int x = localTime.get(Calendar.YEAR);
 		int y = localTime.get(Calendar.MONTH) + 1;
 		int z = localTime.get(Calendar.DAY_OF_MONTH);
 		return x + "-" + y + "-" + z;
 	}
-
+	/**
+	 * 得到去年/前年/明年等年份,根据index来判断：格式为2009-08-01
+	 * index必须为整数,负数为当前年前几年，正数为当前年后几年
+	 */
+	public static String findYearByIndex(int index) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.YEAR, index);
+		Date y = c.getTime();
+		String year = format.format(y);
+		return year.substring(0, 4);
+	}
+	/**
+	 * 获得某年最后一天的日期
+	 * index必须为整数,负数为当前年前几年，正数为当前年后几年
+	 * @param index
+	 * @return
+	 */
+	public static String findYearLastDay(int index) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();  
+        calendar.clear();  
+        calendar.set(Calendar.YEAR, index);  
+        calendar.roll(Calendar.DAY_OF_YEAR, -1);  
+        Date currYear = calendar.getTime();  
+        String date = format.format(currYear);
+		return date.substring(0, 10);  
+	}
+	
 	/**
 	 * 给定的日期加一个月 格式为：2009-08-01
 	 */

@@ -69,6 +69,12 @@ public interface MassOrderItemDao extends IDAO{
 	 */
 	public Map<String, Object> queryMonthprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 	/**
+	 * 查询去年毛利(全国/省/市切换)
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryYearprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
+	/**
 	 * 查询近七日毛利走势图
 	 * @author zhangli
 	 * 2018年10月21日
@@ -211,4 +217,22 @@ public interface MassOrderItemDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> getStoreMemberIntervalDay(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO,PageInfo pageInfo);
+	/**
+	 * 查询去年成交用户量
+	 * @param dd
+	 * @return
+	 */
+	public List<Map<String, Object>> queryLastYearCustomerCount(DynamicDto dd);
+	/**
+	 * 查询某年订单量
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> queryYearOrderCount(DynamicDto dynamicDto);
+	/**
+	 * 查询2018年以后的营业额
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> queryOrderAmountAfter(DynamicDto dynamicDto);
 }
