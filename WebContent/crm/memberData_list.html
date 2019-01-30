@@ -439,12 +439,15 @@
             }
         });
 
-        //从社员邀请统计页跳转携带开卡时间
+        //从社员邀请统计页/合作社社员统计页跳转携带开卡时间
         if(time!="" && time!=null){
             $("#searchTime").val(time);
             $("#startOpenCardDate").val(time.split('-')[0]);
             $("#endOpenCardDate").val(time.split('-')[1]);
             $("#member_invite_code").val(inviteCode);
+            $("#store_id_manual").val(storeId);
+            $("#store_name_manual").val(storeName);
+            $("#citySelect").append('<option value="'+cityId+'">'+cityname+'</option>');
             search_auto_abnormalOrder(1);
         }
 
