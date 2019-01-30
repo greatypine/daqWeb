@@ -238,8 +238,8 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 		Long city_id = dd.getCityId();
 		String province_id = dd.getProvinceId();
-		String year = com.cnpc.pms.base.file.comm.utils.DateUtil.findYearByIndex(-1);
-		dd.setYear(Integer.parseInt(year));
+		//String year = com.cnpc.pms.base.file.comm.utils.DateUtil.findYearByIndex(-1);
+		dd.setYear(dd.getYear());
 		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
 		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
 		if(city_id!=null){

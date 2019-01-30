@@ -90,15 +90,16 @@ public final class DateUtil {
 	 * @param index
 	 * @return
 	 */
-	public static String findYearLastDay(int index) {
+	public static String findYearLastDay(int year) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();  
-        calendar.clear();  
-        calendar.set(Calendar.YEAR, index);  
-        calendar.roll(Calendar.DAY_OF_YEAR, -1);  
-        Date currYear = calendar.getTime();  
-        String date = format.format(currYear);
-		return date.substring(0, 10);  
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(Calendar.YEAR, year);
+		calendar.roll(Calendar.DAY_OF_YEAR, -1);
+		Date currYearLast = calendar.getTime();
+		String lastYearDay = format.format(currYearLast);
+		return lastYearDay;
+
 	}
 	
 	/**

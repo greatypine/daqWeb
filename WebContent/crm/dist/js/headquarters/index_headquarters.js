@@ -141,7 +141,7 @@ var showPageContent = function (pageStatusInfo) {
     getOpenCardUser(pageStatusInfo);
     //查询当月毛利
     showsumofcurmonthprofit(pageStatusInfo);
-    //查询去年毛利(从2018年10月开始统计)
+    //查询19年毛利
     showsumoflastYearprofit(pageStatusInfo);
     //查询昨日毛利
     showsumofYesterdayprofit(pageStatusInfo);
@@ -3059,7 +3059,7 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     if(average>0&&average<=0.2){
     	average = average*1.5;
     }else if(0.2<average&&average<1){
-    	average = average*0.35;
+    	average = average*0.30;
     }else if(average>=1&&average<=10){
     	average = average*0.18;
     }else if(average>10&&average<=100){
@@ -6509,7 +6509,7 @@ function showsumofcurmonthprofit(pageStatusInfo){
 	        if (data.result) {
 	            var resultJson = JSON.parse(data.data);
 	            var jData = JSON.parse(resultJson.gmv)[0];
-	            var real_profit = ((jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun+jData.gayy_subsidy - jData.return_gayy_subsidy)*0.8).toFixed(2);
+	            var real_profit = (jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun).toFixed(2);
 	            
 	            order_month_profit = real_profit;
 	            order_month_profit = order_month_profit+"";
@@ -6533,7 +6533,7 @@ function showsumoflastYearprofit(pageStatusInfo){
 	        if (data.result) {
 	            var resultJson = JSON.parse(data.data);
 	            var jData = JSON.parse(resultJson.gmv)[0];
-	            var real_profit = ((jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun+jData.gayy_subsidy - jData.return_gayy_subsidy)*0.8).toFixed(2);
+	            var real_profit = (jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun).toFixed(2);
 	            
 	            order_year_profit = real_profit;
 	            order_year_profit = order_year_profit+"";
@@ -6559,7 +6559,7 @@ function showsumofYesterdayprofit(pageStatusInfo){
 	            var jData = JSON.parse(resultJson.gmv)[0];
 	            var real_profit;
 	            if(typeof(jData.total_profit)!="undefined"){
-		            real_profit = ((jData.total_profit - jData.return_profit - jData.order_fee+jData.gayy_subsidy - jData.return_gayy_subsidy)*0.8).toFixed(2);
+		            real_profit = (jData.total_profit - jData.return_profit - jData.order_fee).toFixed(2);
 		            
 		            order_yesterday_profit = real_profit;
 		            order_yesterday_profit = order_yesterday_profit+"";
