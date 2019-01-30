@@ -78,7 +78,7 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 				String dateSql = "";
 				String isNewSql = "";
 				String expirySql = "";
-				String lastYearLastDay = DateUtil.findYearLastDay(-1);
+				//String lastYearLastDay = DateUtil.findYearLastDay(Integer.parseInt(DateUtil.findYearByIndex(-1)));
 				dateSql = " and date_format(dum.opencard_time,'%Y')='"+dd.getYear()+"' ";
 				String zx = "no";
 				if(province_id!=null&&province_id!=""&&"no".equals(zx)){
@@ -95,7 +95,7 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 							"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name " +
 								"where d.id='"+province_id+"' ";
 				}
-				expirySql = " and date_format(dum.associator_expiry_date,'%Y-%m-%d') >= '"+lastYearLastDay+"' and dum.status = 1 ";
+				//expirySql = " and date_format(dum.associator_expiry_date,'%Y-%m-%d') >= '"+lastYearLastDay+"' and dum.status = 1 ";
 				sql+=expirySql+isNewSql+dateSql;
 				List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 				try{

@@ -494,10 +494,10 @@
           <!--<div class="box-header h4 text-right" style="margin-bottom: -5px; margin-top:0;font-size: 12px;cursor: pointer;color: #747474" id="customer_analysis_more">更多</div>-->
           <div class="box-header h4 text-right" style="margin-bottom: -5px; margin-top:0;font-size: 12px;cursor: pointer;color: #747474"></div>
           <div class="box-body no-padding">
-            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin" onmouseover="showTooltip5();" onmouseout="hideTooltip5();">
-              <h4 class="gaugetb4">昨日毛利</h4>
-              <font id="attention5" style="color:#FFFFFF;font-size: 12px;position: absolute;top:-18px;z-index: 1000;display:none;left:10px">(销售收入-营销+优易补贴)*0.8</font>	
-              <div class="col-sm-8 no-padding gaugetb4" id="tradesumofyesprofit"></div>
+            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin" onmouseover="showTooltip4();" onmouseout="hideTooltip4();">
+              <h4 class="gaugetb4">当月毛利</h4>
+              <font id="attention4" style="color:#FFFFFF;font-size: 12px;position: absolute;top:-18px;z-index: 1000;display:none;left:10px">销售收入-营销-损耗</font>	
+              <div class="col-sm-8 no-padding gaugetb4" id="tradesumofcurmonthsprofit"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
               <h4 class="gaugetb2">当月新增社员</h4>
@@ -505,10 +505,10 @@
               <div class="col-sm-4 no-padding gaugetb2" id="openCardUserMonthcount"></div>
             </div>
             <div class="info_bottom_dl info_bottom_left pull-right no-margin" style="display: none;">
-              <h4 class="gaugetb5">当月成交单量</h4>
+              <h4 class="gaugetb6">当月成交单量</h4>
 			  <input type="hidden" id="tradesumofmonthOrderHid">
               <input type="hidden" id="tradesumoflastmonthOrderHid">
-              <div class="col-sm-4 no-padding gaugetb5" id="tradesumofmonthOrder"></div>
+              <div class="col-sm-4 no-padding gaugetb6" id="tradesumofmonthOrder"></div>
               <!-- <div class="col-sm-2 increase" id="sing_id4"><i class="fa fa-long-arrow-up" id="sign_4"></i></div>
               <div class="col-sm-5 no-padding text-center"><p class="increase" id="order_count_ratio"></p>环比</div> -->
             </div>
@@ -521,39 +521,39 @@
               <div class="col-sm-5 no-padding text-center"><p class="increase" id="customer_month_ratio"></p>环比</div> -->
             </div>
             <div class="info_bottom_dl info_bottom_left pull-right no-margin" style="display: none;">
-              <h4 class="gaugetb6">当月营业额</h4>
+              <h4 class="gaugetb5">当月营业额</h4>
 			  <input type="hidden" id="tradesumofmonthHid">
-              <div class="col-sm-8 no-padding gaugetb6" id="tradesumofmonth"></div>
+              <div class="col-sm-8 no-padding gaugetb5" id="tradesumofmonth"></div>
             </div>
-            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin" onmouseover="showTooltip4();" onmouseout="hideTooltip4();">
-              <h4 class="gaugetb4">当月毛利</h4>
-              <font id="attention4" style="color:#FFFFFF;font-size: 12px;position: absolute;top:-20px;z-index: 1000;display:none;left:10px">(销售收入-营销-损耗+优易补贴)*0.8</font>	
-              <div class="col-sm-8 no-padding gaugetb4" id="tradesumofcurmonthsprofit"></div>
+            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin" onmouseover="showTooltip6();" onmouseout="hideTooltip6();">
+              <h4 class="gaugetb4">19年毛利</h4>
+              <input type="hidden" id="tradesumofLastYearsprofitHid"/>
+			  <font id="attention6" style="color:#FFFFFF;font-size: 12px;position: absolute;top:-20px;z-index: 1000;display:none;left:10px">销售收入-营销-损耗</font>	
+              <div class="col-sm-8 no-padding gaugetb4" id="tradesumofLastYearsprofit"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
-              <h4 class="gaugetb2">去年累计社员</h4>
+              <h4 class="gaugetb2">18年累计社员</h4>
 			  <input type="hidden" id="openCardUserLastYearcountHid"/>
               <div class="col-sm-4 no-padding gaugetb2" id="openCardUserLastYearcount"></div>
             </div>
             <div class="info_bottom_dl info_bottom_left pull-right no-margin" style="display: none;">
-              <h4 class="gaugetb5">去年累计成交单量</h4>
+              <h4 class="gaugetb6">18年累计成交单量</h4>
 			  <input type="hidden" id="tradesumOrderofLastyearHid">
-              <div class="col-sm-4 no-padding gaugetb5" id="tradesumOrderofLastyear"></div>
+              <div class="col-sm-4 no-padding gaugetb6" id="tradesumOrderofLastyear"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
-              <h4 class="gaugetb3">去年累计消费用户</h4>
+              <h4 class="gaugetb3">18年累计消费用户</h4>
               <div class="col-sm-4 no-padding gaugetb3" id="tradesumoflastYearCustmomer"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-4 no-margin">
-              <h4 class="gaugetb6">去年营业额</h4>
+              <h4 class="gaugetb5">18年营业额</h4>
 			  <input type="hidden" id="tradesumofLastYearsHid">
-              <div class="col-sm-8 no-padding gaugetb6" id="tradesumofLastYears"></div>
+              <div class="col-sm-8 no-padding gaugetb5" id="tradesumofLastYears"></div>
             </div>
-            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin" onmouseover="showTooltip6();" onmouseout="hideTooltip6();">
-              <h4 class="gaugetb4">去年毛利</h4>
-              <input type="hidden" id="tradesumofLastYearsprofitHid"/>
-			  <font id="attention6" style="color:#FFFFFF;font-size: 12px;position: absolute;top:-32px;z-index: 1000;display:none;left:10px">(销售收入-营销-损耗+优易补贴)*0.8<br>毛利从2018-10-01开始统计</font>	
-              <div class="col-sm-8 no-padding gaugetb4" id="tradesumofLastYearsprofit"></div>
+            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin" onmouseover="showTooltip5();" onmouseout="hideTooltip5();">
+              <h4 class="gaugetb4">昨日毛利</h4>
+              <font id="attention5" style="color:#FFFFFF;font-size: 12px;position: absolute;top:-18px;z-index: 1000;display:none;left:10px">销售收入-营销</font>	
+              <div class="col-sm-8 no-padding gaugetb4" id="tradesumofyesprofit"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
                <h4 class="gaugetb2">历史累计社员</h4>
@@ -561,10 +561,10 @@
               <div class="col-sm-4 no-padding gaugetb2" id="openCardUserHistorycount"></div>
             </div>
             <div class="info_bottom_dl info_bottom_left pull-right no-margin" style="display: none;">
-              <h4 class="gaugetb5">历史累计成交单量</h4>
+              <h4 class="gaugetb6">历史累计成交单量</h4>
 			  <input type="hidden" id="tradesumofhistoryOrderHid">
 			  <input type="hidden" id="tradesumOrderofyearHid">
-              <div class="col-sm-4 no-padding gaugetb5" id="tradesumofhistoryOrder"></div>
+              <div class="col-sm-4 no-padding gaugetb6" id="tradesumofhistoryOrder"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
               <h4 class="gaugetb3">历史累计消费用户</h4>
@@ -572,9 +572,9 @@
               <div class="col-sm-4 no-padding gaugetb3" id="tradesumofhistoryCustmomer"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-4 no-margin">
-              <h4 class="gaugetb6">历史营业额</h4>
+              <h4 class="gaugetb5">历史营业额</h4>
 			  <input type="hidden" id="tradesumofhistoryrightHid"/>
-              <div class="col-sm-8 no-padding gaugetb6" id="tradesumofhistoryright"></div>
+              <div class="col-sm-8 no-padding gaugetb5" id="tradesumofhistoryright"></div>
             </div>
           </div>
         </div>
