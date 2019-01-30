@@ -3004,19 +3004,31 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				condition_sql = " where lpad(member.regist_cityno,4,'0') = '"+cityNo+"' ";
 			}
 			sql = "select ifnull(ts.storeno,'无') as storeno,ifnull(ts.name,'无') as name,ifnull(ts.city_name,'无') as city_name,sum(dutm.nowcount) as nowcount,sum(dutm.opencount) as opencount, " +
-					"sum(dutm.count199) as count199 from (select regist_storeid,regist_cityno, " +
+					"sum(dutm.count199) as count199, sum(dutm.axccount) as axccount,sum(dutm.cgkcount) as cgkcount,sum(dutm.dhmcount) as dhmcount,sum(dutm.tjhcount) as tjhcount," +
+					"(sum(dutm.nowcount) - sum(dutm.count199) - sum(dutm.axccount) - sum(dutm.cgkcount) - sum(dutm.dhmcount) - sum(dutm.tjhcount)) as othercount from (select regist_storeid,regist_cityno, " +
 					"SUM(case when member.associator_expiry_date>now() and  member.opencard_time is not null and member.status = 1 and member.opencard_time <= '"+dynamicDto.getEndDate()+" 23:59:59'  then 1 else 0 end) as opencount, " +
 					"SUM(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount, " +
-					"SUM(case when (member_type = 'associator_start_2' or member_type = 'yearCard' or member_type = 'yearCard-19') and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199 " +
+					"SUM(case when (member_type = 'associator_start_2' or member_type = 'yearCard' or member_type = 'yearCard-19') and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199, " +
+					"SUM(case when associator_mode = 'axc' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as axccount," +
+					"SUM(case when associator_mode like 'tjh%' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as tjhcount," +
+					"SUM(case when associator_mode = 'oneToTwo-19' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as cgkcount," +
+					"SUM(case when associator_mode like 'groupYearCard%' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as dhmcount," +
+					"SUM(case when (associator_mode is null or (associator_mode not in ('yearCard','yearCard-19','axc','oneToTwo-19') and associator_mode not like 'tjh%' and associator_mode not like 'groupYearCard%')) and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as othercount " +
 					"from df_user_member member "+condition_sql+" GROUP BY member.regist_storeid) dutm " +
 					"left join t_store ts ON (dutm.regist_storeid = ts.platformid) "+join_sql+" GROUP BY ts.storeno " +
 					"ORDER BY (case when ts.storeno is null then '9010C0130' else ts.storeno end),ts.storeno asc";
 		}else{
 			sql = "select ifnull(ts.storeno,'无') as storeno,ifnull(ts.name,'无') as name,ifnull(ts.city_name,'无') as city_name,dutm.nowcount as nowcount,dutm.opencount as opencount," +
-					"dutm.count199 as count199 from (select regist_storeid,regist_cityno," +
+					"dutm.count199 as count199,dutm.axccount,dutm.cgkcount,dutm.dhmcount,dutm.tjhcount," +
+					"(dutm.nowcount- dutm.count199 - dutm.axccount - dutm.cgkcount - dutm.dhmcount - dutm.tjhcount) as othercount from (select regist_storeid,regist_cityno," +
 					"SUM(case when member.associator_expiry_date>now() and  member.opencard_time is not null and member.status = 1 and member.opencard_time <= '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as opencount," +
 					"SUM(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount," +
-					"SUM(case when (member_type = 'associator_start_2' or member_type = 'yearCard' or member_type = 'yearCard-19') and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199 " +
+					"SUM(case when (member_type = 'associator_start_2' or member_type = 'yearCard' or member_type = 'yearCard-19') and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199," +
+					"SUM(case when associator_mode = 'axc' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as axccount," +
+					"SUM(case when associator_mode like 'tjh%' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as tjhcount," +
+					"SUM(case when associator_mode = 'oneToTwo-19' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as cgkcount," +
+					"SUM(case when associator_mode like 'groupYearCard%' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as dhmcount," +
+					"SUM(case when (associator_mode is null or (associator_mode not in ('yearCard','yearCard-19','axc','oneToTwo-19') and associator_mode not like 'tjh%' and associator_mode not like 'groupYearCard%')) and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as othercount " +
 					"from df_user_member member GROUP BY member.regist_storeid) dutm " +
 					"left join t_store ts ON (dutm.regist_storeid = ts.platformid) where ts.storeno = '"+dynamicDto.getStoreNo()+"' " +
 					"ORDER BY (case when ts.storeno is null then '9010C0130' else ts.storeno end),ts.storeno asc";
@@ -3056,18 +3068,31 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
 		String sql= "";
 		if(cityNo == null || "".equals(cityNo) ){
-			sql="select ifnull(city.cityname,'无') as city_name,sum(dutm.opencount) as opencount,sum(dutm.nowcount) as nowcount,sum(dutm.count199) as count199 from (select (case when regist_cityno = '' then null else regist_cityno end) as cityno," +
+			sql="select ifnull(city.cityname,'无') as city_name,sum(dutm.opencount) as opencount,sum(dutm.nowcount) as nowcount,sum(dutm.count199) as count199," +
+					"sum(dutm.axccount) as axccount,sum(dutm.cgkcount) as cgkcount,sum(dutm.dhmcount) as dhmcount,sum(dutm.tjhcount) as tjhcount," +
+					"(sum(dutm.nowcount) - sum(dutm.count199) - sum(dutm.axccount) - sum(dutm.cgkcount) - sum(dutm.dhmcount) - sum(dutm.tjhcount)) as othercount from (select (case when regist_cityno = '' then null else regist_cityno end) as cityno," +
 					"SUM(case when member.associator_expiry_date>now() and  member.opencard_time is not null and member.status = 1 and member.opencard_time <= '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as opencount," +
 					"SUM(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount," +
-					"SUM(case when (member_type = 'associator_start_2' or member_type = 'yearCard' or member_type = 'yearCard-19') and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199 " +
+					"SUM(case when (member_type = 'associator_start_2' or member_type = 'yearCard' or member_type = 'yearCard-19') and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199," +
+					"SUM(case when associator_mode = 'axc' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as axccount," +
+					"SUM(case when associator_mode like 'tjh%' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as tjhcount," +
+					"SUM(case when associator_mode = 'oneToTwo-19' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as cgkcount," +
+					"SUM(case when associator_mode like 'groupYearCard%' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as dhmcount," +
+					"SUM(case when (associator_mode is null or (associator_mode not in ('yearCard','yearCard-19','axc','oneToTwo-19') and associator_mode not like 'tjh%' and associator_mode not like 'groupYearCard%')) and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as othercount " +
 					"from df_user_member member GROUP BY cityno) dutm LEFT JOIN t_dist_citycode city ON (lpad(dutm.cityno,4,'0') = city.cityno) " +
 					"GROUP BY city_name ORDER BY (case when city.cityno is null then '9999' else city.cityno end),city.cityno";
 		}else{
-			sql="select ifnull(city.cityname,'无')  as city_name,dutm.opencount,dutm.nowcount,dutm.count199 from (select (case when regist_cityno = '' then null else regist_cityno end) as cityno," +
+			sql="select ifnull(city.cityname,'无')  as city_name,dutm.opencount,dutm.nowcount,dutm.count199,dutm.axccount," +
+					"dutm.cgkcount,dutm.dhmcount,dutm.tjhcount," +
+					"(dutm.nowcount- dutm.count199 - dutm.axccount - dutm.cgkcount - dutm.dhmcount - dutm.tjhcount) as othercount from (select (case when regist_cityno = '' then null else regist_cityno end) as cityno," +
 					"SUM(case when member.associator_expiry_date>now() and  member.opencard_time is not null and member.status = 1 and member.opencard_time <= '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as opencount," +
 					"SUM(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount," +
-					"SUM(case when (member_type = 'associator_start_2' or member_type = 'yearCard' or member_type = 'yearCard-19') and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199 " +
-					"from df_user_member member where member.status = 1 and lpad(member.regist_cityno,4,'0') = '"+cityNo+"') dutm LEFT JOIN t_dist_citycode city ON (lpad(dutm.cityno,4,'0') = city.cityno)";
+					"SUM(case when (member_type = 'associator_start_2' or member_type = 'yearCard' or member_type = 'yearCard-19') and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199," +
+					"SUM(case when associator_mode = 'axc' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as axccount," +
+					"SUM(case when associator_mode like 'tjh%' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as tjhcount," +
+					"SUM(case when associator_mode = 'oneToTwo-19' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as cgkcount," +
+					"SUM(case when associator_mode like 'groupYearCard%' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as dhmcount," +
+					"SUM(case when (associator_mode is null or (associator_mode not in ('yearCard','yearCard-19','axc','oneToTwo-19') and associator_mode not like 'tjh%' and associator_mode not like 'groupYearCard%')) and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as othercount " +					"from df_user_member member where member.status = 1 and lpad(member.regist_cityno,4,'0') = '"+cityNo+"') dutm LEFT JOIN t_dist_citycode city ON (lpad(dutm.cityno,4,'0') = city.cityno)";
 		}
 
 		Query query = this.getHibernateTemplate().getSessionFactory()

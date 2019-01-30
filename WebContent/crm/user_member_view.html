@@ -250,16 +250,21 @@
 	                  <table class="table table-striped">
 	                    <tbody id="tradeType_tbody">
 		                    <tr>
-		                      <th width="8%">城市</th>
-		                      <th width="10%">门店名称</th>
-		                      <th width="10%">门店编号</th>
-		                      <th width="12%">
-		                      	新增社员数
-		                      	<font id="showattention" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-	                  			<font id="attention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">包含畅购卡升级和199开卡</font>		 
-		                      </th>
-		                      <th width="12%">199新增开卡数</th>
-		                      <th width="12%">
+							  <th width="8%">城市</th>
+							  <th width="10%">门店名称</th>
+							  <th width="10%">门店编号</th>
+							  <th>安心存</th>
+							  <th>淘金汇</th>
+							  <th>畅购卡升级</th>
+							  <th>兑换码</th>
+							  <th width="12%">199付费社员数</th>
+							  <th>其他</th>
+							  <th width="12%">
+								新增社员数
+								<font id="showattention" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
+								<font id="attention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-25px;z-index: 1000;display:none;left:-10px">新增社员数=查询时间段内，安心存、淘金汇、<br/>畅购卡升级、兑换码、199付费社员数、其他的总和。</font>
+							  </th>
+							  <th width="12%">
 								  累计社员总数
 								  <label style="font-weight:normal;" id="query_store_info"></label>
 							  </th>
@@ -341,17 +346,22 @@
 	                  <table class="table table-striped">
 	                    <tbody id="tradeType_tbody_city">
 		                    <tr>
-		                      <th width="8%">城市</th>
-		                      <th width="12%">
-		                      	新增社员数
-		                      	<font id="showattentioncity" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-	                  			<font id="attentioncity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:125px">包含畅购卡升级和199开卡</font>		 
-		                      </th>
-		                      <th width="12%">199新增开卡数</th>
-		                      <th width="12%">
-								  累计社员总数
-								  <label style="font-weight:normal;" id="query_city_info"></label>
-							  </th>
+		                        <th width="8%">城市</th>
+								<th>安心存</th>
+								<th>淘金汇</th>
+								<th>畅购卡升级</th>
+								<th>兑换码</th>
+								<th width="12%">199付费社员数</th>
+								<th>其他</th>
+								<th width="12%">
+									新增社员数
+									<font id="showattentioncity" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
+									<font id="attentioncity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-25px;z-index: 1000;display:none;left:-10px">新增社员数=查询时间段内，安心存、淘金汇、<br/>畅购卡升级、兑换码、199付费社员数、其他的总和。</font>
+								</th>
+							    <th width="12%">
+								    累计社员总数
+								    <label style="font-weight:normal;" id="query_city_info"></label>
+							    </th>
 		                    </tr>
 	                    </tbody>
 	                  </table>
@@ -950,12 +960,22 @@ $('#store_name_try').keyup(function(event){
 	        		   infoStr += "<tr>"
 		                       +"<td>"+cityname+"</td>";
 					   if(cityname == '无'){
-                           infoStr += "<td>"+jData[i].nowcount+"</td>"
-						   +"<td>"+jData[i].count199+"</td>"
+                           infoStr += "<td>"+jData[i].axccount+"</td>"
+						   +"<td>"+jData[i].tjhcount+"</td>"
+						   +"<td>"+jData[i].cgkcount+"</td>"
+						   +"<td>"+jData[i].dhmcount+"</td>"
+                           +"<td>"+jData[i].count199+"</td>"
+                           +"<td>"+jData[i].othercount+"</td>"
+                           +"<td>"+jData[i].nowcount+"</td>"
                        }else{
-                           infoStr += "<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
+                           infoStr +="<td>"+jData[i].axccount+"</td>"
+                           +"<td>"+jData[i].tjhcount+"</td>"
+                           +"<td>"+jData[i].cgkcount+"</td>"
+                           +"<td>"+jData[i].dhmcount+"</td>"
                            +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].count199+"</a></td>"
-					   }
+						   +"<td>"+jData[i].othercount+"</td>"
+						   +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
+                       }
                        infoStr += "<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
 		                       
@@ -1109,11 +1129,21 @@ $('#store_name_try').keyup(function(event){
 		                       +"<td>"+jData[i].name+"</td>"
 		                       +"<td>"+jData[i].storeno+"</td>";
 					   if(jData[i].name == '无'){
-						   infoStr += "<td>"+jData[i].nowcount+"</td>"
-						   +"<td>"+jData[i].count199+"</td>";
+						   infoStr += "<td>"+jData[i].axccount+"</td>"
+						   +"<td>"+jData[i].tjhcount+"</td>"
+						   +"<td>"+jData[i].cgkcount+"</td>"
+						   +"<td>"+jData[i].dhmcount+"</td>"
+                           +"<td>"+jData[i].count199+"</td>"
+                           +"<td>"+jData[i].othercount+"</td>"
+							+"<td>"+jData[i].nowcount+"</td>"
 					   }else{
-						   infoStr += "<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
-						   +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].count199+"</a></td>"
+						   infoStr += "<td>"+jData[i].axccount+"</td>"
+						   +"<td>"+jData[i].tjhcount+"</td>"
+						   +"<td>"+jData[i].cgkcount+"</td>"
+						   +"<td>"+jData[i].dhmcount+"</td>"
+                           +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].count199+"</a></td>"
+						   +"<td>"+jData[i].othercount+"</td>"
+						   +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
 					   }
 					   infoStr += "<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";

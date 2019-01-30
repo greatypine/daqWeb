@@ -6411,8 +6411,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			if(dynamicDto.getSearchstr().equals("city")){
 				HSSFSheet sheet = wb.createSheet("城市会员");
 				HSSFRow row = sheet.createRow(0);
-				String[] str_headers = {"城市","新增社员数","199新增开卡数","累计社员总数"};
-				String[] headers_key = {"city_name","nowcount","count199","opencount"};
+				String[] str_headers = {"城市","安心存","淘金汇","畅购卡升级","兑换码","199付费社员数","其他","新增社员数","累计社员总数"};
+				String[] headers_key = {"city_name","axccount","tjhcount","cgkcount","dhmcount","count199","othercount","nowcount","opencount"};
 				for(int i = 0;i < str_headers.length;i++){
 					HSSFCell cell = row.createCell(i);
 					cell.setCellStyle(getHeaderStyle());
@@ -6442,8 +6442,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}else if(dynamicDto.getSearchstr().equals("store")){
 				HSSFSheet sheet = wb.createSheet("门店会员");
 				HSSFRow row = sheet.createRow(0);
-				String[] str_headers = {"城市","门店名称","门店编号","新增社员数","199新增开卡数","累计社员总数"};
-				String[] headers_key = {"city_name","name","storeno","nowcount","count199","opencount"};
+				String[] str_headers = {"城市","门店名称","门店编号","安心存","淘金汇","畅购卡升级","兑换码","199付费社员数","其他","新增社员数","累计社员总数"};
+				String[] headers_key = {"city_name","name","storeno","axccount","tjhcount","cgkcount","dhmcount","count199","othercount","nowcount","opencount"};
 				for(int i = 0;i < str_headers.length;i++){
 					HSSFCell cell = row.createCell(i);
 					cell.setCellStyle(getHeaderStyle());

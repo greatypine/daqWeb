@@ -610,9 +610,9 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		List<?> list = null;
 		Map<String, Object> map_result = new HashMap<String, Object>();
 
-		String sql = "select t1.opencount,ifnull(t2.nowcount,0) as nowcount from (select count(distinct customer_id) as opencount from t_member_operation_record where  mode='adminDefined' and  end_time>now() " +
+		String sql = "select t1.opencount,ifnull(t2.nowcount,0) as nowcount from (select count(distinct customer_id) as opencount from t_member_operation_record where  mode='adminDefined' and level = 2 and  end_time>now() " +
 				" and begin_time <= '"+dynamicDto.getEndDate()+" 23:59:59') t1,(" +
-				"select count(distinct customer_id) as nowcount from t_member_operation_record where  mode='adminDefined' and  end_time>now()  and begin_time BETWEEN '" + dynamicDto.getBeginDate() + " 00:00:00' and '" + dynamicDto.getEndDate() + " 23:59:59') t2";
+				"select count(distinct customer_id) as nowcount from t_member_operation_record where  mode='adminDefined' and level = 2 and end_time>now()  and begin_time BETWEEN '" + dynamicDto.getBeginDate() + " 00:00:00' and '" + dynamicDto.getEndDate() + " 23:59:59') t2";
 
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {
