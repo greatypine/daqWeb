@@ -92,7 +92,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object>  queryAreaStat(TurnoverStatDto storeStatDto,PageInfo pageInfo){
-		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,  IFNULL(min(ts.storeno),'') as area_code, IFNULL(min(a.info_employee_a_no),'') as employee_a_no, "
+		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,  IFNULL(min(a.area_code),'') as area_code, IFNULL(min(a.info_employee_a_no),'') as employee_a_no, "
 				+ "IFNULL(dround(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') "+ "THEN gmv_price ELSE 0 END),2),0) AS gmv_price,"
 				+ "IFNULL(dround(SUM(CASE WHEN (loan_label !='4' AND strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN gmv_price ELSE 0 END),2),0) AS gmv_price_profit,"
 				+ "IFNULL(dround(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN returned_amount ELSE 0 END ),2),0) AS return_price,"
