@@ -1600,10 +1600,10 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	public Map<String, Object> queryMemberDataList(MemberDataDto memberDataDto, PageInfo pageInfo){
 		String sql = "select dum.customer_id,CASE dum.customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' "
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' WHEN 'citic' THEN '中信用户联盟' WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动' "
-				+ "ELSE '无' END AS customer_source,dum.mobilephone,dum.regist_time,dum.opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid,"
-				+ "case when dum.member_type in ('associator_start_2' ,'yearCard','yearCard-19') then '199付费社员' when dum.associator_mode='axc' then '安心存' "
-				+ "when dum.associator_mode='oneToTwo-19' then '畅卡升级' when dum.associator_mode like 'tjh%' then '淘金汇' when dum.associator_mode='groupYearCard-19' then '兑换码' "
-				+ "else '其他' end as member_type from df_user_member dum where 1=1 ";
+				+ "ELSE '无' END AS customer_source,dum.mobilephone,dum.regist_time,dum.opencard_time,dum.associator_expiry_date,"
+				+ "IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid,case when dum.member_type in ('associator_start_2' ,'yearCard','yearCard-19') then '199付费社员' "
+				+ "when dum.associator_mode='axc' then '安心存' when dum.associator_mode='oneToTwo-19' then '畅卡升级' when dum.associator_mode like 'tjh%' then '淘金汇' when dum.associator_mode='groupYearCard-19' "
+				+ "then '兑换码' else '其他' end as member_type from df_user_member dum where 1=1 ";
 
 		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
 			sql = sql + " AND dum.regist_storeid='"+memberDataDto.getStoreNo()+"' ";
@@ -1680,9 +1680,9 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		String sql = "select IFNULL(dum.mobilephone,'') as mobilephone,CASE dum.customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' "
 				+ "WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' WHEN 'citic' THEN '中信用户联盟' "
 				+ "WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动' ELSE '无' END AS customer_source,IFNULL(dum.regist_time,'') "
-				+ "as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.customer_id,dum.regist_cityno,"
-				+ "dum.regist_storeid,case when dum.member_type in ('associator_start_2' ,'yearCard','yearCard-19') then '199付费社员' when dum.associator_mode='axc' then '安心存' "
-				+ "when dum.associator_mode='oneToTwo-19' then '畅卡升级' when dum.associator_mode like 'tjh%' then '淘金汇' when dum.associator_mode='groupYearCard-19' then '兑换码' "
+				+ "as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,ifnull(dum.associator_expiry_date,'') as associator_expiry_date,IFNULL(dum.inviteCode,'') as inviteCode,"
+				+ "dum.customer_id,dum.regist_cityno,dum.regist_storeid,case when dum.member_type in ('associator_start_2' ,'yearCard','yearCard-19') then '199付费社员' when dum.associator_mode='axc' "
+				+ "then '安心存' when dum.associator_mode='oneToTwo-19' then '畅卡升级' when dum.associator_mode like 'tjh%' then '淘金汇' when dum.associator_mode='groupYearCard-19' then '兑换码' "
 				+ "else '其他' end as member_type  from df_user_member dum where 1=1 ";
 
 		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){

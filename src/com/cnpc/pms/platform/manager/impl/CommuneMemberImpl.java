@@ -2695,8 +2695,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 			XSSFRow row = sheet.createRow(0);
 
 			//定义表头 以及 要填入的 字段
-			String[] str_headers = {"社员手机号","用户来源","开通渠道","社员ID","注册国安社区时间","邀请码","社员开卡时间","城市","门店","门店编号"};
-			String[] headers_key = {"mobilephone","customer_source","member_type","customer_id","regist_time","inviteCode","opencard_time","city_name","store_name","store_no"};
+			String[] str_headers = {"社员手机号","用户来源","开通渠道","社员ID","注册国安社区时间","邀请码","社员开卡时间","社员过期时间","城市","门店","门店编号"};
+			String[] headers_key = {"mobilephone","customer_source","member_type","customer_id","regist_time","inviteCode","opencard_time","associator_expiry_date","city_name","store_name","store_no"};
 
 			for(int i = 0;i < str_headers.length;i++){
 				XSSFCell cell = row.createCell(i);

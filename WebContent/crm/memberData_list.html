@@ -256,6 +256,7 @@
                                     <th width="10%">社员手机号</th>
                                     <th width="10%">注册国安社区时间</th>
                                     <th width="10%">社员开卡时间</th>
+                                    <th width="10%">社员等级过期时间</th>
                                     <th width="10%">邀请码</th>
                                     <th width="10%">城市</th>
                                     <th width="10%">社员开卡门店</th>
@@ -678,6 +679,7 @@
                     for(var i=0;i<jData.length;i++){
                         var regist="";
                         var opencard="";
+                        var expiry="";
                         if(jData[i].regist_time!=null){
                             var d=	new Date();
                             d.setTime(jData[i].regist_time);
@@ -687,6 +689,11 @@
                             var d=	new Date();
                             d.setTime(jData[i].opencard_time);
                             opencard=d.format('yyyy-MM-dd HH:mm:ss')
+                        }
+                        if(jData[i].associator_expiry_date!=null){
+                            var d=	new Date();
+                            d.setTime(jData[i].associator_expiry_date);
+                            expiry=d.format('yyyy-MM-dd HH:mm:ss')
                         }
 
                         var mobilephone = jData[i].mobilephone;
@@ -703,10 +710,11 @@
                         infoStr= infoStr
                             +"<td><a style=\"text-decoration:underline\" href=\"javascript:showuserprofile('"+jData[i].customer_id+"','"+mobilephone+"','"+city_name+"','"+store_name+"','"+store_no+"','"+ocdate+"')\" onmouseover=\"showphone('"+phonecontent+"');\" id=\""+phoneid+"\">"+mobilephone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')+"</a></td>"
                             +"<td>"+regist+"</td>"
-                            +"<td>"+opencard+"</a></td>";
+                            +"<td>"+opencard+"</a></td>"
+                            +"<td>"+expiry+"</a></td>";
                         if(target==0 || target==1){
                             infoStr= infoStr
-                                +"<td><a href=\"javascript:showemployee('"+jData[i].inviteCode+"')\">"+jData[i].inviteCode+"</a></td>";
+                                +"<td><a style=\"text-decoration:underline\" href=\"javascript:showemployee('"+jData[i].inviteCode+"')\">"+jData[i].inviteCode+"</a></td>";
                         }else{
                             infoStr= infoStr
                                 +"<td>"+jData[i].inviteCode+"</td>";
