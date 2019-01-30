@@ -162,7 +162,7 @@
           <ul class="nav nav-tabs">
 			  <li class="active" id="tab_2_avtive"><a href="#tab_2" id="bigshow2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
 			  <li id="tab_1_avtive"><a href="#tab_1" id="bigshow1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
-			  		  <li class="" id="tab_3_avtive"><a href="#tab_3" id="bighide" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>
+			  <li class="" id="tab_3_avtive"><a href="#tab_3" id="bighide" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>
 
 		  </ul>
 		  <div class="tab-content">
@@ -564,6 +564,8 @@
 		}else if(target==2){//店长
 			$("#tab_2_avtive").hide();
 			$("#tab_2").hide();
+            $("#tab_1_avtive").addClass("active");
+            $("#tab_1").addClass("active");
 			$("#city_name_tradetype").val(cityName);
 			$("#city_name_tradetype").attr("readonly",true);
 			$("#store_name_tradetype").val(storeName);
