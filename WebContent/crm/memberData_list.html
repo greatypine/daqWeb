@@ -447,8 +447,7 @@
             $("#member_invite_code").val(inviteCode);
             $("#store_id_manual").val(storeId);
             $("#store_name_manual").val(storeName);
-            $("#citySelect").append('<option value="'+cityId+'">'+cityname+'</option>');
-            $("#citySelect").options[0].selected = true;
+            $("#citySelect option[value='"+cityId+"']").attr("selected","selected");
             search_auto_abnormalOrder(1);
         }
 
