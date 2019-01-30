@@ -691,8 +691,9 @@
 
                         var mobilephone = jData[i].mobilephone;
                         var cphone="<strong>手机号：</strong>"+mobilephone+"<br>";
-                        var csource="<strong>用户来源：</strong>"+jData[i].customer_source;
-                        var phonecontent =cphone+csource+"@phonetips"+i;
+                        var csource="<strong>用户来源：</strong>"+jData[i].customer_source+"<br>";
+                        var ctype="<strong>开通渠道：</strong>"+jData[i].member_type;
+                        var phonecontent =cphone+csource+ctype+"@phonetips"+i;
                         var phoneid = "phonetips"+i;
                         var city_name = jData[i].city_name;
                         var store_name = jData[i].store_name;
