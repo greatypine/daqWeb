@@ -160,8 +160,8 @@
       <section class="content-header">
         <div class="nav-tabs-custom no-margin">
           <ul class="nav nav-tabs">
-		              <li class="active" id="tab_1_avtive"><a href="#tab_1" id="bigshow1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
-		              <li class="" id="tab_2_avtive"><a href="#tab_2" id="bigshow2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
+			  <li class="active" id="tab_2_avtive"><a href="#tab_2" id="bigshow2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
+			  <li id="tab_1_avtive"><a href="#tab_1" id="bigshow1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
 			  		  <li class="" id="tab_3_avtive"><a href="#tab_3" id="bighide" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>
 
 		  </ul>
@@ -949,12 +949,14 @@ $('#store_name_try').keyup(function(event){
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
 	        		   var cityname = jData[i].city_name;
+                       var cityno = jData[i].cityno;
 	        		   if(cityname == '无'){
 	        			   cityname = $("#city_name").val() == "" ? cityname : $("#city_name").val();
 	        		   }
                        infoStr="";
 	        		   infoStr += "<tr>"
-		                       +"<td>"+cityname+"</td>";
+		                       +"<td>"+cityname+"</td>"
+                           		+"<td style='display: none;'>"+cityno+"</td>";
 					   if(cityname == '无'){
                            infoStr += "<td>"+jData[i].axccount+"</td>"
 						   +"<td>"+jData[i].tjhcount+"</td>"
@@ -968,9 +970,9 @@ $('#store_name_try').keyup(function(event){
                            +"<td>"+jData[i].tjhcount+"</td>"
                            +"<td>"+jData[i].cgkcount+"</td>"
                            +"<td>"+jData[i].dhmcount+"</td>"
-                           +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].count199+"</a></td>"
+                           +"<td>"+jData[i].count199+"</td>"
 						   +"<td>"+jData[i].othercount+"</td>"
-						   +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
+						   +"<td><a target=\"userProfile_view\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
                        }
                        infoStr += "<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
@@ -1123,7 +1125,8 @@ $('#store_name_try').keyup(function(event){
 	        		   infoStr += "<tr>"
 		                       +"<td>"+cityname+"</td>"
 		                       +"<td>"+jData[i].name+"</td>"
-		                       +"<td>"+jData[i].storeno+"</td>";
+		                       +"<td>"+jData[i].storeno+"</td>"
+                           		+"<td style='display: none'>"+jData[i].platformid+"</td>";
 					   if(jData[i].name == '无'){
 						   infoStr += "<td>"+jData[i].axccount+"</td>"
 						   +"<td>"+jData[i].tjhcount+"</td>"
@@ -1137,9 +1140,9 @@ $('#store_name_try').keyup(function(event){
 						   +"<td>"+jData[i].tjhcount+"</td>"
 						   +"<td>"+jData[i].cgkcount+"</td>"
 						   +"<td>"+jData[i].dhmcount+"</td>"
-                           +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].count199+"</a></td>"
+                           +"<td>"+jData[i].count199+"</td>"
 						   +"<td>"+jData[i].othercount+"</td>"
-						   +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
+						   +"<td><a target=\"userProfile_view\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
 					   }
 					   infoStr += "<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
