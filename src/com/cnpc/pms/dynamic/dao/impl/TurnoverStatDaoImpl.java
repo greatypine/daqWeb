@@ -92,7 +92,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object>  queryAreaStat(TurnoverStatDto storeStatDto,PageInfo pageInfo){
-		String sql = "SELECT min(a.store_city_name) AS city_name, min(a.store_name) as store_name,  IFNULL(min(a.area_code),'') as area_code, IFNULL(min(a.info_employee_a_no),'') as employee_a_no, "
+		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,  IFNULL(min(ts.storeno),'') as area_code, IFNULL(min(a.info_employee_a_no),'') as employee_a_no, "
 				+ "IFNULL(dround(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') "+ "THEN gmv_price ELSE 0 END),2),0) AS gmv_price,"
 				+ "IFNULL(dround(SUM(CASE WHEN (loan_label !='4' AND strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN gmv_price ELSE 0 END),2),0) AS gmv_price_profit,"
 				+ "IFNULL(dround(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN returned_amount ELSE 0 END ),2),0) AS return_price,"
@@ -100,12 +100,13 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 				+ "IFNULL(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') "	+ "THEN 1 ELSE 0 END),0) AS order_num,"
 				+ "IFNULL(SUM( CASE WHEN loan_label !='4' AND strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "' THEN 1 ELSE 0 END),0) AS order_num_profit,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num,"
-				+ "IFNULL(SUM( CASE WHEN (return_label='1' and loan_label !='4' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "')THEN 1 ELSE 0 END),0) AS return_num_profit FROM df_mass_order_total a ";
+				+ "IFNULL(SUM( CASE WHEN (return_label='1' and loan_label !='4' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "')THEN 1 ELSE 0 END),0) AS return_num_profit FROM df_mass_order_total a "
+				+ "left join t_store ts on a.real_store_id=ts.id ";
 		
 		sql = sql + " where area_code is not null AND a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
-			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+			sql = sql + " and ts.storeno ='" + storeStatDto.getStoreNo().trim()+ "'";
 		}else{
 			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
 				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
@@ -115,7 +116,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.area_code ='" + storeStatDto.getAreaNo().trim()+ "'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.area_code ORDER BY a.store_code,a.area_code ";
+		sql = sql + " GROUP BY a.real_store_id,a.area_code ORDER BY a.real_store_id,a.area_code ";
 
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 
@@ -142,7 +143,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportAreaStat(TurnoverStatDto storeStatDto){
-		String sql = "SELECT min(a.store_city_name) AS city_name, min(a.store_name) as store_name,  IFNULL(min(a.area_code),'') as area_code, IFNULL(min(a.info_employee_a_no),'') as employee_a_no, "
+		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,  IFNULL(min(a.area_code),'') as area_code, IFNULL(min(a.info_employee_a_no),'') as employee_a_no, "
 				+ "IFNULL(dround(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') "+ "THEN gmv_price ELSE 0 END),2),0) AS gmv_price,"
 				+ "IFNULL(dround(SUM(CASE WHEN (loan_label !='4' AND strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN gmv_price ELSE 0 END),2),0) AS gmv_price_profit,"
 				+ "IFNULL(dround(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN returned_amount ELSE 0 END ),2),0) AS return_price,"
@@ -150,12 +151,13 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 				+ "IFNULL(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') "	+ "THEN 1 ELSE 0 END),0) AS order_num,"
 				+ "IFNULL(SUM( CASE WHEN loan_label !='4' AND strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "' THEN 1 ELSE 0 END),0) AS order_num_profit,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num,"
-				+ "IFNULL(SUM( CASE WHEN (return_label='1' and loan_label !='4' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "')THEN 1 ELSE 0 END),0) AS return_num_profit FROM df_mass_order_total a ";
+				+ "IFNULL(SUM( CASE WHEN (return_label='1' and loan_label !='4' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "')THEN 1 ELSE 0 END),0) AS return_num_profit FROM df_mass_order_total a "
+				+ "left join t_store ts on a.real_store_id=ts.id ";
 
 		sql = sql + " where area_code is not null AND a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA'  ";
 		
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
-			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+			sql = sql + " and ts.storeno ='" + storeStatDto.getStoreNo().trim()+ "'";
 		}else{
 			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
 				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
@@ -165,7 +167,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.area_code ='" + storeStatDto.getAreaNo().trim()+ "'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.area_code ORDER BY a.store_code,a.area_code ";
+		sql = sql + " GROUP BY a.real_store_id,a.area_code ORDER BY a.real_store_id,a.area_code ";
 		
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 		return list;
@@ -173,16 +175,17 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryDeptStat(TurnoverStatDto storeStatDto,PageInfo pageInfo){
-		String sql = "SELECT min(a.store_city_name) AS city_name, min(a.store_name) as store_name,	min(a.store_code) as store_code, IFNULL(min(a.department_name),'') as department_name, "
+		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,	min(ts.storeno) as store_code, IFNULL(min(a.department_name),'') as department_name, "
 				+ "IFNULL(dround(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN gmv_price ELSE 0 END),2),0) AS gmv_price,"
 				+ "IFNULL(dround(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN returned_amount ELSE 0 END ),2),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) "	+ "AS order_num,"
-				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END ),0) AS return_num FROM df_mass_order_total a ";
+				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END ),0) AS return_num FROM df_mass_order_total a "
+				+ "left join t_store ts on a.real_store_id=ts.id ";
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
-			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+			sql = sql + " and ts.storeno ='" + storeStatDto.getStoreNo().trim()+ "'";
 		}else{
 			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
 				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
@@ -192,7 +195,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.department_name like '%" + storeStatDto.getDeptName().trim() + "%'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.bussiness_group_id ORDER BY a.store_code,a.bussiness_group_id ";
+		sql = sql + " GROUP BY a.real_store_id,a.bussiness_group_id ORDER BY a.real_store_id,a.bussiness_group_id ";
 
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 
@@ -219,16 +222,17 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportDeptStat(TurnoverStatDto storeStatDto){
-		String sql = "SELECT min(a.store_city_name) AS city_name, min(a.store_name) as store_name,	min(a.store_code) as store_code, IFNULL(min(a.department_name),'') as department_name, "
+		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,	min(ts.storeno) as store_code, IFNULL(min(a.department_name),'') as department_name, "
 				+ "IFNULL(dround(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN gmv_price ELSE 0 END),2),0) AS gmv_price,"
 				+ "IFNULL(dround(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN returned_amount ELSE 0 END ),2),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) "	+ "AS order_num,"
-				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END ),0) AS return_num FROM df_mass_order_total a ";
+				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END ),0) AS return_num FROM df_mass_order_total a "
+				+ "left join t_store ts on a.real_store_id=ts.id";
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
-			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+			sql = sql + " and ts.storeno ='" + storeStatDto.getStoreNo().trim()+ "'";
 		}else{
 			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
 				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
@@ -238,7 +242,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.department_name like '%" + storeStatDto.getDeptName().trim() + "%'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.bussiness_group_id ORDER BY a.store_code,a.bussiness_group_id ";
+		sql = sql + " GROUP BY a.real_store_id,a.bussiness_group_id ORDER BY a.real_store_id,a.bussiness_group_id ";
 
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 		return list;
@@ -246,16 +250,17 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryChannelStat(TurnoverStatDto storeStatDto,PageInfo pageInfo){
-		String sql = "SELECT min(a.store_city_name) AS city_name, min(a.store_name) as store_name,	min(a.store_code) as store_code, IFNULL(min(a.channel_name),'') as channel_name, "
+		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,	min(ts.storeno) as store_code, IFNULL(min(a.channel_name),'') as channel_name, "
 				+ "IFNULL(dround(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN gmv_price ELSE 0 END),2),0) AS gmv_price,"
 				+ "IFNULL(dround(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN returned_amount ELSE 0 END),2),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') "+ "THEN 1 ELSE 0 END),0) AS order_num,"
-				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num FROM df_mass_order_total a ";
+				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num FROM df_mass_order_total a "
+				+ "left join t_store ts on a.real_store_id=ts.id ";
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
-			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+			sql = sql + " and ts.storeno ='" + storeStatDto.getStoreNo().trim()+ "'";
 		}else{
 			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
 				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
@@ -265,7 +270,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.channel_name like '%" + storeStatDto.getChannelName().trim() + "%'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.channel_id ORDER BY a.store_code,a.channel_id ";
+		sql = sql + " GROUP BY a.real_store_id,a.channel_id ORDER BY a.real_store_id,a.channel_id ";
 
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 
@@ -292,16 +297,17 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportChannelStat(TurnoverStatDto storeStatDto){
-		String sql = "SELECT min(a.store_city_name) AS city_name, min(a.store_name) as store_name,	min(a.store_code) as store_code, IFNULL(min(a.channel_name),'') as channel_name, "
+		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,	min(ts.storeno) as store_code, IFNULL(min(a.channel_name),'') as channel_name, "
 				+ "IFNULL(dround(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN gmv_price ELSE 0 END),2),0) AS gmv_price,"
 				+ "IFNULL(dround(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN returned_amount ELSE 0 END),2),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') "+ "THEN 1 ELSE 0 END),0) AS order_num,"
-				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num FROM df_mass_order_total a ";
+				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num FROM df_mass_order_total a "
+				+ "left join t_store ts on a.real_store_id=ts.id ";
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
-			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+			sql = sql + " and ts.storeno ='" + storeStatDto.getStoreNo().trim()+ "'";
 		}else{
 			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
 				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
@@ -311,7 +317,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.channel_name like '%" + storeStatDto.getChannelName().trim() + "%'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.channel_id ORDER BY a.store_code,a.channel_id ";
+		sql = sql + " GROUP BY a.real_store_id,a.channel_id ORDER BY a.real_store_id,a.channel_id ";
 
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 		return list;
@@ -319,16 +325,17 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryEshopStat(TurnoverStatDto storeStatDto,PageInfo pageInfo){
-		String sql = "SELECT min(a.store_city_name) AS city_name, min(a.store_name) as store_name,	min(a.store_code) as store_code, IFNULL(min(a.eshop_name),'') as eshop_name, "
+		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,	min(ts.storeno) as store_code, IFNULL(min(a.eshop_name),'') as eshop_name, "
 				+ "IFNULL(dround(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN gmv_price ELSE 0 END),2),0) AS gmv_price,"
 				+ "IFNULL(dround(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN returned_amount ELSE 0 END),2),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS order_num,"
-				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num FROM df_mass_order_total a ";
+				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num FROM df_mass_order_total a "
+				+ "left join t_store ts on a.real_store_id=ts.id ";
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
-			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+			sql = sql + " and ts.storeno ='" + storeStatDto.getStoreNo().trim()+ "'";
 		}else{
 			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
 				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
@@ -338,7 +345,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.eshop_name like '%" + storeStatDto.getEshopName().trim() + "%'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.eshop_id ORDER BY a.store_code,a.eshop_id ";
+		sql = sql + " GROUP BY a.real_store_id,a.eshop_id ORDER BY a.real_store_id,a.eshop_id ";
 
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 
@@ -365,16 +372,17 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportEshopStat(TurnoverStatDto storeStatDto){
-		String sql = "SELECT min(a.store_city_name) AS city_name, min(a.store_name) as store_name,	min(a.store_code) as store_code, IFNULL(min(a.eshop_name),'') as eshop_name, "
+		String sql = "SELECT min(a.store_city_name) AS city_name, min(ts.name) as store_name,	min(ts.storeno) as store_code, IFNULL(min(a.eshop_name),'') as eshop_name, "
 				+ "IFNULL(dround(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN gmv_price ELSE 0 END),2),0) AS gmv_price,"
 				+ "IFNULL(dround(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN returned_amount ELSE 0 END),2),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (strleft(sign_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(sign_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS order_num,"
-				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num FROM df_mass_order_total a ";
+				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND strleft(return_time,10) >= '" + storeStatDto.getBeginDate() + "' AND strleft(return_time,10) <= '" + storeStatDto.getEndDate() + "') THEN 1 ELSE 0 END),0) AS return_num FROM df_mass_order_total a "
+				+ "left join t_store ts on a.real_store_id=ts.id ";
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
-			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+			sql = sql + " and ts.storeno ='" + storeStatDto.getStoreNo().trim()+ "'";
 		}else{
 			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
 				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
@@ -384,7 +392,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.eshop_name like '%" + storeStatDto.getEshopName().trim() + "%'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.eshop_id ORDER BY a.store_code,a.eshop_id ";
+		sql = sql + " GROUP BY a.real_store_id,a.eshop_id ORDER BY a.real_store_id,a.eshop_id ";
 
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 		return list;
