@@ -282,7 +282,7 @@
                                 </div>
 
 
-                                <div id="tab-content">
+                                <div id="tab-content_1">
                                     <div class="col-sm-12 no-padding" id="main1" style="height: 350px;display: block"></div>
                                     <div class="col-sm-12 no-padding" id="main1_1" style="height: 350px;display: none"></div>
                                 </div>
@@ -655,9 +655,11 @@
                 }
                 if($("#setadd").val()!="1"){
                     $("#setadd").val("1");
-                    $("#cityMember").css("display", "block");
-                    $("#cityMember").css("left", event.clientX - 160);
-                    $("#cityMember").css("top", event.clientY + 60);
+                    //隐藏当日社员增长弹出
+                    // $("#cityMember").css("display", "block");
+                    // $("#cityMember").css("left", event.clientX - 160);
+                    // $("#cityMember").css("top", event.clientY + 60);
+                    $("#cityMember").hide();
                 }
 
             });
@@ -694,7 +696,8 @@
                     chart7div.style.width=350+'px';
                     myChart0.resize(350);
                     myChart0.setOption(option0);
-                    $("#bigMember2").show();
+                    // $("#bigMember2").show();//隐藏社员分类饼图
+                    $("#bigMember2").hide();
                    // $("#cmBig").show();
                     return;
                 }else{
@@ -715,7 +718,8 @@
                 myChart0.resize(350);
                 myChart0.setOption(option0);
 
-                $("#bigMember2").show();
+                //$("#bigMember2").show();//隐藏社员分类饼图
+                $("#bigMember2").hide();
                 $("#cmBig").show();
             });
 /*            $(".show_cmBig").mouseleave(function(){
@@ -752,9 +756,11 @@
                              }
                             if($("#setTry").val()!="1"){
                                 $("#setTry").val("1");
-                                $("#try_Member").css("display", "block");
-                                $("#try_Member").css("left", event.clientX - 300);
-                                $("#try_Member").css("top", event.clientY + 60);
+                                //隐藏当日社员增长情况
+                                // $("#try_Member").css("display", "block");
+                                // $("#try_Member").css("left", event.clientX - 300);
+                                // $("#try_Member").css("top", event.clientY + 60);
+                                $("#cityMember").hide();
                             }
 
                         });
@@ -2378,7 +2384,7 @@
                 myChart1_1.clear();
                 $('#main1_1').css('display','block');
                 var chart7div=document.getElementById('main1_1');
-                var tabcontent = document.getElementById('tab-content');
+                var tabcontent = document.getElementById('tab-content_1');
                 var width=tabcontent.offsetWidth;
                 chart7div.style.width=width+'px';
                 myChart1_1.resize(width);
@@ -2392,7 +2398,7 @@
                 var myChart1 = echarts.init(document.getElementById('main1'));
                 myChart1.clear();
                 var chart7div=document.getElementById('main1');
-                var tabcontent = document.getElementById('tab-content');
+                var tabcontent = document.getElementById('tab-content_1');
                 var width=tabcontent.offsetWidth;
                 chart7div.style.width=width+'px';
                 myChart1.resize(width);
