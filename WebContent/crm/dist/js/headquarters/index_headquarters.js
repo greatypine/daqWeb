@@ -3059,7 +3059,7 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     if(average>0&&average<=0.2){
     	average = average*1.5;
     }else if(0.2<average&&average<1){
-    	average = average*0.55;
+    	average = average*0.35;
     }else if(average>=1&&average<=10){
     	average = average*0.18;
     }else if(average>10&&average<=100){
