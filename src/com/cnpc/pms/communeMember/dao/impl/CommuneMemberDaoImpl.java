@@ -1602,7 +1602,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' WHEN 'citic' THEN '中信用户联盟' WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动' "
 				+ "ELSE '无' END AS customer_source,dum.mobilephone,dum.regist_time,dum.opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid,"
 				+ "case when dum.member_type in ('associator_start_2' ,'yearCard','yearCard-19') then '199付费社员' when dum.associator_mode='axc' then '安心存' "
-				+ "when dum.associator_mode='oneToTwo-19' then '畅卡升级' when dum.associator_mode='tjh' then '淘金汇' when dum.associator_mode='groupYearCard-19' then '兑换码' "
+				+ "when dum.associator_mode='oneToTwo-19' then '畅卡升级' when dum.associator_mode like 'tjh%' then '淘金汇' when dum.associator_mode='groupYearCard-19' then '兑换码' "
 				+ "else '其他' end as member_type from df_user_member dum where 1=1 ";
 
 		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
@@ -1682,7 +1682,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				+ "WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动' ELSE '无' END AS customer_source,IFNULL(dum.regist_time,'') "
 				+ "as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.customer_id,dum.regist_cityno,"
 				+ "dum.regist_storeid,case when dum.member_type in ('associator_start_2' ,'yearCard','yearCard-19') then '199付费社员' when dum.associator_mode='axc' then '安心存' "
-				+ "when dum.associator_mode='oneToTwo-19' then '畅卡升级' when dum.associator_mode='tjh' then '淘金汇' when dum.associator_mode='groupYearCard-19' then '兑换码' "
+				+ "when dum.associator_mode='oneToTwo-19' then '畅卡升级' when dum.associator_mode like 'tjh%' then '淘金汇' when dum.associator_mode='groupYearCard-19' then '兑换码' "
 				+ "else '其他' end as member_type  from df_user_member dum where 1=1 ";
 
 		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
