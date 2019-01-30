@@ -448,6 +448,7 @@
             $("#store_id_manual").val(storeId);
             $("#store_name_manual").val(storeName);
             $("#citySelect").append('<option value="'+cityId+'">'+cityname+'</option>');
+            $("#citySelect").options[0].selected = true;
             search_auto_abnormalOrder(1);
         }
 
