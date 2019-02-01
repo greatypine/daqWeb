@@ -103,6 +103,14 @@
         .sx_type span{padding-right: 5px;}
         .sx_type span .icheckbox_minimal-blue{margin-right: 2px;}
 
+        /*筛选导航*/
+        .breadcrumb{background: none;padding: 8px 10px 0 10px; line-height: 22px; position: relative; min-height: 45px; background-color: #fafafa;}
+        .breadcrumb a{position: relative; float: left; margin: 0 10px 10px 0; padding: 0 25px 0 5px; height: 25px; line-height: 25px; overflow: hidden; border: 1px solid #DDD; background-color: #f3f3f3; color: #333; font-size: 12px;}
+        .breadcrumb a span{margin-right: 3px;}
+        .breadcrumb a i{position: absolute; width: 25px; height: 22px; right: 0; top: 0; color: #999; padding: 6px 0 0 9px; height: 25px;}
+        .breadcrumb a:hover{border: 1px solid #e4393c; background-color: #fff;}
+        .breadcrumb a:hover i{background-color: #e4393c; color: #fff;}
+
         .auto{max-height:200px; overflow-y:scroll;}
         .opeDiv span{float: right;width: 46px;height: 24px;line-height: 24px;text-align: center;font-size: 12px;border: 1px solid #9fa3a8;border-radius: 3px;color: #616d73;margin: 0 13px 12px 0;box-shadow: 0 1px 5px rgba(0,0,0,0.3);cursor: pointer;}
         .Confirm{ background: linear-gradient(#83c56a, #63b254); border: 1px solid #46975d!important;; color: #fff!important;}
@@ -212,6 +220,20 @@
 
                             <div class="fold-con">
                                 <div class="selectorLine clearfix">
+                                    <div class="pull-left search-title">开通渠道：</div>
+                                    <div class="search-con">
+                                        <div class="sl-v-list-busi">
+                                            <a id="tag_199付费社员" onclick="busiSelection('199付费社员')" style="cursor:pointer;">199付费社员</a>
+                                            <a id="tag_安心存" onclick="busiSelection('安心存')" style="cursor:pointer;">安心存</a>
+                                            <a id="tag_畅卡升级" onclick="busiSelection('畅卡升级')" style="cursor:pointer;">畅卡升级</a>
+                                            <a id="tag_淘金汇" onclick="busiSelection('淘金汇')" style="cursor:pointer;">淘金汇</a>
+                                            <a id="tag_兑换码" onclick="busiSelection('兑换码')" style="cursor:pointer;">兑换码</a>
+                                            <a id="tag_其他" onclick="busiSelection('其他')" style="cursor:pointer;">其他</a>
+                                            <input type="text" style="display:none" class="form-control" placeholder="开通渠道"  id="busi_private_manual"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="selectorLine clearfix">
                                     <div class="pull-left search-title">社员信息：</div>
                                     <div class="search-con">
                                         <div class="sl-v-list">
@@ -228,6 +250,12 @@
                         </div>
                         <div class="show-more-line">
                             <div class="how-more"><span>更多搜索选项</span><i class="fa fa-angle-down"></i></div>
+                        </div>
+                        <div class="breadcrumb no-margin">
+                            <span class="pull-left search-title">已选条件：</span>
+                            <div class="search-con">
+                                <span class="pull-right" style="display:none" id="clear_all"><a style="cursor:pointer;">清空所有条件</a></span>
+                            </div>
                         </div>
                         </div>
                         <div class="clearfix">
@@ -452,6 +480,74 @@
             search_auto_abnormalOrder(1);
         }
 
+        $(".sl-v-list-busi a").click(function(){
+            var screen = $(this).text();
+            var filter = $("<a style='cursor:pointer;' class='condition'><span>" + screen + "</span><i class='fa fa-times'></i></a>");
+            var ui =document.getElementById("clear_all");
+
+            if($(this).hasClass('bg-orange-active')){
+                $(".breadcrumb .search-con").append();
+                $(this).removeClass('bg-orange-active');
+
+                $(".breadcrumb .search-con").find('a').each(function(){
+                    var selectedcareer_group = $(this);
+                    if(selectedcareer_group.text()==screen){
+                        selectedcareer_group.remove();
+                    }
+                });
+
+                var curValue = $(this).text();
+                var name = curValue.substring(0,curValue.length)+",";
+                var busiName = $("#busi_private_manual").val();
+                $("#busi_private_manual").val(busiName.replace(name,""));
+
+                var selectObj = $(".breadcrumb .search-con").find('a');
+
+                if(selectObj.length==1){
+                    $(".all").addClass("bg-orange-active");
+                    ui.style.display="none";
+                }else{
+                    ui.style.display="";
+                }
+            }else {
+                $(this).addClass("bg-orange-active");
+                $(".breadcrumb .search-con").append(filter);
+                $(".all").removeClass("bg-orange-active");
+                ui.style.display="";
+            }
+
+            var obj=$(this);
+            filter.on("click",function(){
+                obj.removeClass("bg-orange-active");
+                filter.remove();
+                var curValue = $(this).text();
+                var name = curValue.substring(0,curValue.length)+",";
+                var deptName = $("#busi_private_manual").val();
+                $("#busi_private_manual").val(deptName.replace(name,""));
+
+                var aobj = $(".breadcrumb .search-con a");
+                if(aobj.length==1){
+                    $(".all").addClass("bg-orange-active");
+                    ui.style.display="none";
+                }else{
+                    ui.style.display="";
+                }
+
+            });
+
+        });
+
+        //清空所有条件
+        $(".breadcrumb .pull-right").click(function(){
+            $("#busi_private_manual").val("");
+            $(".breadcrumb .search-con .condition").remove();
+            $(".sl-v-list-busi a").removeClass("bg-orange-active");
+            var ui =document.getElementById("clear_all");
+            ui.style.display="none";
+            resetSerachParam(2);
+        });
+
+
     });
 
     function initallcity(){
@@ -522,6 +618,16 @@
         $("#store_name_manual").val("");
         initStoreSelectcomplate();
     });
+
+    //开通渠道标签快速选择
+    function busiSelection(labelname){
+        var labelName = $("#busi_private_manual").val();
+        if(labelName.indexOf(labelname)>=0){
+            $("#busi_private_manual").val($("#busi_private_manual").val());
+        }else{
+            $("#busi_private_manual").val($("#busi_private_manual").val()+labelname+",");
+        }
+    }
 
     var storeJson;
     function initStoreSelectcomplate(){
@@ -629,6 +735,10 @@
         var opencard_begin_time = opencard_begin_end_date[0].trim();
         var opencard_end_time = opencard_begin_end_date[1].trim();
 
+        var memberTypes = $("#busi_private_manual").val();
+        if(memberTypes!=null && memberTypes!='' && memberTypes.indexOf(',') >= 0){
+            memberTypes = memberTypes.substring(0,memberTypes.length-1);
+        }
 
         var memberDataDto=null;
         memberDataDto = {
@@ -636,6 +746,7 @@
             storeNo:number_str,
             inviteCode:memberInviteCode,
             mobilePhone:memberMobilePhone,
+            memberType:memberTypes,
             open_card_time_begin:opencard_begin_time,
             open_card_time_end:opencard_end_time
         }
@@ -846,6 +957,11 @@
         var opencard_begin_time = opencard_begin_end_date[0].trim();
         var opencard_end_time = opencard_begin_end_date[1].trim();
 
+        var memberTypes = $("#busi_private_manual").val();
+        if(memberTypes!=null && memberTypes!='' && memberTypes.indexOf(',') >= 0){
+            memberTypes = memberTypes.substring(0,memberTypes.length-1);
+        }
+
         var memberDataDto=null;
         memberDataDto = {
             cityName:cityName,
@@ -853,6 +969,7 @@
             inviteCode:memberInviteCode,
             mobilePhone:memberMobilePhone,
             hidden_flag:hiddenvalue,
+            memberType:memberTypes,
             open_card_time_begin:opencard_begin_time,
             open_card_time_end:opencard_end_time
         }

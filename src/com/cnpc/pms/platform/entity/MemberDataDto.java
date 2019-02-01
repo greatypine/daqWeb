@@ -9,6 +9,7 @@ public class MemberDataDto {
     String hidden_flag;
     String open_card_time_begin;
     String open_card_time_end;
+    String memberType;
 
     public String getCityName() {
         return cityName;
@@ -64,5 +65,13 @@ public class MemberDataDto {
 
     public void setOpen_card_time_end(String open_card_time_end) {
         this.open_card_time_end = open_card_time_end;
+    }
+
+    public String getMemberType() {
+        return memberType;
+    }
+
+    public void setMemberType(String memberType) {
+        this.memberType = memberType;
     }
 }
