@@ -390,6 +390,7 @@
     var employeePhone = decode64(getUrlParamByKey("ep"));//员工手机号
     var time = decode64(getUrlParamByKey("time"));//开卡时间
     var inviteCode = decode64(getUrlParamByKey("ic"));//邀请码
+    var tag = decode64(getUrlParamByKey("tag"));//开通渠道标签
 
     /* 	$('#sign_time').datepicker({
               autoclose: true
@@ -467,6 +468,36 @@
                 $(this).children("span").removeClass("search-more-open");
             }
         });
+
+        /**
+         * 从合作社社员统计页 跳转过来携带开通渠道标签
+         */
+        if(tag!=null&&tag!=""){
+            $("#tag_"+tag).addClass("bg-orange-active");
+            var filter = $("<a href='javascript:;' class='condition'><span>" + tag + "</span><i class='fa fa-times'></i></a>");
+            $(".breadcrumb .search-con").append(filter);
+            var ui =document.getElementById("clear_all");
+            ui.style.display="";
+            filter.on("click",function(){
+                $("#tag_"+tag).removeClass("bg-orange-active");
+                filter.remove();
+                var curValue = $(this).text();
+                var name = curValue.substring(0,curValue.length)+",";
+                var labelName = $("#busi_private_manual").val();
+                $("#busi_private_manual").val(labelName.replace(name,""));
+
+                var aobj = $(".breadcrumb .search-con a");
+                if(aobj.length==1){
+                    $(".sl-v-list-busi .all").addClass("bg-orange-active");
+                    ui.style.display="none";
+                }else{
+                    ui.style.display="";
+                }
+
+            });
+
+            busiSelection(tag);
+        }
 
         //从社员邀请统计页/合作社社员统计页跳转携带开卡时间
         if(time!="" && time!=null){
