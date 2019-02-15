@@ -258,7 +258,7 @@
 							  <th width="12%">
 								新增社员数
 								<font id="showattention" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-								<font id="attention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-25px;z-index: 1000;display:none;left:-10px">新增社员数=查询时间段内，安心存、淘金汇、<br/>畅购卡升级、兑换码、199付费社员数、其他的总和。</font>
+								<font id="attention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-15px;z-index: 1000;display:none;left:-10px">查询时间段内新增社员总数</font>
 							  </th>
 							  <th width="12%">
 								  累计社员总数
@@ -352,7 +352,7 @@
 								<th width="12%">
 									新增社员数
 									<font id="showattentioncity" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-									<font id="attentioncity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-25px;z-index: 1000;display:none;left:-10px">新增社员数=查询时间段内，安心存、淘金汇、<br/>畅购卡升级、兑换码、199付费社员数、其他的总和。</font>
+									<font id="attentioncity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-15px;z-index: 1000;display:none;left:-10px">查询时间段内新增社员总数</font>
 								</th>
 							    <th width="12%">
 								    累计社员总数
@@ -968,13 +968,13 @@ $('#store_name_try').keyup(function(event){
                            +"<td>"+jData[i].othercount+"</td>"
                            +"<td>"+jData[i].nowcount+"</td>"
                        }else{
-                           infoStr +="<td>"+jData[i].axccount+"</td>"
-                           +"<td>"+jData[i].tjhcount+"</td>"
-                           +"<td>"+jData[i].cgkcount+"</td>"
-                           +"<td>"+jData[i].dhmcount+"</td>"
-                           +"<td>"+jData[i].count199+"</td>"
-						   +"<td>"+jData[i].othercount+"</td>"
-						   +"<td><a target=\"userProfile_view\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
+                           infoStr +="<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("安心存")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].axccount+"</a></td>"
+                           +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("淘金汇")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].tjhcount+"</a></td>"
+                           +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("畅卡升级")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].cgkcount+"</a></td>"
+                           +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("兑换码")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].dhmcount+"</a></td>"
+                           +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("199付费社员")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].count199+"</a></td>"
+						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("其他")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].othercount+"</a></td>"
+						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
                        }
                        infoStr += "<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
@@ -1138,13 +1138,13 @@ $('#store_name_try').keyup(function(event){
                            +"<td>"+jData[i].othercount+"</td>"
 							+"<td>"+jData[i].nowcount+"</td>"
 					   }else{
-						   infoStr += "<td>"+jData[i].axccount+"</td>"
-						   +"<td>"+jData[i].tjhcount+"</td>"
-						   +"<td>"+jData[i].cgkcount+"</td>"
-						   +"<td>"+jData[i].dhmcount+"</td>"
-                           +"<td>"+jData[i].count199+"</td>"
-						   +"<td>"+jData[i].othercount+"</td>"
-						   +"<td><a target=\"userProfile_view\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
+						   infoStr += "<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("安心存")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].axccount+"</a></td>"
+						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("淘金汇")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].tjhcount+"</a></td>"
+						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("畅卡升级")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].cgkcount+"</a></td>"
+						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("兑换码")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].dhmcount+"</a></td>"
+                           +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("199付费社员")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].count199+"</a></td>"
+						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("其他")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].othercount+"</a></td>"
+						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
 					   }
 					   infoStr += "<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
