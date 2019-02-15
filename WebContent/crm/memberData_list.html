@@ -493,9 +493,10 @@
                 }else{
                     ui.style.display="";
                 }
-
             });
-
+            $(".how-more").parent().prev().children().next(".fold-con").show();
+            $(".how-more").children("span").html("收起更多选项");
+            $(".how-more").children("span").addClass("search-more-open");
             busiSelection(tag);
         }
 
