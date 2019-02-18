@@ -8,6 +8,7 @@ import com.cnpc.pms.personal.dao.TargetEntryDao;
 import com.cnpc.pms.personal.dao.TargetEntryStoreDao;
 import com.cnpc.pms.personal.entity.Storexpand;
 import com.cnpc.pms.personal.entity.TargetEntryStore;
+import com.cnpc.pms.utils.ImpalaUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -417,4 +418,217 @@ public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements Target
 
 	}
 
+	@Override
+	public List<Map<String, Object>> queryTargetEntryStoreDept(String date) {
+		String find_sql = "SELECT ts.businessGroup_name,ts.frame_time,SUM(ts.maori_target)as maori_target from df_target_entry_store ts where 1=1 ";
+		if(!"all".equals(date)){
+			find_sql += " AND frame_time='"+date+"'";
+		}
+		find_sql = find_sql + " GROUP BY ts.businessGroup_name,ts.frame_time ";
+
+		StringBuilder sb_sql = new StringBuilder();
+		sb_sql.append(find_sql);
+		// SQL查询对象
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession()
+				.createSQLQuery(sb_sql.toString());
+
+		// 获得查询数据
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+
+		// 如果没有数据返回
+		if (lst_data == null || lst_data.size() == 0) {
+			return lst_result;
+		}
+		// 转换成需要的数据形式
+		for (Object obj_data : lst_data) {
+			lst_result.add((Map<String, Object>) obj_data);
+		}
+		return lst_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryTargetEntryStoreCity(String date) {
+		String find_sql = "SELECT ts.city_name,ts.frame_time,SUM(ts.maori_target)as maori_target from df_target_entry_store ts where 1=1 ";
+		if(!"all".equals(date)){
+			find_sql += " AND frame_time='"+date+"'";
+		}
+		find_sql = find_sql + " GROUP BY ts.city_name,ts.frame_time ";
+		StringBuilder sb_sql = new StringBuilder();
+		sb_sql.append(find_sql);
+		// SQL查询对象
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession()
+				.createSQLQuery(sb_sql.toString());
+
+		// 获得查询数据
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+
+		// 如果没有数据返回
+		if (lst_data == null || lst_data.size() == 0) {
+			return lst_result;
+		}
+		// 转换成需要的数据形式
+		for (Object obj_data : lst_data) {
+			lst_result.add((Map<String, Object>) obj_data);
+		}
+		return lst_result;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> queryActualDeptMaori(String date) {
+		String sql = " SELECT aa.department_name,aa.sign_time, dround (ifnull(aa.ims_profit, 0), 2) AS ims_profit, dround ( ifnull(aa.platform_profit, 0), 2 ) AS platform_profit, dround (ifnull(aa.order_fee, 0), 2) AS order_fee, ";
+		sql = sql + " dround ( ifnull(dd.return_profit, 0), 2 ) AS return_profit, dround ( ifnull(aa.total_profit, 0), 2 ) AS total_profit, dround ( ifnull(aa.gayy_subsidy, 0), 2 ) AS gayy_subsidy, dround ( ifnull(dd.return_gayy_subsidy, 0), 2 ) AS return_gayy_subsidy,";
+		sql = sql + "  dround ( ifnull(cc.sale_profit, 0) + ifnull(ee.first_sale_profit, 0), 2 ) AS sale_profit, dround ( ifnull(bb.return_sale_profit, 0) + ifnull( ff.return_first_sale_profit, 0 ), 2 ) AS return_sale_profit FROM ";
+		sql = sql + " ( SELECT dot.bussiness_group_id, min(department_name) AS department_name,min(strleft(dot.sign_time,7)) AS sign_time, min(channel_name) AS channel_name, ifnull( dround ( sum( CASE WHEN dot.eshop_joint_ims = 'no' THEN dot.order_profit ELSE 0 END ), 2 ), 0 ) AS platform_profit, ";
+		sql = sql + " ifnull( dround ( sum( CASE WHEN dot.eshop_joint_ims = 'yes' THEN dot.order_profit ELSE 0 END ), 2 ), 0 ) AS ims_profit, ifnull( dround ( sum( CASE WHEN dot.order_tag4 IS NULL THEN dot.platform_price ELSE 0 END ), 2 ), 0 ) AS order_fee,";
+		sql = sql + "  ifnull( dround (sum(dot.order_profit), 2), 0 ) AS total_profit, ifnull( dround (sum(dot.gayy_subsidy), 2), 0 ) AS gayy_subsidy FROM df_mass_order_total dot, t_store ts, t_dist_citycode tdc ";
+		sql = sql + " WHERE dot.real_store_id = ts.id AND ts.cityno = tdc.cityno ";
+		if(!"all".equals(date)){
+			sql = sql + " AND strleft (sign_time, 7) = '"+date+"' ";
+		}else{
+			sql = sql + " AND strleft (sign_time, 7) >= '2019-01' ";
+			sql = sql + " AND strleft (sign_time, 7) <= '2019-12' ";
+		}
+		sql = sql + " AND dot.department_name NOT LIKE '%测试%' AND dot.department_name NOT LIKE '%运营管理中心%' GROUP BY dot.bussiness_group_id ) aa LEFT JOIN ( SELECT ifnull( dround (sum(order_profit), 2), 0 ) AS return_profit, ifnull( dround (sum(gayy_subsidy), 2), 0 ) AS return_gayy_subsidy,";
+		sql = sql + "  bussiness_group_id FROM df_mass_order_total dot, t_store ts WHERE dot.real_store_id = ts.id ";
+		if(!"all".equals(date)){
+			sql = sql + " AND strleft (return_time, 7) = '"+date+"' ";
+		}else{
+			sql = sql + " AND strleft (return_time, 7) >= '2019-01' ";
+			sql = sql + " AND strleft (return_time, 7) <= '2019-12' ";
+		}
+		sql = sql + " GROUP BY bussiness_group_id ) dd ON ( aa.bussiness_group_id = dd.bussiness_group_id ) LEFT JOIN ( SELECT dot.bussiness_group_id, min(department_name) AS department_name, ";
+		sql = sql + " ifnull( dround ( sum( CASE WHEN ( dept.parent_id = '8ac28b935fed0bc8015fed4c76f60018' ) THEN dot.sale_profit ELSE dot.this_channel_profit END ), 2 ), 0 ) AS sale_profit FROM df_mass_order_total dot LEFT JOIN gemini.t_department_channel dept ON dot.first_order_channel = dept.id ";
+		sql = sql + " LEFT JOIN t_store ts ON dot.real_store_id = ts.id WHERE 1=1 ";
+		if(!"all".equals(date)){
+			sql = sql + " AND strleft (dot.sign_time, 7) = '"+date+"' ";
+		}else{
+			sql = sql + " AND strleft (dot.sign_time, 7) >= '2019-01' ";
+			sql = sql + " AND strleft (dot.sign_time, 7) <= '2019-12' ";
+		}
+		sql = sql + " AND dot.department_name NOT LIKE '%测试%' AND dot.department_name NOT LIKE '%运营管理中心%' GROUP BY dot.bussiness_group_id ) cc ON ( aa.bussiness_group_id = cc.bussiness_group_id ) LEFT JOIN ( SELECT dept.parent_id AS bussiness_group_id, max(dept2. NAME) AS department_name, ";
+		sql = sql + " ifnull( dround ( sum( CASE WHEN ( dept.parent_id = '8ac28b935fed0bc8015fed4c76f60018' ) THEN 0 ELSE dot.first_channel_profit END ), 2 ), 0 ) AS first_sale_profit FROM df_mass_order_total dot LEFT JOIN gemini.t_department_channel dept ON dot.first_order_channel = dept.id ";
+		sql = sql + " LEFT JOIN gemini.t_department_channel dept2 ON dept.parent_id = dept2.id LEFT JOIN t_store ts ON dot.real_store_id = ts.id WHERE 1=1";
+		if(!"all".equals(date)){
+			sql = sql + " AND strleft (dot.sign_time, 7) = '"+date+"' ";
+		}else{
+			sql = sql + " AND strleft (dot.sign_time, 7) >= '2019-01' ";
+			sql = sql + " AND strleft (dot.sign_time, 7) <= '2019-12' ";
+		}
+		sql = sql + " AND dot.department_name NOT LIKE '%测试%' AND dot.department_name NOT LIKE '%运营管理中心%' GROUP BY dept.parent_id ) ee ON ( aa.bussiness_group_id = ee.bussiness_group_id ) LEFT JOIN ( SELECT dot.bussiness_group_id, min(department_name) AS department_name, ";
+		sql = sql + " ifnull( dround ( sum( CASE WHEN ( dept.parent_id = '8ac28b935fed0bc8015fed4c76f60018' ) THEN dot.sale_profit ELSE dot.this_channel_profit END ), 2 ), 0 ) AS return_sale_profit FROM df_mass_order_total dot ";
+		sql = sql + " LEFT JOIN gemini.t_department_channel dept ON dot.first_order_channel = dept.id LEFT JOIN t_store ts ON dot.real_store_id = ts.id WHERE 1=1";
+		if(!"all".equals(date)){
+			sql = sql + " AND strleft (dot.return_time, 7) = '"+date+"' ";
+		}else{
+			sql = sql + " AND strleft (dot.return_time, 7) >= '2019-01' ";
+			sql = sql + " AND strleft (dot.return_time, 7) <= '2019-12' ";
+		}
+		sql = sql + " AND dot.department_name NOT LIKE '%测试%' AND dot.department_name NOT LIKE '%运营管理中心%' GROUP BY dot.bussiness_group_id ) bb ON ( aa.bussiness_group_id = bb.bussiness_group_id ) LEFT JOIN ( SELECT dept.parent_id AS";
+		sql = sql + "  bussiness_group_id, max(dept2. NAME) AS department_name, ifnull( dround ( sum( CASE WHEN ( dept.parent_id = '8ac28b935fed0bc8015fed4c76f60018' ) THEN 0 ELSE dot.first_channel_profit END ), 2 ), 0 ) AS return_first_sale_profit FROM df_mass_order_total dot ";
+		sql = sql + " LEFT JOIN gemini.t_department_channel dept ON dot.first_order_channel = dept.id LEFT JOIN gemini.t_department_channel dept2 ON dept.parent_id = dept2.id LEFT JOIN t_store ts ON dot.real_store_id = ts.id WHERE 1=1";
+		if(!"all".equals(date)){
+			sql = sql + " AND strleft (dot.return_time, 7) = '"+date+"' ";
+		}else{
+			sql = sql + " AND strleft (dot.return_time, 7) >= '2019-01' ";
+			sql = sql + " AND strleft (dot.return_time, 7) <= '2019-12' ";
+		}
+		sql = sql + " AND dot.department_name NOT LIKE '%测试%' AND dot.department_name NOT LIKE '%运营管理中心%' GROUP BY dept.parent_id ) ff ON ( aa.bussiness_group_id = ff.bussiness_group_id ) WHERE 1 = 1 ORDER BY department_name, sale_profit DESC";
+
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+
+		// 如果没有数据返回
+		if (list == null || list.size() == 0) {
+			return lst_result;
+		}
+		// 转换成需要的数据形式
+		for (Object obj_data : list) {
+			lst_result.add((Map<String, Object>) obj_data);
+		}
+		return lst_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryActualCityMaori(String date) {
+		String sql = " SELECT aa.*,";
+		sql = sql + "        ifnull(dd.return_profit,0) AS return_profit,";
+		sql = sql + "        ifnull(dbaosun.count_money,0) AS baosun FROM";
+		sql = sql + "   (SELECT min(dot.store_city_name) AS city_name,";
+		sql = sql + " 		  min(strleft(dot.sign_time,7)) AS sign_time,";
+		sql = sql + "           min(dot.store_city_code) AS store_city_code,";
+		sql = sql + "           min(dot.store_name) AS store_name,";
+		sql = sql + "           ifnull(min(dot.store_code),'') AS store_code,";
+		sql = sql + "           ifnull(min(dot.department_name),'无') AS department_name,";
+		sql = sql + "           min(dot.channel_name) AS channel_name,";
+		sql = sql + "           ifnull(dround(sum(CASE WHEN dot.eshop_joint_ims='no' THEN dot.order_profit ELSE 0 END),2),0) AS platform_profit,";
+		sql = sql + "           ifnull(dround(sum(CASE WHEN dot.eshop_joint_ims='yes' THEN dot.order_profit ELSE 0 END),2),0) AS ims_profit,";
+		sql = sql + "           ifnull(dround(sum(CASE WHEN dot.order_tag4 IS NULL THEN dot.platform_price ELSE 0 END),2),0) AS order_fee,";
+		sql = sql + "           ifnull(dround(sum(dot.order_profit),2),0) AS total_profit";
+		sql = sql + "    FROM df_mass_order_total dot,";
+		sql = sql + "         t_dist_citycode tdc,";
+		sql = sql + "         gemini.t_department_channel dc";
+		sql = sql + "    WHERE LPAD(dot.store_city_code, 4, '0')=tdc.cityno";
+		sql = sql + "      AND dc.id=dot.bussiness_group_id";
+		sql = sql + "      AND dc.level=1";
+		sql = sql + "      AND dc.name NOT LIKE '%测试%'";
+		if(!"all".equals(date)){
+			sql = sql + "      AND strleft(dot.sign_time,7)= '"+date+"'";
+		}else{
+			sql = sql + "      AND strleft(dot.sign_time,7)>= '2019-01'";
+			sql = sql + " 	 AND strleft(dot.sign_time,7)<= '2019-12'";
+		}
+		sql = sql + "    GROUP BY dot.store_city_code";
+		sql = sql + "    ORDER BY dot.store_city_code) aa";
+		sql = sql + " LEFT JOIN";
+		sql = sql + "   (SELECT count_money,";
+		sql = sql + "           city_code,";
+		sql = sql + "           create_date,";
+		sql = sql + "           num";
+		sql = sql + "    FROM";
+		sql = sql + "      (SELECT ifnull(dround(sum(baosun.count_money),2),0) AS count_money,";
+		sql = sql + "              ts.city_code,";
+		sql = sql + "              baosun.create_date,";
+		sql = sql + "              ROW_NUMBER() OVER(PARTITION BY city_code";
+		sql = sql + "                                ORDER BY create_date DESC) AS num";
+		sql = sql + "       FROM df_pankui_baosun_info baosun";
+		sql = sql + "       JOIN gemini.t_store ts ON baosun.store_code=ts.code";
+		sql = sql + "       WHERE baosun.count_type='0'";
+		if(!"all".equals(date)){
+			sql = sql + "         AND baosun.count_month = '"+date+"'";
+		}else{
+			sql = sql + "         AND baosun.count_month >= '2019-01'";
+			sql = sql + " 		AND baosun.count_month <= '2019-12'";
+		}
+		sql = sql + "       GROUP BY ts.city_code,";
+		sql = sql + "                baosun.create_date) aa HAVING num=1) dbaosun ON aa.store_city_code=dbaosun.city_code";
+		sql = sql + " LEFT JOIN";
+		sql = sql + "   (SELECT ifnull(dround(sum(order_profit),2),0) AS return_profit ,";
+		sql = sql + "           store_city_code";
+		sql = sql + "    FROM df_mass_order_total WHERE 1=1";
+		if(!"all".equals(date)){
+			sql = sql + "      AND strleft(return_time,7)= '"+date+"'";
+		}else{
+			sql = sql + "      AND strleft(return_time,7)>= '2019-01'";
+			sql = sql + " 	 AND strleft(return_time,7)<= '2019-12'";
+		}
+		sql = sql + "    GROUP BY store_city_code) dd ON aa.store_city_code=dd.store_city_code";
+		sql = sql + " ORDER BY aa.store_city_code";
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+
+		// 如果没有数据返回
+		if (list == null || list.size() == 0) {
+			return lst_result;
+		}
+		// 转换成需要的数据形式
+		for (Object obj_data : list) {
+			lst_result.add((Map<String, Object>) obj_data);
+		}
+		return lst_result;
+	}
 }

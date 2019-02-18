@@ -450,24 +450,229 @@
               <!--实时数据-->
       <div class="text-muted text-muted1"  style="width: 48%; float:left; position: relative; margin: 0 1%; left: 25%;">
         <div class="gaugetb1 clearfix text-center">
-          <div class="col-sm-4">
+          <div class="col-sm-3">
           	<input type="hidden" id="tradesumofcurmonthHid">
             <h5 class="no-margin" style="cursor: pointer;" onmouseover="showTooltip();" onmouseout="hideTooltip();">当月营业额</h5>
             <font id="attention" style="color:#FFFFFF;font-size: 12px;white-space: nowrap;position: absolute;top:-18px;z-index: 1000;display:none;left:60px">统计口径：签收金额 - 退货金额</font>	
             <p id="tradesumofcurmonths"></p>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
           	<input type="hidden" id="tradesumofyearHid">
             <h5 class="no-margin" style="cursor: pointer;" onmouseover="showTooltip2();" onmouseout="hideTooltip2();">当年营业额</h5>
             <font id="attention2" style="color:#FFFFFF;font-size: 12px;white-space: nowrap;position: absolute;top:-18px;z-index: 1000;display:none;left:60px">统计口径：签收金额 - 退货金额</font>
             <p id="tradesumofCurYears"></p>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
           	<input type="hidden" id="tradesumofhistoryHid">
             <h5 class="no-margin" style="cursor: pointer;" onmouseover="showTooltip3();" onmouseout="hideTooltip3();">历史营业额</h5>
             <font id="attention3" style="color:#FFFFFF;font-size: 12px;white-space: nowrap;position: absolute;top:-18px;z-index: 1000;display:none;left:60px">统计口径：签收金额 - 退货金额</font>
             <p id="tradesumofhistorys"></p>
           </div>
+            <div class="col-sm-3 pull-left zhibiao">
+                <h5 class="no-margin">整体经营指标</h5>
+                <!--<p>2.38万</p>-->
+            </div>
+            <div class="run_pop nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_4_1" data-toggle="tab">业务维度</a></li>
+                    <li><a href="#tab_4_2" data-toggle="tab">区域维度</a></li>
+                </ul>
+                <div class="tab-content tree no-padding">
+                    <div class="tab-pane active" id="tab_4_1">
+                        <ul class="no-padding clearfix">
+                            <li>
+                                <a>
+                                    <p class="bg-red">国安社区整体毛利额目标</p>
+                                    <p class="f24" id="maoriAll">5.28亿</p>
+                                </a>
+                                <ul >
+                                    <li>
+                                        <a>
+                                            <p class="bg-light-blue"><span>优易</span><br>业务目标：<span id="youyiTarget"></span><span>万</span></p>
+                                            <p class="f16 text-green" id="youyi">月完成进度<br><span id="youyiActual"></span></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <p class="bg-light-blue"><span>点位</span><br>业务目标：<span id="dianweiTarget"></span><span>万</span></p>
+                                            <p class="f16 text-black" id="dianwei">月完成进度<br><span id="dianweiActual">暂无数据</span></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <p class="bg-light-blue"><span>金超</span><br>业务目标：<span id="jinchaoTarget"></span><span>万</span></p>
+                                            <p class="f16 text-black" id="jinchao">月完成进度<br><span id="jinchaoActual">暂无数据</span></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <p class="bg-light-blue"><span>家务事</span><br>业务目标：<span id="jiawushiTarget"></span><span>万</span></p>
+                                            <p class="f16 text-red" id="jiawushi">月完成进度<br><span id="jiawushiActual"></span></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <p class="bg-light-blue"><span>产品中心</span><br>目标：<span id="chanpinTarget"></span><span>万</span></p>
+                                            <p class="f16 text-green" id="chanpin">月完成进度<br><span id="chanpinActual"></span></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <p class="bg-light-blue"><span>智诚</span><br>业务目标：暂无数据</p>
+                                            <p class="f16 text-black">月完成进度<br><span>暂无数据</span></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <p class="bg-light-blue"><span>政府补贴</span><br>目标：<span id="zhengfuTarget"></span><span>万</span></p>
+                                            <p class="f16 text-black" id="zhengfu">月完成进度<br><span id="zhengfuActual">暂无数据</span></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <p class="bg-light-blue"><span>综合中心</span><br>目标：<span id="zongheTarget">暂无数据</span></p>
+                                            <p class="f16 text-black">月完成进度<br><span id="zongheActual">暂无数据</span></p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="tab_4_2">
+                        <ul class="no-padding clearfix">
+                            <li>
+                                <a>
+                                    <p class="bg-red">国安社区整体毛利额目标</p>
+                                    <p class="f24" id="allCityTarget">5.28亿</p>
+                                </a>
+                                <ul>
+                                    <li class="pull-left">
+                                        <a>
+                                            <p class="bg-light-blue"><span>社区总部</span><br>任务：<span>暂无数据</span></p>
+                                            <p class="f16 text-red">月完成进度<br><span>暂无数据</span></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <p class="bg-light-blue"><span>京津沪</span><br>整体任务：<span id="jjhCityTarget">暂无数据</span></p>
+                                            <p class="f16 text-green">月完成进度<br><span id="jjhCityActual">暂无数据</span></p>
+                                        </a>
+                                        <!--三级菜单-->
+                                        <ul class="three_menu">
+                                            <li>
+                                                <a>
+                                                    <p class="bg-light-blue"><span>北京区域</span><br><span id="beijingAllTarget">暂无数据</span></p>
+                                                    <p class="f16 text-green">月完成进度<br><span id="beijingAllActual">暂无数据</span></p>
+                                                </a>
+                                                <ul class="three_menu">
+                                                    <li>
+                                                        <a>
+                                                            <p class="bg-light-blue"><span>北京总部</span><br><span id="beijingHeadquartersTarget">暂无数据</span></p>
+                                                            <p class="f16 text-green">月完成进度<br><span id="beijingHeadquartersActual">暂无数据</span></p>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a>
+                                                            <p class="bg-light-blue"><span>北京(79店)</span><br><span id="beijingStoreTarget"></span><span>万</span></p>
+                                                            <p class="f16 text-red">月完成进度<br><span id="beijingStoreActual"></span></p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a>
+                                                    <p class="bg-light-blue"><span>天津区域</span><br><span id="tianjinAllTarget">暂无数据</span></p>
+                                                    <p class="f16 text-green">月完成进度<br><span id="tianjinAllActual">暂无数据</span></p>
+                                                </a>
+                                                <ul class="three_menu">
+                                                    <li>
+                                                        <a>
+                                                            <p class="bg-light-blue"><span>天津总部</span><br><span id="tianjinHeadquartersTarget">暂无数据</span></p>
+                                                            <p class="f16 text-red">月完成进度<br><span id="tianjinHeadquartersActual">暂无数据</span></p>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a>
+                                                            <p class="bg-light-blue"><span>天津(51店)</span><br><span id="tianjinStoreTarget"></span><span>万</span></p>
+                                                            <p class="f16 text-green">月完成进度<br><span id="tianjinStoreActual"></span></p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a>
+                                                    <p class="bg-light-blue"><span>上海区域</span><br><span id="shanghaiAllTarget">暂无数据</span></p>
+                                                    <p class="f16 text-green">月完成进度<br><span id="sahnghaiAllActual">暂无数据</span></p>
+                                                </a>
+                                                <ul class="three_menu">
+                                                    <li>
+                                                        <a>
+                                                            <p class="bg-light-blue"><span>上海总部</span><br><span id="shanghaiHeadquartersTarget">暂无数据</span></p>
+                                                            <p class="f16 text-green">月完成进度<br><span id="shanghaiHeadquartersActual">暂无数据</span></p>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a>
+                                                            <p class="bg-light-blue"><span>上海(30店)</span><br><span id="shanghaiStoreTarget"></span><span>万</span></p>
+                                                            <p class="f16 text-red">月完成进度<br><span id="shanghaiStoreActual"></span></p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pull-right">
+                                        <a>
+                                            <p class="bg-light-blue"><span>智诚业务</span><br>整体任务：暂无数据</p>
+                                            <p class="f16 text-red">月完成进度<br><span>暂无数据</span></p>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a>
+                                                    <p class="bg-light-blue">云南区域：暂无数据</p>
+                                                    <p class="f16 text-red">月完成进度<br><span>暂无数据</span></p>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a>
+                                                    <p class="bg-light-blue">贵州区域：暂无数据</p>
+                                                    <p class="f16 text-red">月完成进度<br><span>暂无数据</span></p>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a>
+                                                    <p class="bg-light-blue">辽宁区域：暂无数据</p>
+                                                    <p class="f16 text-red">月完成进度<br><span>暂无数据</span></p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                <div class="tree-tit text-muted">截止日期：<span id="dateTarget">2019年1月24日 00:00:00</span></div>
+                <div class="tree-data form-group">
+                    <select class="form-control" id="fre_time" onchange="getTargetEntryAll()">
+                        <option value="all">2019年全部</option>
+                        <option value="2019-01">2019年1月份</option>
+                        <option value="2019-02">2019年2月份</option>
+                        <option value="2019-03">2019年3月份</option>
+                        <option value="2019-04">2019年4月份</option>
+                        <option value="2019-05">2019年5月份</option>
+                        <option value="2019-06">2019年6月份</option>
+                        <option value="2019-07">2019年7月份</option>
+                        <option value="2019-08">2019年8月份</option>
+                        <option value="2019-09">2019年9月份</option>
+                        <option value="2019-10">2019年10月份</option>
+                        <option value="2019-11">2019年11月份</option>
+                        <option value="2019-12">2019年12月份</option>
+                    </select>
+                </div>
+                <div class="tree-close"><i class="fa fa-close"></i></div>
+            </div>
         </div>
         <h3 class="text-right" style="margin-top:10px;">当日营业额（元）</h3>
         <div class="dataStatistics">

@@ -26,6 +26,14 @@ public interface TargetEntryStoreManager extends IManager {
 
 	public String saveTargetEntryStore(List<File> lst_import_excel) throws Exception;
 
+	Map<String, Object> queryTargetEntryStoreDept(String date);
+
+	Map<String, Object> queryTargetEntryStoreCity(String date);
+
+	Map<String, Object> queryActualDeptMaori(String date);
+
+	Map<String, Object> queryActualCityMaori(String date);
+
 
 
 	void insertTargetEntry(TargetEntry saveTargetEntry);

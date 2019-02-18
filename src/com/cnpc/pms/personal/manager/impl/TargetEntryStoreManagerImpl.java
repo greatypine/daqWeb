@@ -863,6 +863,42 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> queryTargetEntryStoreDept(String date) {
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		TargetEntryStoreDao targetEntryStoreDao = (TargetEntryStoreDao) SpringHelper.getBean(TargetEntryStoreDao.class.getName());
+		List<Map<String, Object>> datas = targetEntryStoreDao.queryTargetEntryStoreDept(date);
+		map_result.put("data", datas);
+		return map_result;
+	}
+
+	@Override
+	public Map<String, Object> queryTargetEntryStoreCity(String date) {
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		TargetEntryStoreDao targetEntryStoreDao = (TargetEntryStoreDao) SpringHelper.getBean(TargetEntryStoreDao.class.getName());
+		List<Map<String, Object>> datas =  targetEntryStoreDao.queryTargetEntryStoreCity(date);
+		map_result.put("data", datas);
+		return map_result;
+	}
+
+	@Override
+	public Map<String, Object> queryActualDeptMaori(String date) {
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		TargetEntryStoreDao targetEntryStoreDao = (TargetEntryStoreDao) SpringHelper.getBean(TargetEntryStoreDao.class.getName());
+		List<Map<String, Object>> datas = targetEntryStoreDao.queryActualDeptMaori(date);
+		map_result.put("data", datas);
+		return map_result;
+	}
+
+	@Override
+	public Map<String, Object> queryActualCityMaori(String date) {
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		TargetEntryStoreDao targetEntryStoreDao = (TargetEntryStoreDao) SpringHelper.getBean(TargetEntryStoreDao.class.getName());
+		List<Map<String, Object>> datas =  targetEntryStoreDao.queryActualCityMaori(date);
+		map_result.put("data", datas);
+		return map_result;
+	}
+
 //	@Override
 //	public Map<String, Object> getByTarget(String statistics,String cityname) {
 //		Map<String,Object> result = new HashMap<String,Object>();

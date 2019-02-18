@@ -143,13 +143,11 @@
     .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active:hover > a{background-color: transparent; border: 0;}
     .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a{color:#00ffe6;}
     .nav-tabs-custom > .nav-tabs{color: #efefef; border: 0;}
-    .gaugetb1 p{font-size: 26px; font-weight: bold;}
     .nav-tabs-custom > .nav-tabs > li.active a{color: #00ffe6;}
     .nav-tabs-custom > .nav-tabs > li a{color: #b9b9b9;}
     
     .gaugetb1{color: #efefef;}
     .gaugetb5{color: #00ffe6}
-    .gaugetb1 p{font-size: 26px; font-weight: bold;}
     .gaugetb1 .col-sm-4:nth-child(1){color: #ff002f;}
     .gaugetb1 .col-sm-4:nth-child(2){color: #ff6600;}
     .gaugetb1 .col-sm-4:nth-child(3){color: #00ffe6;}
@@ -213,3 +211,54 @@
 	  .gengduo2 a {color: #747474;font-size: 12px;}
 	  .gengduo2:hover{cursor:pointer}
 	  #main9 canvas{top:-20px!important;}
+
+    /*毛利目标*/
+    @media (max-width: 1600px) {
+        .run_pop{width: 1200px; margin-left: -600px;}
+        #tab_4_1,#tab_4_2{overflow-x: scroll;}
+        #tab_4_1>ul{width: 1400px;}
+        #tab_4_2>ul{width: 1550px;}
+    }
+    @media (min-width: 1600px) {
+        .run_pop{width: 1600px; margin-left: -800px;}
+    }
+    .run_pop{position: absolute; top: 70px; left: 50%; background-color: #fff; z-index: 9999; color: #dcdbe0; line-height: 35px; padding: 15px 10px 10px 15px; display: none;}
+    .run_pop.nav-tabs-custom > .nav-tabs > li.active > a{background-color: #50aec7; padding: 6px 15px; color: #fff;}
+    .run_pop.nav-tabs-custom > .nav-tabs > li > a:hover{border: 1px solid #50aec7;}
+    .run_pop.nav-tabs-custom > .nav-tabs > li > a{color: rgba(0,0,0,0.5); border: 1px solid #50aec7; padding: 6px 15px; margin: 0 1px; border-radius: 5px;}
+    .rpop_down{position: absolute; right: 28px; top: 17px;}
+    /*垂直树形图*/
+    .tree>ul{-webkit-transition: all 0.5s; -moz-transition: all 0.5s; transition:all .3s;}
+    .tree ul ul{padding: 10px 0 0 0; position: relative;}
+    .tree li{display: inline-block; text-align: center; position: relative; padding:20px 0 0 0; -webkit-transition: all 0.5s;-moz-transition: all 0.5s;transition:all .3s;}
+    /*利用::before,::after作分支线*/
+    .tree li::before,.tree li::after{content:""; position: absolute; top:0; right:50%; width:50%; height:20px; border-top:1px solid #ccc; min-width: 100px;}
+    .tree li:after{right:auto; left:50%; border-left:1px solid #ccc;}
+    .tree li:first-child::before,.tree li:last-child::after{border:0;}
+    .tree li:last-child::before{ border-right:1px solid #ccc; -webkit-border-radius: 0 10px 0 0; -moz-border-radius: 0 10px 0 0; border-radius: 0 10px 0 0;}
+    .tree li:first-child::after{-webkit-border-radius: 10px 0 0 0; -moz-border-radius: 10px 0 0 0; border-radius: 10px 0 0 0;}
+
+    /*删除仅只有一个分支的分支线*/
+    .tree li:only-child::before,.tree li:only-child::after{border:none;}
+    .tree li:only-child{padding-top:0;}
+
+    /*添加仅只有一个分支的下分支线*/
+    .tree ul ul::before{content:""; position: absolute; top:-15px; left:50%; border-left:1px solid #ccc; width:0; height:25px;}
+    .tree a{display: inline-block; padding: 0px 7px; color:#666; text-decoration: none; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; -webkit-transition: all 0.5s; -moz-transition: all 0.5s; transition:all .3s;}
+
+    /*添加选中状态*/
+    /*.tree li a:hover,.tree li a:hover+ul li a{background-color: #c8e4f8; color: #000; border: 1px solid #94a0b4;}
+    .tree li a:hover+ul li:after,.tree li a:hover+ul li:before,.tree li a:hover+ul::before,.tree li a:hover+ul ul::before{border-color: #94a0b4;}*/
+
+    .tree li p{border:1px solid #385d8a; color:#666; text-decoration: none; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; -webkit-transition: all 0.5s; -moz-transition: all 0.5s; transition:all .3s; margin:0; line-height: 26px;}
+    .tree li a p:nth-child(1){padding: 7px 10px;}
+    .tree li a p:nth-child(2){padding: 7px 5px;}
+    .tree li .f24{font-size: 24px; font-weight: bold; color: #c00000;}
+    .tree li .f16{font-size: 14px; color: rgba(0,0,0,0.7); line-height: 26px;}
+    .tree li .f16 span{font-weight: bold; font-size: 16px;}
+    .three_menu p{padding: 0 5px!important;}
+    .tree-tit{position: absolute; top: 15px; left: 220px;}
+    .tree-data{position: absolute; top: 15px; right: 60px;}
+    .tree-close{position: absolute; top: 0px; right: 20px; font-size: 22px; color: #333; cursor: pointer;}
+    .tree .bg-light-blue{ color: rgba(255,255,255,0.7)!important;}
+    .tree .bg-light-blue span{font-size: 16px; color: rgba(255,255,255,1);}
