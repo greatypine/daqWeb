@@ -1635,12 +1635,12 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				}else if ("淘金汇".equals(names[i].trim())){
 					sql = sql + " dum.associator_mode like 'tjh%' ";
 				}else if ("兑换码".equals(names[i].trim())){
-					sql = sql + " dum.associator_mode = 'groupYearCard-19' ";
+					sql = sql + " dum.associator_mode like 'groupYearCard%' ";
 				}else if ("其他".equals(names[i].trim())){
 					sql = sql + " not EXISTS ( "
 						+ "select dum2.* FROM df_user_member dum2 WHERE dum.customer_id=dum2.customer_id  AND (dum2.opencard_time between '" + memberDataDto.getOpen_card_time_begin() + " 00:00:00' and '"
 						+ memberDataDto.getOpen_card_time_end() + " 23:59:59') " ;
-					sql = sql + " and ( dum2.member_type in ('associator_start_2','yearCard','yearCard-19') or dum2.associator_mode = 'axc' or dum2.associator_mode = 'oneToTwo-19' or dum2.associator_mode like 'tjh%' or dum2.associator_mode = 'groupYearCard-19' ) ";
+					sql = sql + " and ( dum2.member_type in ('associator_start_2','yearCard','yearCard-19') or dum2.associator_mode = 'axc' or dum2.associator_mode = 'oneToTwo-19' or dum2.associator_mode like 'tjh%' or dum2.associator_mode like 'groupYearCard%' ) ";
 					sql = sql + " ) " ;
 				}
 				if (i == names.length - 1) {
@@ -1744,12 +1744,12 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				}else if ("淘金汇".equals(names[i].trim())){
 					sql = sql + " dum.associator_mode like 'tjh%' ";
 				}else if ("兑换码".equals(names[i].trim())){
-					sql = sql + " dum.associator_mode = 'groupYearCard-19' ";
+					sql = sql + " dum.associator_mode like 'groupYearCard%' ";
 				}else if ("其他".equals(names[i].trim())){
 					sql = sql + " not EXISTS ( "
 						+ "select dum2.* FROM df_user_member dum2 WHERE dum.customer_id=dum2.customer_id  AND (dum2.opencard_time between '" + memberDataDto.getOpen_card_time_begin() + " 00:00:00' and '"
 						+ memberDataDto.getOpen_card_time_end() + " 23:59:59') " ;
-					sql = sql + " and ( dum2.member_type in ('associator_start_2','yearCard','yearCard-19') or dum2.associator_mode = 'axc' or dum2.associator_mode = 'oneToTwo-19' or dum2.associator_mode like 'tjh%' or dum2.associator_mode = 'groupYearCard-19' ) ";
+					sql = sql + " and ( dum2.member_type in ('associator_start_2','yearCard','yearCard-19') or dum2.associator_mode = 'axc' or dum2.associator_mode = 'oneToTwo-19' or dum2.associator_mode like 'tjh%' or dum2.associator_mode like 'groupYearCard%' ) ";
 					sql = sql + " ) " ;
 				}
 				if (i == names.length - 1) {
