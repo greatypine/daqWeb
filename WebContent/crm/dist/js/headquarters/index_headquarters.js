@@ -7217,14 +7217,22 @@ function createTableProductData(resultJson,product_num){
 	var lstLength = resultJson['lst_data'].length;
 	var count = resultJson['count'];
 	            $.each(eval(resultJson['lst_data']), function (idx, val) {
+	            	var hot = false;
+	            	var hot_img = "";
+	            	if(val['product_gmv']>=200){
+	            		hot = true;
+	            	}
+	            	if(hot == true){
+	            		hot_img = '<em><img src="dist/img/hot-r.png"></em>';
+	            	}
 	            	if(idx==0){
 	            		var th_tr = $("<tr/>");
 	            		var th_td_1 = $('<td><span class="text_big1"></span></td>');
 	            		var th_td_2;
 	            		if(val['product_name'].length>10){
-	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+hot_img+'</td>');
 	            		}else{
-	            		th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            		th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+hot_img+'</td>');
 	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
@@ -7243,9 +7251,9 @@ function createTableProductData(resultJson,product_num){
 	            		var th_td_1 = $('<td><span class="text_big2"></span></td>');
 	            		var th_td_2;
 	            		if(val['product_name'].length>10){
-	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+hot_img+'</td>');
 	            		}else{
-	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+hot_img+'</td>');
 	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
@@ -7264,9 +7272,9 @@ function createTableProductData(resultJson,product_num){
 	            		var th_td_1 = $('<td><span class="text_big3"></span></td>');
 	            		var th_td_2;
 	            		if(val['product_name'].length>10){
-	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+hot_img+'</td>');
 	            		}else{
-	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            			th_td_2 = $('<td class="text-yellow" title="'+val['product_name']+'">'+val['product_name']+hot_img+'</td>');
 	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');
@@ -7285,9 +7293,9 @@ function createTableProductData(resultJson,product_num){
 	            		var th_td_1 = $('<td>'+(idx+1)+'</td>');
 	            		var th_td_2;
 	            		if(val['product_name'].length>10){
-	            			th_td_2 = $('<td title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+(val['product_name'].substring(0,10)+'...')+hot_img+'</td>');
 	            		}else{
-	            			th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+'<em><img src="dist/img/hot-r.png"> </em></td>');
+	            			th_td_2 = $('<td title="'+val['product_name']+'">'+val['product_name']+hot_img+'</td>');
 	            		}
 	            		var th_td_3 = $('<td title="'+val['store_name']+'">'+val['store_name']+'</td>');
 	            		var th_td_4 = $('<td title="'+val['store_name']+'">'+val['product_gmv']+'</td>');

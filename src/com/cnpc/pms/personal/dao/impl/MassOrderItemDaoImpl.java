@@ -1121,6 +1121,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	@Override
 	public Map<String, Object> getProductYesteryRank(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO, PageInfo pageInfo) {
 		String whereStr = "";
+		String whereStr1 = "";
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
 		String sql = "SELECT ifnull((ss.rows1-tt.rows2),0) as rank,tt.store_name as store_name,tt.storeno as storeno,tt.product_gmv as product_gmv,tt.product_name as product_name FROM (SELECT min(bipo.store_name) AS store_name,min(bipo.store_code) AS storeno,"
@@ -1130,8 +1131,6 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String sqlA = "";
 		String count_sql = "";
 		String total_quantity_sql = "";
-		String product_quantity_sql = "";
-		String searchStr = "";
 		String productName = dynamicDto.getSearchstr();
 		if(cityNO!=null&&cityNO.size()>0){
 			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
@@ -1146,8 +1145,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		whereStr+=" and bipo.store_name not like '%企业购%'";
 		if(StringUtils.isNotEmpty(productName)){
-			searchStr = " where ff.product_name like '%"+productName+"%'";
 			whereStr+=" and bipo.eshop_pro_name like '%"+productName+"%'";
+			whereStr1=" and bipo.eshop_pro_name like '%"+productName+"%'";
 		}
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
@@ -1159,24 +1158,18 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
 		count_sql = "select count(1) as count_ from ("+sql+") ff ";
-		total_quantity_sql = "select sum(gg.product_gmv) as total_quantity from ("+sql+") gg ";
-		product_quantity_sql = "select count(1) as product_quantity from (SELECT min(DISTINCT(ss.product_name)) AS product_quantitys from ("+sql+") ss group by ss.product_name ) ft ";
+		total_quantity_sql = "select gg.product_name as product_name,gg.product_gmv as product_gmv from ("+sql+") gg WHERE gg.product_gmv >= 200 order by gg.product_gmv desc LIMIT 5 OFFSET 0";
+		total_quantity_sql = total_quantity_sql.replace(whereStr1, "");
 		
         List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data_quantity = new ArrayList<Map<String,Object>>();
-        List<Map<String,Object>> lst_data_product_quantity = new ArrayList<Map<String,Object>>();
         Integer count_ = 0;
-        Integer count_total_quantity = 0;
-        Integer count_product_quantity = 0;
         try{
         	lst_data_count=ImpalaUtil.executeGuoan(count_sql);
         	lst_data_quantity=ImpalaUtil.executeGuoan(total_quantity_sql);
-        	lst_data_product_quantity=ImpalaUtil.executeGuoan(product_quantity_sql);
         	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
-        	count_total_quantity = Integer.parseInt(lst_data_quantity.get(0).get("total_quantity").toString());
-        	count_product_quantity = Integer.parseInt(lst_data_product_quantity.get(0).get("product_quantity").toString());
         	if(pageInfo.getCurrentPage()==1){
         		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
         	}else{
@@ -1196,13 +1189,13 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			map_result.put("total_pages", total_pages);
 		}
 		map_result.put("data", lst_data);
-		map_result.put("lst_data_quantity", count_total_quantity);
-		map_result.put("lst_data_product_quantity", count_product_quantity);
+		map_result.put("lst_data_quantity", lst_data_quantity);
 		return map_result;
 	}
 	@Override
 	public Map<String, Object> getStoreProductIntervalDay(DynamicDto dynamicDto,DynamicDto dynamicDto2, List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO, PageInfo pageInfo) {
 		String whereStr = "";
+		String whereStr1 = "";
 		String beginDate = dynamicDto.getBeginDate();
 		String endDate = dynamicDto.getEndDate();
 		String beginDate2 = dynamicDto2.getBeginDate();
@@ -1214,8 +1207,6 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String sqlA = "";
 		String count_sql = "";
 		String total_quantity_sql = "";
-		String product_quantity_sql = "";
-		String searchStr = "";
 		String productName = dynamicDto.getSearchstr();
 		if(cityNO!=null&&cityNO.size()>0){
 			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
@@ -1230,8 +1221,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		whereStr+=" and bipo.store_name not like '%企业购%'";
 		if(StringUtils.isNotEmpty(productName)){
-			searchStr = " where ff.product_name like '%"+productName+"%'";
 			whereStr+=" and bipo.eshop_pro_name like '%"+productName+"%'";
+			whereStr1 = " and bipo.eshop_pro_name like '%"+productName+"%'";
 		}
 		sql = sql+whereStr;
 		sql = sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code) tt ";
@@ -1243,23 +1234,17 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sql = sql+whereStr;		
 		sql=sql+" GROUP BY bipo.eshop_pro_id,bipo.store_code ) ss on tt.storeno = ss.storeno and tt.product_id=ss.product_id ";
 		count_sql = "select count(1) as count_ from ("+sql+") ff ";
-		total_quantity_sql = "select sum(gg.product_gmv) as total_quantity from ("+sql+") gg ";
-		product_quantity_sql = "select count(1) as product_quantity from (SELECT min(DISTINCT(ss.product_name)) AS product_quantitys from ("+sql+") ss group by ss.product_name ) ft ";
+		total_quantity_sql = "select gg.product_name as product_name,gg.product_gmv as product_gmv from ("+sql+") gg WHERE gg.product_gmv >= 200 order by gg.product_gmv desc LIMIT 5 OFFSET 0";
+		total_quantity_sql = total_quantity_sql.replace(whereStr1, "");
         List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data_quantity = new ArrayList<Map<String,Object>>();
-        List<Map<String,Object>> lst_data_product_quantity = new ArrayList<Map<String,Object>>();
         Integer count_ = 0;
-        Integer count_total_quantity = 0;
-        Integer count_product_quantity = 0;
         try{
         	lst_data_count=ImpalaUtil.executeGuoan(count_sql);
         	lst_data_quantity=ImpalaUtil.executeGuoan(total_quantity_sql);
-        	lst_data_product_quantity=ImpalaUtil.executeGuoan(product_quantity_sql);
         	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
-        	count_total_quantity = Integer.parseInt(lst_data_quantity.get(0).get("total_quantity").toString());
-        	count_product_quantity = Integer.parseInt(lst_data_product_quantity.get(0).get("product_quantity").toString());
         	if(pageInfo.getCurrentPage()==1){
         		sqlA = "select ff.* from ("+sql+") ff "+" order by ff.product_gmv desc limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
         	}else{
@@ -1279,8 +1264,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			map_result.put("total_pages", total_pages);
 		}
 		map_result.put("data", lst_data);
-		map_result.put("lst_data_quantity", count_total_quantity);
-		map_result.put("lst_data_product_quantity", count_product_quantity);
+		map_result.put("lst_data_quantity", lst_data_quantity);
 		return map_result;
 	}
 	@Override

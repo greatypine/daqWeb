@@ -39,7 +39,7 @@ public class CommunityMembersManagerImpl extends BizBaseCommonManager implements
 		List<Map<String, Object>> historyCountList = new ArrayList<Map<String,Object>>();
 		newCmCountList =communityMembersDao.getNewMembersCount(dynamicDto,"0");//查询新开社员总量
 		historyCountList =communityMembersDao.getNewMembersCount(dynamicDto,"1");//查询历史新开社员总量
-		lastYearCountList =communityMembersDao.getNewMembersLastYearCount(dd2);//查询去年新开社员总量
+		lastYearCountList =communityMembersDao.getNewMembersLastYearCount(dynamicDto);//查询今年新开社员总量
 		if(newCmCountList!=null&&newCmCountList.size()>0){
 			result.put("newMemberCount", newCmCountList.get(0).get("newCount"));
 		}else {
