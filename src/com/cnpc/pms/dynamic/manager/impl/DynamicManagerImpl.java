@@ -5481,11 +5481,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		dd2.setYear(Integer.parseInt(com.cnpc.pms.base.file.comm.utils.DateUtil.findYearByIndex(-1)));
 		//查询某年营业额
 		List<Map<String, Object>> sumYearGMVList = dynamicDao.queryYearSumGMV(dd,city_id,province_id,"0");
-		//去年营业额
-		List<Map<String, Object>> sumLastYearGMVList = dynamicDao.queryYearSumGMV(dd2,city_id,province_id,"0");
-		//去年用户量
-		List<Map<String, Object>> customerMonthCountList = massOrderItemDao.queryLastYearCustomerCount(dd2);
-		Map<String, Object> orderLastYearCountList = massOrderItemDao.queryYearOrderCount(dd2);
+		//今年营业额
+		List<Map<String, Object>> sumLastYearGMVList = dynamicDao.queryYearSumGMV(dd,city_id,province_id,"0");
+		//今年用户量
+		List<Map<String, Object>> customerMonthCountList = massOrderItemDao.queryLastYearCustomerCount(dd);
+		Map<String, Object> orderLastYearCountList = massOrderItemDao.queryYearOrderCount(dd);
 		result.put("year_gmv_sum", sumYearGMVList);
 		result.put("year_last_gmv_sum", sumLastYearGMVList);
 		result.put("year_last_year_customer_count", customerMonthCountList);
