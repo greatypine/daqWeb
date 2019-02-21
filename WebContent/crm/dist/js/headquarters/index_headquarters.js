@@ -3055,9 +3055,14 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     cityProfitRangeOption.series[6].name = titleTH[6];
     cityProfitRangeOption.legend[0].data = result[0];
     cityProfitRangeOption.legend[1].data = result[1];
-    /*
     var max = Math.max.apply(null, data);
-    cityProfitRangeOption.visualMap[0].max=max;
+    var regin_max = cityProfitRangeOption.visualMap[0].max;
+    if(max>regin_max){
+    	cityProfitRangeOption.visualMap[0].max=max;
+    }else{
+    	cityProfitRangeOption.visualMap[0].max=500;
+    }
+    /*
     var min = Math.min.apply(null, data);
     var average = (max - min)/listcount;
     if(average>0&&average<=0.2){
