@@ -616,13 +616,14 @@ var initPageElements = function () {
         show: false
       }
     },
-    /*visualMap: [
+    visualMap: [
       {
         left: 'right',
         top: '10%',
         dimension: 2,
+        show: false,
         min: 0,
-        max: 250,
+        max: 500,
         itemWidth: 30,
         itemHeight: 150,
         calculable: true,
@@ -647,7 +648,8 @@ var initPageElements = function () {
             color: ['rgba(255,255,255,0.8)']
           }
         }
-      },
+      }
+      /*,
       {
         left: 'right',
         bottom: '5%',
@@ -676,8 +678,8 @@ var initPageElements = function () {
             color: ['#666']
           }
         }
-      }
-    ],*/
+      }*/
+    ],
     series: [
       {
         name: '1',
@@ -3053,7 +3055,9 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
     cityProfitRangeOption.series[6].name = titleTH[6];
     cityProfitRangeOption.legend[0].data = result[0];
     cityProfitRangeOption.legend[1].data = result[1];
+    /*
     var max = Math.max.apply(null, data);
+    cityProfitRangeOption.visualMap[0].max=max;
     var min = Math.min.apply(null, data);
     var average = (max - min)/listcount;
     if(average>0&&average<=0.2){
@@ -3116,6 +3120,7 @@ var showProfitRangeForStoreWeek = function (profitStoreRange) {
 			return val[2]*average;
 		}
 	};
+	*/
 	cityProfitRangeChart.setOption(cityProfitRangeOption,true);
 };
 // 近七日GMV走势图
