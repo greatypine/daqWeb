@@ -575,7 +575,7 @@ Date.prototype.format = function() {
   var option2 = {
 	backgroundColor:'#5e5e5e',
 	title : {
-	  text: '营业额分布（2019年）',
+	  text: '营业额分布（2018年）',
 	  textStyle: {
 		color: '#fff'
 	  },
@@ -2114,6 +2114,7 @@ Date.prototype.format = function() {
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
+                    option2.title.text="营业额分布（"+jsonData.curdate+"年）";
 					option2.series[0].data[1].value = jsonData.offline_amount;
 					option2.series[0].data[0].value = jsonData.online_amount;
 					myChart2.setOption(option2,true);

@@ -171,7 +171,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@Override
 	public Map<String, Object> queryOnlineOfflineTurnover(ChartStatDto csd){
 		String sql = "SELECT IFNULL(FLOOR(SUM(CASE WHEN (`delivery_type` = 'self' OR order_address_id IS NULL) THEN gmv_price ELSE 0 END)),0) offline_amount,	"
-				+ "IFNULL(FLOOR(SUM(CASE WHEN (`delivery_type` != 'self' AND order_address_id IS NOT NULL) THEN gmv_price ELSE 0 END ) ), 0 ) online_amount FROM df_mass_order_total dom "
+				+ "IFNULL(FLOOR(SUM(CASE WHEN (`delivery_type` != 'self' AND order_address_id IS NOT NULL) THEN gmv_price ELSE 0 END ) ), 0 ) online_amount,YEAR(curdate()) as curdate FROM df_mass_order_total dom "
 				+ "WHERE YEAR(dom.sign_time)=YEAR(curdate()) and dom.store_name NOT LIKE '%测试%' ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dom.store_code = '"+csd.getStoreno()+"' ";
