@@ -12,6 +12,7 @@ import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.file.comm.utils.DateUtil;
 import com.cnpc.pms.community.dao.CommunityMembersDao;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
+import com.cnpc.pms.utils.ImpalaUtil;
 
 public class CommunityMembersDaoImpl extends BaseDAOHibernate implements CommunityMembersDao {
 
@@ -263,8 +264,8 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 	}
 	@Override
 	public List<Map<String, Object>> queryTwoTwoOneGMVByDay(DynamicDto dynamicDto) {
-		String sql="SELECT DATE(dmo.sign_time) AS day_time,IFNULL(FLOOR(sum(dmo.trading_price)),0) AS turnover FROM df_mass_order_monthly dmo " +
-				"JOIN df_activity_scope das ON dmo.store_code = das.store_no WHERE dmo.store_name NOT LIKE '%测试%' AND dmo.order_tag2 IS NOT NULL AND dmo.sign_time > '2018-07-01 00:00:00' ";
+		String sql="SELECT from_unixtime(unix_timestamp(dmo.sign_time), 'yyyy-MM-dd') AS day_time,IFNULL(FLOOR(sum(dmo.trading_price)),0) AS turnover FROM daqWeb.df_mass_order_total dmo " +
+				"JOIN daqWeb.df_activity_scope das ON dmo.store_code = das.store_no WHERE dmo.store_name NOT LIKE '%测试%' AND dmo.order_tag2 IS NOT NULL AND dmo.sign_time > '2018-07-01 00:00:00' ";
 		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
 			sql = sql + " AND dmo.store_code = '"+dynamicDto.getStoreNo()+"' ";
 		}
@@ -282,10 +283,9 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 		}else{
 			sql = sql +" AND dmo.order_tag2 not in ('1','2','3')";
 		}
-		sql = sql + " GROUP BY DATE(dmo.sign_time) ";
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		sql = sql + " GROUP BY from_unixtime(unix_timestamp(dmo.sign_time), 'yyyy-MM-dd') ";
 		// 获得查询数据
-		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		List<Map<String, Object>> lst_data = ImpalaUtil.executeGuoan(sql);
 		return lst_data;
 	}
 	@Override
