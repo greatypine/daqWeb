@@ -223,6 +223,13 @@ function pagination(current,pages) {
             //小于8页
             }else if(pages<8){
                 $(".paginate_button")[current].className="paginate_button active";
+				if($("#total").val()==0){
+					$(".paginate_button")[2].remove();
+					$(".paginate_button")[2].remove();
+				}
+				if(current==pages){
+					$("#example1_next").addClass("disabled");
+				}
             //等于8页
             }else if(pages==8){
                 if(current<5){
@@ -256,6 +263,9 @@ function pagination(current,pages) {
                       $("#example1_previous").removeClass("disabled");
                     }else{
                       $("#example1_previous").addClass("disabled");
+					  if((parseInt(current)-1) < 1){
+					  	return;
+					  }
                     }
 					searchProductInfoList(parseInt(current)-1,product_name);
                 }else if(jumpPage=="下一页"){
@@ -263,6 +273,9 @@ function pagination(current,pages) {
 					  $("#example1_next").removeClass("disabled");
                     }else{
                       $("#example1_next").addClass("disabled");
+					  if((parseInt(current)+1) > pages){
+					  	return;
+					  }
                     }
 					searchProductInfoList((parseInt(current)+1),product_name);
                 }else {
