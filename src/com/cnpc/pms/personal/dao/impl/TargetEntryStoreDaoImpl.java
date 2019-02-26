@@ -585,6 +585,7 @@ public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements Target
 		sql = sql + "    GROUP BY dot.store_city_code";
 		sql = sql + "    ORDER BY dot.store_city_code) aa";
 		sql = sql + " LEFT JOIN";
+		sql = sql + " (select sum(aa.count_money) as count_money,aa.city_code,aa.num from ";
 		sql = sql + "   (SELECT count_money,";
 		sql = sql + "           city_code,";
 		sql = sql + "           create_date,";
@@ -592,8 +593,9 @@ public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements Target
 		sql = sql + "    FROM";
 		sql = sql + "      (SELECT ifnull(dround(sum(baosun.count_money),2),0) AS count_money,";
 		sql = sql + "              ts.city_code,";
+		sql = sql + "              baosun.count_month,";
 		sql = sql + "              baosun.create_date,";
-		sql = sql + "              ROW_NUMBER() OVER(PARTITION BY city_code";
+		sql = sql + "              ROW_NUMBER() OVER(PARTITION BY city_code,baosun.count_month";
 		sql = sql + "                                ORDER BY create_date DESC) AS num";
 		sql = sql + "       FROM df_pankui_baosun_info baosun";
 		sql = sql + "       JOIN gemini.t_store ts ON baosun.store_code=ts.code";
@@ -604,8 +606,9 @@ public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements Target
 			sql = sql + "         AND baosun.count_month >= '2019-01'";
 			sql = sql + " 		AND baosun.count_month <= '2019-12'";
 		}
-		sql = sql + "       GROUP BY ts.city_code,";
-		sql = sql + "                baosun.create_date) aa HAVING num=1) dbaosun ON aa.store_city_code=dbaosun.city_code";
+		sql = sql + "       GROUP BY ts.city_code,count_month,";
+		sql = sql + "                baosun.create_date) aa HAVING num=1) aa";
+		sql = sql + "  group by city_code,num) dbaosun ON aa.store_city_code=dbaosun.city_code";
 		sql = sql + " LEFT JOIN";
 		sql = sql + "   (SELECT ifnull(dround(sum(order_profit),2),0) AS return_profit ,";
 		sql = sql + "           store_city_code";

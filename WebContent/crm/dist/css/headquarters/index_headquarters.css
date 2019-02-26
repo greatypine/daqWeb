@@ -222,6 +222,15 @@
     @media (min-width: 1600px) {
         .run_pop{width: 1600px; margin-left: -800px;}
     }
+    /*@media (max-width: 1600px) {*/
+        /*.run_pop{width: 1200px; margin-left: -600px;}*/
+        /*#tab_4_1,#tab_4_2{overflow-x: scroll;}*/
+        /*#tab_4_1>ul{width: 1635px;height: 450px;}*/
+        /*#tab_4_2>ul{width: 1550px;}*/
+    /*}*/
+    /*@media (min-width: 1600px) {*/
+        /*.run_pop{width: 1665px; margin-left: -800px;}*/
+    /*}*/
     .run_pop{position: absolute; top: 70px; left: 50%; background-color: #fff; z-index: 9999; color: #dcdbe0; line-height: 35px; padding: 15px 10px 10px 15px; display: none;}
     .run_pop.nav-tabs-custom > .nav-tabs > li.active > a{background-color: #50aec7; padding: 6px 15px; color: #fff;}
     .run_pop.nav-tabs-custom > .nav-tabs > li > a:hover{border: 1px solid #50aec7;}

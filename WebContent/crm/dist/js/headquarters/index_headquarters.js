@@ -7418,9 +7418,6 @@ function getTargetEntryAll() {
                         chanpinDataActual = Math.round((chanpinDataActual + (resultJson[i].sale_profit - resultJson[i].return_sale_profit))/10000);
                     }
                 }
-                $("#youyiActual").html(youyiDataActual);
-                $("#jiawushiActual").html(jiawushiDataActual);
-                $("#chanpinActual").html(chanpinDataActual);
                 if(date == "all"){
                     if(youyiDataActual >= youyiData){
                         document.getElementById("youyi").className = "text-green"
@@ -7437,6 +7434,9 @@ function getTargetEntryAll() {
                     }else{
                         document.getElementById("chanpin").className = "text-red"
                     }
+                    $("#youyiActual").html(youyiDataActual+"万");
+                    $("#jiawushiActual").html(jiawushiDataActual+"万");
+                    $("#chanpinActual").html(chanpinDataActual+"万");
                 }else{
                     var youyiAvg = youyiData / days;
                     var jiawushiAvg = jiawushiData / days;
@@ -7444,6 +7444,9 @@ function getTargetEntryAll() {
                     var youyiAvgActual = youyiDataActual / nowDay;
                     var jiawushiAvgActual = jiawushiDataActual / nowDay;
                     var chanpinAvgActual = chanpinDataActual / nowDay;
+                    var youyiPro = Math.round(youyiDataActual / youyiData * 10000) / 100.00 + "%";
+                    var jiawushiPro = Math.round(jiawushiDataActual / jiawushiData * 10000) / 100.00 + "%";
+                    var chanpinPro = Math.round(chanpinDataActual / chanpinData * 10000) / 100.00 + "%";
                     if(youyiAvgActual >= youyiAvg){
                         document.getElementById("youyi").className = "text-green"
                     }else{
@@ -7459,7 +7462,11 @@ function getTargetEntryAll() {
                     }else{
                         document.getElementById("chanpin").className = "text-red"
                     }
+                    $("#youyiActual").html(youyiDataActual+"万"+"("+ youyiPro + ")");
+                    $("#jiawushiActual").html(jiawushiDataActual+"万"+"("+ jiawushiPro + ")");
+                    $("#chanpinActual").html(chanpinDataActual+"万"+"("+ chanpinPro + ")");
                 }
+
             }
         },false);
     var allCityDataActual = 0;
@@ -7483,9 +7490,55 @@ function getTargetEntryAll() {
                         tianjinDataActual = Math.round((tianjinDataActual + (resultJson[i].platform_profit + resultJson[i].ims_profit - resultJson[i].order_fee - resultJson[i].baosun - resultJson[i].return_profit))/10000);
                     }
                 }
-                $("#beijingStoreActual").html(beijingDataActual);
-                $("#shanghaiStoreActual").html(shanghaiDataActual);
-                $("#tianjinStoreActual").html(tianjinDataActual);
+                if(date == "all"){
+                    if(beijingDataActual >= beijingData){
+                        document.getElementById("beijing").className = "text-green"
+                    }else{
+                        document.getElementById("beijing").className = "text-red"
+                    }
+                    if(tianjinDataActual >= tianjinData){
+                        document.getElementById("tianjin").className = "text-green"
+                    }else{
+                        document.getElementById("tianjin").className = "text-red"
+                    }
+                    if(shanghaiDataActual >= shanghaiData){
+                        document.getElementById("shanghai").className = "text-green"
+                    }else{
+                        document.getElementById("shanghai").className = "text-red"
+                    }
+                    $("#beijingStoreActual").html(beijingDataActual+"万");
+                    $("#shanghaiStoreActual").html(shanghaiDataActual+"万");
+                    $("#tianjinStoreActual").html(tianjinDataActual+"万");
+                }else{
+                    var beijingAvg = beijingData / days;
+                    var tianjinAvg = tianjinData / days;
+                    var shanghaiAvg = shanghaiData / days;
+                    var beijingAvgActual = beijingDataActual / nowDay;
+                    var tianjinAvgActual = tianjinDataActual / nowDay;
+                    var shanghaiAvgActual = shanghaiDataActual / nowDay;
+                    var beijingPro = Math.round(beijingDataActual / beijingData * 10000) / 100.00 + "%";
+                    var tianjinPro = Math.round(tianjinDataActual / tianjinData * 10000) / 100.00 + "%";
+                    var shanghaiPro = Math.round(shanghaiDataActual / shanghaiData * 10000) / 100.00 + "%";
+                    if(beijingAvgActual >= beijingAvg){
+                        document.getElementById("beijing").className = "text-green"
+                    }else{
+                        document.getElementById("beijing").className = "text-red"
+                    }
+                    if(tianjinAvgActual >= tianjinAvg){
+                        document.getElementById("tianjin").className = "text-green"
+                    }else{
+                        document.getElementById("tianjin").className = "text-red"
+                    }
+                    if(shanghaiAvgActual >= shanghaiAvg){
+                        document.getElementById("shanghai").className = "text-green"
+                    }else{
+                        document.getElementById("shanghai").className = "text-red"
+                    }
+                    $("#beijingStoreActual").html(beijingDataActual+"万"+"("+ beijingPro + ")");
+                    $("#shanghaiStoreActual").html(shanghaiDataActual+"万"+"("+ shanghaiPro + ")");
+                    $("#tianjinStoreActual").html(tianjinDataActual+"万"+"("+ tianjinPro + ")");
+                }
+
             }
         },false);
 }
