@@ -214,6 +214,9 @@ var showPageContent = function (pageStatusInfo) {
     getStoreProductSevenDay(pageStatusInfo);
     //查询近30日门店商品销售排名
     getStoreProductThirtyDay(pageStatusInfo);
+
+    //查询整体经营指标
+    getTargetEntryAll();
     
 };
 // 设置页面初始状态信息
@@ -7373,4 +7376,243 @@ function openMemberUrl(url){
 }
 function openProductUrl(url){
 	window.open(url,"user_member_view");
+}
+
+
+//整体经营指标
+$(".zhibiao").mouseover(function(){
+    $(this).next(".run_pop").show();
+});
+$(".tree-close").click(function(){
+    $(".run_pop").hide();
+});
+
+
+
+function getTargetEntryAll() {
+    var date = $("#fre_time").val();
+    var days = mGetDate();
+    var now = new Date(); //当前日期
+    var nowDay = now.getDate();
+    var allData = 0;
+    var youyiData = 0;
+    var jiawushiData = 0;
+    var chanpinData = 0;
+    var dianweiData = 0;
+    var jinchaoData = 0;
+    var zhengfuData = 0;
+    doManager("targetEntryStoreManager", "queryTargetEntryStoreDept",[date],
+        function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var resultJsons = JSON.parse(data.data);
+                var resultJson = resultJsons.data;
+                for(var i=0;i<resultJson.length;i++){
+                    allData = Math.round(allData + resultJson[i].maori_target);
+                    if(resultJson[i].businessGroup_name == "国安优易"){
+                        youyiData = Math.round(youyiData + resultJson[i].maori_target);
+                    }
+                    if(resultJson[i].businessGroup_name == "家务事"){
+                        jiawushiData = Math.round(jiawushiData + resultJson[i].maori_target);
+                    }
+                    if(resultJson[i].businessGroup_name == "产品中心"){
+                        chanpinData = Math.round(chanpinData + resultJson[i].maori_target);
+                    }
+                    if(resultJson[i].businessGroup_name == "点位"){
+                        dianweiData = Math.round(chanpinData + resultJson[i].maori_target);
+                    }
+                    if(resultJson[i].businessGroup_name == "国安金超"){
+                        jinchaoData = Math.round(chanpinData + resultJson[i].maori_target);
+                    }
+                    if(resultJson[i].businessGroup_name == "政府补贴"){
+                        zhengfuData = Math.round(chanpinData + resultJson[i].maori_target);
+                    }
+                }
+                $("#youyiTarget").html(youyiData);
+                $("#jiawushiTarget").html(jiawushiData);
+                $("#chanpinTarget").html(chanpinData);
+                $("#dianweiTarget").html(dianweiData);
+                $("#jinchaoTarget").html(jinchaoData);
+                $("#zhengfuTarget").html(zhengfuData);
+            }
+        },false);
+
+    var allCityData = 0;
+    var beijingData = 0;
+    var shanghaiData = 0;
+    var tianjinData = 0;
+    doManager("targetEntryStoreManager", "queryTargetEntryStoreCity",[date],
+        function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var resultJsons = JSON.parse(data.data);
+                var resultJson = resultJsons.data;
+                for(var i=0;i<resultJson.length;i++){
+                    allCityData = Math.round(allCityData + resultJson[i].maori_target);
+                    if(resultJson[i].city_name == "北京"){
+                        beijingData = Math.round(beijingData + resultJson[i].maori_target);
+                    }
+                    if(resultJson[i].city_name == "上海"){
+                        shanghaiData = Math.round(shanghaiData + resultJson[i].maori_target);
+                    }
+                    if(resultJson[i].city_name == "天津"){
+                        tianjinData = Math.round(tianjinData + resultJson[i].maori_target);
+                    }
+                }
+                $("#beijingStoreTarget").html(beijingData);
+                $("#shanghaiStoreTarget").html(shanghaiData);
+                $("#tianjinStoreTarget").html(tianjinData);
+            }
+        },false);
+
+    var allDataActual = 0;
+    var youyiDataActual = 0;
+    var jiawushiDataActual = 0;
+    var chanpinDataActual = 0;
+    doManager("targetEntryStoreManager", "queryActualDeptMaori",[date],
+        function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var resultJsons = JSON.parse(data.data);
+                var resultJson = resultJsons.data;
+                for(var i=0;i<resultJson.length;i++){
+                    allDataActual = Math.round((allDataActual + (resultJson[i].sale_profit - resultJson[i].return_sale_profit))/10000);
+                    if(resultJson[i].department_name == "国安优易"){
+                        youyiDataActual = Math.round((youyiDataActual + (resultJson[i].sale_profit - resultJson[i].return_sale_profit))/10000);
+                    }
+                    if(resultJson[i].department_name == "家务事"){
+                        jiawushiDataActual = Math.round((jiawushiDataActual + (resultJson[i].sale_profit - resultJson[i].return_sale_profit))/10000);
+                    }
+                    if(resultJson[i].department_name == "商业创新" || resultJson[i].city_name == "社区驿站"){
+                        chanpinDataActual = Math.round((chanpinDataActual + (resultJson[i].sale_profit - resultJson[i].return_sale_profit))/10000);
+                    }
+                }
+                if(date == "all"){
+                    if(youyiDataActual >= youyiData){
+                        document.getElementById("youyi").className = "text-green"
+                    }else{
+                        document.getElementById("youyi").className = "text-red"
+                    }
+                    if(jiawushiDataActual >= jiawushiData){
+                        document.getElementById("jiawushi").className = "text-green"
+                    }else{
+                        document.getElementById("jiawushi").className = "text-red"
+                    }
+                    if(chanpinDataActual >= chanpinData){
+                        document.getElementById("chanpin").className = "text-green"
+                    }else{
+                        document.getElementById("chanpin").className = "text-red"
+                    }
+                    $("#youyiActual").html(youyiDataActual+"万");
+                    $("#jiawushiActual").html(jiawushiDataActual+"万");
+                    $("#chanpinActual").html(chanpinDataActual+"万");
+                }else{
+                    var youyiAvg = youyiData / days;
+                    var jiawushiAvg = jiawushiData / days;
+                    var chanpinAvg = chanpinData / days;
+                    var youyiAvgActual = youyiDataActual / nowDay;
+                    var jiawushiAvgActual = jiawushiDataActual / nowDay;
+                    var chanpinAvgActual = chanpinDataActual / nowDay;
+                    var youyiPro = Math.round(youyiDataActual / youyiData * 10000) / 100.00 + "%";
+                    var jiawushiPro = Math.round(jiawushiDataActual / jiawushiData * 10000) / 100.00 + "%";
+                    var chanpinPro = Math.round(chanpinDataActual / chanpinData * 10000) / 100.00 + "%";
+                    if(youyiAvgActual >= youyiAvg){
+                        document.getElementById("youyi").className = "text-green"
+                    }else{
+                        document.getElementById("youyi").className = "text-red"
+                    }
+                    if(jiawushiAvgActual >= jiawushiAvg){
+                        document.getElementById("jiawushi").className = "text-green"
+                    }else{
+                        document.getElementById("jiawushi").className = "text-red"
+                    }
+                    if(chanpinAvgActual >= chanpinAvg){
+                        document.getElementById("chanpin").className = "text-green"
+                    }else{
+                        document.getElementById("chanpin").className = "text-red"
+                    }
+                    $("#youyiActual").html(youyiDataActual+"万"+"("+ youyiPro + ")");
+                    $("#jiawushiActual").html(jiawushiDataActual+"万"+"("+ jiawushiPro + ")");
+                    $("#chanpinActual").html(chanpinDataActual+"万"+"("+ chanpinPro + ")");
+                }
+
+            }
+        },false);
+    var allCityDataActual = 0;
+    var beijingDataActual = 0;
+    var shanghaiDataActual = 0;
+    var tianjinDataActual = 0;
+    doManager("targetEntryStoreManager", "queryActualCityMaori",[date],
+        function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var resultJsons = JSON.parse(data.data);
+                var resultJson = resultJsons.data;
+                for(var i=0;i<resultJson.length;i++){
+                    allCityDataActual = Math.round((allCityDataActual + (resultJson[i].platform_profit + resultJson[i].ims_profit - resultJson[i].order_fee - resultJson[i].baosun - resultJson[i].return_profit))/10000);
+                    if(resultJson[i].store_city_code == "010"){
+                        beijingDataActual = Math.round((beijingDataActual + (resultJson[i].platform_profit + resultJson[i].ims_profit - resultJson[i].order_fee - resultJson[i].baosun - resultJson[i].return_profit))/10000);
+                    }
+                    if(resultJson[i].store_city_code == "021"){
+                        shanghaiDataActual = Math.round((shanghaiDataActual + (resultJson[i].platform_profit + resultJson[i].ims_profit - resultJson[i].order_fee - resultJson[i].baosun - resultJson[i].return_profit))/10000);
+                    }
+                    if(resultJson[i].store_city_code == "022"){
+                        tianjinDataActual = Math.round((tianjinDataActual + (resultJson[i].platform_profit + resultJson[i].ims_profit - resultJson[i].order_fee - resultJson[i].baosun - resultJson[i].return_profit))/10000);
+                    }
+                }
+                if(date == "all"){
+                    if(beijingDataActual >= beijingData){
+                        document.getElementById("beijing").className = "text-green"
+                    }else{
+                        document.getElementById("beijing").className = "text-red"
+                    }
+                    if(tianjinDataActual >= tianjinData){
+                        document.getElementById("tianjin").className = "text-green"
+                    }else{
+                        document.getElementById("tianjin").className = "text-red"
+                    }
+                    if(shanghaiDataActual >= shanghaiData){
+                        document.getElementById("shanghai").className = "text-green"
+                    }else{
+                        document.getElementById("shanghai").className = "text-red"
+                    }
+                    $("#beijingStoreActual").html(beijingDataActual+"万");
+                    $("#shanghaiStoreActual").html(shanghaiDataActual+"万");
+                    $("#tianjinStoreActual").html(tianjinDataActual+"万");
+                }else{
+                    var beijingAvg = beijingData / days;
+                    var tianjinAvg = tianjinData / days;
+                    var shanghaiAvg = shanghaiData / days;
+                    var beijingAvgActual = beijingDataActual / nowDay;
+                    var tianjinAvgActual = tianjinDataActual / nowDay;
+                    var shanghaiAvgActual = shanghaiDataActual / nowDay;
+                    var beijingPro = Math.round(beijingDataActual / beijingData * 10000) / 100.00 + "%";
+                    var tianjinPro = Math.round(tianjinDataActual / tianjinData * 10000) / 100.00 + "%";
+                    var shanghaiPro = Math.round(shanghaiDataActual / shanghaiData * 10000) / 100.00 + "%";
+                    if(beijingAvgActual >= beijingAvg){
+                        document.getElementById("beijing").className = "text-green"
+                    }else{
+                        document.getElementById("beijing").className = "text-red"
+                    }
+                    if(tianjinAvgActual >= tianjinAvg){
+                        document.getElementById("tianjin").className = "text-green"
+                    }else{
+                        document.getElementById("tianjin").className = "text-red"
+                    }
+                    if(shanghaiAvgActual >= shanghaiAvg){
+                        document.getElementById("shanghai").className = "text-green"
+                    }else{
+                        document.getElementById("shanghai").className = "text-red"
+                    }
+                    $("#beijingStoreActual").html(beijingDataActual+"万"+"("+ beijingPro + ")");
+                    $("#shanghaiStoreActual").html(shanghaiDataActual+"万"+"("+ shanghaiPro + ")");
+                    $("#tianjinStoreActual").html(tianjinDataActual+"万"+"("+ tianjinPro + ")");
+                }
+
+            }
+        },false);
+}
+
+function mGetDate(){
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth()+1;
+    var d = new Date(year, month, 0);
+    return d.getDate();
 }

@@ -17,7 +17,10 @@ public interface TargetEntryStoreDao extends IDAO{
 	 */
 	List<Map<String, Object>> getTargetEntryStoreList(String where, PageInfo pageInfo);
 	List<Map<String, Object>> getTargetEntryStoreList1(String where, PageInfo pageInfo);
-
+	List<Map<String, Object>> queryTargetEntryStoreDept(String date);
+	List<Map<String, Object>> queryTargetEntryStoreCity(String date);
+	List<Map<String, Object>> queryActualDeptMaori(String date);
+	List<Map<String, Object>> queryActualCityMaori(String date);
 	List<Map<String, Object>> getTargetEntryStoreData(String frame_time,String dept, PageInfo pageInfo);
 
 	List<Map<String, Object>> exportFile(TargetEntryStore targetEntryStore);
