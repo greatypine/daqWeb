@@ -249,6 +249,14 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			if (url.equals("productSearchManager?queryProductList")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+			if (url.equals("productSearchManager?exportProductList")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 			if (url.equals("distCityCodeManager?queryAllDistCityList")) {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
@@ -551,6 +559,10 @@ public class AuthFilter extends OncePerRequestFilter {
 				return;
 			}
 			if (url.contains("221.html")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+			if (url.contains("product_search.html")) {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
