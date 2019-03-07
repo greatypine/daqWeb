@@ -132,8 +132,15 @@
                <label>商品名称</label>
                <input type="text" class="form-control"  placeholder="商品名称" id="name_tradetype" style="display: inherit;width: 90%;border-radius: 6px;"/>
             </div>
+            <div class="form-group col-lg-4">
+                <label>城市</label>
+                <select class="form-control select2" id="citySelect">
+                </select>
+            </div>
             </form>
-            <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+            <div class="form-group col-lg-6" style="margin-top: 20px; padding: 0 25px;">
+            </div>
+            <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
               <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_tradeprofit_step1(1)">查询</button>
             </div>
             <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
@@ -277,17 +284,8 @@
     var screenlogin=getUrlParamByKey("su");
 	$(function () {
         loginShow();
-	    $(".logo-lg > ul > li").hover(function(){
-	      $(this).children(".nav_dropdown").toggle('1000');
-	    });
-
-    $("#columnattention").on("mouseover",function(event){
-        $("#forcolumnattention").show();
-    });
-    $("#columnattention").on("mouseout",function(event){
-        $("#forcolumnattention").hide();
-    });
-
+        initallcity();
+        $("#citySelect option[value='0010']").attr('selected',true);
   });
 
     function loginShow(){
@@ -309,49 +307,19 @@
         }
     }
 
-
-  /**-----------------------------------搜索城市------------------------------------------------------**/
-  var lst_select_city=null;
-  var cityNameArray=new Array();
-  var cityIdMap = {};
-  $('#city_name_tradetype').keyup(function(event){//门店交易额统计
-	  cityNameArray=new Array();
-	   $("#auto_city").empty();
-        var str_name = $(this).val();
-        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        	$("#city_id_tradetype").val("");
-            //$('#city_name-search_tradetype').children().remove();
-            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-                return;
-            }
-            var city_id = null;
-            if(target==1){
-            	city_id = cityId;
-            	
-            }
-            doManager('dynamicManager','selectAllCity',null,function(data){
-                if(data.result){
-                	
-                	lst_select_city = JSON.parse(data.data);
-                	 for(i=0;i<lst_select_city.length;i++){
-                		 cityNameArray.push(lst_select_city[i].cityname);
-                     	 cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
-       			  	 }
-       			  	var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
-       			    autoComplete.start(event);
-                }else{
-                	
+    function initallcity(){
+        doManager("DistCityCodeManager","queryAllDistCityList",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    $("#citySelect").append("<option value=''>全部城市</option>");
+                    $(jsonData).each(function(index,element){
+                        $("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
+                    });
                 }
-            });
-        }
-    });
+            },false);
+    }
 
-	  $('#auto_city').on("click",function(){
-		  var temp_city = document.getElementById("city_name_tradetype").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-		  $("#city_id_tradetype").val(cityIdMap[temp_city]);
-	  }); 
-
-  
     <!-------------------------------------------------------点击查询----------------------------------------------------------------->
    
     var isCreatePage1=false;
@@ -378,9 +346,11 @@
     	$("#process_div").show();
    	 	$("#process_div_pic").show();
         var name = $("#name_tradetype").val();
+        var cityName = $("#citySelect  option:selected").val();
         var dynamicDto=null;
         dynamicDto = {
-            searchstr:name
+            searchstr:name,
+            cityName:cityName
         }
  	    var pageInfo = new Object();
  	    pageInfo.currentPage = cur_page;
@@ -466,9 +436,11 @@
     	$("#process_div").show();
   	 	$("#process_div_pic").show();
         var name = $("#name_tradetype").val();
+        var cityName = $("#citySelect  option:selected").val();
         var dynamicDto=null;
         dynamicDto = {
-            searchstr:name
+            searchstr:name,
+            cityName:cityName
         }
 	    doManager('productSearchManager','exportProductList',[dynamicDto],function(data){
           if(data.result){
