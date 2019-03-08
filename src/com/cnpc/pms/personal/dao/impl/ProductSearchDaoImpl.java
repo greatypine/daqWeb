@@ -19,13 +19,17 @@ import java.util.Map;
 public class ProductSearchDaoImpl extends BaseDAOHibernate implements ProductSearchDao {
 
     public Map<String, Object> queryProductList(DynamicDto dynamicDto, PageInfo pageInfo){
-        String sql = "select t2.content_name,t3.name,ifnull(t3.address,'') as address,t2.content_price,t2.member_price ,t1.pro_number from gemini.t_inventory t1," +
-                "gemini.t_product t2,gemini.t_store t3 where t1.pro_id=t2.id and t1.store_id=t3.id and t1.pro_number>0 and t2.member_price is not null  ";
+        String sql = "select t2.content_name,t3.name,ifnull(t3.address,'') as address,t2.content_price,t2.member_price ,t1.pro_number," +
+                "case when (t2.content_price is null or t2.content_price=0)  then 0.0 else dround(ifnull(t2.member_price,0)/ifnull(t2.content_price,0)*10,1) end as rate " +
+                "from gemini.t_inventory t1,gemini.t_product t2,gemini.t_store t3 where t1.pro_id=t2.id and t1.store_id=t3.id and t1.pro_number>0 and t2.member_price is not null  ";
         if(StringUtils.isNotEmpty(dynamicDto.getCityName())){
             sql = sql + "and LPAD(t3.city_code,4,'0') = '"+dynamicDto.getCityName().trim()+"' ";
         }
         if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){
             sql = sql + "and t2.content_name like '%"+dynamicDto.getSearchstr().trim()+"%' ";
+        }
+        if(dynamicDto.getTarget()!=10){
+            sql = sql + "having rate<= "+dynamicDto.getTarget();
         }
         sql = sql + " order by t2.member_price asc,t1.pro_number desc ";
 
@@ -52,13 +56,17 @@ public class ProductSearchDaoImpl extends BaseDAOHibernate implements ProductSea
     }
 
     public List<Map<String, Object>> exportProductList(DynamicDto dynamicDto){
-        String sql = "select t2.content_name,t3.name,ifnull(t3.address,'') as address,t2.content_price,t2.member_price ,t1.pro_number from gemini.t_inventory t1," +
-                "gemini.t_product t2,gemini.t_store t3 where t1.pro_id=t2.id and t1.store_id=t3.id and t1.pro_number>0 and t2.member_price is not null  ";
+        String sql = "select t2.content_name,t3.name,ifnull(t3.address,'') as address,t2.content_price,t2.member_price ,t1.pro_number," +
+                "case when (t2.content_price is null or t2.content_price=0)  then 0.0 else dround(ifnull(t2.member_price,0)/ifnull(t2.content_price,0)*10,1) end as rate " +
+                "from gemini.t_inventory t1,gemini.t_product t2,gemini.t_store t3 where t1.pro_id=t2.id and t1.store_id=t3.id and t1.pro_number>0 and t2.member_price is not null  ";
         if(StringUtils.isNotEmpty(dynamicDto.getCityName())){
             sql = sql + "and LPAD(t3.city_code,4,'0') = '"+dynamicDto.getCityName().trim()+"' ";
         }
         if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){
             sql = sql + "and t2.content_name like '%"+dynamicDto.getSearchstr().trim()+"%' ";
+        }
+        if(dynamicDto.getTarget()!=10){
+            sql = sql + "having rate<= "+dynamicDto.getTarget();
         }
         sql = sql + " order by t2.member_price asc,t1.pro_number desc ";
 

@@ -48,8 +48,8 @@ public class ProductSearchManagerImpl extends BizBaseCommonManager implements Pr
                 result.put("status","more");
                 return result;
             }
-            String[] str_headers = new String[]{"商品名称","门店名称","地址","原价","社员价","库存"};
-            String[] headers_key = new String[]{"content_name","name","address","content_price","member_price","pro_number"};
+            String[] str_headers = new String[]{"商品名称","门店名称","地址","原价","社员价","库存","折扣"};
+            String[] headers_key = new String[]{"content_name","name","address","content_price","member_price","pro_number","rate"};
             ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("城市单位毛利",list,str_headers,headers_key);
             result = eeuo.exportFile();
         }else{

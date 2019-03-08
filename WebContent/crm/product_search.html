@@ -128,13 +128,23 @@
           </div>
           <div class="box-body">
             <form id="searchform">
-            <div class="form-group col-lg-4">
+            <div class="form-group col-lg-3">
                <label>商品名称</label>
                <input type="text" class="form-control"  placeholder="商品名称" id="name_tradetype" style="display: inherit;width: 90%;border-radius: 6px;"/>
             </div>
-            <div class="form-group col-lg-4">
+            <div class="form-group col-lg-3">
                 <label>城市</label>
                 <select class="form-control select2" id="citySelect">
+                </select>
+            </div>
+            <div class="form-group col-lg-3">
+                <label>折扣</label>
+                <select class="form-control select2" id="rate">
+                    <option value=10>全部</option>
+                    <option value=8>8折以下（含）</option>
+                    <option value=5>5折以下（含）</option>
+                    <option value=3>3折以下（含）</option>
+                    <option value=1>1折以下（含）</option>
                 </select>
             </div>
             </form>
@@ -286,6 +296,7 @@
         loginShow();
         initallcity();
         $("#citySelect option[value='0010']").attr('selected',true);
+        $("#rate option[value='5']").attr('selected',true);
   });
 
     function loginShow(){
@@ -347,10 +358,12 @@
    	 	$("#process_div_pic").show();
         var name = $("#name_tradetype").val();
         var cityName = $("#citySelect  option:selected").val();
+        var rate = $("#rate").val();
         var dynamicDto=null;
         dynamicDto = {
             searchstr:name,
-            cityName:cityName
+            cityName:cityName,
+            target:rate
         }
  	    var pageInfo = new Object();
  	    pageInfo.currentPage = cur_page;
@@ -389,18 +402,20 @@
 	        	   
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
-	        	       var rate = ((jData[i].member_price/jData[i].content_price)*10).toFixed(1);
 	        		   infoStr= "<tr>"
 		                       +"<td>"+jData[i].content_name+"</td>"
 		                       +"<td>"+jData[i].name+"</td>"
                                +"<td>"+jData[i].address+"</td>"
                                +"<td>"+jData[i].content_price.toFixed(2)+"</td>"
                                +"<td><font color=\"red\">"+jData[i].member_price.toFixed(2)+"</font></td>"
-                               +"<td>"+jData[i].pro_number+"</td>"
-                               +"<td>"+rate+"折</td>"
-		                       +"</tr>";
-		                       
-		                  $("#tradeType_tbody").append(infoStr);     
+                               +"<td>"+jData[i].pro_number+"</td>";
+                       if(jData[i].member_price==jData[i].content_price && jData[i].member_price!=0.00){
+                           infoStr = infoStr +"<td>不打折</td>"
+                       }else{
+                           infoStr = infoStr +"<td>"+jData[i].rate.toFixed(1)+"折</td>";
+                       }
+                       infoStr = infoStr + +"</tr>";
+		               $("#tradeType_tbody").append(infoStr);
 	        	   }
 	           }else{
 	        	   crm_alert(5,"请稍后重新请求！");
@@ -437,10 +452,12 @@
   	 	$("#process_div_pic").show();
         var name = $("#name_tradetype").val();
         var cityName = $("#citySelect  option:selected").val();
+        var rate = $("#rate").val();
         var dynamicDto=null;
         dynamicDto = {
             searchstr:name,
-            cityName:cityName
+            cityName:cityName,
+            target:rate
         }
 	    doManager('productSearchManager','exportProductList',[dynamicDto],function(data){
           if(data.result){
