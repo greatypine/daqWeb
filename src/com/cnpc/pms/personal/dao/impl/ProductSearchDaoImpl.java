@@ -25,6 +25,9 @@ public class ProductSearchDaoImpl extends BaseDAOHibernate implements ProductSea
         if(StringUtils.isNotEmpty(dynamicDto.getCityName())){
             sql = sql + "and LPAD(t3.city_code,4,'0') = '"+dynamicDto.getCityName().trim()+"' ";
         }
+        if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+            sql = sql + "and t3.code = '"+dynamicDto.getStoreNo().trim()+"' ";
+        }
         if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){
             sql = sql + "and t2.content_name like '%"+dynamicDto.getSearchstr().trim()+"%' ";
         }
@@ -61,6 +64,9 @@ public class ProductSearchDaoImpl extends BaseDAOHibernate implements ProductSea
                 "from gemini.t_inventory t1,gemini.t_product t2,gemini.t_store t3 where t1.pro_id=t2.id and t1.store_id=t3.id and t1.pro_number>0 and t2.member_price is not null  ";
         if(StringUtils.isNotEmpty(dynamicDto.getCityName())){
             sql = sql + "and LPAD(t3.city_code,4,'0') = '"+dynamicDto.getCityName().trim()+"' ";
+        }
+        if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+            sql = sql + "and t3.code = '"+dynamicDto.getStoreNo().trim()+"' ";
         }
         if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){
             sql = sql + "and t2.content_name like '%"+dynamicDto.getSearchstr().trim()+"%' ";

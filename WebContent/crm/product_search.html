@@ -138,13 +138,20 @@
                 </select>
             </div>
             <div class="form-group col-lg-3">
+                <label>门店</label>
+                <input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
+                <input type="text" class="form-control"  placeholder="门店" id="store_name_manual" />
+                <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
+                </div>
+            </div>
+            <div class="form-group col-lg-3">
                 <label>折扣</label>
                 <select class="form-control select2" id="rate">
                     <option value=10>全部</option>
-                    <option value=8>8折以下（含）</option>
-                    <option value=5>5折以下（含）</option>
-                    <option value=3>3折以下（含）</option>
-                    <option value=1>1折以下（含）</option>
+                    <option value=8>8折及以下</option>
+                    <option value=5>5折及以下</option>
+                    <option value=3>3折及以下</option>
+                    <option value=1>1折及以下</option>
                 </select>
             </div>
             </form>
@@ -295,9 +302,31 @@
 	$(function () {
         loginShow();
         initallcity();
+        // initallstore();
         $("#citySelect option[value='0010']").attr('selected',true);
+        initStoreSelectcomplate();
         $("#rate option[value='5']").attr('selected',true);
   });
+
+    var autoComplete = new AutoComplete("store_name_manual","auto",array);
+    document.getElementById("store_name_manual").onkeyup = function(event){
+        autoComplete.start(event);
+        if($("#store_name_manual").val().trim() == ""){
+            $("#store_id_manual").val("");
+        }
+        for(var key in storeJson){
+            if(document.getElementById("store_name_manual").value==key){
+                document.getElementById("store_id_manual").value=storeJson[key];
+            }
+        }
+    }
+    $("#auto").on("click",function(event){
+        for(var key in storeJson){
+            if(document.getElementById("store_name_manual").value==key){
+                document.getElementById("store_id_manual").value=storeJson[key];
+            }
+        }
+    });
 
     function loginShow(){
         if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
@@ -331,6 +360,89 @@
             },false);
     }
 
+    var array=new Array();
+    //初始化所有门店
+    function initallstore() {
+        doManager("StoreManager", "findStoreAll", null,
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    array = new Array();
+                    var storeString = "";
+                    for(i=0;i<jsonData.length;i++){
+                        array.push(jsonData[i].name);
+                        if(i == 0){
+                            storeString = "{'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+",";
+                        }else if(i == jsonData.length-1){
+                            storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+"}";
+                        }else{
+                            storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+",";
+                        }
+                    }
+                    storeJson=$.fromJSON(storeString);
+                    var autoComplete = new AutoComplete("store_name_manual","auto",array);
+                    document.getElementById("store_name_manual").onkeyup = function(event){
+                        autoComplete.start(event);
+                        if($("#store_name_manual").val().trim() == ""){
+                            $("#store_id_manual").val("");
+                        }
+                        document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+                    }
+                }
+            }, false);
+    }
+
+    $("#citySelect").change(function(){
+        $("#store_id_manual").val("");
+        $("#store_name_manual").val("");
+        initStoreSelectcomplate();
+    });
+
+    var storeJson;
+    function initStoreSelectcomplate(){
+        var citySelect = $("#citySelect").find("option:selected").text();
+        $("#auto").val("");
+        if(citySelect=="" || citySelect=="全部城市"){
+            initallstore();
+        }else{
+            //根据城市查询门店 信息
+            var cityname = "'"+citySelect+"'";
+            doManager("StoreManager","findStoreByCityData",[cityname],
+                function(data,textStatus,XmlHttpRequest){
+                    if (data.result) {
+                        var jsonData = $.fromJSON(data.data);
+                        array=new Array();
+                        var storeString = "";
+                        $(jsonData).each(function(index,element){
+                            var storeName = element.name;
+                            var storeid = element.storeno;
+                            array.push(storeName);
+                            if(index == 0 || index == jsonData.length-1){
+                                if(index == 0){
+                                    storeString = "{'"+storeName+"'"+":"+"'"+storeid+"'"+",";
+                                }
+                                if(index == jsonData.length-1){
+                                    storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+"}";
+                                }
+                            }else{
+                                storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+",";
+                            }
+                        });
+                        storeJson=$.fromJSON(storeString);
+                        var autoCompleteName = new AutoComplete("store_name_manual","auto",array);
+                        document.getElementById("store_name_manual").onkeyup = function(event){
+                            autoCompleteName.start(event);
+                            if($("#store_name_manual").val().trim() == ""){
+                                $("#store_id_manual").val("");
+                            }
+                            document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+                        }
+                    }
+                },false);
+        }
+
+    }
+
     <!-------------------------------------------------------点击查询----------------------------------------------------------------->
    
     var isCreatePage1=false;
@@ -358,11 +470,23 @@
    	 	$("#process_div_pic").show();
         var name = $("#name_tradetype").val();
         var cityName = $("#citySelect  option:selected").val();
+        var number_str = $("#store_id_manual").val();
+        var storeName = $("#store_name_manual").val();
+        if(storeName!=""){
+            if($.inArray(storeName, array) == -1){
+                crm_alert(0,"该门店不存在！");
+                return;
+            }
+        }
+        if(number_str==""&&storeName!=""){
+            number_str=-10000;
+        }
         var rate = $("#rate").val();
         var dynamicDto=null;
         dynamicDto = {
             searchstr:name,
             cityName:cityName,
+            storeNo:number_str,
             target:rate
         }
  	    var pageInfo = new Object();
@@ -452,11 +576,23 @@
   	 	$("#process_div_pic").show();
         var name = $("#name_tradetype").val();
         var cityName = $("#citySelect  option:selected").val();
+        var number_str = $("#store_id_manual").val();
+        var storeName = $("#store_name_manual").val();
+        if(storeName!=""){
+            if($.inArray(storeName, array) == -1){
+                crm_alert(0,"该门店不存在！");
+                return;
+            }
+        }
+        if(number_str==""&&storeName!=""){
+            number_str=-10000;
+        }
         var rate = $("#rate").val();
         var dynamicDto=null;
         dynamicDto = {
             searchstr:name,
             cityName:cityName,
+            storeNo:number_str,
             target:rate
         }
 	    doManager('productSearchManager','exportProductList',[dynamicDto],function(data){
@@ -494,6 +630,8 @@ function resetSerachParam(){
         max:year_month,
     });
     $("#name_tradetype").val("");
+    $("#store_id_manual").val("");
+    $("#store_name_manual").val("");
 }
    
 </script>
