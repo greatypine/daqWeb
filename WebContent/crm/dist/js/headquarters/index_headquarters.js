@@ -106,27 +106,27 @@ $(document).ready(function () {
     // });
 });
 
-const CACHE_HEADER_STATISTIC = 'statistic_';
-const CACHE_HEADER_HISTORY_DATA = 'historyData_';
-const CACHE_HEADER_OPEN_CARD_USER = 'openCardUser_';
-const CACHE_HEADER_CUSTOMER_COUNT_DATA = 'customerData_';
-const CACHE_HEADER_CITY_RANK_GVM = 'cityRankGmv_';
-const CACHE_HEADER_PROFIT_STORE = 'cityProfitStore_';
-const CACHE_HEADER_TWOTWOONE_RANK_GVM = 'twoTwoOneRankGmv_';
-const CACHE_HEADER_STORE_RANK_GMV = 'storeRankGmv_';
-const CACHE_HEADER_STORE_RANK_ORDER = 'storeRankOrder_';
-const CACHE_HEADER_GUOAN_MAN_RANK_GMV = 'guoanManRankGmv_';
-const CACHE_HEADER_COMMODITY_RANK = 'commodityRank_';
-const CACHE_HEADER_CHANNEL_RANK_GMV = 'channelRankGmv_';
-const CACHE_HEADER_CHANNEL_RANK_ORDER = 'channelRankOrder_';
-const CACHE_HEADER_BUSINESS_DEP_RANK_GMV = 'businessDepRankGmv_';
-const CACHE_HEADER_CUSTOMER_CONSUME_MONTH = 'customerConsume_';
-const CACHE_HEADER_TURNOVER_CUSTOMER_MONTH = 'turnoverCustomer_';
-const CACHE_HEADER_STORE_SERVICE_RANGE = 'storeServiceRange_';
-const CACHE_HEADER_CITYUSER_RANK = 'cityUserRank_';
-const SHOW_LEVEL_CHINA = 'china';
-const SHOW_LEVEL_PROVINCE = 'province';
-const SHOW_LEVEL_CITY = 'city';
+var CACHE_HEADER_STATISTIC = 'statistic_';
+var CACHE_HEADER_HISTORY_DATA = 'historyData_';
+var CACHE_HEADER_OPEN_CARD_USER = 'openCardUser_';
+var CACHE_HEADER_CUSTOMER_COUNT_DATA = 'customerData_';
+var CACHE_HEADER_CITY_RANK_GVM = 'cityRankGmv_';
+var CACHE_HEADER_PROFIT_STORE = 'cityProfitStore_';
+var CACHE_HEADER_TWOTWOONE_RANK_GVM = 'twoTwoOneRankGmv_';
+var CACHE_HEADER_STORE_RANK_GMV = 'storeRankGmv_';
+var CACHE_HEADER_STORE_RANK_ORDER = 'storeRankOrder_';
+var CACHE_HEADER_GUOAN_MAN_RANK_GMV = 'guoanManRankGmv_';
+var CACHE_HEADER_COMMODITY_RANK = 'commodityRank_';
+var CACHE_HEADER_CHANNEL_RANK_GMV = 'channelRankGmv_';
+var CACHE_HEADER_CHANNEL_RANK_ORDER = 'channelRankOrder_';
+var CACHE_HEADER_BUSINESS_DEP_RANK_GMV = 'businessDepRankGmv_';
+var CACHE_HEADER_CUSTOMER_CONSUME_MONTH = 'customerConsume_';
+var CACHE_HEADER_TURNOVER_CUSTOMER_MONTH = 'turnoverCustomer_';
+var CACHE_HEADER_STORE_SERVICE_RANGE = 'storeServiceRange_';
+var CACHE_HEADER_CITYUSER_RANK = 'cityUserRank_';
+var SHOW_LEVEL_CHINA = 'china';
+var SHOW_LEVEL_PROVINCE = 'province';
+var SHOW_LEVEL_CITY = 'city';
 
 // 显示页面
 var showPageContent = function (pageStatusInfo) {
@@ -1084,7 +1084,12 @@ var initPageElements = function () {
 		     	}
 		     });
 		     turnoverCustomerOrderOption.legend.selected = selected;
-		        var json = {data1,data2,data3,data5}; //json中有任意多个数组
+		        //var json = {data1,data2,data3,data5}; //json中有任意多个数组
+		        var json = new Array();
+			    json[0] = data1;
+			    json[1] = data2;
+			    json[2] = data3;
+			    json[3] = data5;//json中有任意多个数组
 			    //保存结果的数组
 			    //遍历json
 			    for(var key in json){
@@ -4094,7 +4099,10 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     $.each(eval(turnoverCustomer['lst_data_sh']), function (idx, val) {
     	data6.push(val['newcount']);
     });
-    var json = {data4,data5,data6}; //json中有任意多个数组
+    var json = new Array();
+    json[0] = data4;
+    json[1] = data5;
+    json[2] = data6;//json中有任意多个数组
     //保存结果的数组
     //遍历json
     for(var key in json){
@@ -4730,7 +4738,7 @@ var getReauestParameters = function () {
 }
 // 是否直辖市
 var isMunicipality = function (cityName) {
-    const municipalityIds = ['北京', '天津', '上海', '重庆', '北京市', '天津市', '上海市', '重庆市'];
+    var municipalityIds = ['北京', '天津', '上海', '重庆', '北京市', '天津市', '上海市', '重庆市'];
     if ($.inArray(cityName, municipalityIds) != -1) {
         return true;
     } else {
