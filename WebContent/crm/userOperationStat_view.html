@@ -2897,8 +2897,8 @@
         var areaCode = $("#area_code_manual_daynewcus").val();
         var userOperationStatDto=null;
         userOperationStatDto = {
-            beginDate:begin_end_date[0].trim(),
-            endDate:begin_end_date[1].trim(),
+            beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+            endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
             storeNo:number_str,
             cityName:cityName,
             areaCode:areaCode,
@@ -3034,8 +3034,8 @@
         var areaCode = $("#area_code_manual_daynewcus").val();
         var userOperationStatDto=null;
         userOperationStatDto = {
-            beginDate:begin_end_date[0].trim(),
-            endDate:begin_end_date[1].trim(),
+            beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+            endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
             storeNo:number_str,
             cityName:cityName,
             areaCode:areaCode,
