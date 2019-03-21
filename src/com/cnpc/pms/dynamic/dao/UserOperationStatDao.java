@@ -17,9 +17,9 @@ public interface UserOperationStatDao extends IDAO{
 	
 	public List<Map<String, Object>> exportEmployeeAreamoreStat(UserOperationStatDto userOperationStatDto,String timeFlag);
 	
-	public Map<String, Object> queryNewCusStat(UserOperationStatDto userOperationStatDto,PageInfo pageInfo,String timeFlag);
+	public Map<String, Object> queryNewCusStat(UserOperationStatDto userOperationStatDto,PageInfo pageInfo);
 	
-	public List<Map<String, Object>> exportNewCusStat(UserOperationStatDto userOperationStatDto,String timeFlag);
+	public List<Map<String, Object>> exportNewCusStat(UserOperationStatDto userOperationStatDto);
 	
 	public Map<String, Object> queryPayCusStat(UserOperationStatDto userOperationStatDto,PageInfo pageInfo);
 	

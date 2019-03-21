@@ -432,15 +432,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
 		UserOperationStatDao userOperationStatDao = (UserOperationStatDao) SpringHelper.getBean(UserOperationStatDao.class.getName());
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(userOperationStatDto.getBeginDate()) && DateUtils.compareDate(userOperationStatDto.getBeginDate(), format.format(new Date()))==0){
-				result = userOperationStatDao.queryNewCusStat(userOperationStatDto, pageInfo, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(userOperationStatDto.getBeginDate()) && DateUtils.compareDate(userOperationStatDto.getBeginDate(),preMonthFirst)>=0){
-				result = userOperationStatDao.queryNewCusStat(userOperationStatDto, pageInfo, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = userOperationStatDao.queryNewCusStat(userOperationStatDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = userOperationStatDao.queryNewCusStat(userOperationStatDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -455,15 +447,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   		Map<String, Object> result = new HashMap<String,Object>();
   		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
   		try {
-  			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(userOperationStatDto.getBeginDate()) && DateUtils.compareDate(userOperationStatDto.getBeginDate(), format.format(new Date()))==0){
-				list=userOperationStatDao.exportNewCusStat(userOperationStatDto, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(userOperationStatDto.getBeginDate()) && DateUtils.compareDate(userOperationStatDto.getBeginDate(),preMonthFirst)>=0){
-				list=userOperationStatDao.exportNewCusStat(userOperationStatDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				list=userOperationStatDao.exportNewCusStat(userOperationStatDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			list=userOperationStatDao.exportNewCusStat(userOperationStatDto);
   		} catch (Exception e) {
   			e.printStackTrace();
   			return null;
