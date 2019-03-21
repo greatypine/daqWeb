@@ -867,6 +867,15 @@ function gotoAbnormalOrder(t){
    
 function resetSerachParam(){
 	 $("#auto_store").empty();
+    laydate.render({//月份控件
+        elem:'#be_date1',
+        value:new Date(),
+        type:"month",
+        btns: ['confirm','now'],
+        theme: '#11214e',
+        max:curMonth
+
+    });
 		if(target==0){//总部
 	   		$("#store_id_tradetype").val("");
 	   		$("#store_name_tradetype").val("");
