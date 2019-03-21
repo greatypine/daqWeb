@@ -4039,7 +4039,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" tor.bussiness_group_id as deptid," +
 				" sum(tor.gmv_price) as gmv_price " +
 					selectStr1+
-				" from df_mass_order_monthly tor " +
+				" from df_mass_order_total tor " +
 				" where "+storeWhere+" tor.sign_time >='"+dynamicDto.getBeginDate()+"' "+
 				" and tor.sign_time < from_unixtime(unix_timestamp(days_add(from_unixtime(unix_timestamp('"+dynamicDto.getEndDate()+"'), 'yyyy-MM-dd') , 1)), 'yyyy-MM-dd')" +
 				" and (tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA')" +
@@ -4164,7 +4164,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" bussiness_group_id," +
 				" count(distinct customer_id) as cusnum " +
 				  selectStr1+
-				" from df_mass_order_monthly tor" +
+				" from df_mass_order_total tor" +
 				" where "+storeWhere+" tor.sign_time >='"+dynamicDto.getBeginDate()+"' "+
 				" and tor.sign_time < from_unixtime(unix_timestamp(days_add(from_unixtime(unix_timestamp('"+dynamicDto.getEndDate()+"'), 'yyyy-MM-dd') , 1)), 'yyyy-MM-dd')" +
 				" and (tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA')" +
@@ -4181,7 +4181,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" bussiness_group_id," +
 				" sum(IFNULL(tor.gmv_price,0)) as monetary" +
 				 selectStr1+
-				" from df_mass_order_monthly tor" +
+				" from df_mass_order_total tor" +
 				" where "+storeWhere+" tor.sign_time >='"+dynamicDto.getBeginDate()+"' "+
 				" and tor.sign_time < from_unixtime(unix_timestamp(days_add(from_unixtime(unix_timestamp('"+dynamicDto.getEndDate()+"'), 'yyyy-MM-dd') , 1)), 'yyyy-MM-dd')" +
 				" and (tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA')" +
