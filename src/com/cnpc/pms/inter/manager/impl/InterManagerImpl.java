@@ -4147,12 +4147,23 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				sendShortUrl.setPhone(phone);
 				sendShortUrl.setShorturl(shortUrl);
 				sendShortUrl.setSenddate(yesterdayDate);
-				sendShortUrl.setSendstatus("未读");
+				
+				boolean sendOk=true;
+				if(phone!=null&&phone.trim().equals("13051745039")) {
+					sendShortUrl.setSendstatus("未发送");
+					sendOk=false;
+				}else {
+					sendShortUrl.setSendstatus("未读");
+					sendOk=true;
+				}
 				preSaveObject(sendShortUrl);
 				sendShortUrlManager.saveObject(sendShortUrl);
 				
+				String rt = "notsend";
 				//发送短链接的方法 
-				String rt = commonSendMessage(phone, "您有一条选品建议（库存预警）消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
+				if(sendOk) {
+					rt = commonSendMessage(phone, "您有一条选品建议（库存预警）消息，请点击 "+sendShortUrl.getShorturl()+" 查看 ", "");
+				}
 				//String rt="测试频道没发";
 				
 				SendMessageManager sendMessageManager = (SendMessageManager) SpringHelper.getBean("sendMessageManager");
