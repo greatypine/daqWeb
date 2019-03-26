@@ -222,7 +222,7 @@ public interface MassOrderItemDao extends IDAO{
 	 * @param dd
 	 * @return
 	 */
-	public List<Map<String, Object>> queryLastYearCustomerCount(DynamicDto dd);
+	public List<Map<String, Object>> queryLastYearCustomerCount(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 	/**
 	 * 查询某年订单量
 	 * @param dynamicDto

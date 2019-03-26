@@ -10,6 +10,8 @@ import com.cnpc.pms.dynamic.entity.AbnormalOrderDto;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.ImpalaUtil;
+
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
@@ -2121,37 +2123,27 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	    return lst_data;
 	}
 	@Override
-	public List<Map<String, Object>> queryMonthCustomerCount(DynamicDto dd) {
-		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
-		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
-		String provinceStr = "";
-		String cityStr = "";
-		String lastMonthSqlStr = "";
-		String zx = "no";
-//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-//			zx = "yes";
-//		}
-		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
-			provinceStr+=" AND ds_cus.province_id='"+province_id+"' ";
+	public List<Map<String, Object>> queryMonthCustomerCount(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
+		String cityStr1 = "";
+		String provinceStr1 = "";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr1+=" and a.city_code='"+cityNo+"' ";
 		}
-		if(city_id!=null&&city_id!=""){
-			cityStr+=" and ds_cus.city_id='"+city_id+"' ";
-		}else if("yes".equals(zx)){
-			cityStr+=" and ds_cus.city_id='"+province_id+"' ";
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr1+=" and a.province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
-		String monthStr = "";
-		String monthArr[] = dd.getBeginDate().split("-");
-		int month = Integer.parseInt(monthArr[1]);
-		monthStr = monthArr[0]+(month<10?("0"+month):month);
-		String sql = "SELECT SUM(ds_cus.pay_count) AS  customer_count FROM  ds_cusum_month_city ds_cus " +
-				"LEFT JOIN t_dist_citycode d ON d.id = ds_cus.city_id WHERE 1 = 1 AND " +
-				"ds_cus.order_ym = '"+monthStr+"'"+ cityStr+provinceStr;
-		
+		String sql = "select sum(ff.month_count) as customer_count from (SELECT month_count,province_code,city_name,city_code from daqweb.df_user_count a "
+				+ "where 1=1 "+cityStr1+provinceStr1+" and count_type='pay' ) ff ";
+		if(StringUtils.isEmpty(provinceStr1)&&StringUtils.isEmpty(cityStr1)){
+			sql = "select month_count as customer_count from daqweb.df_user_total_count where 1=1 and count_type='pay' ";
+		}
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
-			SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-			List<?> lst_data = query
-					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			List<?> lst_data = ImpalaUtil.executeGuoan(sql);
 			if(lst_data != null){
 				for(Object obj : lst_data){
 					Map<String,Object> map_data = (Map<String,Object>)obj;
@@ -2403,33 +2395,27 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		return map_all;
 	}
 	@Override
-	public List<Map<String, Object>> queryHistoryCustomerCount(DynamicDto dd) {
-		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
-		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+	public List<Map<String, Object>> queryHistoryCustomerCount(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
+		String cityStr1 = "";
 		String provinceStr = "";
-		String cityStr = "";
-		String zx = "no";
-//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-//			zx = "yes";
-//		}
-		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
-			provinceStr+=" AND ds_cus.province_id='"+province_id+"' ";
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr+=" and a.province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
-		if(city_id!=null&&city_id!=""){
-			cityStr+=" and ds_cus.city_id='"+city_id+"' ";
-		}else if("yes".equals(zx)){
-			cityStr+=" and ds_cus.city_id='"+province_id+"' ";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr1+=" and a.city_code='"+cityNo+"' ";
 		}
-		String monthStr = dd.getBeginDate().substring(0,dd.getBeginDate().lastIndexOf("-")).replace("-", "");
-		String sql = "SELECT SUM(ds_cus.pay_count) AS  history_customer_count FROM ds_cusum_month_city ds_cus LEFT JOIN " +
-				"t_dist_citycode d ON d.id = ds_cus.city_id WHERE 1 = 1 AND " +
-				"ds_cus.order_ym <= '"+monthStr+"'"+ cityStr+provinceStr;
-		
+		String sql = "SELECT sum(ff.total_count) as history_customer_count from (select total_count,province_code,city_name,city_code from "
+				+ "daqweb.df_user_count a WHERE 1=1 "+provinceStr+cityStr1+" and count_year='"+dd.getYear()+"' and count_type='pay' ) ff ";
+		if(StringUtils.isEmpty(provinceStr)&&StringUtils.isEmpty(cityStr1)){
+			sql = "select total_count as history_customer_count from daqweb.df_user_total_count where 1=1 and count_year='"+dd.getYear()+"' and count_type='pay' ";
+		}
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
-			SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-			List<?> lst_data = query
-					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			List<Map<String, Object>> lst_data = ImpalaUtil.executeGuoan(sql);
 			if(lst_data != null){
 				for(Object obj : lst_data){
 					Map<String,Object> map_data = (Map<String,Object>)obj;
@@ -2447,63 +2433,6 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         }
 		return lst_result;
 	}
-	@Override
-	public List<Map<String, Object>> queryMonthZbCustomerCount(DynamicDto dd) {
-		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
-		String monthStr = "";
-		String monthArr[] = dd.getBeginDate().split("-");
-		int month = Integer.parseInt(monthArr[1]);
-		monthStr = monthArr[0]+(month<10?("0"+month):month);
-		//String sql = "select count(distinct customer_id) as customer_count from df_customer_order_month_trade_new where order_ym ='"+monthStr+"'";
-		String sql = "select cusnum_month as customer_count from ds_ope_gmvorcus_all_total ";
-		try{
-			SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-			List<?> lst_data = query
-					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	    	 if(lst_data != null){
-					for(Object obj : lst_data){
-						Map<String,Object> map_data = (Map<String,Object>)obj;
-						Map<String,Object> map_content = (Map<String,Object>)obj;
-						if(map_data.get("customer_count")==null){
-							map_content.put("customer_count",0);
-						}else{
-							map_content.put("customer_count",map_data.get("customer_count"));
-						}
-						lst_result.add(map_content);
-					}
-				}
-	     }catch (Exception e){
-	         e.printStackTrace();
-	     }
-		return lst_result;
-	}
-
-	@Override
-	public List<Map<String, Object>> queryHistoryZbCustomerCount(DynamicDto dd) {
-		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
-		String sql = "select cusnum_history as customer_count from ds_ope_gmvorcus_all_total ";
-		try{
-			SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-			List<?> lst_data = query
-					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	    	 if(lst_data != null){
-					for(Object obj : lst_data){
-						Map<String,Object> map_data = (Map<String,Object>)obj;
-						Map<String,Object> map_content = (Map<String,Object>)obj;
-						if(map_data.get("customer_count")==null){
-							map_content.put("history_customer_count",0);
-						}else{
-							map_content.put("history_customer_count",map_data.get("customer_count"));
-						}
-						lst_result.add(map_content);
-					}
-				}
-	     }catch (Exception e){
-	         e.printStackTrace();
-	     }
-		return lst_result;
-	}
-
 	
 	@Override
 	public Map<String, Object> queryEmployeeSendorders(DynamicDto dd,PageInfo pageInfo) {

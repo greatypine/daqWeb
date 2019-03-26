@@ -4555,25 +4555,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		String endDate = a.get(Calendar.YEAR)+"-"+(month<10?("0"+month):month)+"-"+(a.get(Calendar.DATE)<10?("0"+a.get(Calendar.DATE)):a.get(Calendar.DATE));
 		dd.setBeginDate(beginDate);
 		dd.setEndDate(endDate);
-		List<Map<String, Object>> customerMonthCountList = new ArrayList<Map<String,Object>>();
-		if(dd.getCityId()==null&&dd.getProvinceId()==null){//总部
-			//查询某月用户量
-			customerMonthCountList = dynamicDao.queryMonthZbCustomerCount(dd);
-		}else{//城市公司
-			//查询某月用户量
-			customerMonthCountList = dynamicDao.queryMonthCustomerCount(dd);
-		}
 		//查询某月的订单量
 //		List<Map<String, Object>> orderMonthCountList = orderDao.queryMonthOrderCount(dd,cityNO,provinceNO,"0");
 		if (result.isEmpty()) {
 			result.put("order_amount", "0");
-		}
-		if(customerMonthCountList!=null&&customerMonthCountList.size()>0){
-			result.put("customer_count", customerMonthCountList.get(0).get("customer_count"));
-			//result.put("last_customer_count", customerMonthCountList.get(0).get("last_customer_count"));
-		}else{
-			result.put("customer_count", "0");
-			//result.put("last_customer_count", "0");
 		}
 		return result;
 	}
@@ -4701,13 +4686,6 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		result = dynamicDao.queryTradeSumOfHistory(dd);
 		//查询2018年以后的营业额和订单量
 		Map<String, Object> amountAndOrder = massOrderItemDao.queryOrderAmountAfter(dd);
-		//查询历史用户量
-		List<Map<String, Object>> customerHistoryCountList = new ArrayList<Map<String,Object>>();
-		if(dd.getCityId()==null&&dd.getProvinceId()==null){//总部
-			customerHistoryCountList = dynamicDao.queryHistoryZbCustomerCount(dd);
-		}else{//城市公司
-			customerHistoryCountList = dynamicDao.queryHistoryCustomerCount(dd);
-		}
 		if (result.isEmpty()) {
 			result.put("history_order_amount", "0");
 			totalOrderCount+=0;
@@ -4725,11 +4703,6 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		}
 		result.put("history_order_amount", totalAmount);
 		result.put("history_order_count", totalOrderCount);
-		if(customerHistoryCountList!=null&&customerHistoryCountList.size()>0){
-			result.put("history_customer_count", customerHistoryCountList.get(0).get("history_customer_count"));
-		}else{
-			result.put("history_customer_count", 0);
-		}
 		return result;
 	}
 
@@ -5473,22 +5446,20 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> result = new HashMap<String,Object>();
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
-		String city_id = String.valueOf(dd.getCityId());
+		Long city_id = dd.getCityId();
 		String province_id = String.valueOf(dd.getProvinceId());
 		DynamicDto dd2 = new DynamicDto();
 		dd2.setCityId(dd.getCityId());
 		dd2.setProvinceId(dd.getProvinceId());
 		dd2.setYear(Integer.parseInt(com.cnpc.pms.base.file.comm.utils.DateUtil.findYearByIndex(-1)));
 		//查询某年营业额
-		List<Map<String, Object>> sumYearGMVList = dynamicDao.queryYearSumGMV(dd,city_id,province_id,"0");
+		List<Map<String, Object>> sumYearGMVList = dynamicDao.queryYearSumGMV(dd,String.valueOf(city_id),province_id,"0");
 		//今年营业额
-		List<Map<String, Object>> sumLastYearGMVList = dynamicDao.queryYearSumGMV(dd,city_id,province_id,"0");
+		List<Map<String, Object>> sumLastYearGMVList = dynamicDao.queryYearSumGMV(dd,String.valueOf(city_id),province_id,"0");
 		//今年用户量
-		List<Map<String, Object>> customerMonthCountList = massOrderItemDao.queryLastYearCustomerCount(dd);
 		Map<String, Object> orderLastYearCountList = massOrderItemDao.queryYearOrderCount(dd);
 		result.put("year_gmv_sum", sumYearGMVList);
 		result.put("year_last_gmv_sum", sumLastYearGMVList);
-		result.put("year_last_year_customer_count", customerMonthCountList);
 		result.put("year_last_year_order_count", orderLastYearCountList);
 		return result;
 	}
@@ -7795,6 +7766,51 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				dataEntity.setUpdate_user_id(sessionUser.getId());
 			}
 		}
+	}
+
+	@Override
+	public Map<String, Object> queryCustomerSumAll(DynamicDto dd) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Calendar a=Calendar.getInstance();
+		int month = a.get(Calendar.MONTH)+1;
+		String beginDate = a.get(Calendar.YEAR)+"-"+(month<10?("0"+month):month)+"-"+(a.get(Calendar.DATE)<10?("0"+a.get(Calendar.DATE)):a.get(Calendar.DATE));   
+		String endDate = a.get(Calendar.YEAR)+"-"+(month<10?("0"+month):month)+"-"+(a.get(Calendar.DATE)<10?("0"+a.get(Calendar.DATE)):a.get(Calendar.DATE));
+		dd.setBeginDate(beginDate);
+		dd.setEndDate(endDate);
+		//查询历史用户量
+		List<Map<String, Object>> customerHistoryCountList = new ArrayList<Map<String,Object>>();
+		//查询当月用户量
+		List<Map<String, Object>> customerMonthCountList = new ArrayList<Map<String,Object>>();
+		if(city_id!=null){
+			cityNO = storeDao.getCityNOOfCityById(city_id);
+		}
+		if(province_id!=null&&province_id!=""){
+			provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+		}
+		//查询当年用户量
+		//今年用户量
+		List<Map<String, Object>> customerYearCountList = massOrderItemDao.queryLastYearCustomerCount(dd,cityNO,provinceNO);
+		customerHistoryCountList = dynamicDao.queryHistoryCustomerCount(dd,cityNO,provinceNO);
+		customerMonthCountList = dynamicDao.queryMonthCustomerCount(dd,cityNO,provinceNO);
+		if(customerHistoryCountList!=null&&customerHistoryCountList.size()>0){
+			result.put("history_customer_count", customerHistoryCountList.get(0).get("history_customer_count"));
+		}else{
+			result.put("history_customer_count", 0);
+		}
+		if(customerMonthCountList!=null&&customerMonthCountList.size()>0){
+			result.put("customer_count", customerMonthCountList.get(0).get("customer_count"));
+		}else{
+			result.put("customer_count", "0");
+		}
+		result.put("year_last_year_customer_count", customerYearCountList);
+		return result;
 	}
 	
 }
