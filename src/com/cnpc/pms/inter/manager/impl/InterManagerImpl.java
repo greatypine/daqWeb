@@ -3118,7 +3118,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
     		if(cityId!=null){
     			cityNO = storeDao.getCityNOOfCityById(Long.parseLong(cityId));
     		}
-    		List<Map<String, Object>> customerMonthCountList = dynamicDao.queryMonthCustomerCount(dd);
+    		List<Map<String, Object>> customerMonthCountList = dynamicDao.queryMonthCustomerCount(dd,cityNO,null);
     		List<Map<String,Object>> dailyStoreOrderList = orderDao.getDailyStoreOrderOfCurDay(dd,cityNO,null);
     		if(dailyStoreOrderList!=null&&dailyStoreOrderList.size()>0){
     			dailyUserList = orderDao.getDailyUserOfCurDay(dd,cityNO,null);
