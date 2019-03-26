@@ -1372,30 +1372,28 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		return map_result;
 	}
 	@Override
-	public List<Map<String, Object>> queryLastYearCustomerCount(DynamicDto dd) {
-		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
-		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
-		String provinceStr = "";
-		String cityStr = "";
-		String zx = "no";
-		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
-			provinceStr+=" AND ds_cus.province_id='"+province_id+"' ";
+	public List<Map<String, Object>> queryLastYearCustomerCount(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
+		String cityStr1 = "";
+		String provinceStr1 = "";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr1+=" and a.city_code='"+cityNo+"' ";
 		}
-		if(city_id!=null&&city_id!=""){
-			cityStr+=" and ds_cus.city_id='"+city_id+"' ";
-		}else if("yes".equals(zx)){
-			cityStr+=" and ds_cus.city_id='"+province_id+"' ";
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr1+=" and a.province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
 		String yearStr = String.valueOf(dd.getYear());
-		String sql = "SELECT SUM(ds_cus.pay_count) AS  customer_count FROM  ds_cusum_month_city ds_cus " +
-				"LEFT JOIN t_dist_citycode d ON d.id = ds_cus.city_id WHERE 1 = 1 AND " +
-				"left(ds_cus.order_ym,4)='"+yearStr+"'"+ cityStr+provinceStr;
-		
+		String sql = "SELECT sum(ff.year_count) as customer_count from (select year_count,province_code,city_name,city_code from "
+				+ "daqweb.df_user_count a WHERE 1=1 "+provinceStr1+cityStr1+" and count_year='"+yearStr+"' and count_type='pay' ) ff ";
+		if(StringUtils.isEmpty(provinceStr1)&&StringUtils.isEmpty(cityStr1)){
+			sql = "select year_count as customer_count from daqweb.df_user_total_count where 1=1 and count_year='"+yearStr+"' and count_type='pay' ";
+		}
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
-			SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-			List<?> lst_data = query
-					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			List<?> lst_data = ImpalaUtil.executeGuoan(sql);
 			if(lst_data != null){
 				for(Object obj : lst_data){
 					Map<String,Object> map_data = (Map<String,Object>)obj;

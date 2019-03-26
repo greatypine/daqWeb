@@ -5,6 +5,7 @@ package com.cnpc.pms.dynamic.dao;
 
 import java.util.List;
 import java.util.Map;
+
 import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.AbnormalOrderDto;
@@ -645,7 +646,7 @@ public interface DynamicDao extends IDAO{
 	 * @param dd
 	 * @return
 	 */
-	List<Map<String, Object>> queryMonthCustomerCount(DynamicDto dd);
+	List<Map<String, Object>> queryMonthCustomerCount(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 
 	/**
 	 * 查询本周每日用户量
@@ -700,23 +701,10 @@ public interface DynamicDao extends IDAO{
 	 * 查询历史成交用户量
 	 * @param dd
 	 * @param cityNO
-	 * @param provinceNO
 	 * @param object
 	 * @return
 	 */
-	public List<Map<String, Object>> queryHistoryCustomerCount(DynamicDto dd);
-	/**
-	 * 查询总部当月成交用户量 
-	 * @param dd
-	 * @return
-	 */
-	public List<Map<String, Object>> queryMonthZbCustomerCount(DynamicDto dd);
-	/**
-	 * 查询总部历史成交用户量
-	 * @param dd
-	 * @return
-	 */
-	public List<Map<String, Object>> queryHistoryZbCustomerCount(DynamicDto dd);
+	public List<Map<String, Object>> queryHistoryCustomerCount(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 	
 	/**
 	 * 

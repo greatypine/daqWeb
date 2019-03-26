@@ -137,6 +137,8 @@ var showPageContent = function (pageStatusInfo) {
     getLastMonthOrderCustomerCount(pageStatusInfo);
     // 显示历史数据
     getHistoryData(pageStatusInfo);
+    // 显示消费用户数(本月,当年，历史的)
+    getCustomerAll(pageStatusInfo);
     // 显示本月新增开卡用户和历史总社员数
     getOpenCardUser(pageStatusInfo);
     //查询当月毛利
@@ -1879,17 +1881,14 @@ var getHistoryData = function (pageStatusInfo) {
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var resultJson= JSON.parse(data.data);
-                    var historyDataFromServer = {'curMonthTurnover':resultJson.cur_order_amount,'customer_count':resultJson.customer_count,
-                    'month_order_count':resultJson.month_order_count,'last_order_count':resultJson.last_order_count
-                    ,'last_customer_count':resultJson.last_customer_count};
+                    var historyDataFromServer = {'curMonthTurnover':resultJson.cur_order_amount,
+                    'month_order_count':resultJson.month_order_count,'last_order_count':resultJson.last_order_count};
                     // 查询历史累计营业额
                     doManager("dynamicManager", "queryTradeSumOfHistory",[reqestParameter],
                         function(data, textStatus, XMLHttpRequest) {
                             if (data.result) {
                                 var resultJson= JSON.parse(data.data);
                                 historyDataFromServer['historyTurnover'] = resultJson.history_order_amount;
-                                historyDataFromServer['history_customer_count'] = resultJson.history_customer_count;
-                                historyDataFromServer['last_history_customer_count'] = resultJson.last_history_customer_count;
                                 historyDataFromServer['history_order_count'] = resultJson.history_order_count;
                                 doManager("dynamicManager", "getSumOfCurYear",[reqestParameter],
 		                        function(data, textStatus, XMLHttpRequest) {
@@ -1898,7 +1897,6 @@ var getHistoryData = function (pageStatusInfo) {
 		                            	historyDataFromServer['year_gmv_sum'] = resultJson.year_gmv_sum[0].year_sum_gmv;
 		                            	//historyDataFromServer['year_sum_order'] = resultJson.year_gmv_sum[0].year_sum_order;
 		                            	historyDataFromServer['year_last_gmv_sum'] = resultJson.year_last_gmv_sum[0].year_sum_gmv;
-		                            	historyDataFromServer['year_last_year_customer_count'] = resultJson.year_last_year_customer_count[0].customer_count;
 		                            	historyDataFromServer['year_last_year_order_count'] = resultJson.year_last_year_order_count.year_order_count;
 		                         	}
 		                         }
@@ -1912,6 +1910,29 @@ var getHistoryData = function (pageStatusInfo) {
         //console.log('request history data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
     }
 };
+var getCustomerAll = function(pageStatusInfo){
+	// 准备服务端数据请求参数
+        var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+
+        }
+        // 查询当月累计营业额
+        doManager("dynamicManager", "queryCustomerSumAll",[reqestParameter],
+            function(data, textStatus, XMLHttpRequest) {
+            	var resultJson= JSON.parse(data.data);
+            	var customerDataFromServer = {'customer_count':resultJson.customer_count,'year_last_year_customer_count':resultJson.year_last_year_customer_count[0].customer_count,
+            								  'history_customer_count':resultJson.history_customer_count};
+            	showCustomerAll(customerDataFromServer);
+            });
+}
+var showCustomerAll = function(customerDataFromServer){
+    $("#tradesumoflastYearCustmomer").html(customerDataFromServer.year_last_year_customer_count==null?'0':customerDataFromServer.year_last_year_customer_count);
+    $("#tradesumofmonthCustmomer").html(customerDataFromServer.customer_count);
+  	$("#tradesumofhistoryCustmomer").html(customerDataFromServer.history_customer_count);
+}
 // 显示历史数据
 var showHistoryData = function (historyData) {
 	/*
@@ -1923,16 +1944,13 @@ var showHistoryData = function (historyData) {
     $("#tradesumofyearHid").html(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum));
     */
     //$("#tradesumOrderofyearHid").html(parseInt(historyData.year_sum_order==null?'0':historyData.year_sum_order));
-    $("#tradesumofhistoryCustmomerHid").html(parseInt(historyData.history_customer_count));
     $("#tradesumofhistoryOrderHid").html(parseInt(historyData.history_order_count==null?'0':historyData.history_order_count));
     $("#tradesumofmonthOrderHid").html(parseInt(historyData.month_order_count==null?'0':historyData.month_order_count));
-    $("#tradesumofmonthCustmomerHid").html(parseInt(historyData.customer_count));
     $("#tradesumofcurmonths").html(changeMoney(parseInt(historyData.curMonthTurnover)));
     //右上角当月营业额
     $("#tradesumofmonth").html(changeMoney(parseInt(historyData.curMonthTurnover)));
     $("#tradesumofCurYears").html(changeMoney(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum)));
     $("#tradesumofLastYears").html(changeMoney(parseInt(historyData.year_last_gmv_sum==null?'0':historyData.year_last_gmv_sum)));
-    $("#tradesumoflastYearCustmomer").html(historyData.year_last_year_customer_count==null?'0':historyData.year_last_year_customer_count);
     $("#tradesumOrderofLastyear").html(historyData.year_last_year_order_count==null?'0':historyData.year_last_year_order_count);
     $("#tradesumofhistorys").html(changeMoney(parseInt(historyData.historyTurnover)));
     $("#tradesumofhistoryright").html(changeMoney(parseInt(historyData.historyTurnover)));
@@ -4297,6 +4315,7 @@ var getDailyData = function(){
 				cityId:pageStatusInfo["cityId"]
     	}
      var startTime = new Date().getTime();
+     getCustomerAll(pageStatusInfo);
      doManager("dynamicManager", "getDailyStoreTotlePrice",[dynamicDto],
   			function(data, textStatus, XMLHttpRequest) {
   			//1
@@ -4322,9 +4341,6 @@ var getDailyData = function(){
   					}
   					
   					//var tradesumofhistory = $("#tradesumofhistoryHid").text();//历史营业额
-  					var tradesumofcustomerMonth = $("#tradesumofmonthCustmomerHid").text();//本月用户量
-  					var tradesumoflastmonthCustmomer = $("#tradesumoflastmonthCustmomerHid").text();//上月今天用户量
-  					var tradesumofcustomerHistory = $("#tradesumofhistoryCustmomerHid").text();//历史用户量
   					var tradesumoflastmonthcustomerHistory = $("#tradesumoflasthistoryCustmomerHid").text();//截止到上月历史用户量
   					var tradesumofmonthOrder = $("#tradesumofmonthOrderHid").text();//本月订单量
   					var tradesumofhistoryOrder = $("#tradesumofhistoryOrderHid").text();//历史订单量
@@ -4335,26 +4351,11 @@ var getDailyData = function(){
   					//var tradesumofyear = $("#tradesumofyearHid").text();//上月订单
   					//$("#tradesumofcurmonths").html(changeMoney(parseInt(tradesumofcurmonth)+parseInt(totalprice)));
   					//$("#tradesumofhistorys").html(changeMoney(parseInt(tradesumofhistory)+parseInt(totalprice)));
-  					$("#tradesumofmonthCustmomer").html(parseInt(tradesumofcustomerMonth)+parseInt(daily_user_count));
-  					$("#tradesumofhistoryCustmomer").html(parseInt(tradesumofcustomerHistory)+parseInt(daily_user_count));
   					//$("#tradesumofhistoryCustmomer").html(parseInt(1630694));
   					$("#tradesumofmonthOrder").html(parseInt(tradesumofmonthOrder)+parseInt(daily_order_count));
   					$("#tradesumofhistoryOrder").html(parseInt(tradesumofhistoryOrder)+parseInt(daily_order_count));
   					//$("#openCardUserMonthcount").html(openCardUserMonthcountHid);
   					//$("#openCardUserHistorycount").html(openCardUserHistorycountHid);
-  					var order_count_rate;
-  					if(parseInt(tradesumoflastmonthOrder)==0){
-  						order_count_rate = 0;
-  						$("#order_count_ratio").html(0);
-  					}else{
-  						if(tradesumoflastmonthOrder==""){
-	  						order_count_rate = "";
-	  						$("#order_count_ratio").html('');
-  						}else{
-	  						order_count_rate = parseInt(((parseInt(daily_order_count)-parseInt(tradesumoflastmonthOrder))/parseInt(tradesumoflastmonthOrder))*100);
-	  						$("#order_count_ratio").html(order_count_rate+'%');
-  						}
-  					}
   					/*if(order_count_rate<0){
   						$("#sign_4").attr("class","fa fa-long-arrow-down");
 						$("#sing_id4").attr("class","col-sm-2 decline");
@@ -4369,28 +4370,6 @@ var getDailyData = function(){
 						$("#sing_id_4").removeClass("gaugetb3").addClass("gaugetb2");
   					}
   					*/
-  					if(order_count_rate<0){
-  						$("#sign_4").attr("class","fa fa-long-arrow-down");
-  						$("#sing_id4").attr("class","col-sm-2 decline");
-  						$("#order_count_ratio").attr("class","decline");
-  					}else{
-  						$("#sign_4").attr("class","fa fa-long-arrow-up");
-  						$("#sing_id4").attr("class","col-sm-2 increase");
-  						$("#order_count_ratio").attr("class","increase");
-  					}
-  					var customer_month_rate;
-  					if(parseInt(tradesumoflastmonthCustmomer)==0){
-  						customer_month_rate = 0;
-  						$("#customer_month_ratio").html(0);
-  					}else{
-  						if(tradesumoflastmonthCustmomer==""){
-  							customer_month_rate = "";
-  							$("#customer_month_ratio").html('');
-  						}else{
-  							customer_month_rate = parseInt((parseInt(daily_user_count)-parseInt(tradesumoflastmonthCustmomer))/parseInt(tradesumoflastmonthCustmomer)*100);
-  							$("#customer_month_ratio").html(customer_month_rate+'%');
-  						}
-  					}
   					/*
   					if(customer_month_rate<0){
   							$("#sign_1").attr("class","fa fa-long-arrow-down");
@@ -4406,23 +4385,6 @@ var getDailyData = function(){
   							$("#sing_id_1").removeClass("gaugetb3").addClass("gaugetb2");
   					}
   					*/
-  					if(customer_month_rate<0){
-  							$("#sign_1").attr("class","fa fa-long-arrow-down");
-  							$("#sing_id").attr("class","col-sm-2 decline");
-  							$("#customer_month_ratio").attr("class","decline");
-  					}else{
-  							$("#sign_1").attr("class","fa fa-long-arrow-up");
-  							$("#sing_id").attr("class","col-sm-2 increase");
-  							$("#customer_month_ratio").attr("class","increase");
-  					}
-  					var order_historey_rate;
-  					if(parseInt(tradesumoflastmonthOrder)==0){
-  						order_historey_rate = 0;
-  						$("#order_history_ratio").html(0);
-  					}else{
-  						order_historey_rate = parseInt((parseInt(tradesumofhistoryOrder)+parseInt(daily_order_count)-parseInt(tradesumoflastmonthOrder))/parseInt(tradesumoflastmonthOrder)*100);
-  						$("#order_history_ratio").html(order_historey_rate+'%');
-  					}
   					/*
   					if(order_historey_rate<0){
   							$("#sign_3").attr("class","fa fa-long-arrow-down");
@@ -4438,14 +4400,6 @@ var getDailyData = function(){
   							$("#sing_id_3").removeClass("gaugetb3").addClass("gaugetb2");
   					}
   					*/
-  					var history_customer_rate;
-  					if(parseInt(tradesumoflastmonthCustmomer)==0){
-  						history_customer_rate = 0;
-  						$("#customer_history_ratio").html(0);
-  					}else{
-  						history_customer_rate = parseInt((parseInt(tradesumofcustomerHistory)-parseInt(tradesumoflastmonthcustomerHistory))/parseInt(tradesumoflastmonthcustomerHistory)*100);
-  						$("#customer_history_ratio").html(history_customer_rate+'%');
-  					}
   					/*
   					if(history_customer_rate>0){
   							$("#sign_2").attr("class","fa fa-long-arrow-up");

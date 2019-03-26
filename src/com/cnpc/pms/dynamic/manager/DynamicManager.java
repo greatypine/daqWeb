@@ -753,6 +753,13 @@ public interface DynamicManager extends IManager{
 	 * @return
      */
     public Map<String, Object>  queryTradeSumByMonth(DynamicDto dd);
+	/**
+	 * 查询消费用户量(总部/城市公司当月当年历史的消费用户数)
+	 * @param dd
+	 * @return
+	 */
+    public Map<String, Object>  queryCustomerSumAll(DynamicDto dd);
+    
     
     /**
      * 总部查看数据：按人员Gmv排名-带分页
