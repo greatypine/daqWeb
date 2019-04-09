@@ -218,7 +218,7 @@ var showPageContent = function (pageStatusInfo) {
     getStoreProductThirtyDay(pageStatusInfo);
 
     //查询整体经营指标
-    getTargetEntryAll();
+    // getTargetEntryAll();
     
 };
 // 设置页面初始状态信息
