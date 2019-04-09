@@ -151,10 +151,10 @@
     .gaugetb5{color: #00ffe6}
     .gaugetb6{color: #00c0ef}
     .test1{font-size: 26px; font-weight: bold;}
-    .gaugetb1 .col-sm-3:nth-child(1){color: #ff002f;}
-    .gaugetb1 .col-sm-3:nth-child(2){color: #ff6600;}
-    .gaugetb1 .col-sm-3:nth-child(3){color: #00ffe6;}
-    .gaugetb1 .col-sm-3:nth-child(4){color: #00ffa1;}
+    .gaugetb1 .col-sm-4:nth-child(1){color: #ff002f;}
+    .gaugetb1 .col-sm-4:nth-child(2){color: #ff6600;}
+    .gaugetb1 .col-sm-4:nth-child(3){color: #00ffe6;}
+    .gaugetb1 .col-sm-4:nth-child(4){color: #00ffa1;}
 
 
 
