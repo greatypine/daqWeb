@@ -968,13 +968,20 @@ $('#store_name_try').keyup(function(event){
                            +"<td>"+jData[i].othercount+"</td>"
                            +"<td>"+jData[i].nowcount+"</td>"
                        }else{
-                           infoStr +="<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("安心存")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].axccount+"</a></td>"
+                           /*infoStr +="<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("安心存")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].axccount+"</a></td>"
                            +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("淘金汇")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].tjhcount+"</a></td>"
                            +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("畅卡升级")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].cgkcount+"</a></td>"
                            +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("兑换码")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].dhmcount+"</a></td>"
                            +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("199付费社员")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].count199+"</a></td>"
 						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&tag="+encode64("其他")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].othercount+"</a></td>"
-						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
+						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&c="+encode64(cityno)+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"*/
+                           infoStr +="<td>"+jData[i].axccount+"</td>"
+                               +"<td>"+jData[i].tjhcount+"<</td>"
+                               +"<td>"+jData[i].cgkcount+"</td>"
+                               +"<td>"+jData[i].dhmcount+"</td>"
+                               +"<td>"+jData[i].count199+"</td>"
+                               +"<td>"+jData[i].othercount+"</td>"
+                               +"<td>"+jData[i].nowcount+"</td>"
                        }
                        infoStr += "<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
@@ -1138,13 +1145,20 @@ $('#store_name_try').keyup(function(event){
                            +"<td>"+jData[i].othercount+"</td>"
 							+"<td>"+jData[i].nowcount+"</td>"
 					   }else{
-						   infoStr += "<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("安心存")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].axccount+"</a></td>"
+						   /*infoStr += "<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("安心存")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].axccount+"</a></td>"
 						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("淘金汇")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].tjhcount+"</a></td>"
 						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("畅卡升级")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].cgkcount+"</a></td>"
 						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("兑换码")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].dhmcount+"</a></td>"
                            +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("199付费社员")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].count199+"</a></td>"
 						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&tag="+encode64("其他")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].othercount+"</a></td>"
-						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
+						   +"<td><a target=\"memberData_list\" href=\"memberData_list.html?t="+encode64(target)+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&s="+encode64(jData[i].platformid)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"*/
+                           infoStr += "<td>"+jData[i].axccount+"</td>"
+                               +"<td>"+jData[i].tjhcount+"</td>"
+                               +"<td>"+jData[i].cgkcount+"</td>"
+                               +"<td>"+jData[i].dhmcount+"</td>"
+                               +"<td>"+jData[i].count199+"</td>"
+                               +"<td>"+jData[i].othercount+"</td>"
+                               +"<td>"+jData[i].nowcount+"</td>"
 					   }
 					   infoStr += "<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
@@ -1296,7 +1310,7 @@ function searchInfo_customer(cur_page){
                     //if(jData[i].name == '无'){
                         infoStr += "<td>"+jData[i].nowcount+"</td>";
                     /*}else{
-                        infoStr += "<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
+                        infoStr += "<td><a target=\"userProfile_view\" href=\"RuserProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
                             +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].count199+"</a></td>"
                     }*/
                     infoStr += "<td>"+jData[i].opencount+"</td></tr>";
