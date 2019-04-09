@@ -5714,17 +5714,17 @@ function reportFiledown(){
     }
 
   //用户档案
-  function goToUserProfileStat(){
-	  var role = curr_user.usergroup.code;
-	  var url = "";
-	  var target=pageStatusInfo.targets;
-	  if(target==0){
-	  	url = "userProfile_view.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
-	  }else if(target==1){
-	  	url = "userProfile_view.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
-	  }
-	  window.open(url,"userProfile_view"); 
-   }
+  // function goToUserProfileStat(){
+	//   var role = curr_user.usergroup.code;
+	//   var url = "";
+	//   var target=pageStatusInfo.targets;
+	//   if(target==0){
+	//   	url = "userProfile_view.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+	//   }else if(target==1){
+	//   	url = "userProfile_view.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+	//   }
+	//   window.open(url,"userProfile_view");
+  //  }
   
   //数据查找-员工数据
   function searchEmployeeData(){

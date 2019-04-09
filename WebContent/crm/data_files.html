@@ -1028,9 +1028,11 @@ $('#store_name_try').keyup(function(event){
                            infoStr += "<td>"+jData[i].nowcount+"</td>"
 						   +"<td>"+jData[i].count199+"</td>"
                        }else{
-                           infoStr += "<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
-                           +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].count199+"</a></td>"
-					   }
+                           // infoStr += "<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
+                           // +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].count199+"</a></td>"
+                           infoStr += "<td>"+jData[i].nowcount+"</td>"
+                               +"<td>"+jData[i].count199+"</td>"
+                       }
                        infoStr += "<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
 		                       
