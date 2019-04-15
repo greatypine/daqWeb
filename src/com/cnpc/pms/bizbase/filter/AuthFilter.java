@@ -229,6 +229,10 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			if (url.equals("MongoDBManager?getAllStoreServiceAreaOfStore")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 			if (url.equals("queryConfigManager?getMetaInfo")) {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
@@ -608,6 +612,11 @@ public class AuthFilter extends OncePerRequestFilter {
 			 * @author sunning
 			 */
 			if (url.contains("store_rent_info.html")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+
+			if (url.contains("store_cover_view_tmp.html")) {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}

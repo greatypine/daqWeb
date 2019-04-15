@@ -1,0 +1,428 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>门店覆盖范围</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	  <!-- Font Awesome -->
+	  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+	  <!-- Ionicons -->
+	  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+	  <!-- Theme style -->
+	  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+	  <!-- AdminLTE Skins. Choose a skin from the css/skins
+	       folder instead of downloading all of them to reduce the load. -->
+	  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+	<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
+    <style type="text/css">
+        *{margin: 0; padding: 0;}
+        ul,li{list-style: none;} 
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            font-size: 12px;;
+        }
+
+        #mapContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .content-header{padding-top: 0;}
+        .form-group{line-height: 34px;}
+    	.form-group label{font-size: 12px; margin: 0; display: block; height: 30px;}
+    	
+        .menu{position: absolute; top: 50px;  left: 20px; width: 350px;}
+        .sidebar-form{position: fixed; width: 350px; height: 43px; line-height: 40px; background-color: #fff; box-shadow: 1px 2px 1px rgba(0,0,0,.15); border: 0!important;}
+        .menu_list{margin: 55px 0 0 0; width: 350px; background-color: #fff; overflow: hidden; padding-top: 15px!important; box-shadow: 1px 2px 1px rgba(0,0,0,.15);-webkit-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out}
+        .menu_list ul{overflow-y: auto;}
+        .menu_list ul::-webkit-scrollbar{width: 8px; background-color: #fff;}
+        .menu_list ul::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 5px;}
+        .menu_list ul::-webkit-scrollbar-track{background-color: #fff;}
+        .menu_list li{width: 316px; line-height: 22px; padding: 5px 8px 15px 8px; margin: 0 10px 0 15px; border-bottom: 1px solid #eaeaea;}
+        .menu_list li:nth-last-child(1){border: none;}
+        .menu_list li p:nth-child(2){padding-bottom: 7px; font-size: 14px; color: #333;}
+        p{margin: 0;}
+        .menu_list li a{color: #999; display: inline-block; width: 100%; text-decoration: none; padding-top: 5px;}
+        .menu_list li:hover,.menu_list li:visited,.menu_mark{background-color: rgba(0,0,0,0.05);}
+        .result_hide{padding: 15px 0 10px 0;margin: 55px 0 0 0; width: 349px; background-color: #fff; color: #3385ff; text-align: center; font-size: 14px; padding: 10px 0 10px 0; -webkit-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out}
+    	.checkboxFive {width: 20px;position: relative; margin: 20px 20px 20px 0; padding-left: 10px;}
+		.checkboxFive label {
+		    width: 20px;
+		    height: 20px;
+		    cursor: pointer;
+		    position: absolute;
+		    top: -3px;
+		    left: 0;
+		    background: -moz-linear-gradient(top, #f4f4f4 0%, #f9f8f8 100%);
+		    background: -webkit-linear-gradient(top, #f4f4f4 0%, #f9f8f8 100%);
+		    background: linear-gradient(to bottom, #f4f4f4 0%, #f9f8f8 100%);
+		    -moz-border-radius: 4px;
+		    -webkit-border-radius: 4px;
+		    border-radius: 4px;
+		    -moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+		    -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+		    box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+		}
+		.checkboxFive label:after {
+		    content: '';
+		    width: 12px;
+		    height: 7px;
+		    position: absolute;
+		    top: 5px;
+		    left: 4px;
+		    border: 3px solid #5a5a5a;
+		    border-top: none;
+		    border-right: none;
+		    background: transparent;
+		    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+		    opacity: 0;
+		    -moz-transform: rotate(-45deg);
+		    -ms-transform: rotate(-45deg);
+		    -webkit-transform: rotate(-45deg);
+		    transform: rotate(-45deg);
+		}
+		.checkboxFive label:hover::after {
+		    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+		    opacity: 0.3;
+		}
+		.checkboxFive input[type=checkbox] {
+		    visibility: hidden;
+		}
+		.checkboxFive input[type=checkbox]:checked + label:after {
+		    filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+		    opacity: 1;
+		}
+		.amap-marker .marker-route {
+            background: #f6f6f6;
+            cursor: pointer;
+          white-space:nowrap;
+          position: relative;
+          font-size:14px;
+            color:#c424539e;
+        }
+     /*.marker-route:after {
+       	content:'';
+        position: absolute;
+       	width: 0;
+	    height: 0;
+	    border-left: 5px solid transparent;
+	    border-right: 5px solid transparent;
+	    border-top: 6px solid #f6f6f6;
+      	bottom: -6px;
+       	left:50%;
+       	margin-left:-5px;
+      }*/
+    #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+	/*全屏按钮*/
+    .pull-right-fullscreen {
+    	position:absolute;
+    	z-index:10;
+    	right:20px;
+    }
+    /*全屏样式*/
+   #mask{width:100%; height:100%; position:fixed; top:0; left:0; display: none; z-index:9999999; background-color: rgba(0,0,0,0.7);}
+   #mask-body{ position: absolute; top: 50px; left: 50px; height: 600px; opacity: 1; z-index: 99; }
+   #mask-header{ position: absolute; top: 50px; left: 0px; height: 50px; opacity: 1; z-index: 999; }
+   #mask-header>button{ padding: 3px 5px;  position: absolute; left: 15px; top: -45px; cursor: pointer; }
+     </style>  
+</head>
+<body class="skin-blue">
+<div class="wrapper">
+  <div id="mask" style="width: 100%;height:100%;z-index:120px">
+    <div id="mask-header"><button class="btn btn-primary">退出</button></div>
+    <div id="mask-body"></div>
+  </div>
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <div id="process_div" ></div>
+  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+      <div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div>
+    <!--<div class="container">
+      &lt;!&ndash; Main content &ndash;&gt;
+      <section class="content-header">
+        <div class="box-body" style="position:relative" id="mapHeight">
+
+
+
+        </div>
+</section>
+
+    </div>-->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+
+<!-- jQuery 2.2.0 -->
+<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="../crm/bootstrap/js/raphael-min.js"></script>
+<!-- FastClick -->
+<script src="../crm/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../crm/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../crm/dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!--  <script src="../crm/plugins/morris/morris.min.js"></script> -->
+<script type="text/javascript">
+    autodivheight();
+    function autodivheight(){ //函数：获取尺寸
+        //获取浏览器窗口高度
+        var winHeight=0;
+        if (window.innerHeight)
+            winHeight = window.innerHeight;
+        else if ((document.body) && (document.body.clientHeight))
+            winHeight = document.body.clientHeight;
+        //通过深入Document内部对body进行检测，获取浏览器窗口高度
+        if (document.documentElement && document.documentElement.clientHeight)
+            winHeight = document.documentElement.clientHeight;
+        //DIV高度为浏览器窗口的高度
+        //document.getElementById("test").style.height= winHeight +"px";
+        //DIV高度为浏览器窗口高度的一半
+       // document.getElementById("mapHeight").style.height= winHeight - 130 +"px";
+    }
+    window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+</script>
+<script type="text/javascript">
+
+
+var cityId = decode64(getUrlParamByKey("c"));     /**城市ID*/
+var cityName = decode64(getUrlParamByKey("cn")); /**城市名称*/
+var employeeId = decode64(getUrlParamByKey("e")); /**员工编号*/
+var target = decode64(getUrlParamByKey("t"));   /**1.城市；2.门店**/
+var serviceArray = [];/**门店服务范围数组*/
+var coordinatesArray = [];/**小区数组*/
+var divideAreaCoordinatesArray=[];/**地采除混片坐标数组*/
+var areaCoordinatesArray=[];/**混片范围坐标数组*/
+var serviceCoordinatesArray = [];/**服务范围坐标数组*/
+var vallageCoordinatesArray = [];/**小区坐标数组*/
+var storeNoArray = new Array();/**用来判断是否有重复的门店服务范围*/
+var redundant = {};
+
+
+
+//初始化地图对象，加载地图
+var map = new AMap.Map("mapContainer", {
+    resizeEnable : true,
+    zoom : 16,
+    doubleClickZoom : false
+});
+map.setCity("北京");
+
+map.plugin(["AMap.ToolBar"],function(){
+    //加载工具条
+    var toolBaropt = {
+        offset :new AMap.Pixel(10,55),//相对于地图容器左上角的偏移量，正数代表向右下偏移。默认为AMap.Pixel(10,10)
+        position : 'RT',//工具放置位置RT:右上角;
+        ruler : true,//标尺键盘是否可见，默认为true
+        noIpLocate : false,//定位失败后，是否开启IP定位，默认为false
+        locate : true,//是否显示定位按钮，默认为false
+        liteStyle : false,//是否使用精简模式，默认为false
+        direction : true,//方向键盘是否可见，默认为true
+        autoPosition : false,//是否自动定位，即地图初始化加载完成后，是否自动定位的用户所在地，在支持HTML5的浏览器中有效，默认为false
+        useNative : false
+    }
+    var tool = new AMap.ToolBar(toolBaropt);
+    map.addControl(tool);
+});
+var servicePolygon;
+var vallagePolygon;
+var areaPolygon;
+var mouseoverPolygon;
+function draw(){
+	//画服务范围多边形
+	servicePolygon = servicePolygon = new AMap.Polygon({
+	       strokeColor: "#5c69cc", //线颜色
+	       strokeOpacity: 0.9, //线透明度
+	       strokeWeight: 2,    //线宽
+	       fillColor: "#046ad3", //填充色
+	       fillOpacity: 0.4//填充透明度
+	 });
+	servicePolygon.setMap(map);
+	//所有小区坐标的多边形
+	vallagePolygon = new AMap.Polygon({
+	     //path: villageCoordinates,//设置多边形边界路径
+	      strokeColor: "#e513e5", //线颜色
+	      strokeOpacity: 0.9, //线透明度
+	      strokeWeight: 1,    //线宽
+	      fillColor: "#FF33FF", //填充色
+	      fillOpacity: 0.1,//填充透明度
+	     //	extData:{"code":code}
+	});
+	vallagePolygon.setMap(map);
+	//混片多边形
+	areaPolygon = new AMap.Polygon({
+	    //path: villageCoordinates,//设置多边形边界路径
+	    strokeColor: "#e513e5", //线颜色
+	    strokeOpacity: 0.9, //线透明度
+	    strokeWeight: 1,    //线宽
+	    fillColor: "#FF33FF", //填充色
+	    fillOpacity: 0.6,//填充透明度
+	   //	extData:{"code":code}
+	});
+	areaPolygon.setMap(map);
+
+    mouseoverPolygon = new AMap.Polygon({
+        //path: villageCoordinates,//设置多边形边界路径
+        strokeColor: "#5c69cc", //线颜色
+        strokeOpacity: 0.9, //线透明度
+        strokeWeight: 1,    //线宽
+        fillColor: "#6efdea", //填充色
+        fillOpacity: 0.6,//填充透明度
+        //	extData:{"code":code}
+    });
+    mouseoverPolygon.setMap(map);
+}
+
+$(function(){
+	initData();
+});
+
+function initData(){
+    map.clearMap();
+	draw();
+	$("#process_div").show();
+	$("#process_div_pic").show();
+     doManager("MongoDBManager", "getAllStoreServiceAreaOfStore",[], function(data, textStatus,XMLHttpRequest) {
+        if(data.result){
+            serviceCoordinatesArray = [];
+            vallageCoordinatesArray = [];
+            divideAreaCoordinatesArray = [];
+            areaCoordinatesArray = [];
+                jsonData = JSON.parse(data.data);
+                	//服务范围数组
+                	serviceArray = jsonData.data;
+                	if(serviceArray!=null && serviceArray.length>0) {
+                        var storeMarker;
+                        for (var i = 0; i < serviceArray.length; i++) {
+                            var polygonArray = serviceArray[i];
+                            var serviceCoordinates = polygonArray.vertex;
+                            var storeNo = polygonArray.storeNo;
+                            var index = jQuery.inArray(storeNo, storeNoArray);
+                            if (index == -1) {
+                                var storeName = polygonArray.storeName;
+                                var strLength = -((storeName.length * 14 + 20) / 2);
+                                var position = polygonArray.position;
+                                serviceCoordinatesArray.push(serviceCoordinates);
+                                //注意path是否有值
+                                polygonArray.polygonMap = servicePolygon;
+                                if (position != null && position.length > 0) {
+                                    storeMarker = new AMap.Marker({ //添加自定义点标记
+                                        map: map,
+                                        position: position, //基点位置
+                                        icon: "dist/img/splogo.png",
+                                        offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
+                                        extData: {"storeName": storeName, "storeIndex": i},
+                                        // draggable: true,  //是否可拖动
+                                        //content: '<div class="marker-route marker-marker-bus-from">'+storeName+'</div>'   //自定义点标记覆盖物内容
+                                    });
+                                    /*storeMarker = new AMap.Marker({ //添加自定义点标记
+                                        map: map,
+                                        position: position, //基点位置
+                                        //icon:"dist/img/splogo.png",
+                                        offset: new AMap.Pixel(-20, 15), //相对于基点的偏移位置
+                                        extData: {"storeName": storeName, "storeIndex": i},
+                                        // draggable: true,  //是否可拖动
+                                        content: '<div class="marker-route marker-marker-bus-from">' + storeName + '</div>'   //自定义点标记覆盖物内容
+                                    });*/
+                                    polygonArray["marker"] = storeMarker;
+                                    storeMarker.on("click", function (e) {
+                                        map.setCenter(e.target.getPosition());
+                                        map.setZoom(14);
+                                    });
+                                    storeMarker.on("mouseover", function (e) {
+                                        var storeIndex = e.target.getExtData().storeIndex;
+                                        var coordinates = serviceCoordinatesArray[storeIndex];
+                                        var array1 = redundant[storeIndex];
+                                        var arrayadd = new Array();
+                                        arrayadd.push(coordinates);
+                                        if (array1 != null) {
+                                            arrayadd.push(array1);
+                                        }
+                                        mouseoverPolygon.setPath(arrayadd);
+                                        var storeName = e.target.getExtData().storeName;
+                                        e.target.setTitle(storeName);
+                                    });
+                                    storeMarker.on("mouseout", function (e) {
+                                        mouseoverPolygon.setPath([]);
+                                    });
+                                }
+                                storeNoArray.push(storeNo);
+                            } else {
+                                redundant[index] = serviceCoordinates;
+                                serviceCoordinatesArray.push(serviceCoordinates);
+                            }
+                        }
+                        servicePolygon.setPath(serviceCoordinatesArray);
+                    }
+                 $("#process_div").hide();
+				 $("#process_div_pic").hide();
+       	}else{
+            $$.showMessage("系统信息", "数据加载异常！");
+        }},true); 
+}
+
+
+function automaxheight() { //函数：获取尺寸
+    //获取浏览器窗口高度
+    var winHeight = 0;
+    var winWidth = 0;
+    if (window.innerHeight) {
+        winHeight = window.innerHeight;
+        winWidth = window.innerWidth;
+    }
+    else if ((document.body) && (document.body.clientHeight)) {
+        winHeight = document.body.clientHeight;
+        winWidth = document.body.clientWidth;
+    }
+    //通过深入Document内部对body进行检测，获取浏览器窗口高度
+    else if (document.documentElement && document.documentElement.clientHeight) {
+        winHeight = document.documentElement.clientHeight;
+        winWidth = document.documentElement.clientWidth;
+    }
+    //DIV高度为浏览器窗口的高度
+    //document.getElementById("test").style.height= winHeight +"px";
+    //DIV高度为浏览器窗口高度的一半
+    document.getElementById("mapHeight").style.height = winHeight + "px";
+    document.getElementById("mapHeight").style.width = winWidth + "px";
+    $("#mask-body").css({"top": "0px"});
+    $("#mask-body").css({"left": "0px"});
+    $("#mapContainer").css({"border-radius": "0"});
+
+}
+
+
+
+
+</script>
+</body>
+</html>

@@ -983,6 +983,206 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 	}
 
 
+
+	@Override
+	public Map<String, Object> getAllStoreServiceAreaOfStore() {
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		StoreManager storeManager  = (StoreManager)SpringHelper.getBean("storeManager");
+		UserManager umanager = (UserManager)SpringHelper.getBean("userManager");
+		UserDTO userDTO = umanager.getCurrentUserDTO();
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> platformId_storeNo = new HashMap<String,Object>();
+
+		try {
+			//List<Map<String, Object>> storeList = storeDao.getAllStoreOfCRM(userDTO.getId(),city_id, "CSZJ");//获取门店
+			Object[] platformIdArray ={
+					"00000000000000000000000000000029",
+					"00000000000000000000000000000030",
+					"00000000000000000000000000000031",
+					"00000000000000000000000000000032",
+					"00000000000000000000000000000033",
+					"00000000000000000000000000000034",
+					"00000000000000000000000000000048",
+					"00000000000000000000000000000050",
+					"00000000000000000000000000000052",
+					"00000000000000000000000000000053",
+					"00000000000000000000000000000057",
+					"00000000000000000000000000000068",
+					"00000000000000000000000000000071",
+					"00000000000000000000000000000072",
+					"00000000000000000000000000000076",
+					"00000000000000000000000000000077",
+					"00000000000000000000000000000086",
+					"00000000000000000000000000000092",
+					"00000000000000000000000000000098",
+					"00000000000000000000000000000100",
+					"00000000000000000000000000000105",
+					"8ad8ac8e57aaf8df0157ac2ee9fc019a",
+					"8ad89f985864322d015875a73277787c",
+					"8ad8ac8257055bb401571d6f38ed569e",
+					"8ad8958b56f07e81015703d4de8a2a6a",
+					"8ad8ac8b58bd5dbf0158e24571f507e7",
+					"00000000000000000000000000000117",
+					"8ad895875928d32201593e79064d4618",
+					"8ad8e1885b444af4015b807a82f359a1",
+					"8ad8e18b5b9c5cc2015ba95cbbb939d0",
+					"8ad8ac865b4441e4015b99876b564782",
+					"8ad8a0835b4441dd015b852a11e46e30",
+					"8ad8a0835b4441dd015b998ab8c94570",
+					"8ad89f8e5b9c5cc3015bd66ec0ca6f09",
+					"8ad895825c77032e015c9afadf78485f",
+					"8ad89f825dbaf5ef015dcfd0ef003b1c",
+					"8ad8c18a5dbaf590015dcfc3023036de",
+					"8d2b14c2b84c43c4bb9f8eff933a4912",
+					"f6c717395ecb4ab7b73cd3ce53ae15c1",
+					"8ad8ac8b58bd5dbf0158d8845c8968de",
+					"8ad8e1885b444af4015b5ba72c8a4c22",
+					"8ad8e1885b444af4015b5af7e2724928",
+					"8ad8a0835b4441dd015b5b96af644f25",
+					"8ad89f8e5b9c5cc3015ba3fffb242021",
+					"8ad89f885cd2f71a015ce23a27da5b4e",
+					"8ad895865cd2f1fd015ce277cfde5f6f",
+					"8ad89f885cd2f71a015ce2509dbe5c50",
+					"8ad895865cd2f1fd015ce369dfb4674b",
+					"8ad8958960c503b10160e87f02de251d",
+					"9d272da153db43dcad1a854bf669aee7",
+					"2751b5b58db74af0885d1abb0fdb80f0",
+					"8a81ec8856da5b100156df96bd6500ce",
+					"cf14682bf4ce4ab08482a0ab2a3a6103",
+					"9fd1e4174117416d93ba27c2c5a4a5ef",
+					"8ad895865cd2f1fd015ce306c5886331"};
+			platformId_storeNo.put("00000000000000000000000000000029","0010Z0003");
+			platformId_storeNo.put("00000000000000000000000000000030","0010Y0004");
+			platformId_storeNo.put("00000000000000000000000000000031","0010Y0005");
+			platformId_storeNo.put("00000000000000000000000000000032","0010Y0006");
+			platformId_storeNo.put("00000000000000000000000000000033","0010Y0007");
+			platformId_storeNo.put("00000000000000000000000000000034","0010Y0008");
+			platformId_storeNo.put("00000000000000000000000000000048","0010Y0011");
+			platformId_storeNo.put("00000000000000000000000000000050","0010Y0013");
+			platformId_storeNo.put("00000000000000000000000000000052","0010Y0014");
+			platformId_storeNo.put("00000000000000000000000000000053","0010Y0015");
+			platformId_storeNo.put("00000000000000000000000000000057","0010Y0019");
+			platformId_storeNo.put("00000000000000000000000000000068","0010Y0028");
+			platformId_storeNo.put("00000000000000000000000000000071","0010Y0031");
+			platformId_storeNo.put("00000000000000000000000000000072","0010Y0032");
+			platformId_storeNo.put("00000000000000000000000000000076","0010Y0035");
+			platformId_storeNo.put("00000000000000000000000000000077","0010Y0036");
+			platformId_storeNo.put("00000000000000000000000000000086","0010Y0043");
+			platformId_storeNo.put("00000000000000000000000000000092","0010Y0049");
+			platformId_storeNo.put("00000000000000000000000000000098","0010Y0055");
+			platformId_storeNo.put("00000000000000000000000000000100","0010Y0057");
+			platformId_storeNo.put("00000000000000000000000000000105","0010Y0061");
+			platformId_storeNo.put("8ad8ac8e57aaf8df0157ac2ee9fc019a","0010E0086");
+			platformId_storeNo.put("8ad89f985864322d015875a73277787c","0010Y0089");
+			platformId_storeNo.put("8ad8ac8257055bb401571d6f38ed569e","0010Y0080");
+			platformId_storeNo.put("8ad8958b56f07e81015703d4de8a2a6a","0010Y0078");
+			platformId_storeNo.put("8ad8ac8b58bd5dbf0158e24571f507e7","0010Y0094");
+			platformId_storeNo.put("00000000000000000000000000000117","0010Y0069");
+			platformId_storeNo.put("8ad895875928d32201593e79064d4618","0010Y0095");
+			platformId_storeNo.put("8ad8e1885b444af4015b807a82f359a1","0010Y0107");
+			platformId_storeNo.put("8ad8e18b5b9c5cc2015ba95cbbb939d0","0010Y0118");
+			platformId_storeNo.put("8ad8ac865b4441e4015b99876b564782","0010Y0115");
+			platformId_storeNo.put("8ad8a0835b4441dd015b852a11e46e30","0010Y0109");
+			platformId_storeNo.put("8ad8a0835b4441dd015b998ab8c94570","0010Y0116");
+			platformId_storeNo.put("8ad89f8e5b9c5cc3015bd66ec0ca6f09","0010X0119");
+			platformId_storeNo.put("8ad895825c77032e015c9afadf78485f","0010Y0122");
+			platformId_storeNo.put("8ad89f825dbaf5ef015dcfd0ef003b1c","0010E0124");
+			platformId_storeNo.put("8ad8c18a5dbaf590015dcfc3023036de","0010Y0125");
+			platformId_storeNo.put("8d2b14c2b84c43c4bb9f8eff933a4912","0010Y0181");
+			platformId_storeNo.put("f6c717395ecb4ab7b73cd3ce53ae15c1","0010Y0202");
+			platformId_storeNo.put("8ad8ac8b58bd5dbf0158d8845c8968de","0022Y0003");
+			platformId_storeNo.put("8ad8e1885b444af4015b5ba72c8a4c22","0022Y0013");
+			platformId_storeNo.put("8ad8e1885b444af4015b5af7e2724928","0022Y0006");
+			platformId_storeNo.put("8ad8a0835b4441dd015b5b96af644f25","0022Y0010");
+			platformId_storeNo.put("8ad89f8e5b9c5cc3015ba3fffb242021","0022Y0015");
+			platformId_storeNo.put("8ad89f885cd2f71a015ce23a27da5b4e","0022Y0022");
+			platformId_storeNo.put("8ad895865cd2f1fd015ce277cfde5f6f","0022Y0023");
+			platformId_storeNo.put("8ad89f885cd2f71a015ce2509dbe5c50","0022Y0025");
+			platformId_storeNo.put("8ad895865cd2f1fd015ce369dfb4674b","0022Y0027");
+			platformId_storeNo.put("8ad8958960c503b10160e87f02de251d","0022Y0040");
+			platformId_storeNo.put("9d272da153db43dcad1a854bf669aee7","0022Y0051");
+			platformId_storeNo.put("2751b5b58db74af0885d1abb0fdb80f0","0022Y0058");
+			platformId_storeNo.put("8a81ec8856da5b100156df96bd6500ce","0010E0073");
+			platformId_storeNo.put("cf14682bf4ce4ab08482a0ab2a3a6103","0022Y0056");
+			platformId_storeNo.put("9fd1e4174117416d93ba27c2c5a4a5ef","0022Y0050");
+			platformId_storeNo.put("8ad895865cd2f1fd015ce306c5886331","0022Y0021");
+
+			/*List<Object>  storeNoList = new ArrayList<Object>();
+			for(int i=0;i<storeList.size();i++){//获取门店platformId
+				Map<String, Object> teMap = storeList.get(i);
+				if(teMap.get("platformid")==null||"".equals(teMap.get("platformid"))){
+					continue;
+				}
+				platformIdArray[i] = teMap.get("platformid");
+				platformId_storeNo.put(teMap.get("platformid").toString(),teMap.get("storeno"));
+			}*/
+
+
+			MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
+			MongoDatabase database = mDbUtil.getDatabase();
+			// 先查询门店服务范围
+			MongoCollection<Document> collection = database.getCollection("store_service_area");
+			BasicDBObject query = new BasicDBObject();
+			query.append("storeId", new BasicDBObject("$in",platformIdArray)).append("status", 0);
+			FindIterable<Document> dIterable = collection.find(query);
+			MongoCursor<Document> cursor = dIterable.iterator();
+
+			//查询门店中心坐标点
+			MongoCollection<Document> collection2 = database.getCollection("store_position");
+			BasicDBObject query2 = new BasicDBObject();
+			query2.append("_id", new BasicDBObject("$in",platformIdArray)).append("status", 0);
+			FindIterable<Document> dIterable2 = collection2.find(query2);
+			MongoCursor<Document> cursor2 = dIterable2.iterator();
+
+
+			Map<String, Object> positionMap = new HashMap<String,Object>();
+			List<Object> storeServiceAreaList = new ArrayList<Object>();
+			if(dIterable==null){
+				result.put("code",CodeEnum.nullData.getValue());
+				result.put("message","门店服务范围不存在");
+			}else{//服务范围存在
+
+				while(cursor2.hasNext()){
+					Document teDocument2 = cursor2.next();
+					JSONObject jObject = new JSONObject(teDocument2.toJson());
+					Object location = teDocument2.get("location");
+					Object storeId = teDocument2.get("_id");
+					positionMap.put(String.valueOf(storeId), location);
+				}
+
+				org.json.JSONArray tmp_jArray = new org.json.JSONArray();
+				Store store = null;
+				while(cursor.hasNext()){
+					Document teDocument = cursor.next();
+					JSONObject jObject = new JSONObject(teDocument.toJson());
+					String storeNo_tmp = platformId_storeNo.get(teDocument.get("storeId")).toString();
+					store = storeManager.findStoreByStoreNo(storeNo_tmp);
+					System.out.println(storeNo_tmp);
+					jObject.put("polygonMap", "");
+					jObject.put("position",positionMap.get(teDocument.get("storeId"))==null?"":positionMap.get(teDocument.get("storeId")));
+					jObject.put("storeName", store.getName());
+					jObject.put("storeNo", storeNo_tmp);
+					tmp_jArray.put(jObject);
+				}
+
+
+
+				result.put("data",JSONArray.parse(tmp_jArray.toString()));
+				result.put("code",CodeEnum.success.getValue());
+				result.put("message", CodeEnum.success.getDescription());
+			}
+		} catch (Exception e) {
+			logger.info("getAllStoreServiceAreaOfCity>>>"+e.getMessage());
+			e.printStackTrace();
+			//mBean.getMongoClient().close();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		}
+		return result;
+	}
+
+
 	@Override
 	public Map<String, Object> getAllCoordinates() {
 		Map<String, Object> mapParam = new HashMap<String, Object>();

@@ -145,6 +145,16 @@ public interface MongoDBManager extends IManager{
 	 * @return
 	 */
 	public Map<String,Object> getAllStoreServiceAreaOfCity(Long city_id);
+
+	/**
+	 *
+	 * TODO  查询固定门店的服务范围
+	 * 2017年11月24日
+	 * @author gaoll
+	 * @param
+	 * @returntore
+	 */
+	public Map<String,Object> getAllStoreServiceAreaOfStore();
 	
 	/**
 	 * 
